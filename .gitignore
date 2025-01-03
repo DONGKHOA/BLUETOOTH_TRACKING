@@ -1,0 +1,5 @@
+**/build/
+**/Debug/
+**/.idea/
+**/.venv/
+**/.vscode/
