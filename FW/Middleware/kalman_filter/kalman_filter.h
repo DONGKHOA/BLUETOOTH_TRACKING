@@ -1,18 +1,43 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 
+/******************************************************************************
+ *      INCLUDES
+ *****************************************************************************/
+
 #include <stdint.h>
 
-// Định nghĩa cấu trúc Kalman
-typedef struct {
-    double Q_value;     // Độ nhiễu của quá trình (process noise covariance)
-    double Q_bias;      // Độ nhiễu bias (process noise covariance for bias)
-    double R_measure;   // Độ nhiễu của đo lường (measurement noise covariance)
-    double value;       // Giá trị RSSI được ước tính bởi bộ lọc Kalman
-    double bias;        // Bias được ước tính
-    double P[2][2];     // Ma trận hiệp phương sai
-} Kalman_t;
-
-double Kalman_GetRSSI(Kalman_t *Kalman, double newRSSI, double dt);
-
+#ifdef __cplusplus
+extern "C"
+{
 #endif
+
+  /****************************************************************************
+   *   PUBLIC TYPEDEFS
+   ***************************************************************************/
+
+  typedef struct
+  {
+    double d_err_measure;
+    double d_err_estimate;
+    double d_q;
+    double d_current_estimate;
+    double d_last_estimate;
+    double d_kalman_gain;
+  } Kalman_Filter_t;
+
+  /****************************************************************************
+   *   PUBLIC FUNCTION
+   ***************************************************************************/
+
+  void   KALMAN_FILTER_Init(Kalman_Filter_t *p_Kalman,
+                            double           d_err_measure,
+                            double           d_err_estimate,
+                            double           d_q);
+  double KALMAN_FILTER_GetRSSI(Kalman_Filter_t *p_Kalman, double d_mea);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* KALMAN_FILTER_H_ */

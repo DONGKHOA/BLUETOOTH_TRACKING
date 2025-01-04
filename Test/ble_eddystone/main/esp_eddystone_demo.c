@@ -35,8 +35,8 @@
   float _err_measure = 2;
   float _err_estimate = 2;
   float _q = 0.001;
-  float _current_estimate = 0;
-  float _last_estimate = 0;
+  float _current_estimate = -20;
+  float _last_estimate = -20;
   float _kalman_gain = 0;
 
 static const char* DEMO_TAG = "EDDYSTONE_DEMO";
