@@ -9,14 +9,14 @@
 #include "eddystone_protocol.h"
 #include "kalman_filter.h"
 
-#include <inttypes.h>
 #include "esp_bt.h"
-#include "esp_log.h"
 #include "esp_bt_defs.h"
 #include "esp_bt_main.h"
+#include "esp_gap_ble_api.h"
 #include "esp_gatt_defs.h"
 #include "esp_gattc_api.h"
-#include "esp_gap_ble_api.h"
+#include "esp_log.h"
+#include <inttypes.h>
 
 #include <string.h>
 
@@ -30,11 +30,10 @@
  *    PRIVATE TYPEDEFS
  *****************************************************************************/
 
-// typedef struct mqtt_client_data
-// {
-//   QueueHandle_t           *p_data_mqtt_queue;
-//   esp_mqtt_client_handle_t s_MQTT_Client;
-// } mqtt_client_data_t;
+typedef struct ble_tracking_data
+{
+  QueueHandle_t           *p_data_mqtt_queue;
+} ble_tracking_data_t;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -128,9 +127,8 @@ static void APP_BLE_TRACKING_GAP_Callback(esp_gap_ble_cb_event_t  event,
     {
       eddystone_result_t eddystone_res;
       memset(&eddystone_res, 0, sizeof(eddystone_res));
-      esp_err_t ret =
-      eddystone_decode(scan_result->scan_rst.ble_adv,
-                           scan_result->scan_rst.adv_data_len, &eddystone_res);
+      esp_err_t ret = eddystone_decode(scan_result->scan_rst.ble_adv,
+                                       scan_result->scan_rst.adv_data_len, &eddystone_res);
       if (ret)
       {
         // error:The received data is not an eddystone frame packet or a correct
