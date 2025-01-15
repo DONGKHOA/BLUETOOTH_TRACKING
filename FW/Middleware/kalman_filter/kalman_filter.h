@@ -33,7 +33,8 @@ extern "C"
   void   KALMAN_FILTER_Init(Kalman_Filter_t *p_Kalman,
                             double           d_err_measure,
                             double           d_err_estimate,
-                            double           d_q);
+                            double           d_q,
+                            double           d_start_value);
   double KALMAN_FILTER_GetRSSI(Kalman_Filter_t *p_Kalman, double d_mea);
 
 #ifdef __cplusplus

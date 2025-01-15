@@ -1,0 +1,355 @@
+2025-01-10 21:19:26,246 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-2] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52669], event: CONNECT
+2025-01-10 21:19:26,246 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-1] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52668], event: CONNECT
+2025-01-10 21:19:26,248 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection channel registered: 192.168.1.32:52668
+2025-01-10 21:19:26,248 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection channel registered: 192.168.1.32:52669
+2025-01-10 21:19:26,248 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection channel active: 192.168.1.32:52668
+2025-01-10 21:19:26,249 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection channel active: 192.168.1.32:52669
+2025-01-10 21:19:26,261 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-1] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52668], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:26,261 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection closed: 192.168.1.32:52668
+2025-01-10 21:19:26,262 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection closed: 192.168.1.32:52668
+2025-01-10 21:19:26,263 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection channel inactive: 192.168.1.32:52668
+2025-01-10 21:19:26,263 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-1] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52668], event: CLOSE
+2025-01-10 21:19:26,263 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-1] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52668], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:26,263 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection closed: 192.168.1.32:52668
+2025-01-10 21:19:26,263 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-1] Connection channel unregistered: 192.168.1.32:52668
+2025-01-10 21:19:27,367 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-2] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52669], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,368 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection closed: 192.168.1.32:52669
+2025-01-10 21:19:27,369 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection closed: 192.168.1.32:52669
+2025-01-10 21:19:27,370 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection channel inactive: 192.168.1.32:52669
+2025-01-10 21:19:27,370 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-2] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52669], event: CLOSE
+2025-01-10 21:19:27,370 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-2] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52669], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,371 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection closed: 192.168.1.32:52669
+2025-01-10 21:19:27,371 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-2] Connection channel unregistered: 192.168.1.32:52669
+2025-01-10 21:19:27,373 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-3] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52670], event: CONNECT
+2025-01-10 21:19:27,374 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection channel registered: 192.168.1.32:52670
+2025-01-10 21:19:27,374 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection channel active: 192.168.1.32:52670
+2025-01-10 21:19:27,375 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-3] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52670], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,375 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection closed: 192.168.1.32:52670
+2025-01-10 21:19:27,376 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection closed: 192.168.1.32:52670
+2025-01-10 21:19:27,379 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection channel inactive: 192.168.1.32:52670
+2025-01-10 21:19:27,379 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-3] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52670], event: CLOSE
+2025-01-10 21:19:27,380 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-3] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52670], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,381 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-4] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52671], event: CONNECT
+2025-01-10 21:19:27,381 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection closed: 192.168.1.32:52670
+2025-01-10 21:19:27,381 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection channel registered: 192.168.1.32:52671
+2025-01-10 21:19:27,381 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection channel active: 192.168.1.32:52671
+2025-01-10 21:19:27,381 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-3] Connection channel unregistered: 192.168.1.32:52670
+2025-01-10 21:19:27,384 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-4] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52671], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,385 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection closed: 192.168.1.32:52671
+2025-01-10 21:19:27,386 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection closed: 192.168.1.32:52671
+2025-01-10 21:19:27,386 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection channel inactive: 192.168.1.32:52671
+2025-01-10 21:19:27,387 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-4] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52671], event: CLOSE
+2025-01-10 21:19:27,387 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-4] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52671], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:27,387 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection closed: 192.168.1.32:52671
+2025-01-10 21:19:27,387 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-4] Connection channel unregistered: 192.168.1.32:52671
+2025-01-10 21:19:32,434 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-5] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52672], event: CONNECT
+2025-01-10 21:19:32,434 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-6] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52673], event: CONNECT
+2025-01-10 21:19:32,435 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection channel registered: 192.168.1.32:52673
+2025-01-10 21:19:32,435 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection channel active: 192.168.1.32:52673
+2025-01-10 21:19:32,436 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection channel registered: 192.168.1.32:52672
+2025-01-10 21:19:32,436 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection channel active: 192.168.1.32:52672
+2025-01-10 21:19:32,437 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-5] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52672], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:32,437 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection closed: 192.168.1.32:52672
+2025-01-10 21:19:32,438 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection closed: 192.168.1.32:52672
+2025-01-10 21:19:32,439 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection channel inactive: 192.168.1.32:52672
+2025-01-10 21:19:32,439 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-5] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52672], event: CLOSE
+2025-01-10 21:19:32,439 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-5] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52672], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:19:32,439 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection closed: 192.168.1.32:52672
+2025-01-10 21:19:32,439 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-5] Connection channel unregistered: 192.168.1.32:52672
+2025-01-10 21:20:02,471 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-6] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52673], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,471 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection closed: 192.168.1.32:52673
+2025-01-10 21:20:02,472 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-7] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52677], event: CONNECT
+2025-01-10 21:20:02,472 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection closed: 192.168.1.32:52673
+2025-01-10 21:20:02,472 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection channel registered: 192.168.1.32:52677
+2025-01-10 21:20:02,472 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection channel active: 192.168.1.32:52677
+2025-01-10 21:20:02,472 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection channel inactive: 192.168.1.32:52673
+2025-01-10 21:20:02,474 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-6] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52673], event: CLOSE
+2025-01-10 21:20:02,474 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-6] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52673], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,474 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection closed: 192.168.1.32:52673
+2025-01-10 21:20:02,474 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-6] Connection channel unregistered: 192.168.1.32:52673
+2025-01-10 21:20:02,474 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-7] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52677], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,475 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection closed: 192.168.1.32:52677
+2025-01-10 21:20:02,475 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection closed: 192.168.1.32:52677
+2025-01-10 21:20:02,476 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection channel inactive: 192.168.1.32:52677
+2025-01-10 21:20:02,476 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-7] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52677], event: CLOSE
+2025-01-10 21:20:02,476 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-7] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52677], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,476 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection closed: 192.168.1.32:52677
+2025-01-10 21:20:02,476 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-7] Connection channel unregistered: 192.168.1.32:52677
+2025-01-10 21:20:02,480 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-8] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52678], event: CONNECT
+2025-01-10 21:20:02,481 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection channel registered: 192.168.1.32:52678
+2025-01-10 21:20:02,481 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection channel active: 192.168.1.32:52678
+2025-01-10 21:20:02,481 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-8] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52678], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,481 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection closed: 192.168.1.32:52678
+2025-01-10 21:20:02,481 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection closed: 192.168.1.32:52678
+2025-01-10 21:20:02,482 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection channel inactive: 192.168.1.32:52678
+2025-01-10 21:20:02,482 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-8] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52678], event: CLOSE
+2025-01-10 21:20:02,482 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-8] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52678], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:02,482 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection closed: 192.168.1.32:52678
+2025-01-10 21:20:02,482 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-8] Connection channel unregistered: 192.168.1.32:52678
+2025-01-10 21:20:19,485 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-9] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52681], event: CONNECT
+2025-01-10 21:20:19,486 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection channel registered: 192.168.1.32:52681
+2025-01-10 21:20:19,486 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection channel active: 192.168.1.32:52681
+2025-01-10 21:20:19,487 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-9] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52681], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:19,487 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection closed: 192.168.1.32:52681
+2025-01-10 21:20:19,487 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection closed: 192.168.1.32:52681
+2025-01-10 21:20:19,488 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection channel inactive: 192.168.1.32:52681
+2025-01-10 21:20:19,488 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-9] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52681], event: CLOSE
+2025-01-10 21:20:19,489 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-9] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52681], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:20:19,489 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection closed: 192.168.1.32:52681
+2025-01-10 21:20:19,489 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-9] Connection channel unregistered: 192.168.1.32:52681
+2025-01-10 21:20:19,493 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-11] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52683], event: CONNECT
+2025-01-10 21:20:19,493 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-10] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52682], event: CONNECT
+2025-01-10 21:20:19,495 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-10] Connection channel registered: 192.168.1.32:52682
+2025-01-10 21:20:19,495 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-11] Connection channel registered: 192.168.1.32:52683
+2025-01-10 21:20:19,495 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-10] Connection channel active: 192.168.1.32:52682
+2025-01-10 21:20:19,495 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-11] Connection channel active: 192.168.1.32:52683
+2025-01-10 21:21:46,568 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-11] Connection closed: 192.168.1.32:52683
+2025-01-10 21:21:46,570 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-11] Connection channel inactive: 192.168.1.32:52683
+2025-01-10 21:21:46,570 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-11] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52683], event: CLOSE
+2025-01-10 21:21:46,570 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-11] Connection channel unregistered: 192.168.1.32:52683
+2025-01-10 21:21:46,571 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-10] Connection closed: 192.168.1.32:52682
+2025-01-10 21:21:46,571 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-10] Connection channel inactive: 192.168.1.32:52682
+2025-01-10 21:21:46,571 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-10] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52682], event: CLOSE
+2025-01-10 21:21:46,571 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-10] Connection channel unregistered: 192.168.1.32:52682
+2025-01-10 21:27:40,955 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-13] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52787], event: CONNECT
+2025-01-10 21:27:40,955 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-12] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52786], event: CONNECT
+2025-01-10 21:27:40,956 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection channel registered: 192.168.1.32:52787
+2025-01-10 21:27:40,956 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection channel active: 192.168.1.32:52787
+2025-01-10 21:27:40,956 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection channel registered: 192.168.1.32:52786
+2025-01-10 21:27:40,956 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection channel active: 192.168.1.32:52786
+2025-01-10 21:27:40,957 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-12] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52786], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:40,957 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection closed: 192.168.1.32:52786
+2025-01-10 21:27:40,958 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection closed: 192.168.1.32:52786
+2025-01-10 21:27:40,959 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection channel inactive: 192.168.1.32:52786
+2025-01-10 21:27:40,959 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-12] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52786], event: CLOSE
+2025-01-10 21:27:40,960 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-12] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52786], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:40,960 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection closed: 192.168.1.32:52786
+2025-01-10 21:27:40,960 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-12] Connection channel unregistered: 192.168.1.32:52786
+2025-01-10 21:27:42,004 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-13] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52787], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:42,004 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection closed: 192.168.1.32:52787
+2025-01-10 21:27:42,005 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection closed: 192.168.1.32:52787
+2025-01-10 21:27:42,006 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection channel inactive: 192.168.1.32:52787
+2025-01-10 21:27:42,006 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-13] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52787], event: CLOSE
+2025-01-10 21:27:42,006 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-13] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52787], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:42,006 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection closed: 192.168.1.32:52787
+2025-01-10 21:27:42,006 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-13] Connection channel unregistered: 192.168.1.32:52787
+2025-01-10 21:27:42,007 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-14] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52789], event: CONNECT
+2025-01-10 21:27:42,008 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection channel registered: 192.168.1.32:52789
+2025-01-10 21:27:42,008 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection channel active: 192.168.1.32:52789
+2025-01-10 21:27:42,009 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-14] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52789], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:42,009 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection closed: 192.168.1.32:52789
+2025-01-10 21:27:42,010 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection closed: 192.168.1.32:52789
+2025-01-10 21:27:42,012 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection channel inactive: 192.168.1.32:52789
+2025-01-10 21:27:42,012 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-14] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52789], event: CLOSE
+2025-01-10 21:27:42,013 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-14] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52789], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:42,013 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-15] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52790], event: CONNECT
+2025-01-10 21:27:42,013 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection channel registered: 192.168.1.32:52790
+2025-01-10 21:27:42,013 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection closed: 192.168.1.32:52789
+2025-01-10 21:27:42,013 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection channel active: 192.168.1.32:52790
+2025-01-10 21:27:42,013 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-14] Connection channel unregistered: 192.168.1.32:52789
+2025-01-10 21:27:47,041 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-15] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52790], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:47,041 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection closed: 192.168.1.32:52790
+2025-01-10 21:27:47,042 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection closed: 192.168.1.32:52790
+2025-01-10 21:27:47,042 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection channel inactive: 192.168.1.32:52790
+2025-01-10 21:27:47,042 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-15] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52790], event: CLOSE
+2025-01-10 21:27:47,043 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-15] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52790], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:47,043 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection closed: 192.168.1.32:52790
+2025-01-10 21:27:47,043 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-15] Connection channel unregistered: 192.168.1.32:52790
+2025-01-10 21:27:47,044 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-16] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52792], event: CONNECT
+2025-01-10 21:27:47,045 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection channel registered: 192.168.1.32:52792
+2025-01-10 21:27:47,045 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection channel active: 192.168.1.32:52792
+2025-01-10 21:27:47,045 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-16] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52792], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:47,046 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection closed: 192.168.1.32:52792
+2025-01-10 21:27:47,046 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection closed: 192.168.1.32:52792
+2025-01-10 21:27:47,046 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection channel inactive: 192.168.1.32:52792
+2025-01-10 21:27:47,048 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-16] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52792], event: CLOSE
+2025-01-10 21:27:47,048 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-16] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52792], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:27:47,048 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection closed: 192.168.1.32:52792
+2025-01-10 21:27:47,048 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-16] Connection channel unregistered: 192.168.1.32:52792
+2025-01-10 21:28:13,344 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-17] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52795], event: CONNECT
+2025-01-10 21:28:13,346 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection channel registered: 192.168.1.32:52795
+2025-01-10 21:28:13,346 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection channel active: 192.168.1.32:52795
+2025-01-10 21:28:13,347 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-17] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52795], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:13,347 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection closed: 192.168.1.32:52795
+2025-01-10 21:28:13,347 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection closed: 192.168.1.32:52795
+2025-01-10 21:28:13,347 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection channel inactive: 192.168.1.32:52795
+2025-01-10 21:28:13,347 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-17] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52795], event: CLOSE
+2025-01-10 21:28:13,347 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-17] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52795], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:13,347 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection closed: 192.168.1.32:52795
+2025-01-10 21:28:13,348 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-17] Connection channel unregistered: 192.168.1.32:52795
+2025-01-10 21:28:13,349 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-18] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52796], event: CONNECT
+2025-01-10 21:28:13,350 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection channel registered: 192.168.1.32:52796
+2025-01-10 21:28:13,350 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection channel active: 192.168.1.32:52796
+2025-01-10 21:28:14,386 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-18] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52796], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:14,387 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection closed: 192.168.1.32:52796
+2025-01-10 21:28:14,388 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection closed: 192.168.1.32:52796
+2025-01-10 21:28:14,389 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection channel inactive: 192.168.1.32:52796
+2025-01-10 21:28:14,389 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-18] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52796], event: CLOSE
+2025-01-10 21:28:14,390 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-18] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52796], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:14,390 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection closed: 192.168.1.32:52796
+2025-01-10 21:28:14,391 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-18] Connection channel unregistered: 192.168.1.32:52796
+2025-01-10 21:28:14,391 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-19] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52797], event: CONNECT
+2025-01-10 21:28:14,392 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection channel registered: 192.168.1.32:52797
+2025-01-10 21:28:14,393 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection channel active: 192.168.1.32:52797
+2025-01-10 21:28:14,393 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-19] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52797], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:14,394 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection closed: 192.168.1.32:52797
+2025-01-10 21:28:14,394 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection closed: 192.168.1.32:52797
+2025-01-10 21:28:14,396 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection channel inactive: 192.168.1.32:52797
+2025-01-10 21:28:14,396 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-19] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52797], event: CLOSE
+2025-01-10 21:28:14,397 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-19] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52797], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:14,397 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection closed: 192.168.1.32:52797
+2025-01-10 21:28:14,397 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-19] Connection channel unregistered: 192.168.1.32:52797
+2025-01-10 21:28:18,601 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-20] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52798], event: CONNECT
+2025-01-10 21:28:18,602 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection channel registered: 192.168.1.32:52798
+2025-01-10 21:28:18,602 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-21] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52799], event: CONNECT
+2025-01-10 21:28:18,602 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection channel active: 192.168.1.32:52798
+2025-01-10 21:28:18,602 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection channel registered: 192.168.1.32:52799
+2025-01-10 21:28:18,602 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection channel active: 192.168.1.32:52799
+2025-01-10 21:28:18,603 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-20] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52798], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:18,603 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection closed: 192.168.1.32:52798
+2025-01-10 21:28:18,604 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection closed: 192.168.1.32:52798
+2025-01-10 21:28:18,604 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection channel inactive: 192.168.1.32:52798
+2025-01-10 21:28:18,604 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-20] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52798], event: CLOSE
+2025-01-10 21:28:18,604 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-20] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52798], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:18,605 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection closed: 192.168.1.32:52798
+2025-01-10 21:28:18,605 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-20] Connection channel unregistered: 192.168.1.32:52798
+2025-01-10 21:28:19,645 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-21] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52799], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:19,645 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection closed: 192.168.1.32:52799
+2025-01-10 21:28:19,646 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection closed: 192.168.1.32:52799
+2025-01-10 21:28:19,649 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection channel inactive: 192.168.1.32:52799
+2025-01-10 21:28:19,649 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-21] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52799], event: CLOSE
+2025-01-10 21:28:19,649 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-21] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52799], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:19,649 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection closed: 192.168.1.32:52799
+2025-01-10 21:28:19,649 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-21] Connection channel unregistered: 192.168.1.32:52799
+2025-01-10 21:28:19,658 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-22] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52800], event: CONNECT
+2025-01-10 21:28:19,658 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection channel registered: 192.168.1.32:52800
+2025-01-10 21:28:19,658 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection channel active: 192.168.1.32:52800
+2025-01-10 21:28:19,660 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-22] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52800], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:19,660 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection closed: 192.168.1.32:52800
+2025-01-10 21:28:19,662 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection closed: 192.168.1.32:52800
+2025-01-10 21:28:19,662 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection channel inactive: 192.168.1.32:52800
+2025-01-10 21:28:19,662 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-22] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52800], event: CLOSE
+2025-01-10 21:28:19,662 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-22] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52800], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:19,662 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection closed: 192.168.1.32:52800
+2025-01-10 21:28:19,662 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-22] Connection channel unregistered: 192.168.1.32:52800
+2025-01-10 21:28:24,692 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-23] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52803], event: CONNECT
+2025-01-10 21:28:24,693 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection channel registered: 192.168.1.32:52803
+2025-01-10 21:28:24,694 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection channel active: 192.168.1.32:52803
+2025-01-10 21:28:24,696 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-24] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52804], event: CONNECT
+2025-01-10 21:28:24,696 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-23] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52803], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:24,697 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection closed: 192.168.1.32:52803
+2025-01-10 21:28:24,697 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection channel registered: 192.168.1.32:52804
+2025-01-10 21:28:24,698 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection channel active: 192.168.1.32:52804
+2025-01-10 21:28:24,699 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection closed: 192.168.1.32:52803
+2025-01-10 21:28:24,699 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection channel inactive: 192.168.1.32:52803
+2025-01-10 21:28:24,699 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-23] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52803], event: CLOSE
+2025-01-10 21:28:24,700 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-23] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52803], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:24,700 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection closed: 192.168.1.32:52803
+2025-01-10 21:28:24,700 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-23] Connection channel unregistered: 192.168.1.32:52803
+2025-01-10 21:28:54,735 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-24] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52804], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:54,736 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection closed: 192.168.1.32:52804
+2025-01-10 21:28:54,736 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection closed: 192.168.1.32:52804
+2025-01-10 21:28:54,739 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection channel inactive: 192.168.1.32:52804
+2025-01-10 21:28:54,739 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-24] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52804], event: CLOSE
+2025-01-10 21:28:54,739 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-24] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52804], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:54,739 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection closed: 192.168.1.32:52804
+2025-01-10 21:28:54,739 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-24] Connection channel unregistered: 192.168.1.32:52804
+2025-01-10 21:28:54,740 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-25] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52821], event: CONNECT
+2025-01-10 21:28:54,742 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection channel registered: 192.168.1.32:52821
+2025-01-10 21:28:54,742 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection channel active: 192.168.1.32:52821
+2025-01-10 21:28:54,743 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-25] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52821], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:54,744 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection closed: 192.168.1.32:52821
+2025-01-10 21:28:54,745 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection closed: 192.168.1.32:52821
+2025-01-10 21:28:54,746 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection channel inactive: 192.168.1.32:52821
+2025-01-10 21:28:54,746 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-25] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52821], event: CLOSE
+2025-01-10 21:28:54,747 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-25] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52821], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:28:54,747 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection closed: 192.168.1.32:52821
+2025-01-10 21:28:54,748 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-25] Connection channel unregistered: 192.168.1.32:52821
+2025-01-10 21:29:54,778 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-26] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52831], event: CONNECT
+2025-01-10 21:29:54,779 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection channel registered: 192.168.1.32:52831
+2025-01-10 21:29:54,779 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection channel active: 192.168.1.32:52831
+2025-01-10 21:29:54,779 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-27] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52832], event: CONNECT
+2025-01-10 21:29:54,779 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-26] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52831], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:29:54,780 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection channel registered: 192.168.1.32:52832
+2025-01-10 21:29:54,780 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection closed: 192.168.1.32:52831
+2025-01-10 21:29:54,780 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection channel active: 192.168.1.32:52832
+2025-01-10 21:29:54,781 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection closed: 192.168.1.32:52831
+2025-01-10 21:29:54,781 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection channel inactive: 192.168.1.32:52831
+2025-01-10 21:29:54,781 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-26] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52831], event: CLOSE
+2025-01-10 21:29:54,781 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-26] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52831], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:29:54,781 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection closed: 192.168.1.32:52831
+2025-01-10 21:29:54,781 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-26] Connection channel unregistered: 192.168.1.32:52831
+2025-01-10 21:30:19,760 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-27] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52832], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:19,761 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection closed: 192.168.1.32:52832
+2025-01-10 21:30:19,761 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection closed: 192.168.1.32:52832
+2025-01-10 21:30:19,762 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection channel inactive: 192.168.1.32:52832
+2025-01-10 21:30:19,762 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-27] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52832], event: CLOSE
+2025-01-10 21:30:19,762 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-27] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52832], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:19,762 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection closed: 192.168.1.32:52832
+2025-01-10 21:30:19,762 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-27] Connection channel unregistered: 192.168.1.32:52832
+2025-01-10 21:30:19,768 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-28] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52837], event: CONNECT
+2025-01-10 21:30:19,769 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection channel registered: 192.168.1.32:52837
+2025-01-10 21:30:19,769 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection channel active: 192.168.1.32:52837
+2025-01-10 21:30:19,769 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-29] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52838], event: CONNECT
+2025-01-10 21:30:19,769 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection channel registered: 192.168.1.32:52838
+2025-01-10 21:30:19,769 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection channel active: 192.168.1.32:52838
+2025-01-10 21:30:19,770 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-28] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52837], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:19,770 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection closed: 192.168.1.32:52837
+2025-01-10 21:30:19,771 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection closed: 192.168.1.32:52837
+2025-01-10 21:30:19,771 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection channel inactive: 192.168.1.32:52837
+2025-01-10 21:30:19,771 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-28] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52837], event: CLOSE
+2025-01-10 21:30:19,771 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-28] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52837], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:19,771 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection closed: 192.168.1.32:52837
+2025-01-10 21:30:19,771 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-28] Connection channel unregistered: 192.168.1.32:52837
+2025-01-10 21:30:20,806 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-29] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52838], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:20,807 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection closed: 192.168.1.32:52838
+2025-01-10 21:30:20,807 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection closed: 192.168.1.32:52838
+2025-01-10 21:30:20,807 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection channel inactive: 192.168.1.32:52838
+2025-01-10 21:30:20,808 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-29] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52838], event: CLOSE
+2025-01-10 21:30:20,809 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-29] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52838], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:20,809 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection closed: 192.168.1.32:52838
+2025-01-10 21:30:20,809 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-29] Connection channel unregistered: 192.168.1.32:52838
+2025-01-10 21:30:20,817 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-30] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52840], event: CONNECT
+2025-01-10 21:30:20,818 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-31] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52841], event: CONNECT
+2025-01-10 21:30:20,818 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection channel registered: 192.168.1.32:52840
+2025-01-10 21:30:20,818 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection channel registered: 192.168.1.32:52841
+2025-01-10 21:30:20,818 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection channel active: 192.168.1.32:52840
+2025-01-10 21:30:20,818 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection channel active: 192.168.1.32:52841
+2025-01-10 21:30:20,818 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-30] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52840], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:20,819 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection closed: 192.168.1.32:52840
+2025-01-10 21:30:20,819 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection closed: 192.168.1.32:52840
+2025-01-10 21:30:20,820 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection channel inactive: 192.168.1.32:52840
+2025-01-10 21:30:20,821 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-30] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52840], event: CLOSE
+2025-01-10 21:30:20,821 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-30] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52840], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:20,821 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection closed: 192.168.1.32:52840
+2025-01-10 21:30:20,821 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-30] Connection channel unregistered: 192.168.1.32:52840
+2025-01-10 21:30:25,851 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-31] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52841], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,852 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection closed: 192.168.1.32:52841
+2025-01-10 21:30:25,855 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection closed: 192.168.1.32:52841
+2025-01-10 21:30:25,857 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection channel inactive: 192.168.1.32:52841
+2025-01-10 21:30:25,857 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-31] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52841], event: CLOSE
+2025-01-10 21:30:25,857 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-31] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52841], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,857 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection closed: 192.168.1.32:52841
+2025-01-10 21:30:25,857 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-31] Connection channel unregistered: 192.168.1.32:52841
+2025-01-10 21:30:25,857 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-32] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52845], event: CONNECT
+2025-01-10 21:30:25,859 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection channel registered: 192.168.1.32:52845
+2025-01-10 21:30:25,859 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection channel active: 192.168.1.32:52845
+2025-01-10 21:30:25,861 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-32] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52845], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,861 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection closed: 192.168.1.32:52845
+2025-01-10 21:30:25,861 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection closed: 192.168.1.32:52845
+2025-01-10 21:30:25,862 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection channel inactive: 192.168.1.32:52845
+2025-01-10 21:30:25,862 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-32] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52845], event: CLOSE
+2025-01-10 21:30:25,862 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-32] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52845], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,862 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection closed: 192.168.1.32:52845
+2025-01-10 21:30:25,862 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-32] Connection channel unregistered: 192.168.1.32:52845
+2025-01-10 21:30:25,874 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-33] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52846], event: CONNECT
+2025-01-10 21:30:25,874 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection channel registered: 192.168.1.32:52846
+2025-01-10 21:30:25,874 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection channel active: 192.168.1.32:52846
+2025-01-10 21:30:25,875 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-33] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52846], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[71]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,875 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection closed: 192.168.1.32:52846
+2025-01-10 21:30:25,875 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection closed: 192.168.1.32:52846
+2025-01-10 21:30:25,876 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection channel inactive: 192.168.1.32:52846
+2025-01-10 21:30:25,876 INFO  [ConnectionEventHandler#175] [Rpc-netty-server-worker-1-thread-33] trigger user event, local[192.168.1.32:8801], remote[192.168.1.32:52846], event: CLOSE
+2025-01-10 21:30:25,876 WARN  [ConnectionEventHandler#203] [Rpc-netty-server-worker-1-thread-33] ExceptionCaught in connection: local[192.168.1.32:8801], remote[192.168.1.32:52846], close the connection! Cause[DecoderException:com.alipay.remoting.exception.CodecException: Unknown protocol code: [ProtocolVersion{version=[84]}] while decode in ProtocolDecoder.]
+2025-01-10 21:30:25,876 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection closed: 192.168.1.32:52846
+2025-01-10 21:30:25,876 INFO  [ConnectionEventHandler#290] [Rpc-netty-server-worker-1-thread-33] Connection channel unregistered: 192.168.1.32:52846
