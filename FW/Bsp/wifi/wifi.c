@@ -52,7 +52,11 @@ static char               ssid_name[1024];
  *   STATIC FUNCTIONS
  *****************************************************************************/
 
-static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
+static void
+event_handler (void            *arg,
+               esp_event_base_t event_base,
+               int32_t          event_id,
+               void            *event_data)
 {
   if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START)
   {
@@ -83,7 +87,8 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
   }
 }
 
-static uint8_t WIFI_GetNumSSID(void)
+static uint8_t
+WIFI_GetNumSSID (void)
 {
   uint8_t      num;
   nvs_handle_t nvsHandle;
@@ -101,157 +106,166 @@ static uint8_t WIFI_GetNumSSID(void)
   }
 }
 
-static void WIFI_SetNumSSID(uint8_t num)
+static void
+WIFI_SetNumSSID (uint8_t num)
 {
   nvs_handle_t nvsHandle;
   nvs_open(NUM_WIFI_NVS, NVS_READWRITE, &nvsHandle);
   nvs_set_u8(nvsHandle, NUM_WIFI_KEY, num);
 }
 
-static esp_err_t WIFI_ScanSSID(uint8_t *ssid, uint8_t id, uint8_t len)
+static esp_err_t
+WIFI_ScanSSID (uint8_t *ssid, uint8_t id, uint8_t len)
 {
   char ssid_key[32];
   sprintf(ssid_key, "%d ssid", id);
   return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid, 32);
 }
 
-static esp_err_t WIFI_ScanPass(uint8_t *pass, uint8_t id, uint8_t len)
+static esp_err_t
+WIFI_ScanPass (uint8_t *pass, uint8_t id, uint8_t len)
 {
   char pass_key[32];
   sprintf(pass_key, "%d pass", id);
   return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass, 32);
 }
 
-static esp_err_t WIFI_SetSSID(uint8_t *ssid, uint8_t id)
+static esp_err_t
+WIFI_SetSSID (uint8_t *ssid, uint8_t id)
 {
   char ssid_key[32];
   sprintf(ssid_key, "%d ssid", id);
   return NVS_WriteString(SSID_NVS, (const char *)ssid_key, (const char *)ssid);
 }
 
-static esp_err_t WIFI_SetPass(uint8_t *pass, uint8_t id)
+static esp_err_t
+WIFI_SetPass (uint8_t *pass, uint8_t id)
 {
   char pass_key[32];
   sprintf(pass_key, "%d pass", id);
   return NVS_WriteString(PASS_NVS, (const char *)pass_key, (const char *)pass);
 }
 
-static void print_auth_mode(int authmode)
+static void
+print_auth_mode (int authmode)
 {
   switch (authmode)
   {
-  case WIFI_AUTH_OPEN:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_OPEN");
-    break;
-  case WIFI_AUTH_OWE:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_OWE");
-    break;
-  case WIFI_AUTH_WEP:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WEP");
-    break;
-  case WIFI_AUTH_WPA_PSK:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA_PSK");
-    break;
-  case WIFI_AUTH_WPA2_PSK:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA2_PSK");
-    break;
-  case WIFI_AUTH_WPA_WPA2_PSK:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA_WPA2_PSK");
-    break;
-  case WIFI_AUTH_ENTERPRISE:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_ENTERPRISE");
-    break;
-  case WIFI_AUTH_WPA3_PSK:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA3_PSK");
-    break;
-  case WIFI_AUTH_WPA2_WPA3_PSK:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA2_WPA3_PSK");
-    break;
-  case WIFI_AUTH_WPA3_ENT_192:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA3_ENT_192");
-    break;
-  default:
-    ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_UNKNOWN");
-    break;
+    case WIFI_AUTH_OPEN:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_OPEN");
+      break;
+    case WIFI_AUTH_OWE:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_OWE");
+      break;
+    case WIFI_AUTH_WEP:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WEP");
+      break;
+    case WIFI_AUTH_WPA_PSK:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA_PSK");
+      break;
+    case WIFI_AUTH_WPA2_PSK:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA2_PSK");
+      break;
+    case WIFI_AUTH_WPA_WPA2_PSK:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA_WPA2_PSK");
+      break;
+    case WIFI_AUTH_ENTERPRISE:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_ENTERPRISE");
+      break;
+    case WIFI_AUTH_WPA3_PSK:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA3_PSK");
+      break;
+    case WIFI_AUTH_WPA2_WPA3_PSK:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA2_WPA3_PSK");
+      break;
+    case WIFI_AUTH_WPA3_ENT_192:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_WPA3_ENT_192");
+      break;
+    default:
+      ESP_LOGI(TAG, "Authmode \tWIFI_AUTH_UNKNOWN");
+      break;
   }
 }
 
-static void print_cipher_type(int pairwise_cipher, int group_cipher)
+static void
+print_cipher_type (int pairwise_cipher, int group_cipher)
 {
   switch (pairwise_cipher)
   {
-  case WIFI_CIPHER_TYPE_NONE:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_NONE");
-    break;
-  case WIFI_CIPHER_TYPE_WEP40:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_WEP40");
-    break;
-  case WIFI_CIPHER_TYPE_WEP104:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_WEP104");
-    break;
-  case WIFI_CIPHER_TYPE_TKIP:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_TKIP");
-    break;
-  case WIFI_CIPHER_TYPE_CCMP:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_CCMP");
-    break;
-  case WIFI_CIPHER_TYPE_TKIP_CCMP:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_TKIP_CCMP");
-    break;
-  case WIFI_CIPHER_TYPE_AES_CMAC128:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_AES_CMAC128");
-    break;
-  case WIFI_CIPHER_TYPE_SMS4:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_SMS4");
-    break;
-  case WIFI_CIPHER_TYPE_GCMP:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_GCMP");
-    break;
-  case WIFI_CIPHER_TYPE_GCMP256:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_GCMP256");
-    break;
-  default:
-    ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_UNKNOWN");
-    break;
+    case WIFI_CIPHER_TYPE_NONE:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_NONE");
+      break;
+    case WIFI_CIPHER_TYPE_WEP40:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_WEP40");
+      break;
+    case WIFI_CIPHER_TYPE_WEP104:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_WEP104");
+      break;
+    case WIFI_CIPHER_TYPE_TKIP:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_TKIP");
+      break;
+    case WIFI_CIPHER_TYPE_CCMP:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_CCMP");
+      break;
+    case WIFI_CIPHER_TYPE_TKIP_CCMP:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_TKIP_CCMP");
+      break;
+    case WIFI_CIPHER_TYPE_AES_CMAC128:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_AES_CMAC128");
+      break;
+    case WIFI_CIPHER_TYPE_SMS4:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_SMS4");
+      break;
+    case WIFI_CIPHER_TYPE_GCMP:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_GCMP");
+      break;
+    case WIFI_CIPHER_TYPE_GCMP256:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_GCMP256");
+      break;
+    default:
+      ESP_LOGI(TAG, "Pairwise Cipher \tWIFI_CIPHER_TYPE_UNKNOWN");
+      break;
   }
 
   switch (group_cipher)
   {
-  case WIFI_CIPHER_TYPE_NONE:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_NONE");
-    break;
-  case WIFI_CIPHER_TYPE_WEP40:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_WEP40");
-    break;
-  case WIFI_CIPHER_TYPE_WEP104:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_WEP104");
-    break;
-  case WIFI_CIPHER_TYPE_TKIP:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_TKIP");
-    break;
-  case WIFI_CIPHER_TYPE_CCMP:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_CCMP");
-    break;
-  case WIFI_CIPHER_TYPE_TKIP_CCMP:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_TKIP_CCMP");
-    break;
-  case WIFI_CIPHER_TYPE_SMS4:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_SMS4");
-    break;
-  case WIFI_CIPHER_TYPE_GCMP:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_GCMP");
-    break;
-  case WIFI_CIPHER_TYPE_GCMP256:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_GCMP256");
-    break;
-  default:
-    ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_UNKNOWN");
-    break;
+    case WIFI_CIPHER_TYPE_NONE:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_NONE");
+      break;
+    case WIFI_CIPHER_TYPE_WEP40:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_WEP40");
+      break;
+    case WIFI_CIPHER_TYPE_WEP104:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_WEP104");
+      break;
+    case WIFI_CIPHER_TYPE_TKIP:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_TKIP");
+      break;
+    case WIFI_CIPHER_TYPE_CCMP:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_CCMP");
+      break;
+    case WIFI_CIPHER_TYPE_TKIP_CCMP:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_TKIP_CCMP");
+      break;
+    case WIFI_CIPHER_TYPE_SMS4:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_SMS4");
+      break;
+    case WIFI_CIPHER_TYPE_GCMP:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_GCMP");
+      break;
+    case WIFI_CIPHER_TYPE_GCMP256:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_GCMP256");
+      break;
+    default:
+      ESP_LOGI(TAG, "Group Cipher \tWIFI_CIPHER_TYPE_UNKNOWN");
+      break;
   }
 }
 
-// Function to check if a substring has appeared in the two-dimensional array or not
-static uint8_t isDuplicate(char *str, char *substrings[], int count)
+// Function to check if a substring has appeared in the two-dimensional array or
+// not
+static uint8_t
+isDuplicate (char *str, char *substrings[], int count)
 {
   for (int i = 0; i < count; i++)
   {
@@ -263,12 +277,15 @@ static uint8_t isDuplicate(char *str, char *substrings[], int count)
   return 0; // Not duplicate
 }
 
-// Function to remove duplicate substrings from the substring array and store in a new string
-static void deleteDuplicateSubstrings(char *str, char *result)
+// Function to remove duplicate substrings from the substring array and store in
+// a new string
+static void
+deleteDuplicateSubstrings (char *str, char *result)
 {
   char *token;
   char *delim = "\n";
-  char *substrings[100]; // Two-dimensional array to store non-duplicate substrings
+  char *substrings[100]; // Two-dimensional array to store non-duplicate
+                         // substrings
   int count = 0;         // Number of substrings added to the array
 
   // Parse the original string into substrings and store them in the array
@@ -286,8 +303,9 @@ static void deleteDuplicateSubstrings(char *str, char *result)
   result[0] = '\0'; // Initialize the new string
   for (int i = 0; i < count; i++)
   {
-    strcat(result, substrings[i]); // Concatenate the substring into the new string
-    strcat(result, "\n");          // Add '\n' character after each substring
+    strcat(result,
+           substrings[i]); // Concatenate the substring into the new string
+    strcat(result, "\n");  // Add '\n' character after each substring
   }
 }
 
@@ -296,9 +314,11 @@ static void deleteDuplicateSubstrings(char *str, char *result)
  *****************************************************************************/
 
 /**
- * The function `WIFI_StaInit` initializes the WiFi station mode on an ESP32 device.
+ * The function `WIFI_StaInit` initializes the WiFi station mode on an ESP32
+ * device.
  */
-void WIFI_StaInit(void)
+void
+WIFI_StaInit (void)
 {
   ESP_ERROR_CHECK(esp_netif_init());
   ESP_ERROR_CHECK(esp_event_loop_create_default());
@@ -315,17 +335,21 @@ void WIFI_StaInit(void)
 }
 
 /**
- * The function `WIFI_Scan` scans for nearby WiFi networks, retrieves their information, removes
- * duplicates, and returns the total number of unique networks found.
+ * The function `WIFI_Scan` scans for nearby WiFi networks, retrieves their
+ * information, removes duplicates, and returns the total number of unique
+ * networks found.
  *
- * @param data_name The `data_name` parameter in the `WIFI_Scan` function is a pointer to a uint8_t
- * array where the scanned Wi-Fi SSID names will be stored after processing. The function scans for
- * available Wi-Fi networks, extracts the SSID names, removes duplicates, and stores the unique
+ * @param data_name The `data_name` parameter in the `WIFI_Scan` function is a
+ * pointer to a uint8_t array where the scanned Wi-Fi SSID names will be stored
+ * after processing. The function scans for available Wi-Fi networks, extracts
+ * the SSID names, removes duplicates, and stores the unique
  *
- * @return The function `WIFI_Scan` returns the total number of WiFi networks scanned and stored in the
- * `data_name` buffer after removing any duplicate SSIDs.
+ * @return The function `WIFI_Scan` returns the total number of WiFi networks
+ * scanned and stored in the `data_name` buffer after removing any duplicate
+ * SSIDs.
  */
-uint8_t WIFI_Scan(char *data_name)
+uint8_t
+WIFI_Scan (char *data_name)
 {
 
   int i;
@@ -393,26 +417,29 @@ uint8_t WIFI_Scan(char *data_name)
 }
 
 /**
- * The function `WIFI_Connect` attempts to connect to a WiFi network using the provided SSID and
- * password, handling authentication modes and event notifications.
+ * The function `WIFI_Connect` attempts to connect to a WiFi network using the
+ * provided SSID and password, handling authentication modes and event
+ * notifications.
  *
- * @param ssid The `ssid` parameter in the `WIFI_Connect` function is a pointer to an array of
- * characters representing the SSID (Service Set Identifier) of the Wi-Fi network you want to connect
- * to. The SSID is essentially the name of the Wi-Fi network.
- * @param password The code you provided is a function `WIFI_Connect` that attempts to connect to a
- * WiFi network using the provided SSID and password. The function initializes the WiFi configuration,
- * sets up event handlers, and then tries to connect to the network.
+ * @param ssid The `ssid` parameter in the `WIFI_Connect` function is a pointer
+ * to an array of characters representing the SSID (Service Set Identifier) of
+ * the Wi-Fi network you want to connect to. The SSID is essentially the name of
+ * the Wi-Fi network.
+ * @param password The code you provided is a function `WIFI_Connect` that
+ * attempts to connect to a WiFi network using the provided SSID and password.
+ * The function initializes the WiFi configuration, sets up event handlers, and
+ * then tries to connect to the network.
  *
- * @return The function `WIFI_Connect` returns a value of type `WIFI_Status_t`, which is an enumeration
- * type. The possible return values are:
+ * @return The function `WIFI_Connect` returns a value of type `WIFI_Status_t`,
+ * which is an enumeration type. The possible return values are:
  * - `CONNECT_OK` if the connection to the Wi-Fi network was successful.
  * - `CONNECT_FAIL` if the connection to the Wi-Fi network failed.
- * - `UNEXPECTED_EVENT` if an unexpected event occurred during the connection process.
+ * - `UNEXPECTED_EVENT` if an unexpected event occurred during the connection
+ * process.
  */
-WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
+WIFI_Status_t
+WIFI_Connect (uint8_t *ssid, uint8_t *password)
 {
-  esp_wifi_stop();
-
   s_wifi_event_group = xEventGroupCreate();
 
   wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
@@ -420,24 +447,24 @@ WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
 
   esp_event_handler_instance_t instance_any_id;
   esp_event_handler_instance_t instance_got_ip;
-  esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID,
-                                      &event_handler, NULL, &instance_any_id);
-  esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP,
-                                      &event_handler, NULL, &instance_got_ip);
+  esp_event_handler_instance_register(
+      WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL, &instance_any_id);
+  esp_event_handler_instance_register(
+      IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, &instance_got_ip);
 
   wifi_config_t wifi_config =
-        {
-            .sta =
-                {
-                    /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password len => 8).
-                     * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
-                     * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
-                     * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
-                     */
-                    .threshold.authmode = WIFI_AUTH_WPA2_PSK,
-                    .sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
-                },
-        };
+  {
+    .sta =
+    {
+      /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password len => 8).
+        * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
+        * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
+        * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
+        */
+      .threshold.authmode = WIFI_AUTH_WPA2_PSK,
+      .sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
+    },
+  };
 
   for (uint8_t i = 0; i < 32; i++)
   {
@@ -451,31 +478,42 @@ WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
 
   ESP_LOGI(TAG, "Wifi_init_station finished.");
 
-  /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
-   * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
-  EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-                                         pdFALSE, pdFALSE, portMAX_DELAY);
+  /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or
+   * connection failed for the maximum number of re-tries (WIFI_FAIL_BIT). The
+   * bits are set by event_handler() (see above) */
+  EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
+                                         WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+                                         pdFALSE,
+                                         pdFALSE,
+                                         portMAX_DELAY);
 
   /* xEventGroupWaitBits() returns the bits before the call returned, hence we
    * can test which event actually happened. */
   if (bits & WIFI_CONNECTED_BIT)
   {
     s_retry_num = 0;
-    ESP_LOGI(TAG, "Connected to ap SSID:%s password:%s", wifi_config.sta.ssid,
+    ESP_LOGI(TAG,
+             "Connected to ap SSID:%s password:%s",
+             wifi_config.sta.ssid,
              wifi_config.sta.password);
+    vEventGroupDelete(s_wifi_event_group);
     return CONNECT_OK;
   }
   else if (bits & WIFI_FAIL_BIT)
   {
     s_retry_num = 0;
-    ESP_LOGE(TAG, "Failed to connect to SSID:%s, password:%s",
-             wifi_config.sta.ssid, wifi_config.sta.password);
+    ESP_LOGE(TAG,
+             "Failed to connect to SSID:%s, password:%s",
+             wifi_config.sta.ssid,
+             wifi_config.sta.password);
+    vEventGroupDelete(s_wifi_event_group);
     return CONNECT_FAIL;
   }
   else
   {
     s_retry_num = 0;
     ESP_LOGE(TAG, "UNEXPECTED EVENT");
+    vEventGroupDelete(s_wifi_event_group);
     return UNEXPECTED_EVENT;
   }
 }
@@ -494,7 +532,8 @@ WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
  * specified SSID is found during the scan, it returns the index of that SSID.
  * If the SSID is not found or if there are no SSIDs available, it returns -1.
  */
-int8_t WIFI_ScanNVS(uint8_t *ssid, uint8_t *pass)
+int8_t
+WIFI_ScanNVS (uint8_t *ssid, uint8_t *pass)
 {
   int8_t  i;
   uint8_t ssid_temp[32];
@@ -518,14 +557,17 @@ int8_t WIFI_ScanNVS(uint8_t *ssid, uint8_t *pass)
 }
 
 /**
- * The function WIFI_StoreNVS stores a new WiFi SSID and password in non-volatile storage.
+ * The function WIFI_StoreNVS stores a new WiFi SSID and password in
+ * non-volatile storage.
  *
- * @param ssid The `ssid` parameter is a pointer to an array of characters that represents the name of
- * the Wi-Fi network (Service Set Identifier).
- * @param password The `password` parameter in the `WIFI_StoreNVS` function is a pointer to an array of
- * `uint8_t` data type, which is typically used to store a password for a Wi-Fi network.
+ * @param ssid The `ssid` parameter is a pointer to an array of characters that
+ * represents the name of the Wi-Fi network (Service Set Identifier).
+ * @param password The `password` parameter in the `WIFI_StoreNVS` function is a
+ * pointer to an array of `uint8_t` data type, which is typically used to store
+ * a password for a Wi-Fi network.
  */
-void WIFI_StoreNVS(uint8_t *ssid, uint8_t *password)
+void
+WIFI_StoreNVS (uint8_t *ssid, uint8_t *password)
 {
   num_wifi = WIFI_GetNumSSID();
   num_wifi++;
@@ -534,7 +576,8 @@ void WIFI_StoreNVS(uint8_t *ssid, uint8_t *password)
   WIFI_SetPass(password, num_wifi);
 }
 
-WIFI_Status_t WIFI_state_connect(void)
+WIFI_Status_t
+WIFI_state_connect (void)
 {
   return state_connected_wifi;
 }
