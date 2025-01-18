@@ -1,6 +1,8 @@
 import socket
 
-def start_server(host='192.168.1.145', port=8899):
+if __name__ == "__main__":
+    host = '192.168.1.145'
+    port = 8899
     # Create a TCP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
@@ -47,7 +49,3 @@ def start_server(host='192.168.1.145', port=8899):
             # Close the connection
             client_socket.close()
             print(f"Connection closed with {client_address}")
-
-
-if __name__ == "__main__":
-    start_server()
