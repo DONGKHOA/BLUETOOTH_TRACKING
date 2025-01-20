@@ -1293,10 +1293,11 @@ PartTypes=0
 Net1=NetName=-12V|NetColor=clBlue
 Net2=NetName=12V|NetColor=$00E8864A
 Net3=NetName=1V2|NetColor=clAqua
-Net4=NetName=2V8|NetColor=clLime
-Net5=NetName=3V3|NetColor=clYellow
-Net6=NetName=5V|NetColor=$000099FF
-Net7=NetName=VCC|NetColor=clRed
+Net4=NetName=2V5|NetColor=$00FF0099
+Net5=NetName=2V8|NetColor=clLime
+Net6=NetName=3V3|NetColor=clYellow
+Net7=NetName=5V|NetColor=$000099FF
+Net8=NetName=VCC|NetColor=clRed
 
 [Comparison Options]
 ComparisonOptions0=Kind=Net|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
