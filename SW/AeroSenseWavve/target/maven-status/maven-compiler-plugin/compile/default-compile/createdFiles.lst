@@ -56,6 +56,7 @@ com\aerosense\radar\tcp\service\toRadar\GetTheStatusOfTheNumberOfMotionsCollecte
 com\aerosense\radar\tcp\config\RequestTimeOut.class
 com\aerosense\radar\tcp\hander\base\AbstractToRadarProtocolDataHandler.class
 com\aerosense\radar\tcp\service\toRadar\GetHeartRateLowThreshold.class
+com\aerosense\handler\ConsumerRadarHandler.class
 com\aerosense\radar\tcp\hander\base\AbstractFromRadarProtocolDataHandler.class
 com\aerosense\radar\tcp\service\fromRadar\CreateConnectionHandler.class
 com\aerosense\radar\tcp\connection\RadarAddressHashMap.class
