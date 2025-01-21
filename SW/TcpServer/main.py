@@ -1,8 +1,9 @@
 import socket
 import struct
+import threading
 
 # Server configuration
-HOST = '192.168.1.109'
+HOST = '192.168.1.110'
 PORT = 8899
 
 def parse_28_byte_content(content_data):
@@ -16,21 +17,6 @@ def parse_28_byte_content(content_data):
         "Target Distance": fields[4],
         "Signal Strength": fields[5],
         "Valid Bit ID": fields[6],
-    }
-
-def parse_36_byte_content(content_data):
-    """Parse the 28-byte content data into a dictionary."""
-    fields = struct.unpack('>ffffffIff', content_data)
-    return {
-        "Breath BPM": fields[0],
-        "Breath Curve": fields[1],
-        "Heart Rate BPM": fields[2],
-        "Heart Rate Curve": fields[3],
-        "Target Distance": fields[4],
-        "Signal Strength": fields[5],
-        "Valid Bit ID": fields[6],
-        "Body Move Energy": fields[7],
-        "Body Move Range": fields[8],
     }
 
 def parse_packet(data):
@@ -75,16 +61,11 @@ def handle_client(client_socket, client_address):
 
                 if data[14] == 0x03 or data[15] == 0xe8:
                     function, content_data = parse_packet(data)
-                    if data[13] == 30:
-                        parsed_content = parse_28_byte_content(content_data)
-                        print("Parsed 28-byte content:")
-                        for key, value in parsed_content.items():
-                            print(f"{key}: {value}")
-                    else :
-                        parsed_content = parse_36_byte_content(content_data)
-                        print("Parsed 36-byte content:")
-                        for key, value in parsed_content.items():
-                            print(f"{key}: {value}")
+                    parsed_content = parse_28_byte_content(content_data)
+                    print("Parsed 28-byte content:")
+                    for key, value in parsed_content.items():
+                        print(f"{key}: {value}")
+
                     client_socket.sendall(b"ACK")
                 else:
                     client_socket.sendall(b"ACK")
@@ -104,13 +85,15 @@ def start_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((HOST, PORT))
-        server_socket.listen(1)
+        server_socket.listen(5)
         print(f"Server is running on {HOST}:{PORT}")
 
         while True:
             print("Waiting for a connection from a client...")
             client_socket, client_address = server_socket.accept()
-            handle_client(client_socket, client_address)
+            client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+            client_thread.daemon = True
+            client_thread.start()
 
 if __name__ == "__main__":
     start_server()
