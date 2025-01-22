@@ -15,6 +15,7 @@ count = np.uint32(0)
 ip_to_id_map = {}  # Maps client_ip -> client_id_hex
 id_to_ip_map = {}  # Maps client_id_hex -> client_ip
 
+
 def parse_28_byte_content(data_28):
     """
     data_28: 28 bytes => 6 floats (24 bytes) + 1 uint (4 bytes).
@@ -207,6 +208,7 @@ def main():
     print(f"Server is running on {HOST}:{PORT}")
 
     while True:
+        print("Number of active threads: ", threading.active_count())
         print("Waiting for a connection from a client...")
         client_socket, client_address = server_socket.accept()
         print(f"[Server] Accepted connection from {client_address}")
