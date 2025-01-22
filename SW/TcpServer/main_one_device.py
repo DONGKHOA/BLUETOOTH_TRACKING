@@ -174,8 +174,8 @@ def handle_client(client_socket, client_address):
                 client_socket.sendall(bytes(data_resp))
                 print(f"[Server] Sent response for function=1 with count={current_count}")
 
-            # ---------------- If function == 0x03e8 or 0x03?? => parse more data ----------------
-            if function == 0x03e8 or (function & 0xFF00) == 0x0300:
+            # ---------------- If function == 0x03e8 => parse more data ----------------
+            if function == 0x03e8:
                 with lock:
                     # Look up the ID from IP, or "UnknownID" if not found
                     client_id = ip_to_id_map.get(client_ip, "UnknownID")
@@ -208,6 +208,7 @@ def main():
     print(f"Server is running on {HOST}:{PORT}")
 
     while True:
+        print("Number of active threads: ", threading.active_count())
         print("Waiting for a connection from a client...")
         client_socket, client_address = server_socket.accept()
         print(f"[Server] Accepted connection from {client_address}")
