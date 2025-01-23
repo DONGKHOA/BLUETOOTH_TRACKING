@@ -1,14 +1,14 @@
-Record=TopLevelDocument|FileName=0-10V_Converter.SchDoc|SheetNumber=11
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=4-20mA_Converter.SchDoc|SheetNumber=10
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Camera.SchDoc|SheetNumber=5
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=DAC_ADC_External.SchDoc|SheetNumber=12
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Display.SchDoc|SheetNumber=6
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=ESP32_BLE.SchDoc|SheetNumber=3
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=ESP32_WiFi.SchDoc|SheetNumber=4
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Ethernet.SchDoc|SheetNumber=8
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=FingerPrint.SchDoc|SheetNumber=7
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Interface_IO.SchDoc|SheetNumber=13
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Overview_Schematic.SchDoc|SheetNumber=1
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=Power_Supply.SchDoc|SheetNumber=2
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=UART_RS485.SchDoc|SheetNumber=9
-Record=NoMainPathDocument|SourceDocument=0-10V_Converter.SchDoc|FileName=USB_To_TTL.SchDoc|SheetNumber=14
+Record=TopLevelDocument|FileName=Overview_Schematic.SchDoc|SheetNumber=2
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=ESP32_BLE.SchDoc|SheetNumber=4|SymbolType=Normal|RawFileName=ESP32_BLE.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=ESP32_WiFi.SchDoc|SheetNumber=5|SymbolType=Normal|RawFileName=ESP32_WiFi.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Power_Supply.SchDoc|SheetNumber=3|SymbolType=Normal|RawFileName=Power_Supply.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=DAC_ADC_External.SchDoc|SheetNumber=12|SymbolType=Normal|RawFileName=DAC_ADC_External.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=4-20mA_Converter.SchDoc|SheetNumber=10|SymbolType=Normal|RawFileName=4-20mA_Converter.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=0-10V_Converter.SchDoc|SheetNumber=11|SymbolType=Normal|RawFileName=0-10V_Converter.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=UART_RS485.SchDoc|SheetNumber=9|SymbolType=Normal|RawFileName=UART_RS485.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Camera.SchDoc|SheetNumber=6|SymbolType=Normal|RawFileName=Camera.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Display.SchDoc|SheetNumber=7|SymbolType=Normal|RawFileName=Display.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Interface_IO.SchDoc|SheetNumber=13|SymbolType=Normal|RawFileName=Interface_IO.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=FingerPrint.SchDoc|SheetNumber=8|SymbolType=Normal|RawFileName=FingerPrint.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Overview_Schematic.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=USB_To_TTL.SchDoc|SheetNumber=14|SymbolType=Normal|RawFileName=USB_To_TTL.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=NoMainPathDocument|SourceDocument=Overview_Schematic.SchDoc|FileName=Block_Diagram.SchDoc|SheetNumber=1
