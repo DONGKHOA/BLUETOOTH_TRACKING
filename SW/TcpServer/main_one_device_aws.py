@@ -1,8 +1,36 @@
 import socket
 import struct
+import json
+import paho.mqtt.client as mqtt
+import ssl
 
 HOST = '192.168.1.101'
 PORT = 8899
+
+AWS_IOT_ENDPOINT = "a1xu2macchahf7-ats.iot.ap-southeast-2.amazonaws.com" # Replace with your endpoint
+MQTT_PORT = 8883  # Port MQTT SSL
+MQTT_TOPIC_PUBLISH = "IOT/dataTopic/AEROSENSE" # Replace with the topic you want to use
+
+root_ca_path = "aws/root-CA.crt"  # Path to root certificate
+private_key_path = "aws/private.pem.key"  # Path to private key
+cert_path = "aws/certificate.pem.crt"  # Path to tới certificate
+
+ip_to_id_map = {}  # Maps client_ip -> client_id_hex
+
+# Callback function called when the client successfully connects to the broker
+def mqtt_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Successfully connected to the AWS")
+    else:
+        print(f"Connection failed. Return code: {rc}")
+
+# Callback function called when the client disconnects from the broker
+def mqtt_disconnect(client, userdata, rc):
+    print("Disconnected from the AWS.")
+
+# Callback function called when there is a new message on subscribed topics
+def mqtt_message(client, userdata, msg):
+    print(f"Received message from topic {msg.topic}: {msg.payload.decode('utf-8')}")
 
 def parse_28_byte_content(data_28):
     """
@@ -72,6 +100,31 @@ def main():
     client_socket, client_address = server_socket.accept()
     print(f"[Server] Accepted connection from {client_address}")
 
+    # Create a client
+    client = mqtt.Client(client_id="AEROSENSEClient")
+
+    # Assign the callback functions
+    client.on_connect = mqtt_connect
+    client.on_message = mqtt_message
+    client.on_disconnect = mqtt_disconnect
+
+    # Configure SSL for secure connections to AWS IoT
+    client.tls_set(ca_certs=root_ca_path,
+                   certfile=cert_path,
+                   keyfile=private_key_path,
+                   tls_version=ssl.PROTOCOL_TLSv1_2)
+
+    # Attempt to connect to AWS
+    print(f"Connecting to AWS")
+    client.connect(AWS_IOT_ENDPOINT, MQTT_PORT, 60)
+
+    # Start the client loop (non-blocking)
+    client.loop_start()
+
+    num_pac = 0
+    ip_to_id_map["ID"] = "Unknown ID"
+    ip_to_id_map["ID Packet"] = num_pac
+
     while True:
         data = client_socket.recv(1024)
         print(f"Received data (hex): {data.hex()}")
@@ -90,22 +143,34 @@ def main():
                 0, 0, 0, 0, 0, 6, 0, 1,
                 0, 0, 0, 0
             ]
+            id_dev = content_data[-13:].hex()
+            ip_to_id_map["ID"] = id_dev
             client_socket.sendall(bytes(data_resp))
             print(f"[Server] Sent response for function = 0x0001")
 
         # ---------------- If function == 0x03e8 => parse more data ----------------
         if function == 0x03e8:
             print(f"[Server] Sent response for function = 0x03e8")
+            num_pac += 1
+            ip_to_id_map["ID Packet"] = num_pac
             if len(content_data) == 28:
                 parsed = parse_28_byte_content(content_data)
                 print(f"[Parsed 28-byte content from IP={client_address[0]},")
-                for k, v in parsed.items():
-                    print(f"   {k}: {v}")
+
+                json_data = json.dumps([ip_to_id_map, parsed], indent=4)
+                print(json_data)
+
+                client.publish(MQTT_TOPIC_PUBLISH, json_data, qos = 0)
+
             elif len(content_data) == 36:
                 parsed = parse_36_byte_content(content_data)
                 print(f"[Parsed 36-byte content from IP={client_address[0]},")
-                for k, v in parsed.items():
-                    print(f"   {k}: {v}")
+
+                json_data = json.dumps([ip_to_id_map, parsed], indent=4)
+                print(json_data)
+
+                client.publish(MQTT_TOPIC_PUBLISH, json_data, qos = 0)
+
             else:
                 print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
 
