@@ -1,0 +1,35 @@
+Change Component Designator: OldDesignator=R104 NewDesignator=R103
+Change Component Designator: OldDesignator=R106 NewDesignator=R104
+Change Component Designator: OldDesignator=R107 NewDesignator=R105
+Change Component Designator: OldDesignator=R108 NewDesignator=R106
+Change Component Designator: OldDesignator=R109 NewDesignator=R107
+Change Component Designator: OldDesignator=R110 NewDesignator=R108
+Change Component Designator: OldDesignator=R111 NewDesignator=R109
+Change Component Designator: OldDesignator=R112 NewDesignator=R110
+Change Component Designator: OldDesignator=R113 NewDesignator=R111
+Change Component Designator: OldDesignator=R114 NewDesignator=R112
+Change Component Designator: OldDesignator=R115 NewDesignator=R113
+Change Component Designator: OldDesignator=R117 NewDesignator=R114
+Change Component Designator: OldDesignator=R119 NewDesignator=R115
+Change Component Designator: OldDesignator=R120 NewDesignator=R116
+Change Component Designator: OldDesignator=R121 NewDesignator=R117
+Change Component Designator: OldDesignator=R122 NewDesignator=R118
+Change Component Designator: OldDesignator=R123 NewDesignator=R119
+Change Net Name : Old Net Name=NetR104_1 New Net Name=NetR103_1
+Change Net Name : Old Net Name=NetR106_1 New Net Name=NetR104_1
+Change Net Name : Old Net Name=NetR112_1 New Net Name=NetR110_1
+Change Net Name : Old Net Name=NetR113_1 New Net Name=NetR111_1
+Change Net Name : Old Net Name=NetR115_1 New Net Name=NetR113_1
+Change Net Name : Old Net Name=NetR117_1 New Net Name=NetR114_1
+Change Net Name : Old Net Name=NetR119_1 New Net Name=NetR115_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

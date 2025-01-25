@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=WF_N Pin=R116-1
+Removed Pin From Net: NetName=WF_P Pin=R118-1
+Added Pin To Net: NetName=WF_P Pin=U24-1
+Added Pin To Net: NetName=WF_N Pin=U24-2
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
