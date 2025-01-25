@@ -131,9 +131,8 @@ def handle_client(client_socket, client_address):
                 else:
                     new_id_hex = "TooShort"
 
-                if client_ip not in ip_to_id_map:
-                    ip_to_id_map[client_ip] = new_id_hex
-                    print(f"[Server] (1) Registered new: IP={client_ip}, ID={new_id_hex}. count={count}")
+                ip_to_id_map[client_ip] = new_id_hex
+                print(f"[Server] (1) Registered new: IP={client_ip}, ID={new_id_hex}. count={count}")
 
                 # Send response containing the 'count' variable
                 data_resp = [
