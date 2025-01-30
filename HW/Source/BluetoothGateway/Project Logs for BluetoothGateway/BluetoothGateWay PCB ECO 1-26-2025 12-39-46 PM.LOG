@@ -1,0 +1,17 @@
+Change Component Footprint: Designator=C25 Old Footprint=CAP_0603 New Footprint=CAP_0805
+Change component parameters: Designator = "C25" ("C25"); Footprint = "CAP_0603"; UniqueID = "\XLUAPMEB\LPZMSHBV" ("\XLUAPMEB\LPZMSHBV")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0805 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0805-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
