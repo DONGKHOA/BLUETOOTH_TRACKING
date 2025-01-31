@@ -1,0 +1,19 @@
+Added Component: Designator=D5(SOD-123)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.alldatasheet.com/datasheet-pdf/view/281319/SEMTECH_ELEC/MBR0520.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "MBR0520T1G"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1582#page=pro_info"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=D5-A
+Added Pin To Net: NetName=NetC13_2 Pin=D5-C
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Member To Class: ClassName=Designator Member=Component D5 MBR0520T1G

@@ -1,0 +1,17 @@
+Added Component: Designator=H1(MountingHole_3.2mm_M3_Pad_Via)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Member To Class: ClassName=Designator Member=Component H1 Mounting Hole without connection
