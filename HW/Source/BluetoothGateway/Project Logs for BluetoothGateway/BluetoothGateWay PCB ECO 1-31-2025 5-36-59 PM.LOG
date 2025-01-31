@@ -1,0 +1,119 @@
+Removed Pin From Net: NetName=NetU6_15 Pin=U7-34
+Removed Pin From Net: NetName=NetU6_4 Pin=U7-35
+Change Component Description : Designator=J6 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Change Component Description : Designator=J7 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Added Component: Designator=C102(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 10uF 16V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-10uf-16v"; VariantName = "[No Variations]"
+Added Component: Designator=C103(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=C104(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 10uF 16V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-10uf-16v"; VariantName = "[No Variations]"
+Added Component: Designator=C105(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=P9(Terminal_Block_3.81mm_2P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "UL-3.81-2-R Terminal Block Plug-in Hàn PCB 2 Chân Cong 3.81mm 300V 10A ULO"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/ul-3-81-2-r-terminal-block-plug-in-han-pcb-2-chan-cong-3-81mm-300v-10a-ulo"; VariantName = "[No Variations]"
+Added Component: Designator=R131(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 120 Ohm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-120-ohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R132(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 120 Ohm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-120-ohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R133(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R134(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R135(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 120 Ohm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-120-ohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=U26(SOIC-8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.ti.com/lit/ds/symlink/sn65hvd230.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "SN65HVD230DR CAN Transceiver 8-SOIC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/sn65hvd230dr-can-transceiver-8-soic"; VariantName = "[No Variations]"
+Added Component: Designator=U27(SOIC-8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.ti.com/lit/ds/symlink/sn65hvd230.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "SN65HVD230DR CAN Transceiver 8-SOIC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/sn65hvd230dr-can-transceiver-8-soic"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=C102-1
+Added Pin To Net: NetName=3V3 Pin=C102-2
+Added Pin To Net: NetName=GND Pin=C103-1
+Added Pin To Net: NetName=3V3 Pin=C103-2
+Added Pin To Net: NetName=GND Pin=C104-1
+Added Pin To Net: NetName=3V3 Pin=C104-2
+Added Pin To Net: NetName=GND Pin=C105-1
+Added Pin To Net: NetName=3V3 Pin=C105-2
+Added Pin To Net: NetName=GND Pin=R133-2
+Added Pin To Net: NetName=GND Pin=R134-2
+Added Pin To Net: NetName=NetU6_15 Pin=U26-1
+Added Pin To Net: NetName=GND Pin=U26-2
+Added Pin To Net: NetName=3V3 Pin=U26-3
+Added Pin To Net: NetName=NetU6_4 Pin=U26-4
+Added Pin To Net: NetName=GND Pin=U27-2
+Added Pin To Net: NetName=3V3 Pin=U27-3
+Added Pin To Net: NetName=CAN_N Pin=P9-2
+Added Pin To Net: NetName=CAN_N Pin=R131-1
+Added Pin To Net: NetName=CAN_N Pin=R132-2
+Added Pin To Net: NetName=CAN_N Pin=R135-1
+Added Pin To Net: NetName=CAN_N Pin=U26-7
+Added Pin To Net: NetName=CAN_N Pin=U27-7
+Added Net: Name=CAN_N
+Added Pin To Net: NetName=CAN_P Pin=P9-1
+Added Pin To Net: NetName=CAN_P Pin=R131-2
+Added Pin To Net: NetName=CAN_P Pin=R132-1
+Added Pin To Net: NetName=CAN_P Pin=R135-2
+Added Pin To Net: NetName=CAN_P Pin=U26-6
+Added Pin To Net: NetName=CAN_P Pin=U27-6
+Added Net: Name=CAN_P
+Added Pin To Net: NetName=NetR133_1 Pin=R133-1
+Added Pin To Net: NetName=NetR133_1 Pin=U26-8
+Added Net: Name=NetR133_1
+Added Pin To Net: NetName=NetR134_1 Pin=R134-1
+Added Pin To Net: NetName=NetR134_1 Pin=U27-8
+Added Net: Name=NetR134_1
+Added Pin To Net: NetName=NetU7_34 Pin=U7-34
+Added Pin To Net: NetName=NetU7_34 Pin=U27-4
+Added Net: Name=NetU7_34
+Added Pin To Net: NetName=NetU7_35 Pin=U7-35
+Added Pin To Net: NetName=NetU7_35 Pin=U27-1
+Added Net: Name=NetU7_35
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Differential Pair: Name=CAN
