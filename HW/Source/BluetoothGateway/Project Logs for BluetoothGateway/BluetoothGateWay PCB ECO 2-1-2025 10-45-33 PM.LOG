@@ -1,0 +1,39 @@
+Removed Pin From Net: NetName=NetJ3_1 Pin=J3-1
+Removed Pin From Net: NetName=GND Pin=J3-2
+Change Component Footprint: Designator=P3 Old Footprint=Terminal_Block_3.81mm_2P New Footprint=Terminal_Block_3.81mm_4P
+Change Component Comment : Designator=P3 Old Comment=3.81mm_2P New Comment=3.81mm_4P
+Change Component Designator: OldDesignator=J4 NewDesignator=J3
+Change Component Designator: OldDesignator=J5 NewDesignator=J4
+Change Component Designator: OldDesignator=J6 NewDesignator=J5
+Change Component Designator: OldDesignator=J7 NewDesignator=J6
+Change component parameters: Designator = "P3" ("P3"); Footprint = "Terminal_Block_3.81mm_2P"; UniqueID = "\PRZWLLOA\DFYVTLJC" ("\PRZWLLOA\DFYVTLJC")
+Change component parameters (AddParameter): Name = "ComponentLink1Description"; Value = "Website Link"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.we-online.com/redexpert/article/691322310004?ad"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet Link"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink2URL"; Value = "https://www.we-online.com/redexpert/spec/691322310004?ad"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "UL-3.81-4-R Terminal Block Plug-in Hàn PCB 4 Chân Cong 3.81mm 300V 10A ULO"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/ul-3-81-4-r-terminal-block-plug-in-han-pcb-4-chan-cong-3-81mm-300v-10a-ulo"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetJ3_1 Pin=P3-3
+Added Pin To Net: NetName=GND Pin=P3-4
+Change Net Name : Old Net Name=NetJ3_1 New Net Name=NetP3_3
+Change Net Name : Old Net Name=NetJ4_2 New Net Name=NetJ3_2
+Change Net Name : Old Net Name=NetJ6_A4B9 New Net Name=NetJ5_A4B9
+Change Net Name : Old Net Name=NetJ6_A5 New Net Name=NetJ5_A5
+Change Net Name : Old Net Name=NetJ6_B5 New Net Name=NetJ5_B5
+Change Net Name : Old Net Name=NetJ7_A4B9 New Net Name=NetJ6_A4B9
+Change Net Name : Old Net Name=NetJ7_A5 New Net Name=NetJ6_A5
+Change Net Name : Old Net Name=NetJ7_B5 New Net Name=NetJ6_B5
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

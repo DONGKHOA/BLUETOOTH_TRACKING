@@ -1,0 +1,130 @@
+Removed Pin From Net: NetName=NetK1_4 Pin=P6-1
+Removed Pin From Net: NetName=NetK1_3 Pin=P6-2
+Removed Pin From Net: NetName=NetK2_4 Pin=P8-1
+Removed Pin From Net: NetName=NetK2_3 Pin=P8-2
+Change Component Designator: OldDesignator=D18 NewDesignator=D19
+Change Component Designator: OldDesignator=D19 NewDesignator=D20
+Change Component Designator: OldDesignator=D20 NewDesignator=D21
+Change Component Designator: OldDesignator=D21 NewDesignator=D22
+Change Component Designator: OldDesignator=D22 NewDesignator=D23
+Change Component Designator: OldDesignator=D23 NewDesignator=D24
+Change Component Designator: OldDesignator=D24 NewDesignator=D25
+Change Component Designator: OldDesignator=D25 NewDesignator=D26
+Change Component Designator: OldDesignator=P7 NewDesignator=P6
+Change Component Designator: OldDesignator=P9 NewDesignator=P8
+Change Component Designator: OldDesignator=R90 NewDesignator=R91
+Change Component Designator: OldDesignator=R91 NewDesignator=R92
+Change Component Designator: OldDesignator=R92 NewDesignator=R93
+Change Component Designator: OldDesignator=R93 NewDesignator=R94
+Change Component Designator: OldDesignator=R94 NewDesignator=R95
+Change Component Designator: OldDesignator=R95 NewDesignator=R96
+Change Component Designator: OldDesignator=R96 NewDesignator=R97
+Change Component Designator: OldDesignator=R97 NewDesignator=R98
+Change Component Designator: OldDesignator=R98 NewDesignator=R99
+Change Component Designator: OldDesignator=R99 NewDesignator=R100
+Change Component Designator: OldDesignator=R100 NewDesignator=R101
+Change Component Designator: OldDesignator=R101 NewDesignator=R102
+Change Component Designator: OldDesignator=R102 NewDesignator=R103
+Change Component Designator: OldDesignator=R103 NewDesignator=R104
+Change Component Designator: OldDesignator=R104 NewDesignator=R105
+Change Component Designator: OldDesignator=R105 NewDesignator=R106
+Change Component Designator: OldDesignator=R106 NewDesignator=R107
+Change Component Designator: OldDesignator=R107 NewDesignator=R108
+Change Component Designator: OldDesignator=R108 NewDesignator=R109
+Change Component Designator: OldDesignator=R109 NewDesignator=R110
+Change Component Designator: OldDesignator=R110 NewDesignator=R111
+Change Component Designator: OldDesignator=R111 NewDesignator=R112
+Change Component Designator: OldDesignator=R112 NewDesignator=R113
+Change Component Designator: OldDesignator=R113 NewDesignator=R114
+Change Component Designator: OldDesignator=R114 NewDesignator=R115
+Change Component Designator: OldDesignator=R115 NewDesignator=R116
+Change Component Designator: OldDesignator=R116 NewDesignator=R117
+Change Component Designator: OldDesignator=R117 NewDesignator=R118
+Change Component Designator: OldDesignator=R118 NewDesignator=R119
+Change Component Designator: OldDesignator=R119 NewDesignator=R120
+Change Component Designator: OldDesignator=R120 NewDesignator=R121
+Change Component Designator: OldDesignator=R121 NewDesignator=R122
+Change Component Designator: OldDesignator=R122 NewDesignator=R123
+Change Component Designator: OldDesignator=R123 NewDesignator=R124
+Change Component Designator: OldDesignator=R124 NewDesignator=R125
+Change Component Designator: OldDesignator=R125 NewDesignator=R126
+Change Component Designator: OldDesignator=R126 NewDesignator=R127
+Change Component Designator: OldDesignator=R127 NewDesignator=R128
+Change Component Designator: OldDesignator=R128 NewDesignator=R129
+Change Component Designator: OldDesignator=R129 NewDesignator=R130
+Change Component Designator: OldDesignator=R130 NewDesignator=R131
+Change Component Designator: OldDesignator=R131 NewDesignator=R132
+Change Component Designator: OldDesignator=R132 NewDesignator=R133
+Added Component: Designator=D18(LED_0603Y)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Added Component: Designator=P7(Terminal_Block_3.81mm_4P)
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Website Link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.we-online.com/redexpert/article/691322310004?ad"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet Link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "https://www.we-online.com/redexpert/spec/691322310004?ad"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "UL-3.81-4-R Terminal Block Plug-in Hàn PCB 4 Chân Cong 3.81mm 300V 10A ULO"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/ul-3-81-4-r-terminal-block-plug-in-han-pcb-4-chan-cong-3-81mm-300v-10a-ulo"; VariantName = "[No Variations]"
+Added Component: Designator=R90(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetK1_3 Pin=P7-1
+Added Pin To Net: NetName=NetK1_4 Pin=P7-2
+Added Pin To Net: NetName=NetK2_3 Pin=P7-3
+Added Pin To Net: NetName=NetK2_4 Pin=P7-4
+Added Pin To Net: NetName=GND Pin=R90-1
+Change Net Name : Old Net Name=NetD18_2 New Net Name=NetD19_2
+Change Net Name : Old Net Name=NetD19_A New Net Name=NetD20_A
+Change Net Name : Old Net Name=NetD19_C New Net Name=NetD20_C
+Change Net Name : Old Net Name=NetD20_C New Net Name=NetD21_C
+Change Net Name : Old Net Name=NetD21_A New Net Name=NetD22_A
+Change Net Name : Old Net Name=NetD22_A New Net Name=NetD23_A
+Change Net Name : Old Net Name=NetD23_1 New Net Name=NetD24_1
+Change Net Name : Old Net Name=NetD23_3 New Net Name=NetD24_3
+Change Net Name : Old Net Name=NetD24_A New Net Name=NetD25_A
+Change Net Name : Old Net Name=NetD25_1 New Net Name=NetD26_1
+Change Net Name : Old Net Name=NetD25_3 New Net Name=NetD26_3
+Change Net Name : Old Net Name=NetP7_1 New Net Name=NetP6_1
+Change Net Name : Old Net Name=NetP7_2 New Net Name=NetP6_2
+Change Net Name : Old Net Name=NetP7_3 New Net Name=NetP6_3
+Change Net Name : Old Net Name=NetP7_4 New Net Name=NetP6_4
+Change Net Name : Old Net Name=NetR90_1 New Net Name=NetR91_1
+Change Net Name : Old Net Name=NetR90_2 New Net Name=NetR91_2
+Change Net Name : Old Net Name=NetR101_1 New Net Name=NetR102_1
+Change Net Name : Old Net Name=NetR102_1 New Net Name=NetR103_1
+Change Net Name : Old Net Name=NetR103_1 New Net Name=NetR104_1
+Change Net Name : Old Net Name=NetR104_1 New Net Name=NetR105_1
+Change Net Name : Old Net Name=NetR105_1 New Net Name=NetR106_1
+Change Net Name : Old Net Name=NetR112_1 New Net Name=NetR113_1
+Change Net Name : Old Net Name=NetR113_1 New Net Name=NetR114_1
+Change Net Name : Old Net Name=NetR115_1 New Net Name=NetR116_1
+Change Net Name : Old Net Name=NetR116_1 New Net Name=NetR117_1
+Change Net Name : Old Net Name=NetR117_1 New Net Name=NetR118_1
+Change Net Name : Old Net Name=NetR124_1 New Net Name=NetR125_1
+Change Net Name : Old Net Name=NetR124_2 New Net Name=NetR125_2
+Change Net Name : Old Net Name=NetR125_1 New Net Name=NetR126_1
+Change Net Name : Old Net Name=NetR125_2 New Net Name=NetR126_2
+Change Net Name : Old Net Name=NetR128_1 New Net Name=NetR129_1
+Change Net Name : Old Net Name=NetR128_2 New Net Name=NetR129_2
+Change Net Name : Old Net Name=NetR129_1 New Net Name=NetR130_1
+Change Net Name : Old Net Name=NetR129_2 New Net Name=NetR130_2
+Change Net Name : Old Net Name=NetR130_1 New Net Name=NetR131_1
+Change Net Name : Old Net Name=NetR131_1 New Net Name=NetR132_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

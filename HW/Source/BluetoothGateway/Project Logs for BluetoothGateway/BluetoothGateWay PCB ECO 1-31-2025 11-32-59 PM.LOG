@@ -1,0 +1,28 @@
+Removed Pin From Net: NetName=3V3 Pin=FB10-2
+Removed Pin From Net: NetName=3V3 Pin=FB11-2
+Change Component Designator: OldDesignator=FB12 NewDesignator=FB10
+Change Component Designator: OldDesignator=FB13 NewDesignator=FB11
+Change Component Designator: OldDesignator=FB14 NewDesignator=FB12
+Change Component Designator: OldDesignator=FB15 NewDesignator=FB13
+Change Component Designator: OldDesignator=FB16 NewDesignator=FB14
+Change Component Designator: OldDesignator=FB17 NewDesignator=FB15
+Added Pin To Net: NetName=3V3 Pin=C82-2
+Added Pin To Net: NetName=3V3 Pin=C83-2
+Added Pin To Net: NetName=3V3 Pin=C84-2
+Added Pin To Net: NetName=3V3 Pin=C85-2
+Added Pin To Net: NetName=3V3 Pin=U15-8
+Added Pin To Net: NetName=3V3 Pin=U16-1
+Change Net Name : Old Net Name=NetFB13_1 New Net Name=NetFB11_1
+Change Net Name : Old Net Name=NetFB16_1 New Net Name=NetFB14_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

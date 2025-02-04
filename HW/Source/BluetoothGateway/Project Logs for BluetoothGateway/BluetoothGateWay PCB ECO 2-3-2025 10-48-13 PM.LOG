@@ -1,0 +1,79 @@
+Removed Pin From Net: NetName=3V3 Pin=C81-2
+Removed Pin From Net: NetName=3V3 Pin=C82-2
+Removed Pin From Net: NetName=3V3 Pin=U15-8
+Change Component Designator: OldDesignator=D16 NewDesignator=D18
+Change Component Designator: OldDesignator=D17 NewDesignator=D19
+Change Component Designator: OldDesignator=D18 NewDesignator=D20
+Change Component Designator: OldDesignator=D19 NewDesignator=D21
+Change Component Designator: OldDesignator=D20 NewDesignator=D22
+Change Component Designator: OldDesignator=D21 NewDesignator=D23
+Change Component Designator: OldDesignator=D22 NewDesignator=D24
+Change Component Designator: OldDesignator=D23 NewDesignator=D25
+Change Component Designator: OldDesignator=D24 NewDesignator=D26
+Change Component Designator: OldDesignator=D25 NewDesignator=D27
+Change Component Designator: OldDesignator=D26 NewDesignator=D28
+Change Component Designator: OldDesignator=D27 NewDesignator=D29
+Change Component Designator: OldDesignator=FB10 NewDesignator=FB11
+Change Component Designator: OldDesignator=FB11 NewDesignator=FB12
+Change Component Designator: OldDesignator=FB12 NewDesignator=FB13
+Change Component Designator: OldDesignator=FB13 NewDesignator=FB14
+Change Component Designator: OldDesignator=FB14 NewDesignator=FB15
+Added Component: Designator=D16(SOD-80)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.alldatasheet.com/datasheet-pdf/view/17578/PHILIPS/BZV55.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "BZV55-C3V3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1871#page=pro_info"; VariantName = "[No Variations]"
+Added Component: Designator=D17(SOD-80)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.alldatasheet.com/datasheet-pdf/view/17578/PHILIPS/BZV55.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "BZV55-C3V3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1871#page=pro_info"; VariantName = "[No Variations]"
+Added Component: Designator=FB10(Ferrite_Bead_0805)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "CBW201209U121T Ferrite Beads 2A 120 Ohm 0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/cbw201209u121t-ferrite-beads-2a-120-ohm-0805"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=3V3 Pin=D16-C
+Added Pin To Net: NetName=GND Pin=D17-A
+Added Pin To Net: NetName=3V3 Pin=FB10-2
+Change Net Name : Old Net Name=NetD16_2 New Net Name=NetD18_2
+Change Net Name : Old Net Name=NetD17_A New Net Name=NetD19_A
+Change Net Name : Old Net Name=NetD17_C New Net Name=NetD19_C
+Change Net Name : Old Net Name=NetD18_A New Net Name=NetD20_A
+Change Net Name : Old Net Name=NetD18_C New Net Name=NetD20_C
+Change Net Name : Old Net Name=NetD19_A New Net Name=NetD21_A
+Change Net Name : Old Net Name=NetD19_C New Net Name=NetD21_C
+Change Net Name : Old Net Name=NetD20_2 New Net Name=NetD22_2
+Change Net Name : Old Net Name=NetD21_A New Net Name=NetD23_A
+Change Net Name : Old Net Name=NetD21_C New Net Name=NetD23_C
+Change Net Name : Old Net Name=NetD22_C New Net Name=NetD24_C
+Change Net Name : Old Net Name=NetD23_A New Net Name=NetD25_A
+Change Net Name : Old Net Name=NetD24_A New Net Name=NetD26_A
+Change Net Name : Old Net Name=NetD25_1 New Net Name=NetD27_1
+Change Net Name : Old Net Name=NetD25_3 New Net Name=NetD27_3
+Change Net Name : Old Net Name=NetD26_A New Net Name=NetD28_A
+Change Net Name : Old Net Name=NetD27_1 New Net Name=NetD29_1
+Change Net Name : Old Net Name=NetD27_3 New Net Name=NetD29_3
+Change Net Name : Old Net Name=NetFB11_1 New Net Name=NetFB12_1
+Change Net Name : Old Net Name=NetFB13_1 New Net Name=NetFB14_1
+Added Pin To Net: NetName=NetC81_2 Pin=C81-2
+Added Pin To Net: NetName=NetC81_2 Pin=C82-2
+Added Pin To Net: NetName=NetC81_2 Pin=FB10-1
+Added Pin To Net: NetName=NetC81_2 Pin=U15-8
+Added Net: Name=NetC81_2
+Added Pin To Net: NetName=NetD16_A Pin=D16-A
+Added Pin To Net: NetName=NetD16_A Pin=D17-C
+Added Pin To Net: NetName=NetD16_A Pin=U15-6
+Added Net: Name=NetD16_A
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
