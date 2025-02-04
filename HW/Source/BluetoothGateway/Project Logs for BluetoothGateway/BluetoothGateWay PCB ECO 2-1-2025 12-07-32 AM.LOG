@@ -1,0 +1,22 @@
+Change component parameters: Designator = "C46" ("C46"); Footprint = "CAP_0603"; UniqueID = "\PRZWLLOA\IOSVZCOJ" ("\PRZWLLOA\IOSVZCOJ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "CC0603KRX7R9BB222"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1310#page=pro_info"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C55" ("C55"); Footprint = "CAP_0603"; UniqueID = "\PRZWLLOA\XFFFXDAF" ("\PRZWLLOA\XFFFXDAF")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "CC0603KRX7R9BB222"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1310#page=pro_info"; VariantName = "[No Variations]"
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

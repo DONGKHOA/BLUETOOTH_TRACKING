@@ -1,0 +1,22 @@
+Removed Pin From Net: NetName=NetK1_3 Pin=P7-1
+Removed Pin From Net: NetName=NetK1_4 Pin=P7-2
+Removed Pin From Net: NetName=NetK2_3 Pin=P7-3
+Removed Pin From Net: NetName=NetK2_4 Pin=P7-4
+Change Component Description : Designator=J5 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Change Component Description : Designator=J6 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Added Pin To Net: NetName=NetK1_4 Pin=P7-1
+Added Pin To Net: NetName=NetK1_3 Pin=P7-2
+Added Pin To Net: NetName=NetK2_4 Pin=P7-3
+Added Pin To Net: NetName=NetK2_3 Pin=P7-4
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

@@ -1,0 +1,33 @@
+Removed Pin From Net: NetName=5V Pin=C51-1
+Removed Pin From Net: NetName=GND Pin=C51-2
+Removed Pin From Net: NetName=2V5 Pin=C54-1
+Removed Pin From Net: NetName=GND Pin=C54-2
+Change Component Footprint: Designator=C51 Old Footprint=TanTa_Cap_A New Footprint=CAP_0603
+Change Component Footprint: Designator=C54 Old Footprint=TanTa_Cap_A New Footprint=CAP_0603
+Change Component Comment : Designator=C54 Old Comment=10uF/16V New Comment=10uF/6.3V
+Change component parameters: Designator = "C51" ("C51"); Footprint = "TanTa_Cap_A"; UniqueID = "\PRZWLLOA\IMPLNCFQ" ("\PRZWLLOA\IMPLNCFQ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 10uF 16V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-10uf-16v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C54" ("C54"); Footprint = "TanTa_Cap_A"; UniqueID = "\PRZWLLOA\EBSLVIJG" ("\PRZWLLOA\EBSLVIJG")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "CC0603KRX5R5BB106"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=1165#page=pro_info"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=C51-1
+Added Pin To Net: NetName=5V Pin=C51-2
+Added Pin To Net: NetName=GND Pin=C54-1
+Added Pin To Net: NetName=2V5 Pin=C54-2
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

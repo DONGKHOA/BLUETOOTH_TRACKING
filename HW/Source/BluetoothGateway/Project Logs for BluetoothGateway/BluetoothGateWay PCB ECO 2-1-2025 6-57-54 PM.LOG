@@ -1,0 +1,22 @@
+Added Component: Designator=J4(JST_SH_BM03B-SRSS-TB_1x03-1MP_P1.00mm_horizontal)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ð?u SH1.0mm 3 Chân Dán SMD N?m Ngang"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dau-sh1-0mm-3-chan-dan-smd-nam-ngang"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=3V3 Pin=J4-1
+Added Pin To Net: NetName=NetJ4_2 Pin=J4-2
+Added Pin To Net: NetName=GND Pin=J4-3
+Added Pin To Net: NetName=GND Pin=J4-SH1
+Added Pin To Net: NetName=GND Pin=J4-SH2
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

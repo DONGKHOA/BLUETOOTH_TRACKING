@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=RS485_P Pin=P2-1
+Removed Pin From Net: NetName=RS485_N Pin=P2-2
+Added Pin To Net: NetName=RS485_N Pin=P2-1
+Added Pin To Net: NetName=RS485_P Pin=P2-2
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

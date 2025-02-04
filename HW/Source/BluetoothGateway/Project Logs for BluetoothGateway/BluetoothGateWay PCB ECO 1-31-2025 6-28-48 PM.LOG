@@ -1,0 +1,44 @@
+Added Component: Designator=U22(EESOP10)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.alldatasheet.com/datasheet-pdf/view/1817211/WCH/CH340K.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "LinhKienThuDuc"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "CH340K"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://linhkienthuduc.com/san-pham/ch340k/"; VariantName = "[No Variations]"
+Added Component: Designator=U24(EESOP10)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.alldatasheet.com/datasheet-pdf/view/1817211/WCH/CH340K.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "LinhKienThuDuc"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "CH340K"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://linhkienthuduc.com/san-pham/ch340k/"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetR106_2 Pin=U22-1
+Added Pin To Net: NetName=NetR104_2 Pin=U22-2
+Added Pin To Net: NetName=GND Pin=U22-3
+Added Pin To Net: NetName=BLE_DIR Pin=U22-4
+Added Pin To Net: NetName=NetR103_1 Pin=U22-5
+Added Pin To Net: NetName=BLE_RTS Pin=U22-6
+Added Pin To Net: NetName=NetC94_2 Pin=U22-7
+Added Pin To Net: NetName=NetR105_1 Pin=U22-8
+Added Pin To Net: NetName=NetR107_1 Pin=U22-9
+Added Pin To Net: NetName=NetC96_2 Pin=U22-10
+Added Pin To Net: NetName=GND Pin=U22-11
+Added Pin To Net: NetName=NetR122_2 Pin=U24-1
+Added Pin To Net: NetName=NetR120_2 Pin=U24-2
+Added Pin To Net: NetName=GND Pin=U24-3
+Added Pin To Net: NetName=WF_DIR Pin=U24-4
+Added Pin To Net: NetName=NetR119_1 Pin=U24-5
+Added Pin To Net: NetName=WF_RTS Pin=U24-6
+Added Pin To Net: NetName=NetC98_2 Pin=U24-7
+Added Pin To Net: NetName=NetR121_1 Pin=U24-8
+Added Pin To Net: NetName=NetR123_1 Pin=U24-9
+Added Pin To Net: NetName=NetC100_2 Pin=U24-10
+Added Pin To Net: NetName=GND Pin=U24-11
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

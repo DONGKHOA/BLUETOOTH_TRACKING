@@ -1,0 +1,24 @@
+Change Component Footprint: Designator=C51 Old Footprint=CAP_0402 New Footprint=CAP_0603
+Change Component Footprint: Designator=C52 Old Footprint=CAP_0402 New Footprint=CAP_0603
+Change component parameters: Designator = "C51" ("C51"); Footprint = "CAP_0402"; UniqueID = "\PRZWLLOA\SZDLAFEZ" ("\PRZWLLOA\SZDLAFEZ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C52" ("C52"); Footprint = "CAP_0402"; UniqueID = "\PRZWLLOA\EWVUHZTQ" ("\PRZWLLOA\EWVUHZTQ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

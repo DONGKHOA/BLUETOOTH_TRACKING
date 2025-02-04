@@ -1,0 +1,78 @@
+Change Component Footprint: Designator=D6 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D7 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D8 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D9 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D10 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D11 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D17 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D19 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D22 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Footprint: Designator=D24 Old Footprint=LED_0805 New Footprint=LED_0603Y
+Change Component Comment : Designator=D10 Old Comment=BLE_LED_Status New Comment=BLE_STATUS
+Change Component Comment : Designator=D9 Old Comment=LED_3V3 New Comment=3V3
+Change Component Comment : Designator=D8 Old Comment=LED_5V New Comment=5V
+Change Component Comment : Designator=D7 Old Comment=LED_12V New Comment=12V
+Change Component Comment : Designator=D6 Old Comment=LED_VCC New Comment=VCC
+Change Component Comment : Designator=D11 Old Comment=WF_LED_Status New Comment=WF_STATUS
+Change component parameters: Designator = "D6" ("D6"); Footprint = "LED_0805"; UniqueID = "\XLUAPMEB\AKKQPCED" ("\XLUAPMEB\AKKQPCED")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D7" ("D7"); Footprint = "LED_0805"; UniqueID = "\XLUAPMEB\QMLPFMYD" ("\XLUAPMEB\QMLPFMYD")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D8" ("D8"); Footprint = "LED_0805"; UniqueID = "\XLUAPMEB\GMRZCLNJ" ("\XLUAPMEB\GMRZCLNJ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D9" ("D9"); Footprint = "LED_0805"; UniqueID = "\XLUAPMEB\DUVFFALH" ("\XLUAPMEB\DUVFFALH")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D10" ("D10"); Footprint = "LED_0805"; UniqueID = "\UTWQFTNJ\EVWLTXFM" ("\UTWQFTNJ\EVWLTXFM")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D11" ("D11"); Footprint = "LED_0805"; UniqueID = "\WZDIQVUA\UEEBKQTL" ("\WZDIQVUA\UEEBKQTL")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D17" ("D17"); Footprint = "LED_0805"; UniqueID = "\EVHBKNOC\ZHBQQHIM" ("\EVHBKNOC\ZHBQQHIM")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D19" ("D19"); Footprint = "LED_0805"; UniqueID = "\EVHBKNOC\ZUXIXOXK" ("\EVHBKNOC\ZUXIXOXK")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D22" ("D22"); Footprint = "LED_0805"; UniqueID = "\OPPPKUCW\WSNUXEUX" ("\OPPPKUCW\WSNUXEUX")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D24" ("D24"); Footprint = "LED_0805"; UniqueID = "\OPPPKUCW\YMCGSHRK" ("\OPPPKUCW\YMCGSHRK")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
