@@ -1,0 +1,19 @@
+Added Pin To Net: NetName=Vref_0.75V Pin=D16-A
+Added Pin To Net: NetName=Vref_0.75V Pin=D17-C
+Added Pin To Net: NetName=Vref_0.75V Pin=U15-6
+Change Net Name : Old Net Name=NetP3_2 New Net Name=4_20mA_IN_1
+Change Net Name : Old Net Name=NetP3_3 New Net Name=4_20mA_OUT_1
+Change Net Name : Old Net Name=NetP4_1 New Net Name=0_10V_IN
+Change Net Name : Old Net Name=NetP4_3 New Net Name=0_10V_OUT
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
