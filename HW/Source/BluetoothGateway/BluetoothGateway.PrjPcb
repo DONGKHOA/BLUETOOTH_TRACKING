@@ -203,6 +203,23 @@ GenerateClassCluster=0
 DocumentUniqueId=CDFDADBQ
 
 [Document10]
+DocumentPath=Communication.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=17
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=ZDBQKXNP
+
+[Document11]
 DocumentPath=Camera.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -219,7 +236,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BDTXXJAT
 
-[Document11]
+[Document12]
 DocumentPath=Display.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -236,7 +253,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=EXVDNMAJ
 
-[Document12]
+[Document13]
 DocumentPath=FingerPrint.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -253,7 +270,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=VBKBFGOF
 
-[Document13]
+[Document14]
 DocumentPath=UART_RS485.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -270,7 +287,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BFAXOMLV
 
-[Document14]
+[Document15]
 DocumentPath=4-20mA_Converter.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -287,7 +304,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=XQZNLGLL
 
-[Document15]
+[Document16]
 DocumentPath=0-10V_Converter.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -304,7 +321,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KCQWUOEC
 
-[Document16]
+[Document17]
 DocumentPath=DAC_ADC_External.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -321,7 +338,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=LDUTBDMK
 
-[Document17]
+[Document18]
 DocumentPath=Interface_IO.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -337,23 +354,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QFUCGNGX
-
-[Document18]
-DocumentPath=Communication.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=ZDBQKXNP
 
 [Document19]
 DocumentPath=USB_To_TTL.SchDoc
