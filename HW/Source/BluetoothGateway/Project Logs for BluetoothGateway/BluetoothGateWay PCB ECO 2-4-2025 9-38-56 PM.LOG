@@ -1,0 +1,44 @@
+Removed Pin From Net: NetName=BLE_P Pin=U22-1
+Removed Pin From Net: NetName=BLE_N Pin=U22-2
+Removed Pin From Net: NetName=WIFI_P Pin=U24-1
+Removed Pin From Net: NetName=WIFI_N Pin=U24-2
+Change Component Description : Designator=J5 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Change Component Description : Designator=J6 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=WIFI_N Pin=R?-1
+Added Pin To Net: NetName=WIFI_P Pin=R?-1
+Added Pin To Net: NetName=NetR?_2 Pin=R?-2
+Added Pin To Net: NetName=NetR?_2 Pin=U24-1
+Added Net: Name=NetR?_2
+Add Net: Net with name "NetR?_2" already exists
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
