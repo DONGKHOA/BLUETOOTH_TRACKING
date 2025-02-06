@@ -20,7 +20,7 @@
 #define SCLK_PIN  GPIO_NUM_18
 #define CS_PIN    GPIO_NUM_5
 
-#define CLOCK_SPEED_HZ  100000
+#define CLOCK_SPEED_HZ  400000
 #define MAX_TRANSFER_SZ 4096
 #define DMA_CHANNEL     1
 #define SPI_MODE        0
@@ -100,12 +100,6 @@ uint8_t BSP_sdSpiWriteBlocks(uint32_t *p_data,
                              uint32_t  u32_numOfBlocks,
                              uint32_t  u32_timeout);
 
-// uint8_t BSP_sdSpiReadBlocks_DMA(uint32_t *pData,
-//                                 uint32_t  ReadAddr,
-//                                 uint32_t  NumOfBlocks);
-// uint8_t BSP_sdSpiWriteBlocks_DMA(uint32_t *pData,
-//                                  uint32_t  WriteAddr,
-//                                  uint32_t  NumOfBlocks);
 
 uint8_t BSP_sdSpiErase(uint32_t StartAddr, uint32_t EndAddr);
 uint8_t BSP_sdSpiGetCardState(void);

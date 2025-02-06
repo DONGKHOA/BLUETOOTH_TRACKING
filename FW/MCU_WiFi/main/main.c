@@ -74,6 +74,12 @@ bufsize (char *buf)
   return i;
 }
 
+static void
+init_new (void)
+{
+  
+}
+
 void
 test_fatfs_write_file (void)
 {
@@ -123,38 +129,90 @@ test_fatfs_write_file (void)
   printf("Unmount done.\n");
 }
 
+static void
+test_send_cmd0_new (void)
+{
+  // 1) CS lên cao
+  gpio_set_level(CS_PIN, 1);
+
+  // 2) Gửi 80 clock dummy
+  uint8_t ff_buf[10];
+  memset(ff_buf, 0xFF, sizeof(ff_buf));
+
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = 10 * 8; // 80 bit
+  t.tx_buffer = ff_buf; // Gửi 10 byte 0xFF
+  t.rx_buffer = NULL;   // Không cần đọc
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // 3) Gửi CMD0
+  // CMD0 = 0x40, argument=0, CRC=0x95
+  uint8_t cmd0[6] = { 0x40, 0x00, 0x00, 0x00, 0x00, 0x95 };
+
+  // Kéo CS=0
+  gpio_set_level(CS_PIN, 0);
+
+  // Gửi 6 byte CMD0
+  memset(&t, 0, sizeof(t));
+  t.length    = 6 * 8; // 6 byte
+  t.tx_buffer = cmd0;
+  t.rx_buffer = NULL; // Chỉ gửi
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // Đọc tối đa 8 byte response
+  // Ở half-duplex, ta gửi 8 byte dummy => đọc 8 byte
+  uint8_t tx_dummy[8], rx_resp[8];
+  memset(tx_dummy, 0xFF, sizeof(tx_dummy));
+  memset(&t, 0, sizeof(t));
+  t.length    = 8 * 8; // 8 byte
+  t.tx_buffer = tx_dummy;
+  t.rx_buffer = rx_resp;
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // Thả CS
+  gpio_set_level(CS_PIN, 1);
+
+  // In kết quả
+  for (int i = 0; i < 8; i++)
+  {
+    printf("Resp[%d] = 0x%02X\n", i, rx_resp[i]);
+  }
+}
+
+
 void
 app_main (void)
-{
-  // FRESULT fr = FR_NOT_READY;
-  // FATFS   SDFatFs_main; /* File system object for SD card logical drive */
-  // FIL     MyFile;       /* File object */
+{ 
+  // test_fatfs_write_file();
 
-  // char buffer[BUFFER_SIZE]; // to store strings..
-  // UINT br, bw;
+  // init_new();
 
-  // uint32_t total_size    = 1UL * 1024 * 1024 * 1024; // 1GB
-  // uint32_t bytes_written = 0;
+  // Cấu hình GPIO cho CS
+  // gpio_set_direction(CS_PIN, GPIO_MODE_OUTPUT);
+  // gpio_set_level(CS_PIN, 1);
 
-  // memset(buffer, 0xFF, BUFFER_SIZE); // Fill buffer with data
+  // // 1) Cấu hình SPI bus
+  // spi_bus_config_t buscfg = { .miso_io_num     = MISO_PIN,
+  //                             .mosi_io_num     = MOSI_PIN,
+  //                             .sclk_io_num     = SCLK_PIN,
+  //                             .quadwp_io_num   = -1,
+  //                             .quadhd_io_num   = -1,
+  //                             .max_transfer_sz = 4096 };
+  // spi_bus_initialize(HSPI_HOST, &buscfg, SPI_DMA_DISABLED);
 
-  // fr = f_mount(&SDFatFs_main, "", 1);
-  // fr = f_open(&MyFile, "file3.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  // // 2) add device: SPI_DEVICE_HALFDUPLEX + mode=0 + freq=100k
+  // spi_device_interface_config_t devcfg
+  //     = { .clock_speed_hz = 100000, // 100 kHz init
+  //         .mode           = 0,      // mode 0
+  //         .spics_io_num   = -1,     // tự điều khiển CS
+  //         .queue_size     = 1,
+  //         .flags          = SPI_DEVICE_HALFDUPLEX };
+  // spi_bus_add_device(HSPI_HOST, &devcfg, &spi_handle);
 
-  // /* Writing text */
-  // while (bytes_written < total_size)
-  // {
-  //   fr = f_write(&MyFile, buffer, bufsize(buffer), &bw);
-
-  //   bytes_written += bw;
-  // }
-  // f_close(&MyFile);
-
-  // uint8_t response = BSP_sdSpiInit();
-  // printf("%d\n", response);
+  // test_send_cmd0_new();
 
   test_fatfs_write_file();
-
   while (1)
   {
     vTaskDelay(pdMS_TO_TICKS(1000));

@@ -31,6 +31,8 @@ static volatile BSP_SD_SPI_CardInfo cardInfo;
 static volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter */
 static uint8_t           PowerFlag = 0;  /* Power flag */
 
+// static spi_device_handle_t sd_spi;
+
 /*****************************************************************************
  *   PRIVATE FUNCTION PROTOTYPE
  *****************************************************************************/
@@ -65,6 +67,9 @@ static uint8_t DEV_SDCard_SendCommand(uint8_t  u8_command,
 static uint8_t DEV_SDCard_SendCommand_NEW(uint8_t  cmd,
                                           uint32_t arg,
                                           uint8_t  crc);
+
+static void BSP_sdSpiInit_NEW(void);
+static void test_send_cmd0(uint8_t *rx_resp);
 /*****************************************************************************
  *   PUBLIC FUNCTIONS
  *****************************************************************************/
@@ -89,21 +94,22 @@ BSP_sdSpiInit (void)
                     DMA_CHANNEL,
                     CLOCK_SPEED_HZ,
                     SPI_MODE);
+  // BSP_sdSpiInit_NEW();
 
-  BSP_spiSelectDevice(CS_PIN);
+  // BSP_spiSelectDevice(CS_PIN);
 
-  printf("📂 Gửi xung clock dummy...\n");
-  for (int i = 0; i < 10; i++)
-  { // 10 bytes = 80 clock cycles
-    BSP_spiWriteByte(dummy_clocks);
-  }
+  // printf("📂 Gửi xung clock dummy...\n");
+  // for (int i = 0; i < 10; i++)
+  // { // 10 bytes = 80 clock cycles
+  //   BSP_spiWriteByte(dummy_clocks);
+  // }
 
-  BSP_spiDeselectDevice(CS_PIN);
+  // BSP_spiDeselectDevice(CS_PIN);
 
   PowerFlag = 1;
 
   printf("📂 Gửi CMD0 (GO_IDLE_STATE)...\n");
-  if (DEV_SDCard_SendCommand(CMD0, 0, 0x95) == 0x01)
+  if (DEV_SDCard_SendCommand(CMD0, 0x0000000, 0x95) == 0x01)
   {
     /* Set the timer for 1 second */
     Timer1 = 100;
@@ -815,4 +821,81 @@ SD_SendCommand (uint8_t cmd, uint32_t arg, uint8_t crc)
   BSP_spiSelectDevice(CS_PIN);
   BSP_spiWriteToDevice(tx_data, 6);
   BSP_spiDeselectDevice(CS_PIN);
+}
+
+static void
+BSP_sdSpiInit_NEW (void)
+{
+  // Cấu hình GPIO cho CS
+  gpio_set_direction(CS_PIN, GPIO_MODE_OUTPUT);
+  gpio_set_level(CS_PIN, 1);
+
+  // 1) Cấu hình SPI bus
+  spi_bus_config_t buscfg = { .miso_io_num     = MISO_PIN,
+                              .mosi_io_num     = MOSI_PIN,
+                              .sclk_io_num     = SCLK_PIN,
+                              .quadwp_io_num   = -1,
+                              .quadhd_io_num   = -1,
+                              .max_transfer_sz = 4096 };
+  spi_bus_initialize(HSPI_HOST, &buscfg, 1);
+
+  // 2) add device: SPI_DEVICE_HALFDUPLEX + mode=0 + freq=100k
+  spi_device_interface_config_t devcfg
+      = { .clock_speed_hz = 100000, // 100 kHz init
+          .mode           = 0,      // mode 0
+          .spics_io_num   = -1,     // tự điều khiển CS
+          .queue_size     = 50,
+          .flags          = SPI_DEVICE_HALFDUPLEX };
+  spi_bus_add_device(HSPI_HOST, &devcfg, &spi_handle);
+}
+
+static void
+test_send_cmd0 (uint8_t *rx_resp)
+{
+  // 1) CS lên cao
+  gpio_set_level(CS_PIN, 1);
+
+  // 2) Gửi 80 clock dummy
+  uint8_t ff_buf[10];
+  memset(ff_buf, 0xFF, sizeof(ff_buf));
+
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = 10 * 8; // 80 bit
+  t.tx_buffer = ff_buf; // Gửi 10 byte 0xFF
+  t.rx_buffer = NULL;   // Không cần đọc
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // 3) Gửi CMD0
+  // CMD0 = 0x40, argument=0, CRC=0x95
+  uint8_t cmd0[6] = { 0x40, 0x00, 0x00, 0x00, 0x00, 0x95 };
+
+  // Kéo CS=0
+  gpio_set_level(CS_PIN, 0);
+
+  // Gửi 6 byte CMD0
+  memset(&t, 0, sizeof(t));
+  t.length    = 6 * 8; // 6 byte
+  t.tx_buffer = cmd0;
+  t.rx_buffer = NULL; // Chỉ gửi
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // Đọc tối đa 8 byte response
+  // Ở half-duplex, ta gửi 8 byte dummy => đọc 8 byte
+  uint8_t tx_dummy[8];
+  memset(tx_dummy, 0xFF, sizeof(tx_dummy));
+  memset(&t, 0, sizeof(t));
+  t.length    = 8 * 8; // 8 byte
+  t.tx_buffer = tx_dummy;
+  t.rx_buffer = rx_resp;
+  spi_device_polling_transmit(spi_handle, &t);
+
+  // Thả CS
+  gpio_set_level(CS_PIN, 1);
+
+  // In kết quả
+  for (int i = 0; i < 8; i++)
+  {
+    printf("Resp[%d] = 0x%02X\n", i, rx_resp[i]);
+  }
 }
