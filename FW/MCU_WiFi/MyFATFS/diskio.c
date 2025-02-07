@@ -7,9 +7,11 @@
 /* storage control modules to the FatFs module with a defined API.       */
 /*-----------------------------------------------------------------------*/
 
-#include "sdspi.h"
 #include "ff.h"     /* Obtains integer types */
 #include "diskio.h" /* Declarations of disk functions */
+
+#include "sdspi.h"
+#include "sdcard.h"
 
 /* Private variables ---------------------------------------------------------*/
 static volatile DSTATUS Stat        = STA_NOINIT;
@@ -50,20 +52,20 @@ DSTATUS
 disk_initialize(BYTE pdrv /* Physical drive nmuber to identify the drive */
 )
 {
-  printf("disk_initialize() called for pdrv = %d", pdrv);
   Stat = STA_NOINIT;
-
-  int init_status = BSP_sdSpiInit();
-
-  printf("BSP_sdSpiInit() returned: %d", init_status);
-  if (init_status == MSD_OK)
+  if (BSP_sdSpiInit(HSPI_HOST,
+                    MISO_PIN,
+                    MOSI_PIN,
+                    SCLK_PIN,
+                    MAX_TRANSFER_SZ,
+                    CS_PIN,
+                    DMA_CHANNEL,
+                    SD_INIT_FREQ,
+                    SD_WORK_FREQ,
+                    SPI_MODE)
+      == MSD_OK)
   {
     Stat &= ~STA_NOINIT;
-    printf("disk_initialize() successful!");
-  }
-  else
-  {
-    printf("disk_initialize() failed!");
   }
   return Stat;
 }
@@ -79,23 +81,13 @@ disk_read(BYTE  pdrv,   /* Physical drive nmuber to identify the drive */
           UINT  count   /* Number of sectors to read */
 )
 {
-  printf("disk_read() called for sector = %ld, count = %d", sector, count);
-
   DRESULT res = RES_ERROR;
 
-  int read_status = BSP_sdSpiReadBlocks(
-      (uint8_t *)buff, (uint32_t)(sector), count, SD_TIMEOUT);
-
-  printf("BSP_sdSpiReadBlocks() returned: %d", read_status);
-
-  if (read_status == MSD_OK)
+  if (BSP_sdSpiReadBlocks(
+          (uint8_t *)buff, (uint32_t)(sector), count, SD_TIMEOUT, CS_PIN)
+      == MSD_OK)
   {
     res = RES_OK;
-    printf("disk_read() successful!");
-  }
-  else
-  {
-    printf("disk_read() failed!");
   }
 
   return res;
@@ -126,7 +118,7 @@ disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
   DRESULT res = RES_ERROR;
 
   if (BSP_sdSpiWriteBlocks(
-          (uint32_t *)buff, (uint32_t)(sector), count, SD_TIMEOUT)
+          (uint8_t *)buff, (uint32_t)sector, count, SD_TIMEOUT, CS_PIN)
       == MSD_OK)
   {
     res = RES_OK;
@@ -226,3 +218,7 @@ get_fattime(void)
 {
   return 0;
 }
+
+#if FF_MULTI_PARTITION
+PARTITION VolToPart[] = { { 0, 1 } };
+#endif

@@ -13,7 +13,7 @@
 #define I2C_NUM        0
 #define I2C_MODE       I2C_MODE_MASTER
 #define I2C_SDA        GPIO_NUM_21
-#define I2C_SCL        GPIO_NUM_22
+#define I2C_SCL        GPIO_NUM_42
 #define I2C_SDA_PULLUP GPIO_PULLUP_ENABLE
 #define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
 #define I2C_CLK_SPEED  100000

@@ -1,123 +1,165 @@
-// /******************************************************************************
-//  *      INCLUDES
-//  *****************************************************************************/
+/******************************************************************************
+ *      INCLUDES
+ *****************************************************************************/
 
-// #include <stdio.h>
-// #include <string.h>
+#include <stdio.h>
+#include <string.h>
 
-// #include "sdkconfig.h"
+#include "sdkconfig.h"
 
-// #include "freertos/FreeRTOS.h"
-// #include "freertos/task.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
-// #include "sdcard.h"
-// #include "esp_vfs_fat.h"
-// #include "sdmmc_cmd.h"
+#include "sdcard.h"
+#include "ff.h"
+#include "diskio.h"
 
-// /*****************************************************************************
-//  *   PRIVATE DEFINES
-//  *****************************************************************************/
+/*****************************************************************************
+ *   PRIVATE DEFINES
+ *****************************************************************************/
 
-// #define HSPI_HOST       SPI2_HOST
-// #define MISO_PIN        GPIO_NUM_19
-// #define MOSI_PIN        GPIO_NUM_23
-// #define SCLK_PIN        GPIO_NUM_18
-// #define CS_PIN          GPIO_NUM_5
-// #define CLOCK_SPEED_HZ  400000
-// #define MAX_TRANSFER_SZ 4096
-// #define DMA_CHANNEL     1
-// #define SPI_MODE        0
+/*****************************************************************************
+ *   PRIVATE PROTOTYPE FUNCTIONS
+ *****************************************************************************/
 
-// #define SPI_CLOCK_FAST 20000000
+FRESULT fr;
+FATFS   fs;
+FIL     fil;
+UINT    bw;
+UINT    br;
 
-// /*****************************************************************************
-//  *   PRIVATE PROTOTYPE FUNCTIONS
-//  *****************************************************************************/
+#define MOUNT_POINT "0:" // Định nghĩa mount point
 
-// #define MOUNT_POINT "/sdcard"
+/*****************************************************************************
+ *   PUBLIC FUNCTIONS
+ *****************************************************************************/
+void
+DEV_SDCard_Init (void)
+{
+  BSP_sdSpiInit(HSPI_HOST,
+                MISO_PIN,
+                MOSI_PIN,
+                SCLK_PIN,
+                MAX_TRANSFER_SZ,
+                CS_PIN,
+                DMA_CHANNEL,
+                SD_INIT_FREQ,
+                SD_WORK_FREQ,
+                SPI_MODE);
+}
 
-// /*****************************************************************************
-//  *   PUBLIC FUNCTIONS
-//  *****************************************************************************/
-// uint8_t
-// DEV_SDCard_Init (void)
-// {
-//   esp_err_t ret;
+void
+SDCard_ReadFile (void)
+{
+  static char buffer[128]; // Buffer để chứa dữ liệu đọc
 
-//   // Initialize SPI with low speed at startup
-//   BSP_sdSpiDriverInit(HSPI_HOST,
-//                       MISO_PIN,
-//                       MOSI_PIN,
-//                       SCLK_PIN,
-//                       MAX_TRANSFER_SZ,
-//                       CS_PIN,
-//                       DMA_CHANNEL,
-//                       CLOCK_SPEED_HZ,
-//                       SPI_MODE);
+  fr = f_mount(&fs, "0:", 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
 
-//   // Mount SD Card using FATFS
-//   ret = BSP_sdFatFsMount(HSPI_HOST, "/sdcard", CS_PIN, false, 5, 16 * 1024);
+  fr = f_open(&fil, "0:/hello5.txt", FA_READ);
+  if (fr == FR_OK)
+  {
+    printf("File opened successfully!\n");
 
-//   if (ret != ESP_OK)
-//   {
-//     return 0x01; // Mount failed
-//   }
+    do
+    {
+      memset(buffer, 0, sizeof(buffer));
+      fr = f_read(&fil, buffer, sizeof(buffer) - 1, &br);
+      if (fr == FR_OK)
+      {
+        printf("%s", buffer);
+      }
+    } while (br > 0);
 
-//   // Increase SPI speed to 20MHz
-//   BSP_spiSChangeClock(HSPI_HOST, SPI_CLOCK_FAST);
+    f_close(&fil);
+    printf("File read complete!\n");
+  }
+  else
+  {
+    printf("f_open failed! error=%d\n", fr);
+  }
 
-//   return 0x00; // Success
-// }
+  f_mount(NULL, "0:", 1);
+}
 
-// // Const char* được sử dụng khi ký tự cần ghi là string
-// // Const uint8_t* được sử dụng khi ký tự là nhị phân/hex
-// void
-// DEV_SDCard_Write_File (const char *p_filename, const char *p_data)
-// {
-//   char full_path[128];
+void
+DEV_SDCard_WriteFile (const char *p_filename, const char *p_data)
+{
 
-//   snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_filename);
+  char full_path[128];
 
-//   FILE *f = fopen(full_path, "w");
-//   if (f == NULL)
-//   {
-//     printf("Không thể mở file để ghi\n");
-//     return;
-//   }
-//   fprintf(f, "%s\n", p_data);
-//   fclose(f);
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+  }
 
-//   printf("Ghi file thành công: %s\n", p_filename);
-// }
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_filename);
 
-// void
-// DEV_SDCard_Read_File (const char *p_path)
-// {
-//   FILE *f = fopen(p_path, "r");
-//   if (f == NULL)
-//   {
-//     printf("Failed to open file for reading\n");
-//     return;
-//   }
-//   char line[128];
-//   fgets(line, sizeof(line), f);
-//   fclose(f);
-//   printf("Read from file: %s\n", line);
-// }
+  fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+  }
 
-// void
-// DEV_SDCard_Delete_File (const char *p_path)
-// {
-//   if (f_unlink(p_path) == 0)
-//   {
-//     printf("File deleted successfully\n");
-//   }
-//   else
-//   {
-//     printf("Failed to delete file\n");
-//   }
-// }
+  fr = f_write(&fil, p_data, strlen(p_data), &bw);
+  if (fr == FR_OK && bw == strlen(p_data))
+  {
+    printf("Ghi file thành công: %s\n", full_path);
+  }
+  else
+  {
+    printf("f_write failed! error=%d, written=%u\n", fr, bw);
+  }
 
-// /*****************************************************************************
-//  *   PRIVATE FUNCTIONS
-//  *****************************************************************************/
+  f_close(&fil);
+
+  f_mount(NULL, MOUNT_POINT, 1);
+}
+
+void
+DEV_SDCard_Read_File (const char *p_path)
+{
+  char full_path[128];
+  char line[128];
+
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+  }
+
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_path);
+
+  fr = f_open(&fil, full_path, FA_READ);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+  }
+
+  memset(line, 0, sizeof(line));
+  fr = f_read(&fil, line, sizeof(line) - 1, &br);
+  if (fr == FR_OK)
+  {
+    line[br] = '\0';
+    printf("Read from file: %s\n", line);
+  }
+  else
+  {
+    printf("f_read failed! error=%d\n", fr);
+  }
+
+  f_close(&fil);
+
+  f_mount(NULL, MOUNT_POINT, 1);
+}
+
+/*****************************************************************************
+ *   PRIVATE FUNCTIONS
+ *****************************************************************************/

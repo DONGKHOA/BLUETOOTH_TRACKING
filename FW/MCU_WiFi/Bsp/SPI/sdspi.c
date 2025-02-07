@@ -2,900 +2,548 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <stdio.h>
 #include <string.h>
-
-#include "sdkconfig.h"
-#include "esp_timer.h"
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "ff.h"
-
 #include "sdspi.h"
-
+#include "diskio.h"
 /*****************************************************************************
  *   PRIVATE DEFINES
  *****************************************************************************/
-
-#define TRUE  1
-#define FALSE 0
 
 /*****************************************************************************
  *   PRIVATE VARIABLES
  *****************************************************************************/
 
-static volatile BSP_SD_SPI_CardInfo cardInfo;
-// spi_device_handle_t spi_handle = NULL;
-static volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter */
-static uint8_t           PowerFlag = 0;  /* Power flag */
-
-// static spi_device_handle_t sd_spi;
+static spi_device_handle_t s_spi            = NULL;  // SPI handle
+static BSP_SD_SPI_CardInfo s_cardInfo       = { 0 }; // Save info SDCard
+static bool                s_spi_bus_inited = false;
 
 /*****************************************************************************
- *   PRIVATE FUNCTION PROTOTYPE
+ *   PRIVATE PROTOTYPE FUNCTIONS
  *****************************************************************************/
-static bool BSP_sdSpiIsReady(void);
 
-static void    BSP_sdSpiSelectDevice(gpio_num_t e_gpio_pin);
-static void    BSP_sdSpiDeselectDevice(gpio_num_t e_gpio_pin);
-static uint8_t BSP_sdSpiWriteByte(uint8_t u8_tx_data, uint32_t u32_timeout);
-static void    BSP_sdSpiWriteToDevice(uint8_t *u8_tx_data, size_t i64_length);
-static void    BSP_sdSpiReadFromDevice(uint8_t *u8_rx_data, size_t i64_length);
-static uint8_t BSP_sdSpiReadByte(uint32_t u32_timeout);
-static void    BSP_sdSpiReadBytePtr(uint8_t *p_buffer, uint32_t u32_timeout);
+static inline void BSP_sdSpiSelect(gpio_num_t e_cs_io);
+static inline void BSP_sdSpiDeSelect(gpio_num_t e_cs_io);
+static void        BSP_sdSpiWriteByte(uint8_t data);
+static void        BSP_sdSpiWriteBuffer(const uint8_t *buffer, size_t len);
+static uint8_t     BSP_sdSpiReadByte(void);
+static uint8_t     BSP_sdSpiReadyWait(void);
+static void        BSP_sdSpiSendDummyClocks(gpio_num_t e_cs_io);
+static bool        BSP_sdSpiReadDataBlock(uint8_t *buff, size_t len);
+static uint8_t     BSP_sdSpiSendCmd(uint8_t cmd, uint32_t arg);
 
-static void    BSP_sdSpiPowerOn(void);
-static void    BSP_sdSpiPowerOff(void);
-static uint8_t BSP_sdSpiCheckPower(void);
-static uint8_t BSP_sdSpiReadyWait(void);
-
-static bool BSP_sdSpiReadDataBlock(uint8_t *p_buffer,
-                                   uint32_t u32_len,
-                                   uint32_t u32_timeout);
-static bool BSP_sdSpiWriteDataBlock(uint8_t *p_buffer,
-                                    BYTE     token,
-                                    uint32_t u32_timeout);
-static BYTE BSP_sdSpiSendCmd(BYTE cmd, uint32_t u32_arg, uint32_t u32_timeout);
-
-static void SD_SendCommand(uint8_t cmd, uint32_t arg, uint8_t crc);
-
-static uint8_t DEV_SDCard_SendCommand(uint8_t  u8_command,
-                                      uint32_t u32_arg,
-                                      uint8_t  u8_crc);
-static uint8_t DEV_SDCard_SendCommand_NEW(uint8_t  cmd,
-                                          uint32_t arg,
-                                          uint8_t  crc);
-
-static void BSP_sdSpiInit_NEW(void);
-static void test_send_cmd0(uint8_t *rx_resp);
 /*****************************************************************************
- *   PUBLIC FUNCTIONS
+ *    PUBLIC FUNCTIONS
  *****************************************************************************/
 
 uint8_t
-BSP_sdSpiInit (void)
+BSP_sdSpiInit (spi_host_device_t e_spi_host,
+               gpio_num_t        e_miso_io,
+               gpio_num_t        e_mosi_io,
+               gpio_num_t        e_sclk_io,
+               int               i_max_transfer_sz,
+               gpio_num_t        e_cs_io,
+               int               i_dma_channel,
+               int               i_clock_init_hz,
+               int               i_clock_work_hz,
+               uint8_t           u8_spi_mode)
 {
-  uint8_t response;
-  uint8_t dummy_clocks = 0xFF;
+  esp_err_t ret = ESP_OK; // Sửa lỗi NULL -> ESP_OK
 
-  uint8_t type = NULL;
-  uint8_t n, ocr[4];
-
-  printf("📂 Đang khởi tạo SD Card...\n");
-
-  BSP_spiDriverInit(HSPI_HOST,
-                    MISO_PIN,
-                    MOSI_PIN,
-                    SCLK_PIN,
-                    MAX_TRANSFER_SZ,
-                    CS_PIN,
-                    DMA_CHANNEL,
-                    CLOCK_SPEED_HZ,
-                    SPI_MODE);
-  // BSP_sdSpiInit_NEW();
-
-  // BSP_spiSelectDevice(CS_PIN);
-
-  // printf("📂 Gửi xung clock dummy...\n");
-  // for (int i = 0; i < 10; i++)
-  // { // 10 bytes = 80 clock cycles
-  //   BSP_spiWriteByte(dummy_clocks);
-  // }
-
-  // BSP_spiDeselectDevice(CS_PIN);
-
-  PowerFlag = 1;
-
-  printf("📂 Gửi CMD0 (GO_IDLE_STATE)...\n");
-  if (DEV_SDCard_SendCommand(CMD0, 0x0000000, 0x95) == 0x01)
+  if (!s_spi_bus_inited)
   {
-    /* Set the timer for 1 second */
-    Timer1 = 100;
+    // 1) Cấu hình GPIO CS_PIN = output
+    gpio_config_t io_conf = { .pin_bit_mask = 1ULL << e_cs_io,
+                              .mode         = GPIO_MODE_OUTPUT,
+                              .pull_up_en   = 0,
+                              .pull_down_en = 0,
+                              .intr_type    = GPIO_INTR_DISABLE };
+    gpio_config(&io_conf);
+    BSP_sdSpiDeSelect(e_cs_io);
 
-    /* SD Checking Interface Behavior Conditions */
-    if (DEV_SDCard_SendCommand(CMD8, 0x000001AA, 0x87) == 0x01)
+    // 2) Init SPI bus
+    spi_bus_config_t buscfg = { .miso_io_num     = e_miso_io,
+                                .mosi_io_num     = e_mosi_io,
+                                .sclk_io_num     = e_sclk_io,
+                                .quadwp_io_num   = -1,
+                                .quadhd_io_num   = -1,
+                                .max_transfer_sz = i_max_transfer_sz };
+    ret = spi_bus_initialize(e_spi_host, &buscfg, i_dma_channel);
+    if (ret != ESP_OK)
     {
-      /* SDC Ver2+ */
-      for (n = 0; n < 4; n++)
-      {
-        ocr[n] = BSP_spiReadByte();
-      }
-      if (ocr[2] == 0x01 && ocr[3] == 0xAA)
-      {
-        /* 2.7-3.6V */
-        do
-        {
-          if (DEV_SDCard_SendCommand(CMD55, 0, 0x00) <= 1
-              && DEV_SDCard_SendCommand(CMD41, 1UL << 30, 0x00) == 0)
-          {
-            break; /* ACMD41 with HCS bit */
-          }
-        } while (Timer1);
+      printf("spi_bus_initialize failed=%d\n", ret);
+      return MSD_ERROR;
+    }
+  }
 
-        if (Timer1 && DEV_SDCard_SendCommand(CMD58, 0, 0x00) == 0)
-        {
-          /* Check CCS bit */
-          for (n = 0; n < 4; n++)
-          {
-            ocr[n] = BSP_spiReadByte();
-            printf("ocr[%d] = %d\n", n, ocr[n]);
-          }
-          type = (ocr[0] & 0x40) ? 6 : 2;
-        }
-      }
+  // 3) Gán device
+  spi_device_interface_config_t devcfg = {
+    .clock_speed_hz = i_clock_init_hz,
+    .mode           = u8_spi_mode,
+    .spics_io_num   = -1,
+    .queue_size     = 1,
+  };
+  ret = spi_bus_add_device(e_spi_host, &devcfg, &s_spi);
+
+  if (ret != ESP_OK)
+  {
+    printf("spi_bus_add_device failed=%d\n", ret);
+    return MSD_ERROR;
+  }
+  s_spi_bus_inited = true;
+
+  uint8_t  response;
+  uint8_t  n, csd[16];
+  uint32_t csize;
+
+  BSP_sdSpiSendDummyClocks(e_cs_io);
+
+  BSP_sdSpiSelect(e_cs_io);
+
+  // CMD0
+  if (BSP_sdSpiSendCmd(CMD0, 0) != 0x01)
+  {
+    BSP_sdSpiDeSelect(e_cs_io);
+    return MSD_ERROR;
+  }
+
+  // CMD8 => Check SD v2
+  response   = BSP_sdSpiSendCmd(CMD8, 0x1AA);
+  bool sd_v2 = false;
+  if (response == 0x01)
+  {
+    uint8_t r7[4];
+    for (int i = 0; i < 4; i++)
+    {
+      r7[i] = BSP_sdSpiReadByte();
+    }
+    if (r7[2] == 0x01 && r7[3] == 0xAA)
+    {
+      sd_v2 = true;
+    }
+  }
+
+  // Check CMD55 and ACMD41
+  TickType_t start = xTaskGetTickCount();
+  do
+  {
+    response = BSP_sdSpiSendCmd(CMD55, 0);
+    response = BSP_sdSpiSendCmd(ACMD41, (sd_v2 ? (1UL << 30) : 0));
+    if (response == 0)
+    {
+      break;
+    }
+    vTaskDelay(pdMS_TO_TICKS(10));
+  } while (xTaskGetTickCount() - start < pdMS_TO_TICKS(2000));
+
+  if (response != 0)
+  {
+    BSP_sdSpiDeSelect(e_cs_io);
+    printf("ACMD41 fail, r1=0x%02X\n", response);
+    return MSD_ERROR;
+  }
+
+  // CMD58 => Read OCR + check CCS
+  response = BSP_sdSpiSendCmd(CMD58, 0);
+  if (response != 0)
+  {
+    printf("CMD58 failed, R1=%02X\n", response);
+    return MSD_ERROR;
+  }
+
+  uint8_t ocr[4];
+  for (int i = 0; i < 4; i++)
+  {
+    ocr[i] = BSP_sdSpiReadByte();
+  }
+  if (ocr[0] & 0x40)
+  {
+    s_cardInfo.CardType = (CT_SDC2 | CT_BLOCK);
+    printf("SDHC/SDXC detected\n");
+  }
+  else
+  {
+    s_cardInfo.CardType = CT_SDC2;
+    printf("SDSC (v2) detected\n");
+  }
+
+  BSP_sdSpiDeSelect(e_cs_io);
+  BSP_sdSpiReadByte(); // Idle State Transitions (Release DO)
+
+  s_cardInfo.LogBlockNbr  = 0;
+  s_cardInfo.LogBlockSize = 512;
+
+  BSP_sdSpiSelect(e_cs_io);
+  if ((BSP_sdSpiSendCmd(CMD9, 0) == 0) && BSP_sdSpiReadDataBlock(csd, 16) == 1)
+  {
+    if ((csd[0] >> 6) == 1)
+    {
+      csize                  = csd[9] + ((uint32_t)csd[8] << 8) + 1;
+      s_cardInfo.LogBlockNbr = csize << 10;
     }
     else
     {
-      /* SDC Ver1 or MMC */
-      type = (DEV_SDCard_SendCommand(CMD55, 0, 0x00) <= 1
-              && DEV_SDCard_SendCommand(CMD41, 0, 0x00) <= 1)
-                 ? 2
-                 : 1; /* SDC : MMC */
-      do
-      {
-        if (type == 2)
-        {
-          if (DEV_SDCard_SendCommand(CMD55, 0, 0x00) <= 1
-              && DEV_SDCard_SendCommand(CMD41, 0, 0x00) == 0)
-          {
-            break; /* ACMD41 */
-          }
-        }
-        else
-        {
-          if (DEV_SDCard_SendCommand(CMD1, 0, 0x00) == 0)
-          {
-            break; /* CMD1 */
-          }
-        }
-      } while (Timer1);
+      n = (csd[5] & 15) + ((csd[10] & 0x80) >> 7) + ((csd[9] & 3) << 1) + 2;
+      csize
+          = (csd[8] >> 6) + ((uint32_t)csd[7] << 2) + ((csd[6] & 3) << 10) + 1;
+      s_cardInfo.LogBlockNbr = csize << (n - 9);
+    }
+    s_cardInfo.LogBlockSize = 512;
+    // printf("SD total sectors = %lu, sector_size=%lu\n",
+    //        s_cardInfo.LogBlockNbr,
+    //        s_cardInfo.LogBlockSize);
+  }
+  else
+  {
+    printf("Failed!\n");
+    return MSD_ERROR;
+  }
+  BSP_sdSpiDeSelect(e_cs_io);
 
-      if (!Timer1 || DEV_SDCard_SendCommand(CMD16, 512, 0x00) != 0)
+  // Change Frequency Clock
+  devcfg.clock_speed_hz = i_clock_work_hz;
+  ret                   = spi_bus_add_device(e_spi_host, &devcfg, &s_spi);
+  if (ret != ESP_OK)
+  {
+    printf("re-add device fail for high freq\n");
+    return MSD_ERROR;
+  }
+  else
+  {
+    printf("re-add device successfully for high freq\n");
+  }
+
+  return MSD_OK;
+}
+
+uint8_t
+BSP_sdSpiReadBlocks (uint8_t   *p_data,
+                     uint32_t   readAddr,
+                     uint32_t   numOfBlocks,
+                     uint32_t   timeout,
+                     gpio_num_t e_cs_io)
+{
+  // SDSC => địa chỉ byte
+  if (!(s_cardInfo.CardType & CT_BLOCK))
+  {
+    readAddr *= 512;
+  }
+
+  BSP_sdSpiSelect(e_cs_io);
+
+  uint8_t response;
+  if (numOfBlocks == 1)
+  {
+    // CMD17
+    response = BSP_sdSpiSendCmd(CMD17, readAddr);
+    if (response == 0)
+    {
+      // Read 512 byte
+      if (!BSP_sdSpiReadDataBlock(p_data, 512))
       {
-        /* Select Block Length */
-        type = 0;
+        BSP_sdSpiDeSelect(e_cs_io);
+        return MSD_ERROR;
       }
+      numOfBlocks = 0;
+    }
+  }
+  else
+  {
+    // CMD18
+    response = BSP_sdSpiSendCmd(CMD18, readAddr);
+    if (response == 0)
+    {
+      while (numOfBlocks)
+      {
+        if (!BSP_sdSpiReadDataBlock(p_data, 512))
+        {
+          break;
+        }
+        p_data += 512;
+        numOfBlocks--;
+      }
+      // STOP_TRANSMISSION (CMD12)
+      BSP_sdSpiSendCmd(CMD12, 0);
     }
   }
 
-  cardInfo.CardType = type;
+  BSP_sdSpiDeSelect(e_cs_io);
+  BSP_sdSpiReadByte(); // Idle State Transitions (Release DO)
 
-  BSP_spiDeselectDevice(CS_PIN);
-
-  // BSP_sdSpiReadByte(1000);
-  // BSP_spiReadByte();
-
-  printf("Debug: type=%d\n", type);
-  if (type)
+  if (numOfBlocks == 0)
   {
-
-    // Get information
-    uint8_t  n, csd[16];
-    uint32_t csize;
-    printf("Debug: Vào if(type)\n");
-    uint8_t r1     = DEV_SDCard_SendCommand(CMD9, 0, 0x00);
-    bool    readOK = BSP_sdSpiReadDataBlock(csd, 16, 1000);
-    printf("Debug: CMD9 R1=0x%02X, readOK=%d\n", r1, readOK);
-
-    if ((r1 == 0) && readOK)
-    {
-      printf("Debug: csd[0]>>6 = %u\n", (csd[0] >> 6));
-      if ((csd[0] >> 6) == 1)
-      {
-        printf("Debug: Vào nhánh SDC V2\n");
-        printf("csd[8]=0x%02X, csd[9]=0x%02X\n", csd[8], csd[9]);
-
-        printf("Bắt đầu tính csize...\n");
-        csize = csd[9] + ((WORD)csd[8] << 8) + 1;
-        printf("csize = %lu\n", csize);
-
-        printf("Gán cardInfo.LogBlockNbr...\n");
-        cardInfo.LogBlockNbr = csize << 10;
-        printf("Đã gán cardInfo.LogBlockNbr xong\n");
-
-        cardInfo.LogBlockSize = 512;
-        printf("Gán cardInfo.LogBlockSize xong\n");
-
-        // Hết nhánh V2
-        printf("Ra khỏi nhánh V2\n");
-      }
-      else
-      {
-        printf("Debug: Vào nhánh SDC V1/MMC\n");
-        n = (csd[5] & 15) + ((csd[10] & 128) >> 7) + ((csd[9] & 3) << 1) + 2;
-        csize = (csd[8] >> 6) + (csd[7] << 2) + ((csd[6] & 3) << 10) + 1;
-        cardInfo.LogBlockNbr = csize << (n - 9);
-      }
-    }
-    printf("Initialization Success\n");
     return MSD_OK;
   }
-  //   /* Initialization failed */
-  PowerFlag = 0;
   return MSD_ERROR;
-  // }
 }
 
 uint8_t
-BSP_sdSpiITConfig (void)
+BSP_sdSpiWriteBlocks (uint8_t   *p_data,
+                      uint32_t   writeAddr,
+                      uint32_t   numOfBlocks,
+                      uint32_t   timeout,
+                      gpio_num_t e_cs_io)
 {
-  return 0;
-}
+  uint8_t  token;
+  uint8_t  response;
+  uint16_t i;
+  uint32_t startTime = xTaskGetTickCount();
 
-uint8_t
-BSP_sdSpiReadBlocks (uint8_t *p_data,
-                     uint32_t u32_readAddr,
-                     uint32_t u32_numOfBlocks,
-                     uint32_t u32_timeout)
-{
-  // 1) Kéo CS = 0 (bắt đầu giao dịch)
-  BSP_sdSpiSelectDevice(CS_PIN);
-
-  // 2) Nếu chỉ đọc 1 block => CMD17
-  if (u32_numOfBlocks == 1)
+  if (!(s_cardInfo.CardType & CT_BLOCK))
   {
-    // Gửi CMD17(address)
-    uint8_t r1
-        = DEV_SDCard_SendCommand_NEW(CMD17, u32_readAddr, 0x01 /* hoặc 0x00 */);
-    if (r1 == 0) // R1=0 => OK
+    writeAddr *= 512;
+  }
+
+  // printf("WriteAddr: %lu, numOfBlocks: %lu\n", writeAddr, numOfBlocks);
+
+  if (numOfBlocks == 1)
+  {
+    BSP_sdSpiSelect(e_cs_io);
+    if (BSP_sdSpiSendCmd(CMD24, writeAddr) != 0)
     {
-      // Chờ token 0xFE, đọc 512 byte
-      if (BSP_sdSpiReadDataBlock(p_data, 512, u32_timeout))
-      {
-        u32_numOfBlocks = 0; // Đánh dấu đã đọc thành công
-      }
+      printf("CMD24 failed for WriteAddr: %lu\n", writeAddr);
+      BSP_sdSpiDeSelect(e_cs_io);
+      return MSD_ERROR;
     }
   }
   else
   {
-    // 3) Nhiều block => CMD18
-    uint8_t r1 = DEV_SDCard_SendCommand_NEW(CMD18, u32_readAddr, 0x01);
-    if (r1 == 0)
+    BSP_sdSpiSelect(e_cs_io);
+    if (BSP_sdSpiSendCmd(CMD25, writeAddr) != 0)
     {
-      // Liên tục đọc mỗi block 512 byte
-      do
-      {
-        if (!BSP_sdSpiReadDataBlock(p_data, 512, u32_timeout))
-        {
-          // Nếu đọc block này lỗi => thoát
-          break;
-        }
-        // Dịch con trỏ sang block kế tiếp
-        p_data += 512;
-      } while (--u32_numOfBlocks);
-
-      // Gửi CMD12 để dừng
-      DEV_SDCard_SendCommand_NEW(CMD12, 0, 0x01);
+      printf("CMD25 failed for WriteAddr: %lu\n", writeAddr);
+      BSP_sdSpiDeSelect(e_cs_io);
+      return MSD_ERROR;
     }
   }
 
-  // 4) Thả CS
-  BSP_sdSpiDeselectDevice(CS_PIN);
+  token = (numOfBlocks == 1) ? 0xFE : 0xFC;
+  // printf("Sending START_TOKEN: 0x%02X\n", token);
+  BSP_sdSpiWriteByte(token);
 
-  // 5) Đọc 1 byte 0xFF “nhàn rỗi” (thường có trong spec)
-  BSP_sdSpiReadByte(u32_timeout);
-
-  // Trả về kết quả
-  return (u32_numOfBlocks == 0) ? MSD_OK : MSD_ERROR;
-}
-
-// uint8_t
-// BSP_sdSpiReadBlocks (uint8_t *p_data,
-//                      uint32_t u32_readAddr,
-//                      uint32_t u32_numOfBlocks,
-//                      uint32_t u32_timeout)
-// {
-
-//   BSP_sdSpiSelectDevice(CS_PIN);
-
-//   if (u32_numOfBlocks == 1)
-//   {
-//     /* 싱글 블록 읽기 */
-//     if ((DEV_SDCard_SendCommand(CMD17, u32_readAddr, 0x00) == 0)
-//         && BSP_sdSpiReadDataBlock(p_data, 512, u32_timeout))
-//     {
-//       u32_numOfBlocks = 0;
-//     }
-//   }
-//   else
-//   {
-//     /* 다중 블록 읽기 */
-//     if (DEV_SDCard_SendCommand(CMD18, u32_readAddr, 0x00) == 0)
-//     {
-//       do
-//       {
-//         if (!BSP_sdSpiReadDataBlock(p_data, 512, u32_timeout))
-//         {
-//           break;
-//         }
-
-//         p_data += 512;
-//       } while (--u32_numOfBlocks);
-
-//       /* STOP_TRANSMISSION, 모든 블럭을 다 읽은 후, 전송 중지 요청 */
-//       DEV_SDCard_SendCommand(CMD12, 0, 0x00);
-//     }
-//   }
-
-//   BSP_sdSpiDeselectDevice(CS_PIN);
-//   BSP_sdSpiReadByte(u32_timeout); /* Idle 상태(Release DO) */
-
-//   return u32_numOfBlocks ? MSD_ERROR : MSD_OK;
-// }
-
-uint8_t
-BSP_sdSpiWriteBlocks (uint32_t *p_data,
-                      uint32_t  u32_writeAddr,
-                      uint32_t  u32_numOfBlocks,
-                      uint32_t  u32_timeout)
-{
-  if (!(cardInfo.CardType & CT_SD2))
+  for (uint32_t block = 0; block < numOfBlocks; block++)
   {
-    u32_writeAddr *= 512;
-  }
-
-  BSP_sdSpiSelectDevice(CS_PIN);
-
-  if (u32_numOfBlocks == 1)
-  {
-    /* 싱글 블록 쓰기 */
-    if ((BSP_sdSpiSendCmd(CMD24, u32_writeAddr, u32_timeout) == 0)
-        && BSP_sdSpiWriteDataBlock((uint8_t *)p_data, 0xFE, u32_timeout))
+    for (i = 0; i < 512; i++)
     {
-      u32_numOfBlocks = 0;
+      BSP_sdSpiWriteByte(p_data[block * 512 + i]);
     }
-  }
-  else
-  {
-    /* WRITE_MULTIPLE_BLOCK */
-    if (cardInfo.CardType & CT_SD1)
-    {
-      BSP_sdSpiSendCmd(CMD55, 0, u32_timeout);
-      BSP_sdSpiSendCmd(CMD23, u32_numOfBlocks, u32_timeout); /* ACMD23 */
-    }
-    if (BSP_sdSpiSendCmd(CMD25, u32_writeAddr, u32_timeout) == 0)
-    {
-      do
-      {
-        if (!BSP_sdSpiWriteDataBlock((uint8_t *)p_data, 0xFC, u32_timeout))
-        {
-          break;
-        }
-        p_data += 512;
-      } while (--u32_numOfBlocks);
 
-      /* STOP_TRAN token */
-      if (!BSP_sdSpiWriteDataBlock(0, 0xFD, u32_timeout))
+    BSP_sdSpiWriteByte(0xFF);
+    BSP_sdSpiWriteByte(0xFF);
+
+    response = BSP_sdSpiReadByte();
+    // printf("Write Response for WriteAddr %lu: 0x%02X\n", writeAddr,
+    // response);
+
+    if ((response & 0x1F) != 0x05)
+    {
+      // printf("SD card rejected data block at WriteAddr %lu\n", writeAddr);
+      BSP_sdSpiDeSelect(e_cs_io);
+      return MSD_ERROR;
+    }
+
+    while (BSP_sdSpiReadByte() == 0x00)
+    {
+      if ((xTaskGetTickCount() - startTime) > timeout)
       {
-        u32_numOfBlocks = 1;
+        // printf("Timeout waiting for SD write completion\n");
+        BSP_sdSpiDeSelect(e_cs_io);
+        return MSD_ERROR;
       }
+      vTaskDelay(1);
     }
   }
 
-  BSP_sdSpiDeselectDevice(CS_PIN);
-  BSP_sdSpiReadByte(1000);
+  if (numOfBlocks > 1)
+  {
+    BSP_sdSpiWriteByte(0xFD);
+  }
 
-  return u32_numOfBlocks ? MSD_ERROR : MSD_OK;
+  while (BSP_sdSpiReadByte() == 0x00)
+  {
+    if ((xTaskGetTickCount() - startTime) > timeout)
+    {
+      printf("Timeout waiting for SD card\n");
+      BSP_sdSpiDeSelect(e_cs_io);
+      return MSD_ERROR;
+    }
+    vTaskDelay(1);
+  }
+
+  BSP_sdSpiDeSelect(e_cs_io);
+  return MSD_OK;
 }
 
-/**
- * @brief Retrieves information about the SD card and populates the provided
- *        `BSP_SD_SPI_CardInfo` structure.
- *
- * This function fills the `CardInfo` structure with details about the SD
- * card, including the card type, the number of logical blocks, and the size
- * of each logical block. The information is fetched from a global or internal
- * `cardInfo` object that contains the SD card's current configuration.
- *
- * @param CardInfo Pointer to a `BSP_SD_SPI_CardInfo` structure to be filled
- *                 with the card information.
- */
 void
 BSP_sdSpiGetCardInfo (BSP_SD_SPI_CardInfo *CardInfo)
 {
-  CardInfo->CardType     = cardInfo.CardType;
-  CardInfo->LogBlockNbr  = cardInfo.LogBlockNbr;
-  CardInfo->LogBlockSize = cardInfo.LogBlockSize;
+  CardInfo->CardType     = s_cardInfo.CardType;
+  CardInfo->LogBlockNbr  = s_cardInfo.LogBlockNbr;
+  CardInfo->LogBlockSize = s_cardInfo.LogBlockSize;
 }
 
 /*****************************************************************************
- *   PRIVATE FUNCTIONS
+ *    PRIVATE FUNCTIONS
  *****************************************************************************/
+static inline void
+BSP_sdSpiSelect (gpio_num_t e_cs_io)
+{
+  gpio_set_level(e_cs_io, 0);
+}
+
+static inline void
+BSP_sdSpiDeSelect (gpio_num_t e_cs_io)
+{
+  gpio_set_level(e_cs_io, 1);
+}
+
+static void
+BSP_sdSpiWriteByte (uint8_t data)
+{
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = 8;
+  t.tx_buffer = &data;
+  t.rx_buffer = NULL;
+  spi_device_polling_transmit(s_spi, &t);
+}
+
+static void
+BSP_sdSpiWriteBuffer (const uint8_t *buffer, size_t len)
+{
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = len * 8;
+  t.tx_buffer = buffer;
+  spi_device_polling_transmit(s_spi, &t);
+}
+
+/* Read 1 byte from SD Card and send 0xFF */
 static uint8_t
-DEV_SDCard_SendCommand_NEW (uint8_t cmd, uint32_t arg, uint8_t crc)
+BSP_sdSpiReadByte (void)
 {
-  uint8_t response;
-  uint8_t tx_data[6]
-      = { (cmd & 0x3F) | 0x40, (arg >> 24) & 0xFF, (arg >> 16) & 0xFF,
-          (arg >> 8) & 0xFF,   (arg) & 0xFF,       crc };
-
-  // Cũ: tự gọi select/deselect
-  // BSP_spiSelectDevice(CS_PIN);
-  // ...
-  // BSP_spiDeselectDevice(CS_PIN);
-
-  // Thay vào đó, bạn bỏ hẳn 2 dòng select/deselect ở đây
-  // => "DEV_SDCard_SendCommand" sẽ chỉ gửi 6 byte lệnh + đọc R1
-
-  // Gửi 6 byte lệnh
-  BSP_sdSpiWriteToDevice(tx_data, 6);
-
-  // Đọc R1 tối đa 8 byte
-  uint8_t resp = 0xFF;
-  for (int i = 0; i < 8; i++)
-  {
-    resp = BSP_sdSpiReadByte(1000);
-    if (resp != 0xFF)
-    {
-      break;
-    }
-  }
-
-  return resp;
-}
-
-static uint8_t
-DEV_SDCard_SendCommand (uint8_t u8_command, uint32_t u32_arg, uint8_t u8_crc)
-{
-  uint8_t response;
-  uint8_t tx_data[6]
-      = { (u8_command & 0x3F) | 0x40, // 🔹 Đảm bảo CMD đúng format (0x40 | CMD)
-          (u32_arg >> 24) & 0xFF,
-          (u32_arg >> 16) & 0xFF,
-          (u32_arg >> 8) & 0xFF,
-          u32_arg & 0xFF,
-          u8_crc };
-
-  BSP_spiSelectDevice(CS_PIN);
-  vTaskDelay(pdMS_TO_TICKS(1)); // 🔹 Delay để ổn định CS
-
-  BSP_sdSpiWriteToDevice(tx_data, 6);
-
-  // 4️⃣ Đọc phản hồi từ SD (tối đa 8 byte chờ response)
-  for (uint16_t i = 0; i < 8; i++)
-  {
-    response = BSP_sdSpiReadByte(1000);
-    if (response != 0xFF)
-    {
-      break;
-    }
-  }
-
-  BSP_spiDeselectDevice(CS_PIN);
-  vTaskDelay(pdMS_TO_TICKS(1)); // 🔹 Delay để ổn định CS
-
-  return response;
-}
-
-static bool
-BSP_sdSpiIsReady (void)
-{
-  spi_transaction_t trans;
-  memset(&trans, 0, sizeof(trans));
-
-  // Kiểm tra xem hàng đợi SPI có chỗ trống không
-  esp_err_t ret = spi_device_polling_transmit(spi_handle, &trans);
-
-  return (ret == ESP_OK); // Trả về true nếu SPI sẵn sàng
+  uint8_t           txData = 0xFF, rxData = 0xFF;
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = 8;
+  t.tx_buffer = &txData;
+  t.rx_buffer = &rxData;
+  spi_device_polling_transmit(s_spi, &t);
+  return rxData;
 }
 
 static void
-BSP_sdSpiSelectDevice (gpio_num_t e_gpio_pin)
+BSP_sdSpiSendDummyClocks (gpio_num_t e_cs_io)
 {
-  gpio_set_level(e_gpio_pin, 0);
+  BSP_sdSpiDeSelect(e_cs_io);
+  uint8_t ff[10];
+  memset(ff, 0xFF, 10);
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t));
+  t.length    = 10 * 8;
+  t.tx_buffer = ff;
+  spi_device_polling_transmit(s_spi, &t);
 }
 
-static void
-BSP_sdSpiDeselectDevice (gpio_num_t e_gpio_pin)
-{
-  gpio_set_level(e_gpio_pin, 1);
-}
-
-static void
-BSP_sdSpiWriteToDevice (uint8_t *u8_tx_data, size_t i64_length)
-{
-  spi_transaction_t master_trans
-      = { .flags = 0, .tx_buffer = u8_tx_data, .length = i64_length * 8 };
-  spi_device_transmit(spi_handle, &master_trans);
-}
-
-static uint8_t
-BSP_sdSpiWriteByte (uint8_t u8_tx_data, uint32_t u32_timeout)
-{
-  printf("Attempting to send byte: 0x%02X", u8_tx_data);
-
-  uint32_t elapsed_time = 0;
-  int64_t  start_time   = esp_timer_get_time();
-
-  while (elapsed_time < u32_timeout)
-  {
-    if (BSP_sdSpiIsReady())
-    {
-      printf("SPI is ready, writing data...");
-      BSP_sdSpiWriteToDevice(&u8_tx_data, 1);
-      return 0; // Trả về kết quả thực tế của `BSP_sdSpiWriteToDevice()`
-    }
-
-    elapsed_time = (esp_timer_get_time() - start_time) / 1000;
-  }
-
-  printf("SPI Write Timeout!");
-  return 1; // Timeout, send failed
-}
-
-static void
-BSP_sdSpiReadFromDevice (uint8_t *u8_rx_data, size_t i64_length)
-{
-  spi_transaction_t master_rec = {
-    .tx_buffer = NULL,
-    .rx_buffer = u8_rx_data,
-    .length    = i64_length * 8,
-  };
-  spi_device_transmit(spi_handle, &master_rec);
-}
-
-static uint8_t
-BSP_sdSpiReadByte (uint32_t u32_timeout)
-{
-  uint8_t u8_rx_data = 0xFF; // Default value
-  printf("Attempting to read SPI byte...\r\n");
-
-  uint32_t elapsed_time = 0;
-  int64_t  start_time   = esp_timer_get_time();
-
-  while (elapsed_time < u32_timeout)
-  {
-    BSP_sdSpiReadFromDevice(&u8_rx_data, 1);
-
-    printf("Received: 0x%02X\r\n", u8_rx_data);
-
-    if (u8_rx_data != 0xFF) // Kiểm tra xem có dữ liệu hợp lệ không
-    {
-      printf("Valid SPI data received: 0x%02X\r\n", u8_rx_data);
-      return u8_rx_data;
-    }
-
-    elapsed_time = (esp_timer_get_time() - start_time) / 1000;
-  }
-
-  printf("SPI Read Timeout!\r\n");
-  return u8_rx_data;
-}
-
-static void
-BSP_sdSpiReadBytePtr (uint8_t *p_buffer, uint32_t u32_timeout)
-{
-  *p_buffer = BSP_sdSpiReadByte(u32_timeout);
-}
-
-/* power on */
-static void
-BSP_sdSpiPowerOn (void)
-{
-  uint8_t response;
-  uint8_t dummy_clock = 0xFF;
-  for (int i = 0; i < 10; i++)
-  {
-    BSP_spiWriteToDevice(&dummy_clock, 1);
-  }
-}
-
-/* power off */
-static void
-BSP_sdSpiPowerOff (void)
-{
-  PowerFlag = 0;
-}
-
-/* check power flag */
-static uint8_t
-BSP_sdSpiCheckPower (void)
-{
-  return PowerFlag;
-}
-
-/* SD Ready */
-/* wait SD ready */
 static uint8_t
 BSP_sdSpiReadyWait (void)
 {
-  uint8_t res;
-
-  /* timeout 500ms */
-  Timer2 = 500;
-
-  /* if SD goes ready, receives 0xFF */
+  const TickType_t startTick = xTaskGetTickCount();
+  uint8_t          response;
   do
   {
-    res = BSP_sdSpiReadByte(Timer2);
-  } while ((res != 0xFF) && Timer2);
+    response = BSP_sdSpiReadByte();
+    if (response == 0xFF)
+    {
+      break;
+    }
+    vTaskDelay(1); // 1ms
+  } while ((xTaskGetTickCount() - startTick) < pdMS_TO_TICKS(500));
 
-  return res;
+  return response; // 0xFF = ready
 }
 
-/* receive data block */
 static bool
-BSP_sdSpiReadDataBlock (uint8_t *p_buffer,
-                        uint32_t u32_len,
-                        uint32_t u32_timeout)
+BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
 {
-  // 1) Chờ token 0xFE
-  // uint8_t token;
-  // Timer1 = 200;
-  // do
-  // {
-  //   token = BSP_sdSpiReadByte(u32_timeout);
-  // } while ((token == 0xFF) && Timer1);
-  // if (token != 0xFE)
-  // {
-  //   return false;
-  // }
-
-  // // 2) Đọc đúng `len` byte (16 byte CSD)
-  // for (size_t i = 0; i < u32_len; i++)
-  // {
-  //   p_buffer[i] = BSP_sdSpiReadByte(u32_timeout);
-  //   // printf("p_buffer[%d] = 0x%02X\r\n", i, p_buffer[i]);
-  // }
-
-  // // 3) Bỏ qua 2 byte CRC
-  // BSP_sdSpiReadByte(u32_timeout);
-  // BSP_sdSpiReadByte(u32_timeout);
-
-  // return true;
-
-  uint8_t token;
-
-  // Chờ token 0xFE
-  Timer1 = 200;
+  const TickType_t startTick = xTaskGetTickCount();
+  uint8_t          token;
   do
   {
-    token = BSP_sdSpiReadByte(u32_timeout);
-  } while ((token == 0xFF) && Timer1);
+    token = BSP_sdSpiReadByte();
+    if (token == 0xFE)
+    {
+      break;
+    }
+    vTaskDelay(1);
+  } while ((xTaskGetTickCount() - startTick) < pdMS_TO_TICKS(200));
 
   if (token != 0xFE)
   {
+    printf("BSP_sdSpiReadDataBlock: invalid token=0x%02X", token);
     return false;
   }
 
-  // Đọc "len" byte dữ liệu
-  for (size_t i = 0; i < u32_len; i++)
+  for (size_t i = 0; i < len; i++)
   {
-    p_buffer[i] = BSP_sdSpiReadByte(u32_timeout);
+    buff[i] = BSP_sdSpiReadByte();
   }
 
   // Bỏ qua 2 byte CRC
-  BSP_sdSpiReadByte(u32_timeout);
-  BSP_sdSpiReadByte(u32_timeout);
-
+  BSP_sdSpiReadByte();
+  BSP_sdSpiReadByte();
   return true;
 }
 
-/* transmit data block */
-static bool
-BSP_sdSpiWriteDataBlock (uint8_t *p_buffer, BYTE token, uint32_t u32_timeout)
+static uint8_t
+BSP_sdSpiSendCmd (uint8_t cmd, uint32_t arg)
 {
-  uint8_t resp = 0xFF;
-  uint8_t i    = 0;
-
-  /* wait SD ready */
+  // Wait SDCard ready
   if (BSP_sdSpiReadyWait() != 0xFF)
   {
-    return FALSE;
+    // Not ready
+    printf("SD Card not ready!");
   }
 
-  /* transmit token */
-  BSP_sdSpiWriteByte(token, u32_timeout);
+  // Send 6 bytes: [CMD|0x40, arg(4), CRC]
+  uint8_t buf[6];
+  buf[0] = (cmd & 0x3F) | 0x40; // Command
+  buf[1] = (arg >> 24) & 0xFF;  // Argument[31..24]
+  buf[2] = (arg >> 16) & 0xFF;  // Argument[23..16]
+  buf[3] = (arg >> 8) & 0xFF;   // Argument[15..8]
+  buf[4] = (arg) & 0xFF;        // Argument[7..0]
 
-  /* if it's not STOP token, transmit data */
-  if (token != 0xFD)
-  {
-    BSP_sdSpiWriteToDevice((uint8_t *)p_buffer, 512);
-
-    /* discard CRC */
-    BSP_sdSpiReadByte(u32_timeout);
-    BSP_sdSpiReadByte(u32_timeout);
-
-    /* receive response */
-    while (i <= 64)
-    {
-      resp = BSP_sdSpiReadByte(u32_timeout);
-
-      /* transmit 0x05 accepted */
-      if ((resp & 0x1F) == 0x05)
-      {
-        break;
-      }
-      i++;
-    }
-
-    /* recv buffer clear */
-    while (BSP_sdSpiReadByte(u32_timeout) == 0)
-      ;
-  }
-
-  /* transmit 0x05 accepted */
-  if ((resp & 0x1F) == 0x05)
-  {
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-/* transmit command */
-static BYTE
-BSP_sdSpiSendCmd (BYTE cmd, uint32_t u32_arg, uint32_t u32_timeout)
-{
-  uint8_t crc, res;
-
-  /* wait SD ready */
-  if (BSP_sdSpiReadyWait() != 0xFF)
-  {
-    return 0xFF;
-  }
-
-  /* transmit command */
-  BSP_sdSpiWriteByte(cmd, u32_timeout); /* Command */
-  BSP_sdSpiWriteByte((uint8_t)(u32_arg >> 24),
-                     u32_timeout); /* Argument[31..24] */
-  BSP_sdSpiWriteByte((uint8_t)(u32_arg >> 16),
-                     u32_timeout); /* Argument[23..16] */
-  BSP_sdSpiWriteByte((uint8_t)(u32_arg >> 8),
-                     u32_timeout);                   /* Argument[15..8] */
-  BSP_sdSpiWriteByte((uint8_t)u32_arg, u32_timeout); /* Argument[7..0] */
-
-  /* prepare CRC */
+  // Prepare CRC
+  uint8_t crc = 1;
   if (cmd == CMD0)
   {
-    crc = 0x95; /* CRC for CMD0(0) */
+    crc = 0x95; // CRC for CMD0(0)
   }
   else if (cmd == CMD8)
   {
-    crc = 0x87; /* CRC for CMD8(0x1AA) */
+    crc = 0x87; // CRC for CMD0(0)
   }
-  else
-  {
-    crc = 1;
-  }
+  buf[5] = crc;
 
-  /* transmit CRC */
-  BSP_sdSpiWriteByte(crc, u32_timeout);
+  BSP_sdSpiWriteBuffer(buf, 6);
 
-  /* Skip a stuff byte when STOP_TRANSMISSION */
+  // Skip a stuff byte when STOP_TRANSMISSION
   if (cmd == CMD12)
   {
-    BSP_sdSpiReadByte(u32_timeout);
+    BSP_sdSpiReadByte();
   }
 
-  /* receive response */
-  uint8_t n = 10;
-  do
+  // Receive response
+  uint8_t response = 0xFF;
+  for (int i = 0; i < 10; i++)
   {
-    res = BSP_sdSpiReadByte(u32_timeout);
-  } while ((res & 0x80) && --n);
-
-  return res;
-}
-
-// Sửa ngày 4/2/2025
-
-// #define SD_CMD0  0x40  // Reset SD Card
-// #define SD_CMD8  0x48  // Check SDHC/SDXC
-// #define SD_CMD17 0x51  // Read single block
-// #define SD_CMD24 0x58  // Write single block
-
-static void
-SD_SendCommand (uint8_t cmd, uint32_t arg, uint8_t crc)
-{
-  uint8_t tx_data[6];
-  tx_data[0] = cmd;
-  tx_data[1] = (arg >> 24) & 0xFF;
-  tx_data[2] = (arg >> 16) & 0xFF;
-  tx_data[3] = (arg >> 8) & 0xFF;
-  tx_data[4] = arg & 0xFF;
-  tx_data[5] = crc;
-
-  BSP_spiSelectDevice(CS_PIN);
-  BSP_spiWriteToDevice(tx_data, 6);
-  BSP_spiDeselectDevice(CS_PIN);
-}
-
-static void
-BSP_sdSpiInit_NEW (void)
-{
-  // Cấu hình GPIO cho CS
-  gpio_set_direction(CS_PIN, GPIO_MODE_OUTPUT);
-  gpio_set_level(CS_PIN, 1);
-
-  // 1) Cấu hình SPI bus
-  spi_bus_config_t buscfg = { .miso_io_num     = MISO_PIN,
-                              .mosi_io_num     = MOSI_PIN,
-                              .sclk_io_num     = SCLK_PIN,
-                              .quadwp_io_num   = -1,
-                              .quadhd_io_num   = -1,
-                              .max_transfer_sz = 4096 };
-  spi_bus_initialize(HSPI_HOST, &buscfg, 1);
-
-  // 2) add device: SPI_DEVICE_HALFDUPLEX + mode=0 + freq=100k
-  spi_device_interface_config_t devcfg
-      = { .clock_speed_hz = 100000, // 100 kHz init
-          .mode           = 0,      // mode 0
-          .spics_io_num   = -1,     // tự điều khiển CS
-          .queue_size     = 50,
-          .flags          = SPI_DEVICE_HALFDUPLEX };
-  spi_bus_add_device(HSPI_HOST, &devcfg, &spi_handle);
-}
-
-static void
-test_send_cmd0 (uint8_t *rx_resp)
-{
-  // 1) CS lên cao
-  gpio_set_level(CS_PIN, 1);
-
-  // 2) Gửi 80 clock dummy
-  uint8_t ff_buf[10];
-  memset(ff_buf, 0xFF, sizeof(ff_buf));
-
-  spi_transaction_t t;
-  memset(&t, 0, sizeof(t));
-  t.length    = 10 * 8; // 80 bit
-  t.tx_buffer = ff_buf; // Gửi 10 byte 0xFF
-  t.rx_buffer = NULL;   // Không cần đọc
-  spi_device_polling_transmit(spi_handle, &t);
-
-  // 3) Gửi CMD0
-  // CMD0 = 0x40, argument=0, CRC=0x95
-  uint8_t cmd0[6] = { 0x40, 0x00, 0x00, 0x00, 0x00, 0x95 };
-
-  // Kéo CS=0
-  gpio_set_level(CS_PIN, 0);
-
-  // Gửi 6 byte CMD0
-  memset(&t, 0, sizeof(t));
-  t.length    = 6 * 8; // 6 byte
-  t.tx_buffer = cmd0;
-  t.rx_buffer = NULL; // Chỉ gửi
-  spi_device_polling_transmit(spi_handle, &t);
-
-  // Đọc tối đa 8 byte response
-  // Ở half-duplex, ta gửi 8 byte dummy => đọc 8 byte
-  uint8_t tx_dummy[8];
-  memset(tx_dummy, 0xFF, sizeof(tx_dummy));
-  memset(&t, 0, sizeof(t));
-  t.length    = 8 * 8; // 8 byte
-  t.tx_buffer = tx_dummy;
-  t.rx_buffer = rx_resp;
-  spi_device_polling_transmit(spi_handle, &t);
-
-  // Thả CS
-  gpio_set_level(CS_PIN, 1);
-
-  // In kết quả
-  for (int i = 0; i < 8; i++)
-  {
-    printf("Resp[%d] = 0x%02X\n", i, rx_resp[i]);
+    response = BSP_sdSpiReadByte();
+    if ((response & 0x80) == 0)
+    {
+      break; // bit7 = 0 => OK
+    }
   }
+  return response;
 }

@@ -17,5 +17,5 @@ dependencies:
 direct_dependencies:
 - espressif/esp_secure_cert_mgr
 manifest_hash: 66e34675819718dd2541200ae5e6b81be2f41de3b308a366e5904f805759d579
-target: esp32
+target: esp32s3
 version: 2.0.0

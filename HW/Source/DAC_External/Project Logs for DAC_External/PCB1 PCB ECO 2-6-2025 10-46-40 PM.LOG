@@ -1,0 +1,100 @@
+Added Component: Designator=C1(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=C2(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 10uF 16V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-10uf-16v"; VariantName = "[No Variations]"
+Added Component: Designator=R1(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R2(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=TP1(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP2(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP3(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP4(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP5(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP6(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP7(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=TP8(TestPoint_Pad_2.0x2.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U1(SOIC-8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/20002249B.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "BanLinhKien"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "MCP4822-E/SN SOIC-8 DAC 12Bit Chính Hãng Microchip"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://banlinhkien.com/m4822esn-soic8-dac-12bit-chinh-hang-microchip-p6651182.html"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=3V3 Pin=C1-2
+Added Pin To Net: NetName=3V3 Pin=C2-2
+Added Pin To Net: NetName=3V3 Pin=R1-2
+Added Pin To Net: NetName=3V3 Pin=R2-2
+Added Pin To Net: NetName=3V3 Pin=TP2-1
+Added Pin To Net: NetName=3V3 Pin=U1-1
+Added Net: Name=3V3
+Added Pin To Net: NetName=GND Pin=C1-1
+Added Pin To Net: NetName=GND Pin=C2-1
+Added Pin To Net: NetName=GND Pin=TP1-1
+Added Pin To Net: NetName=GND Pin=U1-7
+Added Net: Name=GND
+Added Pin To Net: NetName=NetR1_1 Pin=R1-1
+Added Pin To Net: NetName=NetR1_1 Pin=TP7-1
+Added Pin To Net: NetName=NetR1_1 Pin=U1-2
+Added Net: Name=NetR1_1
+Added Pin To Net: NetName=NetR2_1 Pin=R2-1
+Added Pin To Net: NetName=NetR2_1 Pin=TP8-1
+Added Pin To Net: NetName=NetR2_1 Pin=U1-5
+Added Net: Name=NetR2_1
+Added Pin To Net: NetName=NetTP3_1 Pin=TP3-1
+Added Pin To Net: NetName=NetTP3_1 Pin=U1-4
+Added Net: Name=NetTP3_1
+Added Pin To Net: NetName=NetTP4_1 Pin=TP4-1
+Added Pin To Net: NetName=NetTP4_1 Pin=U1-3
+Added Net: Name=NetTP4_1
+Added Pin To Net: NetName=NetTP5_1 Pin=TP5-1
+Added Pin To Net: NetName=NetTP5_1 Pin=U1-8
+Added Net: Name=NetTP5_1
+Added Pin To Net: NetName=NetTP6_1 Pin=TP6-1
+Added Pin To Net: NetName=NetTP6_1 Pin=U1-6
+Added Net: Name=NetTP6_1
+Added Class: Name=Sheet1
+Added Rule: Name=Schematic Supply Nets
+Added Rule: Name=Schematic Supply Nets_1

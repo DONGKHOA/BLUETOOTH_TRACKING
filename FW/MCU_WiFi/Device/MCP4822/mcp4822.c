@@ -12,7 +12,7 @@
 
 #define HSPI_HOST SPI2_HOST
 #define MISO_PIN  GPIO_NUM_19
-#define MOSI_PIN  GPIO_NUM_23
+#define MOSI_PIN  GPIO_NUM_43
 #define SCLK_PIN  GPIO_NUM_18
 #define CS_PIN    GPIO_NUM_5
 #define LDAC_PIN  GPIO_NUM_4

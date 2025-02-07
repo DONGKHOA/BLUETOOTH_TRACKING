@@ -1,43 +1,20 @@
 #ifndef SDSPI_H_
 #define SDSPI_H_
 
-/******************************************************************************
- *      INCLUDES
- *****************************************************************************/
-
 #include <stdint.h>
+#include <stdbool.h>
+#include "sdkconfig.h"
+#include "driver/spi_master.h"
 #include "driver/gpio.h"
-// #include "driver/spi_master.h"
-#include "spi.h"
 
-/*****************************************************************************
- *      PUBLIC DEFINES
- *****************************************************************************/
-
-#define HSPI_HOST SPI2_HOST
-#define MISO_PIN  GPIO_NUM_19
-#define MOSI_PIN  GPIO_NUM_23
-#define SCLK_PIN  GPIO_NUM_18
-#define CS_PIN    GPIO_NUM_5
-
-#define CLOCK_SPEED_HZ  400000
-#define MAX_TRANSFER_SZ 4096
-#define DMA_CHANNEL     1
-#define SPI_MODE        0
-/*****************************************************************************
- *      PUBLIC TYPEDEFS
- *****************************************************************************/
-
-typedef struct _BSP_SD_SPI_CardInfo
+#ifdef __cplusplus
+extern "C"
 {
-  uint32_t CardType;     /*!< Specifies the card Type */
-  uint32_t LogBlockNbr;  /*!< Specifies the Card logical Capacity in blocks */
-  uint32_t LogBlockSize; /*!< Specifies logical block size in bytes */
-} BSP_SD_SPI_CardInfo;
+#endif
 
-/*****************************************************************************
- *      PUBLIC DEFINES
- *****************************************************************************/
+  /*****************************************************************************
+   *      PUBLIC DEFINES
+   *****************************************************************************/
 
 /* MMC/SD command */
 #define CMD0   (0)         /* GO_IDLE_STATE */
@@ -62,54 +39,113 @@ typedef struct _BSP_SD_SPI_CardInfo
 #define CMD55  (55)        /* APP_CMD */
 #define CMD58  (58)        /* READ_OCR */
 
-/* MMC card type flags (MMC_GET_TYPE) */
-#define CT_MMC   0x01 /* MMC ver 3 */
-#define CT_SD1   0x02 /* SD ver 1 */
-#define CT_SD2   0x04 /* SD ver 2 */
-#define CT_SDC   0x06 /* SD */
-#define CT_BLOCK 0x08 /* Block addressing */
+#define MSD_OK                   0x00
+#define MSD_ERROR                0x01
+#define MSD_ERROR_SD_NOT_PRESENT 0x02
+#define SD_TRANSFER_OK           0x00
+#define SD_TRANSFER_BUSY         0x01
+#define SD_PRESENT               0x01
+#define SD_NOT_PRESENT           0x00
 
-/**
- * @brief  SD status structure definition
- */
-#define MSD_OK                   ((uint8_t)0x00)
-#define MSD_ERROR                ((uint8_t)0x01)
-#define MSD_ERROR_SD_NOT_PRESENT ((uint8_t)0x02)
+  /*****************************************************************************
+   *      PUBLIC TYPEDEFS
+   *****************************************************************************/
 
-/**
- * @brief  SD transfer state definition
- */
-#define SD_TRANSFER_OK   ((uint8_t)0x00)
-#define SD_TRANSFER_BUSY ((uint8_t)0x01)
+  typedef struct
+  {
+    uint32_t CardType;
+    uint32_t LogBlockNbr;
+    uint32_t LogBlockSize;
+  } BSP_SD_SPI_CardInfo;
 
-#define SD_PRESENT     ((uint8_t)0x01)
-#define SD_NOT_PRESENT ((uint8_t)0x00)
-#define SD_DATATIMEOUT ((uint32_t)100000000)
-/*****************************************************************************
- *      PUBLIC FUNCTIONS
- *****************************************************************************/
+  /*****************************************************************************
+   *      PUBLIC FUNCTIONS
+   *****************************************************************************/
+  /**
+   * @brief Initialize the SPI interface for the SD card.
+   *
+   * This function sets up the SPI interface with the specified parameters to
+   * communicate with an SD card.
+   *
+   * @param e_spi_host        The SPI host device to use.
+   * @param e_miso_io         The GPIO number for the MISO (Master In Slave Out)
+   * line.
+   * @param e_mosi_io         The GPIO number for the MOSI (Master Out Slave In)
+   * line.
+   * @param e_sclk_io         The GPIO number for the SCLK (Serial Clock) line.
+   * @param i_max_transfer_sz The maximum transfer size in bytes.
+   * @param e_cs_io           The GPIO number for the CS (Chip Select) line.
+   * @param i_dma_channel     The DMA channel to use.
+   * @param i_clock_init_hz   The initial clock frequency in Hz.
+   * @param i_clock_work_hz   The working clock frequency in Hz.
+   * @param u8_spi_mode       The SPI mode (0-3).
+   *
+   * @return uint8_t Returns 0 on success, or an error code on failure.
+   */
+  uint8_t BSP_sdSpiInit(spi_host_device_t e_spi_host,
+                        gpio_num_t        e_miso_io,
+                        gpio_num_t        e_mosi_io,
+                        gpio_num_t        e_sclk_io,
+                        int               i_max_transfer_sz,
+                        gpio_num_t        e_cs_io,
+                        int               i_dma_channel,
+                        int               i_clock_init_hz,
+                        int               i_clock_work_hz,
+                        uint8_t           u8_spi_mode);
 
-uint8_t BSP_sdSpiInit(void);
-uint8_t BSP_sdSpiITConfig(void);
-uint8_t BSP_sdSpiReadBlocks(uint8_t *p_data,
-                            uint32_t u32_readAddr,
-                            uint32_t u32_numOfBlocks,
-                            uint32_t u32_timeout);
-uint8_t BSP_sdSpiWriteBlocks(uint32_t *p_data,
-                             uint32_t  u32_writeAddr,
-                             uint32_t  u32_numOfBlocks,
-                             uint32_t  u32_timeout);
+  /**
+   * @brief Reads blocks of data from the SD card via SPI.
+   *
+   * This function reads a specified number of blocks from the SD card starting
+   * from a given address and stores the data in the provided buffer.
+   *
+   * @param p_data Pointer to the buffer where the read data will be stored.
+   * @param readAddr Address from where the read operation will start.
+   * @param numOfBlocks Number of blocks to read.
+   * @param timeout Timeout duration for the read operation.
+   * @param e_cs_io GPIO pin number for the chip select (CS) line.
+   *
+   * @return Status of the read operation.
+   *         - 0: Success
+   *         - Non-zero: Error code
+   */
+  uint8_t BSP_sdSpiReadBlocks(uint8_t   *p_data,
+                              uint32_t   readAddr,
+                              uint32_t   numOfBlocks,
+                              uint32_t   timeout,
+                              gpio_num_t e_cs_io);
 
+  /**
+   * @brief  Writes blocks of data to the SD card via SPI.
+   *
+   * This function writes a specified number of blocks to the SD card starting
+   * from a given address. The operation is performed using SPI communication.
+   *
+   * @param  p_data      Pointer to the data buffer to be written.
+   * @param  writeAddr   Address on the SD card where the write operation
+   * starts.
+   * @param  numOfBlocks Number of blocks to write.
+   * @param  timeout     Timeout duration for the write operation.
+   * @param  e_cs_io     GPIO pin number used for chip select (CS).
+   *
+   * @retval uint8_t     Returns 0 on success, non-zero error code on failure.
+   */
+  uint8_t BSP_sdSpiWriteBlocks(uint8_t   *p_data,
+                               uint32_t   writeAddr,
+                               uint32_t   numOfBlocks,
+                               uint32_t   timeout,
+                               gpio_num_t e_cs_io);
 
-uint8_t BSP_sdSpiErase(uint32_t StartAddr, uint32_t EndAddr);
-uint8_t BSP_sdSpiGetCardState(void);
-void    BSP_sdSpiGetCardInfo(BSP_SD_SPI_CardInfo *CardInfo);
-uint8_t BSP_sdSpiIsDetected(void);
+  /**
+   * @brief  Retrieves the SD card information.
+   * @param  CardInfo: Pointer to a BSP_SD_SPI_CardInfo structure that will hold
+   * the card information.
+   * @retval None
+   */
+  void BSP_sdSpiGetCardInfo(BSP_SD_SPI_CardInfo *CardInfo);
 
-/* These functions can be modified in case the current settings (e.g. DMA
-   stream) need to be changed for specific application needs */
-void BSP_sdSpiAbortCallback(void);
-void BSP_sdSpiWriteCpltCallback(void);
-void BSP_sdSpiReadCpltCallback(void);
+#ifdef __cplusplus
+}
+#endif
 
-#endif /* SDSPI_H_ */
+#endif /* BSP_SD_SPI_H_ */

@@ -1,0 +1,66 @@
+Added Component: Designator=C1(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 10uF 16V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-10uf-16v"; VariantName = "[No Variations]"
+Added Component: Designator=C2(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=J1(Header_2.54mm_2P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Hàng Rào Ð?c Ðon 2.54mm 40 Chân 1 Hàng Cao 11.2mm Xuyên L?"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/hang-rao-duc-don-2-54mm-40-chan-1-hang-cao-11-2mm-xuyen-lo"; VariantName = "[No Variations]"
+Added Component: Designator=J2(Header_2.54mm_4P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Hàng Rào Ð?c Ðon 2.54mm 40 Chân 1 Hàng Cao 11.2mm Xuyên L?"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/hang-rao-duc-don-2-54mm-40-chan-1-hang-cao-11-2mm-xuyen-lo"; VariantName = "[No Variations]"
+Added Component: Designator=R1(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 120 Ohm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-120-ohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R2(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=U1(SOIC-8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.ti.com/lit/ds/symlink/sn65hvd230.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "SN65HVD230DR CAN Transceiver 8-SOIC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/sn65hvd230dr-can-transceiver-8-soic"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=3V3 Pin=C1-2
+Added Pin To Net: NetName=3V3 Pin=C2-2
+Added Pin To Net: NetName=3V3 Pin=J2-3
+Added Pin To Net: NetName=3V3 Pin=U1-3
+Added Net: Name=3V3
+Added Pin To Net: NetName=GND Pin=C1-1
+Added Pin To Net: NetName=GND Pin=C2-1
+Added Pin To Net: NetName=GND Pin=J2-2
+Added Pin To Net: NetName=GND Pin=R2-1
+Added Pin To Net: NetName=GND Pin=U1-2
+Added Net: Name=GND
+Added Pin To Net: NetName=NetJ1_1 Pin=J1-1
+Added Pin To Net: NetName=NetJ1_1 Pin=R1-2
+Added Pin To Net: NetName=NetJ1_1 Pin=U1-6
+Added Net: Name=NetJ1_1
+Added Pin To Net: NetName=NetJ1_2 Pin=J1-2
+Added Pin To Net: NetName=NetJ1_2 Pin=R1-1
+Added Pin To Net: NetName=NetJ1_2 Pin=U1-7
+Added Net: Name=NetJ1_2
+Added Pin To Net: NetName=NetR2_2 Pin=R2-2
+Added Pin To Net: NetName=NetR2_2 Pin=U1-8
+Added Net: Name=NetR2_2
+Added Pin To Net: NetName=RXD Pin=J2-4
+Added Pin To Net: NetName=RXD Pin=U1-4
+Added Net: Name=RXD
+Added Pin To Net: NetName=TXD Pin=J2-1
+Added Pin To Net: NetName=TXD Pin=U1-1
+Added Net: Name=TXD
+Added Class: Name=Sheet1
+Added Rule: Name=Schematic Supply Nets
+Added Rule: Name=Schematic Supply Nets_1
