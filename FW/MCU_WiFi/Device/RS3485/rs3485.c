@@ -6,17 +6,21 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "rs3485.h"
 #include "esp_timer.h"
+
+#include "gpio.h"
+#include "rs3485.h"
+#include "crc16.h"
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define RS3485_UART_NUM    UART_NUM_2
-#define RS3485_TXD_PIN     GPIO_NUM_15
-#define RS3485_RXD_PIN     GPIO_NUM_16
-#define RS3485_RE_PIN      GPIO_NUM_21
-#define RS3485_DE_PIN      GPIO_NUM_38
+#define RS3485_UART_NUM UART_NUM_2
+#define RS3485_TXD_PIN  GPIO_NUM_15
+#define RS3485_RXD_PIN  GPIO_NUM_16
+#define RS3485_RE_PIN   GPIO_NUM_21
+#define RS3485_DE_PIN   GPIO_NUM_38
+
 #define RS3485_BAUDRATE    9600
 #define RS3485_DATA_BIT    UART_DATA_8_BITS
 #define RS3485_PARITY_BIT  UART_PARITY_EVEN
@@ -28,8 +32,6 @@
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
-
-static uint16_t DEV_RS3485_CRC16(const uint8_t *data, uint16_t length);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -48,10 +50,10 @@ DEV_RS3485_Init (void)
                      RS3485_STOP_BITS);
 
   // Default: receive mode
-  gpio_set_direction(RS3485_RE_PIN, GPIO_MODE_OUTPUT);
-  gpio_set_direction(RS3485_DE_PIN, GPIO_MODE_OUTPUT);
-  gpio_set_level(RS3485_RE_PIN, 0);
-  gpio_set_level(RS3485_DE_PIN, 0);
+  BSP_gpioSetDirection(RS3485_RE_PIN, GPIO_MODE_OUTPUT);
+  BSP_gpioSetDirection(RS3485_DE_PIN, GPIO_MODE_OUTPUT);
+  BSP_gpioSetState(RS3485_RE_PIN, 0);
+  BSP_gpioSetState(RS3485_DE_PIN, 0);
 }
 
 void
@@ -74,19 +76,19 @@ DEV_RS3485_SendRequest (rs3485_request_t *request)
     packet[5] = request->reg_count & 0xFF;
   }
 
-  uint16_t crc = DEV_RS3485_CRC16(packet, 6);
+  uint16_t crc = MID_CheckCRC16(packet, 6);
   packet[6]    = crc & 0xFF;
   packet[7]    = (crc >> 8) & 0xFF;
 
-  gpio_set_level(RS3485_RE_PIN, 1);
-  gpio_set_level(RS3485_DE_PIN, 1); // Transmit mode
+  BSP_gpioSetState(RS3485_RE_PIN, 1);
+  BSP_gpioSetState(RS3485_DE_PIN, 1); // Transmit mode
   vTaskDelay(pdMS_TO_TICKS(5));
 
-  uart_write_bytes(RS3485_UART_NUM, packet, sizeof(packet));
-  uart_wait_tx_done(RS3485_UART_NUM, pdMS_TO_TICKS(100));
+  BSP_uartSendData(RS3485_UART_NUM, packet, sizeof(packet));
+  BSP_uartWaitTXDone(RS3485_UART_NUM, pdMS_TO_TICKS(100));
 
-  gpio_set_level(RS3485_RE_PIN, 0);
-  gpio_set_level(RS3485_DE_PIN, 0); // Receive mode
+  BSP_gpioSetState(RS3485_RE_PIN, 0);
+  BSP_gpioSetState(RS3485_DE_PIN, 0); // Receive mode
 
   printf("Sent Modbus request.\r\n");
 }
@@ -101,7 +103,7 @@ DEV_RS3485_ReceiveResponse (uint8_t *buffer)
   while (esp_timer_get_time() - start_time < 500000)
   { // 500ms timeout
     int bytes_read
-        = uart_read_bytes(RS3485_UART_NUM, buffer + len, 1, pdMS_TO_TICKS(50));
+        = BSP_uartReadData(RS3485_UART_NUM, buffer + len, 1, pdMS_TO_TICKS(50));
     if (bytes_read > 0)
     {
       len += bytes_read;
@@ -119,7 +121,7 @@ DEV_RS3485_ReceiveResponse (uint8_t *buffer)
   }
 
   uint16_t received_crc   = (buffer[len - 1] << 8) | buffer[len - 2];
-  uint16_t calculated_crc = DEV_RS3485_CRC16(buffer, len - 2);
+  uint16_t calculated_crc = MID_CheckCRC16(buffer, len - 2);
 
   if (received_crc == calculated_crc)
   {
@@ -137,24 +139,3 @@ DEV_RS3485_ReceiveResponse (uint8_t *buffer)
 /******************************************************************************
  *   PRIVATE FUNCTION
  *****************************************************************************/
-static uint16_t
-DEV_RS3485_CRC16 (const uint8_t *data, uint16_t length)
-{
-  uint16_t crc = 0xFFFF;
-  for (uint16_t i = 0; i < length; i++)
-  {
-    crc ^= data[i];
-    for (uint8_t j = 0; j < 8; j++)
-    {
-      if (crc & 0x0001)
-      {
-        crc = (crc >> 1) ^ 0xA001;
-      }
-      else
-      {
-        crc >>= 1;
-      }
-    }
-  }
-  return crc;
-}

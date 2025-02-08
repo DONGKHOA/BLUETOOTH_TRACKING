@@ -51,6 +51,25 @@ BSP_uartSendData (uart_port_t    u32_uart_port,
   return bytes_sent;
 }
 
+int
+BSP_uartReadData (uart_port_t u32_uart_port,
+                  uint8_t    *u8_data,
+                  size_t      u32_len,
+                  uint32_t    u32_timeout)
+{
+  int bytes_receive
+      = uart_read_bytes(u32_uart_port, u8_data, u32_len, u32_timeout);
+  return bytes_receive;
+}
+
+esp_err_t
+BSP_uartWaitTXDone (uart_port_t u32_uart_port, uint32_t u32_timeout)
+{
+  esp_err_t response
+      = uart_wait_tx_done(u32_uart_port, u32_timeout);
+  return response;
+}
+
 esp_err_t
 BSP_resetBuffer (uart_port_t u32_uart_port)
 {

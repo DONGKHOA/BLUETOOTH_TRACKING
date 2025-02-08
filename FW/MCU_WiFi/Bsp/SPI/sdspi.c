@@ -5,6 +5,7 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_timer.h"
 
 #include "sdspi.h"
 #include "diskio.h"
@@ -126,7 +127,7 @@ BSP_sdSpiInit (spi_host_device_t e_spi_host,
   }
 
   // Check CMD55 and ACMD41
-  TickType_t start = xTaskGetTickCount();
+  TickType_t start = esp_timer_get_time();
   do
   {
     response = BSP_sdSpiSendCmd(CMD55, 0);
@@ -136,7 +137,7 @@ BSP_sdSpiInit (spi_host_device_t e_spi_host,
       break;
     }
     vTaskDelay(pdMS_TO_TICKS(10));
-  } while (xTaskGetTickCount() - start < pdMS_TO_TICKS(2000));
+  } while (esp_timer_get_time() - start < 2000000ULL); // 2s
 
   if (response != 0)
   {
@@ -289,7 +290,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
   uint8_t  token;
   uint8_t  response;
   uint16_t i;
-  uint32_t startTime = xTaskGetTickCount();
+  uint32_t startTime = esp_timer_get_time();
 
   if (!(s_cardInfo.CardType & CT_BLOCK))
   {
@@ -346,7 +347,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
 
     while (BSP_sdSpiReadByte() == 0x00)
     {
-      if ((xTaskGetTickCount() - startTime) > timeout)
+      if ((esp_timer_get_time() - startTime) > timeout)
       {
         // printf("Timeout waiting for SD write completion\n");
         BSP_sdSpiDeSelect(e_cs_io);
@@ -363,7 +364,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
 
   while (BSP_sdSpiReadByte() == 0x00)
   {
-    if ((xTaskGetTickCount() - startTime) > timeout)
+    if ((esp_timer_get_time() - startTime) > timeout)
     {
       printf("Timeout waiting for SD card\n");
       BSP_sdSpiDeSelect(e_cs_io);
@@ -450,7 +451,7 @@ BSP_sdSpiSendDummyClocks (gpio_num_t e_cs_io)
 static uint8_t
 BSP_sdSpiReadyWait (void)
 {
-  const TickType_t startTick = xTaskGetTickCount();
+  const TickType_t startTick = esp_timer_get_time();
   uint8_t          response;
   do
   {
@@ -460,7 +461,7 @@ BSP_sdSpiReadyWait (void)
       break;
     }
     vTaskDelay(1); // 1ms
-  } while ((xTaskGetTickCount() - startTick) < pdMS_TO_TICKS(500));
+  } while ((esp_timer_get_time() - startTick) < 500000ULL);
 
   return response; // 0xFF = ready
 }
@@ -468,7 +469,7 @@ BSP_sdSpiReadyWait (void)
 static bool
 BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
 {
-  const TickType_t startTick = xTaskGetTickCount();
+  const TickType_t startTick = esp_timer_get_time();
   uint8_t          token;
   do
   {
@@ -478,7 +479,7 @@ BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
       break;
     }
     vTaskDelay(1);
-  } while ((xTaskGetTickCount() - startTick) < pdMS_TO_TICKS(200));
+  } while ((esp_timer_get_time() - startTick) < 2000000ULL); // 2s
 
   if (token != 0xFE)
   {

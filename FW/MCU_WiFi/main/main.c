@@ -59,7 +59,7 @@ static void ADS1115_Task(void *pvParameter);
 static void MCP4822_Task(void *pvParameter);
 static void SDCard_ReadFile(char *p_path);
 static void SDCard_WriteFile(char *p_path, char *p_data);
-// static void RS3485_Task(void *pvParameter);
+static void RS3485_Task(void *pvParameter);
 
 /******************************************************************************
  *       MAIN FUNCTION
@@ -68,25 +68,14 @@ static void SDCard_WriteFile(char *p_path, char *p_data);
 void
 app_main (void)
 {
-  DEV_RS3485_Init(); // Khởi tạo UART Modbus
 
-  rs3485_request_t request = {
-    .slave_id  = 0x01,                         // Địa chỉ Slave
-    .function  = RS3485_FUNC_READ_HOLDING_REGS, // Lệnh đọc thanh ghi
-    .reg_addr  = 0x0010,                       // Địa chỉ thanh ghi (0x0010)
-    .reg_count = 1                             // Số lượng thanh ghi cần đọc
-  };
+  // xTaskCreate(
+  //   RS3485_Task, "RS3485_Task", 4096, NULL, 10, NULL);
 
   while (1)
   {
-    DEV_RS3485_SendRequest(&request); // Gửi lệnh đọc dữ liệu
     vTaskDelay(pdMS_TO_TICKS(1000));
-    // modbus_receive_response();
   }
-  // while (1)
-  // {
-  //   vTaskDelay(pdMS_TO_TICKS(1000));
-  // }
 }
 
 /******************************************************************************
@@ -154,22 +143,19 @@ SDCard_WriteFile (char *p_path, char *p_data)
   DEV_SDCard_WriteFile(p_path, p_data);
 }
 
-// static void
-// RS3485_Task (void *pvParameter)
-// {
-//   DEV_RS485_Init(); // Khởi tạo UART Modbus
+static void
+RS3485_Task (void *pvParameter)
+{
+  DEV_RS3485_Init();
 
-//   rs485_request_t request = {
-//     .slave_id  = 0x01,                         // Địa chỉ Slave
-//     .function  = RS485_FUNC_READ_HOLDING_REGS, // Lệnh đọc thanh ghi
-//     .reg_addr  = 0x0010,                       // Địa chỉ thanh ghi (0x0010)
-//     .reg_count = 1                             // Số lượng thanh ghi cần đọc
-//   };
+  rs3485_request_t request = { .slave_id  = 0x01,
+                               .function  = RS3485_FUNC_READ_HOLDING_REGS,
+                               .reg_addr  = 0x0010,
+                               .reg_count = 1 };
 
-//   while (1)
-//   {
-//     DEV_RS485_SendRequest(&request); // Gửi lệnh đọc dữ liệu
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//     // modbus_receive_response();
-//   }
-// }
+  while (1)
+  {
+    DEV_RS3485_SendRequest(&request);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+}

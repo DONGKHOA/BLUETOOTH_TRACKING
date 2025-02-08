@@ -25,7 +25,7 @@ static volatile UINT    WriteStatus = 0, ReadStatus = 0;
  * BSP_SD_WriteCpltCallback() the value by default is as defined in the BSP
  * platform driver otherwise 30 secs
  */
-#define SD_TIMEOUT 30 * 1000
+#define SD_TIMEOUT 30 * 1000000 //Unit: us -> s
 
 #define SD_DEFAULT_BLOCK_SIZE 512
 

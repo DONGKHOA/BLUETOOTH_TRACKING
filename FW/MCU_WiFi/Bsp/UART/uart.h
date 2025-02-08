@@ -82,6 +82,45 @@ int BSP_uartSendData(uart_port_t    u32_uart_port,
                      size_t         u32_len);
 
 /**
+ * @brief Reads data from the specified UART port.
+ *
+ * This function reads a specified number of bytes from the given UART port
+ * and stores them in the provided buffer. The function will wait for the
+ * specified timeout duration for the data to be available.
+ *
+ * @param u32_uart_port The UART port to read from.
+ * @param u8_data Pointer to the buffer where the read data will be stored.
+ * @param u32_len The number of bytes to read.
+ * @param u32_timeout The timeout duration in milliseconds to wait for data.
+ *
+ * @return The number of bytes actually read, or a negative value if an error
+ * occurred.
+ */
+int BSP_uartReadData(uart_port_t u32_uart_port,
+                     uint8_t    *u8_data,
+                     size_t      u32_len,
+                     uint32_t    u32_timeout);
+
+/**
+ * @brief Waits for the UART transmission to complete.
+ *
+ * This function waits until the UART transmission is finished or the specified
+ * timeout period elapses.
+ *
+ * @param u32_uart_port The UART port number to wait for the transmission to
+ * complete.
+ * @param u32_timeout The maximum time to wait for the transmission to complete,
+ * in milliseconds.
+ *
+ * @return
+ *     - ESP_OK: Transmission completed successfully.
+ *     - ESP_ERR_TIMEOUT: The operation timed out before the transmission
+ * completed.
+ *     - ESP_FAIL: Other errors.
+ */
+esp_err_t BSP_uartWaitTXDone(uart_port_t u32_uart_port, uint32_t u32_timeout);
+
+/**
  * @brief Resets the UART buffer for the specified UART port.
  *
  * This function flushes the input buffer of the given UART port, effectively
