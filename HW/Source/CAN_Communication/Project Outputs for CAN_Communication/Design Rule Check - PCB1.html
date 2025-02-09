@@ -1,0 +1,623 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 9em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD25\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">2/8/2025</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">11:38:02 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc" class="file"><acronym title="D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc">D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">93</td></tr>
+</table>
+</td>
+</table><a name="IDSTFQAN3NWXDIP2OI3QTA5FQCSPHK2QT1JMNCFDTLBDBUP1ESSCH"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDOJNKK512PBZ5JXMFOGLALBCCPEK5R2OAI4BGKQE3ZNU2D1W43AQJ">Clearance Constraint (Gap=15mil) (All),(All)</a></td>
+<td class="column2">21</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDONVITONCLY4BOPDU55HIMNL0TNCAMBUD5BU4Z3OLT4HQRH44MKRE">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDN1ISXDB0KEKHNWB4MJLNMXZXRONXB3HL4JMEHT4MP3RVDRUSWCL">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDWMSY4DQSLEDBLG2LLES1JXDAUOFGELGSLELCEK2QNN3G3N0B12O">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDEZBXSCPNFOPKI4OMMIN05RAFHOZSUQKT1CJ4S5NBOICKMU1HHF1E">Width Constraint (Min=10mil) (Max=20mil) (Preferred=15mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDKLZV3DOF0L1IIVNIEHMCCKLP1IEQ5EUTWT3ZQLCSXXBQ5YCH252H">Routing Topology Rule(Topology=Shortest) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDCSR14UIXMNMGKKHB3JGFPZN45DYHZ00JZHSZAQO00AUMPTBTOS5M">Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDXKAB3ZJGILIOKMKTMQYBWQFH1MELPIEUY2WFC1M24VUSQXQCNOXB">Hole Size Constraint (Min=1mil) (Max=100mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDSM3AEDNVS5KENIGT0QCFIUOHIBOQRZPSDHS41KBG4AJZSXTS33DP">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDE0OPVAMAS20HLUOS30V5VBEF5IACQU2LAHCPZ3KRFYGKAHKSSY5">Minimum Solder Mask Sliver (Gap=10mil) (All),(All)</a></td>
+<td class="column2">4</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDPP53ORRC3DHFDGODVQYZX3SNRB3V0OXJWMXFB3JADTDXBZEOYBSF">Silk To Solder Mask (Clearance=10mil) (IsPad),(All)</a></td>
+<td class="column2">58</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDZBVKTFCPNRN5OBUEYIVX3IIJ2N1QSI0ZMZF3BCOWBRIRS2EB5N1E">Silk to Silk (Clearance=10mil) (All),(All)</a></td>
+<td class="column2">10</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDQONGJBF55EJJWCDIDJTLSBOCPJIMG0HO5P1JLPTV4FQRIZRG02H">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDQPB4WJYGGKHKTKPCGFRORWZHCRE1FCHGZUYHBCVNQUURXHGCGMB">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">93</td>
+</tr>
+</table><br><a name="IDOJNKK512PBZ5JXMFOGLALBCCPEK5R2OAI4BGKQE3ZNU2D1W43AQJ"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Clearance Constraint (Gap=15mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6088.802mil|Location2.X=6108.957mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6088.802mil|Location2.X=6108.957mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10.162mil &lt; 15mil) Between Track (6056mil,1678mil)(6095.5mil,1717.5mil) on Bottom Layer And Track (6062.855mil,1778mil)(6098.355mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6088.802mil|Location2.X=6108.957mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6088.802mil|Location2.X=6108.957mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10.162mil &lt; 15mil) Between Track (6056mil,1678mil)(6095.5mil,1717.5mil) on Bottom Layer And Track (6098.355mil,1742.5mil)(6146.713mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6090.23mil|Location2.X=6106.48mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6090.23mil|Location2.X=6106.48mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6062.855mil,1778mil)(6098.355mil,1742.5mil) on Bottom Layer And Track (6095.5mil,1717.5mil)(6146.713mil,1717.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6090.23mil|Location2.X=6106.48mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6090.23mil|Location2.X=6106.48mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6095.5mil,1717.5mil)(6146.713mil,1717.5mil) on Bottom Layer And Track (6098.355mil,1742.5mil)(6146.713mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6095.5mil,1717.5mil)(6146.713mil,1717.5mil) on Bottom Layer And Track (6146.713mil,1742.5mil)(6155.5mil,1751.287mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6098.355mil,1742.5mil)(6146.713mil,1742.5mil) on Bottom Layer And Track (6146.713mil,1717.5mil)(6155.5mil,1708.713mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6138.588mil|Location2.X=6154.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6146.713mil,1717.5mil)(6155.5mil,1708.713mil) on Bottom Layer And Track (6146.713mil,1742.5mil)(6155.5mil,1751.287mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6172.5mil,1708.713mil)(6181.287mil,1717.5mil) on Bottom Layer And Track (6172.5mil,1751.287mil)(6181.287mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6172.5mil,1708.713mil)(6181.287mil,1717.5mil) on Bottom Layer And Track (6181.287mil,1742.5mil)(6211.713mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6172.5mil,1751.287mil)(6181.287mil,1742.5mil) on Bottom Layer And Track (6181.287mil,1717.5mil)(6211.713mil,1717.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6173.162mil|Location2.X=6189.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6181.287mil,1717.5mil)(6211.713mil,1717.5mil) on Bottom Layer And Track (6181.287mil,1742.5mil)(6211.713mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6181.287mil,1717.5mil)(6211.713mil,1717.5mil) on Bottom Layer And Track (6211.713mil,1742.5mil)(6220.5mil,1751.287mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6181.287mil,1742.5mil)(6211.713mil,1742.5mil) on Bottom Layer And Track (6211.713mil,1717.5mil)(6220.5mil,1708.713mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6203.588mil|Location2.X=6219.838mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6211.713mil,1717.5mil)(6220.5mil,1708.713mil) on Bottom Layer And Track (6211.713mil,1742.5mil)(6220.5mil,1751.287mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6237.5mil,1708.713mil)(6246.287mil,1717.5mil) on Bottom Layer And Track (6237.5mil,1751.287mil)(6246.287mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6237.5mil,1708.713mil)(6246.287mil,1717.5mil) on Bottom Layer And Track (6246.287mil,1742.5mil)(6278.091mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6237.5mil,1751.287mil)(6246.287mil,1742.5mil) on Bottom Layer And Track (6246.287mil,1717.5mil)(6278.091mil,1717.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6238.162mil|Location2.X=6254.412mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6246.287mil,1717.5mil)(6278.091mil,1717.5mil) on Bottom Layer And Track (6246.287mil,1742.5mil)(6278.091mil,1742.5mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6246.287mil,1717.5mil)(6278.091mil,1717.5mil) on Bottom Layer And Track (6278.091mil,1742.5mil)(6290.591mil,1755mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6246.287mil,1742.5mil)(6278.091mil,1742.5mil) on Bottom Layer And Track (6278.091mil,1717.5mil)(6290.591mil,1705mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6269.966mil|Location2.X=6286.216mil|Location1.Y=1721.875mil|Location2.Y=1738.125mil|Absolute=True">Clearance Constraint: (10mil &lt; 15mil) Between Track (6278.091mil,1717.5mil)(6290.591mil,1705mil) on Bottom Layer And Track (6278.091mil,1742.5mil)(6290.591mil,1755mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDE0OPVAMAS20HLUOS30V5VBEF5IACQU2LAHCPZ3KRFYGKAHKSSY5"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Minimum Solder Mask Sliver (Gap=10mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6050.375mil|Location2.X=6061.625mil|Location1.Y=1722.375mil|Location2.Y=1733.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6050.375mil|Location2.X=6061.625mil|Location1.Y=1722.375mil|Location2.Y=1733.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (9.323mil &lt; 10mil) Between Pad J1-1(6056mil,1678mil) on Multi-Layer And Pad J1-2(6056mil,1778mil) on Multi-Layer [Top Solder] Mask Sliver [9.323mil] / [Bottom Solder] Mask Sliver [9.323mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1819.375mil|Location2.Y=1830.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1819.375mil|Location2.Y=1830.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (9.323mil &lt; 10mil) Between Pad J2-1(6752mil,1875mil) on Multi-Layer And Pad J2-2(6752mil,1775mil) on Multi-Layer [Top Solder] Mask Sliver [9.323mil] / [Bottom Solder] Mask Sliver [9.323mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1719.375mil|Location2.Y=1730.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1719.375mil|Location2.Y=1730.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (9.323mil &lt; 10mil) Between Pad J2-2(6752mil,1775mil) on Multi-Layer And Pad J2-3(6752mil,1675mil) on Multi-Layer [Top Solder] Mask Sliver [9.323mil] / [Bottom Solder] Mask Sliver [9.323mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1619.375mil|Location2.Y=1630.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1619.375mil|Location2.Y=1630.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (9.323mil &lt; 10mil) Between Pad J2-3(6752mil,1675mil) on Multi-Layer And Pad J2-4(6752mil,1575mil) on Multi-Layer [Top Solder] Mask Sliver [9.323mil] / [Bottom Solder] Mask Sliver [9.323mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDPP53ORRC3DHFDGODVQYZX3SNRB3V0OXJWMXFB3JADTDXBZEOYBSF"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=10mil) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-1(6645mil,1756.575mil) on Bottom Layer And Track (6625.315mil,1683.74mil)(6625.315mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.627mil|Location2.X=6634.877mil|Location1.Y=1766.674mil|Location2.Y=1777.924mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.627mil|Location2.X=6634.877mil|Location1.Y=1766.674mil|Location2.Y=1777.924mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (1.921mil &lt; 10mil) Between Pad C1-1(6645mil,1756.575mil) on Bottom Layer And Track (6625.315mil,1776.26mil)(6664.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [1.921mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6627.564mil|Location2.X=6638.814mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6627.564mil|Location2.X=6638.814mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C1-1(6645mil,1756.575mil) on Bottom Layer And Track (6633.189mil,1726.063mil)(6633.189mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6651.186mil|Location2.X=6662.436mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6651.186mil|Location2.X=6662.436mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C1-1(6645mil,1756.575mil) on Bottom Layer And Track (6656.811mil,1726.063mil)(6656.811mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-1(6645mil,1756.575mil) on Bottom Layer And Track (6664.685mil,1683.74mil)(6664.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6625.315mil,1683.74mil)(6625.315mil,1720.158mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6623.158mil|Location2.X=6634.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6625.315mil,1683.74mil)(6625.315mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.123mil|Location2.X=6666.373mil|Location1.Y=1682.076mil|Location2.Y=1693.326mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.123mil|Location2.X=6666.373mil|Location1.Y=1682.076mil|Location2.Y=1693.326mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (1.921mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6625.315mil,1683.74mil)(6664.685mil,1683.74mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [1.921mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6627.564mil|Location2.X=6638.814mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6627.564mil|Location2.X=6638.814mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6633.189mil,1726.063mil)(6633.189mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6651.186mil|Location2.X=6662.436mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6651.186mil|Location2.X=6662.436mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6656.811mil,1726.063mil)(6656.811mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6664.685mil,1683.74mil)(6664.685mil,1720.158mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6655.592mil|Location2.X=6666.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C1-2(6645mil,1703.425mil) on Bottom Layer And Track (6664.685mil,1683.74mil)(6664.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-1(6595mil,1756.575mil) on Bottom Layer And Track (6575.315mil,1683.74mil)(6575.315mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.627mil|Location2.X=6584.877mil|Location1.Y=1766.674mil|Location2.Y=1777.924mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.627mil|Location2.X=6584.877mil|Location1.Y=1766.674mil|Location2.Y=1777.924mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (1.921mil &lt; 10mil) Between Pad C2-1(6595mil,1756.575mil) on Bottom Layer And Track (6575.315mil,1776.26mil)(6614.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [1.921mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6577.564mil|Location2.X=6588.814mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6577.564mil|Location2.X=6588.814mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C2-1(6595mil,1756.575mil) on Bottom Layer And Track (6583.189mil,1726.063mil)(6583.189mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6601.186mil|Location2.X=6612.436mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6601.186mil|Location2.X=6612.436mil|Location1.Y=1734.217mil|Location2.Y=1745.467mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C2-1(6595mil,1756.575mil) on Bottom Layer And Track (6606.811mil,1726.063mil)(6606.811mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1736.186mil|Location2.Y=1747.436mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-1(6595mil,1756.575mil) on Bottom Layer And Track (6614.685mil,1683.74mil)(6614.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6575.315mil,1683.74mil)(6575.315mil,1720.158mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6573.158mil|Location2.X=6584.408mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6575.315mil,1683.74mil)(6575.315mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.123mil|Location2.X=6616.373mil|Location1.Y=1682.076mil|Location2.Y=1693.326mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.123mil|Location2.X=6616.373mil|Location1.Y=1682.076mil|Location2.Y=1693.326mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (1.921mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6575.315mil,1683.74mil)(6614.685mil,1683.74mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [1.921mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6577.564mil|Location2.X=6588.814mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6577.564mil|Location2.X=6588.814mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6583.189mil,1726.063mil)(6583.189mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6601.186mil|Location2.X=6612.436mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6601.186mil|Location2.X=6612.436mil|Location1.Y=1714.533mil|Location2.Y=1725.783mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6606.811mil,1726.063mil)(6606.811mil,1733.937mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [3.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6614.685mil,1683.74mil)(6614.685mil,1720.158mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6605.592mil|Location2.X=6616.842mil|Location1.Y=1683.036mil|Location2.Y=1694.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.937mil &lt; 10mil) Between Pad C2-2(6595mil,1703.425mil) on Bottom Layer And Track (6614.685mil,1683.74mil)(6614.685mil,1776.26mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.937mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6004.115mil|Location2.X=6015.365mil|Location1.Y=1631.036mil|Location2.Y=1642.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6004.115mil|Location2.X=6015.365mil|Location1.Y=1631.036mil|Location2.Y=1642.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.842mil &lt; 10mil) Between Pad J1-1(6056mil,1678mil) on Multi-Layer And Track (6000.882mil,1618.945mil)(6000.882mil,1837.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.842mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6004.106mil|Location2.X=6015.356mil|Location1.Y=1772.375mil|Location2.Y=1783.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6004.106mil|Location2.X=6015.356mil|Location1.Y=1772.375mil|Location2.Y=1783.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.824mil &lt; 10mil) Between Pad J1-2(6056mil,1778mil) on Multi-Layer And Track (6000.882mil,1618.945mil)(6000.882mil,1837.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.824mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6706.828mil|Location2.X=6714.495mil|Location1.Y=1856.489mil|Location2.Y=1864.156mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6706.828mil|Location2.X=6714.495mil|Location1.Y=1856.489mil|Location2.Y=1864.156mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 10mil) Between Pad J2-1(6752mil,1875mil) on Multi-Layer And Text "C1" (6712mil,1809mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.635mil|Location2.X=6803.885mil|Location1.Y=1828.036mil|Location2.Y=1839.286mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.635mil|Location2.X=6803.885mil|Location1.Y=1828.036mil|Location2.Y=1839.286mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.842mil &lt; 10mil) Between Pad J2-1(6752mil,1875mil) on Multi-Layer And Track (6807.118mil,1520.669mil)(6807.118mil,1934.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.842mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1769.375mil|Location2.Y=1780.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1769.375mil|Location2.Y=1780.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.824mil &lt; 10mil) Between Pad J2-2(6752mil,1775mil) on Multi-Layer And Track (6807.118mil,1520.669mil)(6807.118mil,1934.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.824mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1669.375mil|Location2.Y=1680.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1669.375mil|Location2.Y=1680.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.824mil &lt; 10mil) Between Pad J2-3(6752mil,1675mil) on Multi-Layer And Track (6807.118mil,1520.669mil)(6807.118mil,1934.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.824mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1523.499mil|Location2.Y=1534.749mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6746.375mil|Location2.X=6757.625mil|Location1.Y=1523.499mil|Location2.Y=1534.749mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.036mil &lt; 10mil) Between Pad J2-4(6752mil,1575mil) on Multi-Layer And Track (6692.945mil,1520.669mil)(6807.118mil,1520.669mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.036mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1569.375mil|Location2.Y=1580.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6792.644mil|Location2.X=6803.894mil|Location1.Y=1569.375mil|Location2.Y=1580.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.824mil &lt; 10mil) Between Pad J2-4(6752mil,1575mil) on Multi-Layer And Track (6807.118mil,1520.669mil)(6807.118mil,1934.055mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [9.824mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6206.375mil|Location2.X=6217.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6206.375mil|Location2.X=6217.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R1-1(6229mil,1760.5mil) on Bottom Layer And Track (6208mil,1679mil)(6208mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6207.375mil|Location2.X=6218.625mil|Location1.Y=1771.125mil|Location2.Y=1782.375mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6207.375mil|Location2.X=6218.625mil|Location1.Y=1771.125mil|Location2.Y=1782.375mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R1-1(6229mil,1760.5mil) on Bottom Layer And Track (6208mil,1781mil)(6250mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6240.375mil|Location2.X=6251.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6240.375mil|Location2.X=6251.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R1-1(6229mil,1760.5mil) on Bottom Layer And Track (6250mil,1679mil)(6250mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6206.375mil|Location2.X=6217.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6206.375mil|Location2.X=6217.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R1-2(6229mil,1699.5mil) on Bottom Layer And Track (6208mil,1679mil)(6208mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6239.375mil|Location2.X=6250.625mil|Location1.Y=1677.625mil|Location2.Y=1688.875mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6239.375mil|Location2.X=6250.625mil|Location1.Y=1677.625mil|Location2.Y=1688.875mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R1-2(6229mil,1699.5mil) on Bottom Layer And Track (6208mil,1679mil)(6250mil,1679mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6240.375mil|Location2.X=6251.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6240.375mil|Location2.X=6251.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R1-2(6229mil,1699.5mil) on Bottom Layer And Track (6250mil,1679mil)(6250mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6141.375mil|Location2.X=6152.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6141.375mil|Location2.X=6152.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R2-1(6164mil,1760.5mil) on Bottom Layer And Track (6143mil,1679mil)(6143mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6142.375mil|Location2.X=6153.625mil|Location1.Y=1771.125mil|Location2.Y=1782.375mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6142.375mil|Location2.X=6153.625mil|Location1.Y=1771.125mil|Location2.Y=1782.375mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R2-1(6164mil,1760.5mil) on Bottom Layer And Track (6143mil,1781mil)(6185mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6175.375mil|Location2.X=6186.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6175.375mil|Location2.X=6186.625mil|Location1.Y=1739.875mil|Location2.Y=1751.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R2-1(6164mil,1760.5mil) on Bottom Layer And Track (6185mil,1679mil)(6185mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6141.375mil|Location2.X=6152.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6141.375mil|Location2.X=6152.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R2-2(6164mil,1699.5mil) on Bottom Layer And Track (6143mil,1679mil)(6143mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6174.375mil|Location2.X=6185.625mil|Location1.Y=1677.625mil|Location2.Y=1688.875mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6174.375mil|Location2.X=6185.625mil|Location1.Y=1677.625mil|Location2.Y=1688.875mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R2-2(6164mil,1699.5mil) on Bottom Layer And Track (6143mil,1679mil)(6185mil,1679mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6175.375mil|Location2.X=6186.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6175.375mil|Location2.X=6186.625mil|Location1.Y=1678.875mil|Location2.Y=1690.125mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R2-2(6164mil,1699.5mil) on Bottom Layer And Track (6185mil,1679mil)(6185mil,1781mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6357.625mil|Location2.X=6368.875mil|Location1.Y=1890.375mil|Location2.Y=1901.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6357.625mil|Location2.X=6368.875mil|Location1.Y=1890.375mil|Location2.Y=1901.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.5mil &lt; 10mil) Between Pad R3-1(6378.5mil,1880mil) on Bottom Layer And Text "U1" (6358mil,1869mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6387.875mil|Location2.X=6399.125mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6387.875mil|Location2.X=6399.125mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R3-1(6378.5mil,1880mil) on Bottom Layer And Track (6297mil,1859mil)(6399mil,1859mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6357.875mil|Location2.X=6369.125mil|Location1.Y=1891.375mil|Location2.Y=1902.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6357.875mil|Location2.X=6369.125mil|Location1.Y=1891.375mil|Location2.Y=1902.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R3-1(6378.5mil,1880mil) on Bottom Layer And Track (6297mil,1901mil)(6399mil,1901mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6389.125mil|Location2.X=6400.375mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6389.125mil|Location2.X=6400.375mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R3-1(6378.5mil,1880mil) on Bottom Layer And Track (6399mil,1859mil)(6399mil,1901mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6295.625mil|Location2.X=6306.875mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6295.625mil|Location2.X=6306.875mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R3-2(6317.5mil,1880mil) on Bottom Layer And Text "R1" (6295mil,1814mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6328.667mil|Location2.X=6336.333mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6328.667mil|Location2.X=6336.333mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 10mil) Between Pad R3-2(6317.5mil,1880mil) on Bottom Layer And Text "U1" (6358mil,1869mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6295.625mil|Location2.X=6306.875mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6295.625mil|Location2.X=6306.875mil|Location1.Y=1858.375mil|Location2.Y=1869.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.5mil &lt; 10mil) Between Pad R3-2(6317.5mil,1880mil) on Bottom Layer And Track (6297mil,1859mil)(6297mil,1901mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2.5mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6326.875mil|Location2.X=6338.125mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6326.875mil|Location2.X=6338.125mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R3-2(6317.5mil,1880mil) on Bottom Layer And Track (6297mil,1859mil)(6399mil,1859mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6296.875mil|Location2.X=6308.125mil|Location1.Y=1891.375mil|Location2.Y=1902.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6296.875mil|Location2.X=6308.125mil|Location1.Y=1891.375mil|Location2.Y=1902.625mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2mil &lt; 10mil) Between Pad R3-2(6317.5mil,1880mil) on Bottom Layer And Track (6297mil,1901mil)(6399mil,1901mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6468.036mil|Location2.X=6479.286mil|Location1.Y=1815.743mil|Location2.Y=1826.993mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6468.036mil|Location2.X=6479.286mil|Location1.Y=1815.743mil|Location2.Y=1826.993mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.114mil &lt; 10mil) Between Pad U1-1(6512.441mil,1805mil) on Bottom Layer And Track (6336.26mil,1828.425mil)(6493.74mil,1828.425mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [9.114mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6468.036mil|Location2.X=6479.286mil|Location1.Y=1633.007mil|Location2.Y=1644.257mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6468.036mil|Location2.X=6479.286mil|Location1.Y=1633.007mil|Location2.Y=1644.257mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.114mil &lt; 10mil) Between Pad U1-4(6512.441mil,1655mil) on Bottom Layer And Track (6336.26mil,1631.575mil)(6493.74mil,1631.575mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [9.114mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6350.714mil|Location2.X=6361.964mil|Location1.Y=1633.007mil|Location2.Y=1644.257mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6350.714mil|Location2.X=6361.964mil|Location1.Y=1633.007mil|Location2.Y=1644.257mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.114mil &lt; 10mil) Between Pad U1-5(6317.559mil,1655mil) on Bottom Layer And Track (6336.26mil,1631.575mil)(6493.74mil,1631.575mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [9.114mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1810.167mil|Location2.Y=1817.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1810.167mil|Location2.Y=1817.833mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 10mil) Between Pad U1-8(6317.559mil,1805mil) on Bottom Layer And Text "R1" (6295mil,1814mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6350.714mil|Location2.X=6361.964mil|Location1.Y=1815.743mil|Location2.Y=1826.993mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6350.714mil|Location2.X=6361.964mil|Location1.Y=1815.743mil|Location2.Y=1826.993mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (9.114mil &lt; 10mil) Between Pad U1-8(6317.559mil,1805mil) on Bottom Layer And Track (6336.26mil,1828.425mil)(6493.74mil,1828.425mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [9.114mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDZBVKTFCPNRN5OBUEYIVX3IIJ2N1QSI0ZMZF3BCOWBRIRS2EB5N1E"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=10mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6578.199mil|Location2.X=6585.866mil|Location1.Y=1805.167mil|Location2.Y=1812.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6578.199mil|Location2.X=6585.866mil|Location1.Y=1805.167mil|Location2.Y=1812.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (6574.055mil,1807.953mil) on Bottom Overlay And Text "C2" (6682mil,1809mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6673.173mil|Location2.X=6680.84mil|Location1.Y=1860.144mil|Location2.Y=1867.811mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6673.173mil|Location2.X=6680.84mil|Location1.Y=1860.144mil|Location2.Y=1867.811mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C1" (6712mil,1809mil) on Bottom Overlay And Text "C2" (6682mil,1809mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6251.18mil|Location2.X=6258.846mil|Location1.Y=1860.15mil|Location2.Y=1867.817mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6251.18mil|Location2.X=6258.846mil|Location1.Y=1860.15mil|Location2.Y=1867.817mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R1" (6295mil,1814mil) on Bottom Overlay And Text "R2" (6250mil,1814mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R1" (6295mil,1814mil) on Bottom Overlay And Text "U1" (6358mil,1869mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1870.147mil|Location2.Y=1877.814mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1870.147mil|Location2.Y=1877.814mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R1" (6295mil,1814mil) on Bottom Overlay And Track (6297mil,1859mil)(6297mil,1901mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1855.167mil|Location2.Y=1862.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6291.167mil|Location2.X=6298.833mil|Location1.Y=1855.167mil|Location2.Y=1862.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R1" (6295mil,1814mil) on Bottom Overlay And Track (6297mil,1859mil)(6399mil,1859mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6360.18mil|Location2.X=6367.846mil|Location1.Y=1930.167mil|Location2.Y=1937.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6360.18mil|Location2.X=6367.846mil|Location1.Y=1930.167mil|Location2.Y=1937.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R3" (6404mil,1934mil) on Bottom Overlay And Text "U1" (6358mil,1869mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6293.167mil|Location2.X=6300.833mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6293.167mil|Location2.X=6300.833mil|Location1.Y=1865.167mil|Location2.Y=1872.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "U1" (6358mil,1869mil) on Bottom Overlay And Track (6297mil,1859mil)(6297mil,1901mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6342.378mil|Location2.X=6353.628mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6342.378mil|Location2.X=6353.628mil|Location1.Y=1857.375mil|Location2.Y=1868.625mil|Absolute=True">Silk To Silk Clearance Constraint: (2mil &lt; 10mil) Between Text "U1" (6358mil,1869mil) on Bottom Overlay And Track (6297mil,1859mil)(6399mil,1859mil) on Bottom Overlay Silk Text to Silk Clearance [2mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6354.167mil|Location2.X=6361.833mil|Location1.Y=1897.167mil|Location2.Y=1904.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Github\BLUETOOTH_TRACKING\HW\Source\CAN_Communication\PCB1.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6354.167mil|Location2.X=6361.833mil|Location1.Y=1897.167mil|Location2.Y=1904.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "U1" (6358mil,1869mil) on Bottom Overlay And Track (6297mil,1901mil)(6399mil,1901mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>
