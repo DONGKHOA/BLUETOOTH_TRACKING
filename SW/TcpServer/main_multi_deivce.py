@@ -5,7 +5,7 @@ import threading
 import json
 import paho.mqtt.client as mqtt
 
-HOST = '172.8.179.125'
+HOST = '10.0.1.166'
 PORT = 8899
 
 # Broker address

@@ -6,7 +6,7 @@ import json
 import ssl
 import paho.mqtt.client as mqtt
 
-HOST = '192.168.1.225'
+HOST = '10.0.1.166'
 PORT = 8899
 
 AWS_IOT_ENDPOINT = "a1xu2macchahf7-ats.iot.ap-southeast-2.amazonaws.com" # Replace with your endpoint

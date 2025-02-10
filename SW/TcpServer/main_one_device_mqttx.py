@@ -3,7 +3,7 @@ import struct
 import json
 import paho.mqtt.client as mqtt
 
-HOST = '192.168.1.101'
+HOST = '10.0.1.166'
 PORT = 8899
 
 # Broker address
