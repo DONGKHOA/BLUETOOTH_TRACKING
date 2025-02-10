@@ -58,7 +58,7 @@ DEV_AS608_Reponse (uint8_t *p_instruction_code)
 {
   uint8_t   u8_received_confirmation_code = 0;
   uint8_t  *p_received_package            = (uint8_t *)malloc(RX_BUF_SIZE + 1);
-  const int rxBytes                       = uart_read_bytes(
+  const int rxBytes                       = BSP_uartReadData(
       UART_NUM, p_received_package, RX_BUF_SIZE, pdMS_TO_TICKS(500));
 
   if (rxBytes > 0)
@@ -389,7 +389,7 @@ DEV_AS608_TempleteNum (uint8_t  *p_AS608_address,
 
   // Export the number of stored fingerprints
   uint8_t response[14] = { 0 };
-  int     rxBytes      = uart_read_bytes(
+  int     rxBytes      = BSP_uartReadData(
       UART_NUM, response, sizeof(response), pdMS_TO_TICKS(100));
 
   if (rxBytes >= 12 && response[9] == 0x00)

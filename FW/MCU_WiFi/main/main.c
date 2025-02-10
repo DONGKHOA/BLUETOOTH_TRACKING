@@ -69,55 +69,55 @@ static void RS3485_Task(void *pvParameter);
 void
 twai_init ()
 {
-  // Cấu hình chân TX và RX
-  twai_general_config_t g_config
-      = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_19, GPIO_NUM_20, TWAI_MODE_NORMAL);
+  // // Cấu hình chân TX và RX
+  // twai_general_config_t g_config
+  //     = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_19, GPIO_NUM_20, TWAI_MODE_NORMAL);
 
-  // Cấu hình bộ lọc (chấp nhận tất cả ID)
-  twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+  // // Cấu hình bộ lọc (chấp nhận tất cả ID)
+  // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
-  // Cấu hình tốc độ baud 500kbps
-  twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+  // // Cấu hình tốc độ baud 500kbps
+  // // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
 
-  // Cài đặt TWAI driver
-  if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK)
-  {
-    printf("TWAI driver installed\n");
-  }
-  else
-  {
-    printf("Failed to install TWAI driver\n");
-  }
+  // // Cài đặt TWAI driver
+  // if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK)
+  // {
+  //   printf("TWAI driver installed\n");
+  // }
+  // else
+  // {
+  //   printf("Failed to install TWAI driver\n");
+  // }
 
-  // Bật TWAI driver
-  if (twai_start() == ESP_OK)
-  {
-    printf("TWAI driver started\n");
-  }
-  else
-  {
-    printf("Failed to start TWAI driver\n");
-  }
+  // // Bật TWAI driver
+  // if (twai_start() == ESP_OK)
+  // {
+  //   printf("TWAI driver started\n");
+  // }
+  // else
+  // {
+  //   printf("Failed to start TWAI driver\n");
+  // }
 }
 
 void
 twai_send_message ()
 {
-  twai_message_t message;
-  message.identifier       = 0x123; // ID của frame CAN
-  message.extd             = 0;     // Standard frame (11-bit ID)
-  message.rtr              = 0; // Dữ liệu bình thường (không phải Remote Frame)
-  message.data_length_code = 8; // 8 byte dữ liệu
-  memcpy(message.data, "ESP2CAN!", 8); // Nội dung gửi
+  // twai_message_t message;
+  // message.identifier       = 0x123; // ID của frame CAN
+  // message.extd             = 0;     // Standard frame (11-bit ID)
+  // message.rtr              = 0; // Dữ liệu bình thường (không phải Remote Frame)
+  // message.data_length_code = 8; // 8 byte dữ liệu
+  // memcpy(message.data, "ESP2CAN!", 8); // Nội dung gửi
 
-  if (twai_transmit(&message, pdMS_TO_TICKS(1000)) == ESP_OK)
-  {
-    printf("Message sent\n");
-  }
-  else
-  {
-    printf("Failed to send message\n");
-  }
+  // if (twai_transmit(&message, pdMS_TO_TICKS(1000)) == ESP_OK)
+  // {
+  //   printf("Message sent\n");
+  // }
+  // else
+  // {
+  //   printf("Failed to send message\n");
+  // }
 }
 
 void

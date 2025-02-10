@@ -18,8 +18,11 @@
 #define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
 #define I2C_CLK_SPEED  100000
 
-#define ADS1115_RESOLUTION 16                              // bit
-#define ADS1115_STEP       (1 << (ADS1115_RESOLUTION - 1)) // 32768
+#define ADS1115_RESOLUTION 16 // bit
+#define ADS1115_STEP        \
+  (1 << (ADS1115_RESOLUTION \
+         - 1)) // Remove 1 bit sign by right shift and minus 1 because the
+               // value of ADS1115 ranges from 0 to 32768
 
 /*****************************************************************************
  *      PRIVATE VARIABLES
@@ -57,7 +60,7 @@ DEV_ADS1115_GetData (ads1115_channel_t e_channel, ads1115_gain_t e_gain)
         ADS1115_REG_CONFIG_CPOL_ACTVLOW
         |                               // Alert/Rdy active low   (default val)
         ADS1115_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-        ADS1115_REG_CONFIG_DR_860SPS |  // 128 samples per second (default)
+        ADS1115_REG_CONFIG_DR_860SPS |  // 860 samples per second (default)
         ADS1115_REG_CONFIG_MODE_SINGLE; // Single-shot mode (default)
 
   // Set PGA/voltage range

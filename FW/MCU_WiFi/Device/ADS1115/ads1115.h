@@ -145,11 +145,59 @@ typedef enum ads1115_gain_t
  *      PUBLIC FUNCTIONS
  *****************************************************************************/
 
+/**
+ * @brief Initializes the ADS1115 device.
+ *
+ * This function sets up the ADS1115 analog-to-digital converter (ADC) for use.
+ * It configures the necessary settings and prepares the device for operation.
+ * Call this function before using any other ADS1115 functions.
+ */
 void     DEV_ADS1115_Init(void);
+
+/**
+ * @brief Retrieves data from the ADS1115 ADC for the specified channel and gain.
+ *
+ * This function reads the analog-to-digital conversion result from the ADS1115
+ * for the given channel and gain settings. The ADS1115 is a precision analog-to-digital
+ * converter with a programmable gain amplifier.
+ *
+ * @param e_channel The ADS1115 channel to read from. This parameter is of type
+ *                  ads1115_channel_t, which specifies the input multiplexer configuration.
+ * @param e_gain    The gain setting for the ADS1115. This parameter is of type
+ *                  ads1115_gain_t, which specifies the programmable gain amplifier setting.
+ *
+ * @return The 16-bit digital value representing the analog input voltage for the specified
+ *         channel and gain settings.
+ */
 uint16_t DEV_ADS1115_GetData(ads1115_channel_t e_channel,
                              ads1115_gain_t    e_gain);
+
+/**
+ * @brief Reads the voltage from the specified ADS1115 channel.
+ *
+ * This function reads the voltage from the ADS1115 analog-to-digital converter
+ * on the specified channel with the given gain setting.
+ *
+ * @param e_channel The ADS1115 channel to read from. This is of type 
+ *                  `ads1115_channel_t` which specifies the input multiplexer 
+ *                  configuration.
+ * @param e_gain The gain setting for the ADS1115. This is of type 
+ *               `ads1115_gain_t` which specifies the programmable gain 
+ *               amplifier (PGA) setting.
+ * @return The voltage read from the specified channel in volts.
+ */
 float    DEV_ADS1115_ReadVoltage(ads1115_channel_t e_channel,
                                  ads1115_gain_t    e_gain);
+
+/**
+ * @brief Converts the raw ADC value to a voltage.
+ *
+ * This function takes a 16-bit raw ADC value and converts it to the corresponding voltage.
+ * The conversion is based on the reference voltage and the resolution of the ADS1115 ADC.
+ *
+ * @param u16_value_adc The raw 16-bit ADC value to be converted.
+ * @return The corresponding voltage as a float.
+ */
 float    DEV_ADS1115_GetVoltage(uint16_t u16_value_adc);
 
 #endif /* ADS1115_H_ */
