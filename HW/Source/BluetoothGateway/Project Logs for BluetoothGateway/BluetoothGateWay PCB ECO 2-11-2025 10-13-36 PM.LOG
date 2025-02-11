@@ -1,0 +1,102 @@
+Removed Pin From Net: NetName=NetJ1_6 Pin=R27-1
+Removed Pin From Net: NetName=3V3 Pin=R27-2
+Removed Pin From Net: NetName=NetJ1_3 Pin=R28-1
+Removed Pin From Net: NetName=3V3 Pin=R28-2
+Removed Pin From Net: NetName=NetJ1_5 Pin=R29-1
+Removed Pin From Net: NetName=3V3 Pin=R29-2
+Removed Pin From Net: NetName=3V3 Pin=R82-2
+Removed Pin From Net: NetName=3V3 Pin=R83-2
+Removed Pin From Net: NetName=NetR80_1 Pin=R100-1
+Removed Pin From Net: NetName=3V3 Pin=R100-2
+Removed Pin From Net: NetName=NetR81_1 Pin=R101-1
+Removed Pin From Net: NetName=3V3 Pin=R101-2
+Removed Pin From Net: NetName=GND Pin=U6-41_10
+Removed Pin From Net: NetName=GND Pin=U6-41_11
+Removed Pin From Net: NetName=GND Pin=U6-41_12
+Removed Pin From Net: NetName=GND Pin=U6-41_13
+Removed Pin From Net: NetName=GND Pin=U6-41_14
+Removed Pin From Net: NetName=GND Pin=U6-41_15
+Removed Pin From Net: NetName=GND Pin=U6-41_16
+Removed Pin From Net: NetName=GND Pin=U6-41_17
+Removed Pin From Net: NetName=GND Pin=U6-41_18
+Removed Pin From Net: NetName=GND Pin=U6-41_19
+Removed Pin From Net: NetName=GND Pin=U6-41_20
+Removed Pin From Net: NetName=GND Pin=U6-41_21
+Removed Pin From Net: NetName=GND Pin=U7-41_10
+Removed Pin From Net: NetName=GND Pin=U7-41_11
+Removed Pin From Net: NetName=GND Pin=U7-41_12
+Removed Pin From Net: NetName=GND Pin=U7-41_13
+Removed Pin From Net: NetName=GND Pin=U7-41_14
+Removed Pin From Net: NetName=GND Pin=U7-41_15
+Removed Pin From Net: NetName=GND Pin=U7-41_16
+Removed Pin From Net: NetName=GND Pin=U7-41_17
+Removed Pin From Net: NetName=GND Pin=U7-41_18
+Removed Pin From Net: NetName=GND Pin=U7-41_19
+Removed Pin From Net: NetName=GND Pin=U7-41_20
+Removed Pin From Net: NetName=GND Pin=U7-41_21
+Change Component Designator: OldDesignator=0-10VOUT NewDesignator=TP17
+Change Component Designator: OldDesignator=GND NewDesignator=TP1
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RESISTOR_0402)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0402 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0402-1-"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetJ1_3 Pin=R?-1
+Added Pin To Net: NetName=NetJ1_5 Pin=R?-1
+Added Pin To Net: NetName=NetJ1_6 Pin=R?-1
+Added Pin To Net: NetName=NetR80_1 Pin=R?-1
+Added Pin To Net: NetName=NetR81_1 Pin=R?-1
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=3V3 Pin=R?-2
+Added Pin To Net: NetName=NetR?_1 Pin=R?-1
+Added Pin To Net: NetName=NetR?_1 Pin=U7-22
+Added Pin To Net: NetName=NetR?_1 Pin=U16-2
+Added Net: Name=NetR?_1
+Add Net: Net with name "NetR?_1" already exists
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
