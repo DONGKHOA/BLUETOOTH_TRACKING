@@ -2,19 +2,15 @@ import asyncio
 import struct
 import numpy as np
 import json
-import ssl
 import paho.mqtt.client as mqtt
 
 HOST = '10.0.96.80'
 PORT = 8899
 
-AWS_IOT_ENDPOINT = "a1xu2macchahf7-ats.iot.ap-southeast-2.amazonaws.com" # Replace with your endpoint
-MQTT_PORT = 8883  # Port MQTT SSL
-MQTT_TOPIC_PUBLISH = "IOT/dataTopic/AEROSENSE" # Replace with the topic you want to use
-
-root_ca_path = "aws/root-CA.crt"  # Path to root certificate
-private_key_path = "aws/private.pem.key"  # Path to private key
-cert_path = "aws/certificate.pem.crt"  # Path to tới certificate
+# MQTT broker information
+MQTT_BROKER = "broker.emqx.io"
+MQTT_PORT = 1883
+MQTT_TOPIC_PUBLISH = "IOT/dataTopic/AEROSENSE"
 
 # Global counter (uint32)
 count = np.uint32(0)
@@ -44,7 +40,6 @@ def parse_28_byte_content(data_28):
         "Valid Bit ID": fields[6],
     }
 
-
 def parse_36_byte_content(data_36):
     """
     data_36: 36 bytes => 6 floats (24 bytes) + 1 uint (4 bytes) + 2 floats (8 bytes) = 9 fields.
@@ -62,7 +57,6 @@ def parse_36_byte_content(data_36):
         "Body Move Energy": fields[7],
         "Body Move Range": fields[8],
     }
-
 
 def parse_packet(data):
     """
@@ -88,9 +82,8 @@ def parse_packet(data):
     proto, ver, ptype, cmd, request_id, timeout, content_len = struct.unpack('!BBBBIHI', data[:14])
     function = struct.unpack('!H', data[14:16])[0]
 
-    content_data = data[16: 14 + content_len]
+    content_data = data[16 : 14 + content_len]
     return request_id, function, content_len, content_data
-
 
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
     global count
@@ -126,15 +119,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
     try:
         while True:
-            # ----------------------------------------------------------
-            #  Add exception handling for connection-reset errors
-            # ----------------------------------------------------------
-            try:
-                data = await reader.read(1024)
-            except (ConnectionResetError, BrokenPipeError) as e:
-                print(f"[Async] Connection error from {client_ip}: {e}")
-                break
-
+            data = await reader.read(1024)
             if not data:
                 # Client closed the connection
                 print(f"[Async] Client {client_ip} disconnected.")
@@ -174,56 +159,21 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
             # ---------------- Handle function=0x03e8 (28 or 36 bytes of data) ----------------
             elif function == 0x03e8:
-
                 client_id = ip_to_id_map.get(client_ip, "UnknownID")
 
-                if client_id == "UnknownID":
-                    data_req = [
-                        0x13, 0x01, 0x01, 0x01,
-                        (request_id >> 24) & 0xFF,
-                        (request_id >> 16) & 0xFF,
-                        (request_id >> 8) & 0xFF,
-                        (request_id >> 0) & 0xFF,
-                        0, 0, 0, 0, 0, 6, 0x04, 0x10,
-                        0, 0, 0, 0
-                    ]
-                    writer.write(bytes(data_req))
-                    await writer.drain()
-                    print(f"[Server] Sent request for function=0x0410 with count={count}")
-                else:
-                    if len(content_data) == 28:
-                        parsed = parse_28_byte_content(content_data)
-                        print(f"[Parsed 28-byte content from IP={client_ip}, ID={client_id}]")
-                        for k, v in parsed.items():
-                            print(f"   {k}: {v}")
-
-                        # Publish the data to MQTT as JSON
-                        index_data = {"ID": client_id}
-                        json_data = json.dumps([index_data, parsed], indent=4)
-                        print(json_data)
-
-                        mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
-
-                    elif len(content_data) == 36:
-                        parsed = parse_36_byte_content(content_data)
-                        print(f"[Parsed 36-byte content from IP={client_ip}, ID={client_id}]")
-                        for k, v in parsed.items():
-                            print(f"   {k}: {v}")
-
-                        # Publish the data to MQTT as JSON
-                        index_data = {"ID": client_id}
-                        json_data = json.dumps([index_data, parsed], indent=4)
-                        print(json_data)
-
-                        mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
-
-                    else:
-                        print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
-
-            elif function == 0x0410:
-                new_id_hex = content_data[-13:].hex()
-                ip_to_id_map[client_ip] = new_id_hex
-                print(f"[Server] (1) Registered new: IP={client_ip}, ID={new_id_hex}. count={count}")
+                # Build a response that contains 'count'
+                data_resp = [
+                    0x13, 0x01, 0x01, 0x01,
+                    (request_id >> 24) & 0xFF,
+                    (request_id >> 16) & 0xFF,
+                    (request_id >> 8) & 0xFF,
+                    (request_id >> 0) & 0xFF,
+                    0, 0, 0, 0, 0, 6, 0x04, 0x10,
+                    0, 0, 0, 0
+                ]
+                writer.write(bytes(data_resp))
+                await writer.drain()
+                print(f"[Server] Sent response for function=1 with count={count}")
 
     except Exception as e:
         print(f"[Async] Exception for {client_ip}: {e}")
@@ -239,28 +189,19 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
             del ip_to_writer_map[client_ip]
         print(f"[Async] Ended for {client_ip}.")
 
-        # Decrease 'count' if close connection
-        count = count - 1
-
-
 async def main():
     global mqtt_client
 
     # ---------------- MQTT Setup ----------------
     mqtt_client = mqtt.Client(client_id="AEROSENSEClient")
+    # You can configure credentials if needed:
+    # mqtt_client.username_pw_set("username", "password")
 
-    # Configure SSL for secure connections to AWS IoT
-    mqtt_client.tls_set(ca_certs=root_ca_path,
-                   certfile=cert_path,
-                   keyfile=private_key_path,
-                   tls_version=ssl.PROTOCOL_TLSv1_2)
-
-    # Attempt to connect to AWS
-    print(f"Connecting to AWS")
-    mqtt_client.connect(AWS_IOT_ENDPOINT, MQTT_PORT, 60)
-
+    # Connect to broker
+    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
     # Start a background thread to handle the network loop
     mqtt_client.loop_start()
+    print(f"[MQTT] Connected to {MQTT_BROKER}:{MQTT_PORT}, client is running in background.")
 
     # ---------------- TCP Server Setup (asyncio) ----------------
     server = await asyncio.start_server(
@@ -275,7 +216,6 @@ async def main():
     async with server:
         # Serve requests until the program is stopped
         await server.serve_forever()
-
 
 if __name__ == '__main__':
     asyncio.run(main())

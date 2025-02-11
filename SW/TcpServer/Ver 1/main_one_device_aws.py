@@ -11,9 +11,9 @@ AWS_IOT_ENDPOINT = "a1xu2macchahf7-ats.iot.ap-southeast-2.amazonaws.com" # Repla
 MQTT_PORT = 8883  # Port MQTT SSL
 MQTT_TOPIC_PUBLISH = "IOT/dataTopic/AEROSENSE" # Replace with the topic you want to use
 
-root_ca_path = "aws/root-CA.crt"  # Path to root certificate
-private_key_path = "aws/private.pem.key"  # Path to private key
-cert_path = "aws/certificate.pem.crt"  # Path to tới certificate
+root_ca_path = "../aws/root-CA.crt"  # Path to root certificate
+private_key_path = "../aws/private.pem.key"  # Path to private key
+cert_path = "../aws/certificate.pem.crt"  # Path to tới certificate
 
 ip_to_id_map = {}  # Maps client_ip -> client_id_hex
 
