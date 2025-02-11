@@ -10,16 +10,16 @@
  *      PRIVATE DEFINES
  *****************************************************************************/
 
-#define HSPI_HOST SPI2_HOST
-#define MISO_PIN  GPIO_NUM_19
-#define MOSI_PIN  GPIO_NUM_43
-#define SCLK_PIN  GPIO_NUM_18
-#define CS_PIN    GPIO_NUM_5
-#define LDAC_PIN  GPIO_NUM_4
+#define HSPI_HOST SPI3_HOST
+#define MISO_PIN  -1
+#define MOSI_PIN  GPIO_NUM_19
+#define SCLK_PIN  GPIO_NUM_20
+#define CS_PIN    GPIO_NUM_21
+#define LDAC_PIN  GPIO_NUM_47
 
 #define CLOCK_SPEED_HZ  1000000
 #define MAX_TRANSFER_SZ 4096
-#define DMA_CHANNEL     1
+#define DMA_CHANNEL     3
 #define SPI_MODE        0
 
 /*****************************************************************************
@@ -54,11 +54,18 @@ DEV_MCP4822_SetValue (uint8_t u8_channel, uint8_t u8_gain, uint16_t u16_value)
                      | (1 << 12) | (u16_value & 0x0FFF);
   uint8_t data[2] = { command >> 8, command & 0xFF };
 
-  BSP_spiSelectDevice(CS_PIN);
+  ESP_LOGI("MCP4822",
+           "Channel: %d, Gain: %d, Value: %d\n",
+           u8_channel,
+           u8_gain,
+           u16_value);
+  // ESP_LOGI("MCP4822", "SPI Command Sent: 0x%04X\n", command);
+
+  BSP_spiDeselectDevice(CS_PIN);
 
   BSP_spiWriteToDevice(data, sizeof(data));
 
-  BSP_spiDeselectDevice(CS_PIN);
+  BSP_spiSelectDevice(CS_PIN);
 }
 
 void

@@ -19,7 +19,7 @@
 
 static spi_device_handle_t s_spi            = NULL;  // SPI handle
 static BSP_SD_SPI_CardInfo s_cardInfo       = { 0 }; // Save info SDCard
-static bool                s_spi_bus_inited = false;
+static uint8_t             s_spi_bus_inited = 0;
 
 /*****************************************************************************
  *   PRIVATE PROTOTYPE FUNCTIONS
@@ -32,7 +32,7 @@ static void        BSP_sdSpiWriteBuffer(const uint8_t *buffer, size_t len);
 static uint8_t     BSP_sdSpiReadByte(void);
 static uint8_t     BSP_sdSpiReadyWait(void);
 static void        BSP_sdSpiSendDummyClocks(gpio_num_t e_cs_io);
-static bool        BSP_sdSpiReadDataBlock(uint8_t *buff, size_t len);
+static uint8_t     BSP_sdSpiReadDataBlock(uint8_t *buff, size_t len);
 static uint8_t     BSP_sdSpiSendCmd(uint8_t cmd, uint32_t arg);
 
 /*****************************************************************************
@@ -55,7 +55,6 @@ BSP_sdSpiInit (spi_host_device_t e_spi_host,
 
   if (!s_spi_bus_inited)
   {
-    // 1) Cấu hình GPIO CS_PIN = output
     gpio_config_t io_conf = { .pin_bit_mask = 1ULL << e_cs_io,
                               .mode         = GPIO_MODE_OUTPUT,
                               .pull_up_en   = 0,
@@ -64,7 +63,6 @@ BSP_sdSpiInit (spi_host_device_t e_spi_host,
     gpio_config(&io_conf);
     BSP_sdSpiDeSelect(e_cs_io);
 
-    // 2) Init SPI bus
     spi_bus_config_t buscfg = { .miso_io_num     = e_miso_io,
                                 .mosi_io_num     = e_mosi_io,
                                 .sclk_io_num     = e_sclk_io,
@@ -79,7 +77,6 @@ BSP_sdSpiInit (spi_host_device_t e_spi_host,
     }
   }
 
-  // 3) Gán device
   spi_device_interface_config_t devcfg = {
     .clock_speed_hz = i_clock_init_hz,
     .mode           = u8_spi_mode,
@@ -320,8 +317,10 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
     }
   }
 
+  // Token = 0xFE -> Write 1 block
   token = (numOfBlocks == 1) ? 0xFE : 0xFC;
   // printf("Sending START_TOKEN: 0x%02X\n", token);
+
   BSP_sdSpiWriteByte(token);
 
   for (uint32_t block = 0; block < numOfBlocks; block++)
@@ -331,6 +330,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
       BSP_sdSpiWriteByte(p_data[block * 512 + i]);
     }
 
+    // CRC Bytes
     BSP_sdSpiWriteByte(0xFF);
     BSP_sdSpiWriteByte(0xFF);
 
@@ -359,7 +359,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
 
   if (numOfBlocks > 1)
   {
-    BSP_sdSpiWriteByte(0xFD);
+    BSP_sdSpiWriteByte(0xFD); // STOP_TRANSMISSION Bytes for write multi-block
   }
 
   while (BSP_sdSpiReadByte() == 0x00)
@@ -466,7 +466,7 @@ BSP_sdSpiReadyWait (void)
   return response; // 0xFF = ready
 }
 
-static bool
+static uint8_t
 BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
 {
   const TickType_t startTick = esp_timer_get_time();
@@ -484,7 +484,7 @@ BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
   if (token != 0xFE)
   {
     printf("BSP_sdSpiReadDataBlock: invalid token=0x%02X", token);
-    return false;
+    return 0;
   }
 
   for (size_t i = 0; i < len; i++)
@@ -495,7 +495,7 @@ BSP_sdSpiReadDataBlock (uint8_t *buff, size_t len)
   // Bỏ qua 2 byte CRC
   BSP_sdSpiReadByte();
   BSP_sdSpiReadByte();
-  return true;
+  return 1;
 }
 
 static uint8_t

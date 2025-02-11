@@ -33,10 +33,48 @@ extern "C"
    *   PUBLIC FUNCTIONS
    ***************************************************************************/
 
+  /**
+   * @brief Initializes the DS3231 device.
+   *
+   * This function sets up the DS3231 real-time clock (RTC) device with the specified
+   * data structure and GPIO pins for SDA and SCL.
+   *
+   * @param p_ds3231_data Pointer to the DS3231 data structure.
+   * @param e_sda_io GPIO number for the SDA (data) line.
+   * @param e_scl_io GPIO number for the SCL (clock) line.
+   */
   void      DEV_DS3231_Init(ds3231_data_t *p_ds3231_data,
                             gpio_num_t     e_sda_io,
                             gpio_num_t     e_scl_io);
+
+  /**
+   * @brief Reads data from the DS3231 device and stores it in the provided data structure.
+   *
+   * This function communicates with the DS3231 real-time clock (RTC) module to read the current
+   * time and date information. The retrieved data is then stored in the structure pointed to by
+   * `p_ds3231_data`.
+   *
+   * @param[in,out] p_ds3231_data Pointer to a ds3231_data_t structure where the read data will be stored.
+   *
+   * @return
+   *     - ESP_OK: Success
+   *     - ESP_ERR_INVALID_ARG: Invalid argument
+   *     - ESP_FAIL: Communication with the DS3231 failed
+   */
   esp_err_t DEV_DS3231_Register_Read(ds3231_data_t *p_ds3231_data);
+
+  /**
+   * @brief Writes data to the DS3231 device register.
+   *
+   * This function writes the provided data to the DS3231 device register.
+   *
+   * @param[in] p_ds3231_data Pointer to the structure containing the data to be written to the DS3231 register.
+   *
+   * @return
+   *     - ESP_OK: Success
+   *     - ESP_ERR_INVALID_ARG: Invalid argument
+   *     - ESP_FAIL: Write operation failed
+   */
   esp_err_t DEV_DS3231_Register_Write(ds3231_data_t *p_ds3231_data);
 
 #ifdef __cplusplus
