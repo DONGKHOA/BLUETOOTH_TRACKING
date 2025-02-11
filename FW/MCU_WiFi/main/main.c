@@ -36,7 +36,7 @@
 #include "driver/twai.h"
 /******************************************************************************
  *    PRIVATE DEFINES
- ***********************************g******************************************/
+ *****************************************************************************/
 
 #define DHT11_PIN GPIO_NUM_4
 #define GPIO_NUM  GPIO_NUM_14
@@ -51,7 +51,7 @@ char *p_path = "hahaaa.txt";
 char *p_data = "Hello";
 
 /******************************************************************************
- *  PRIVATE FUNCTIONS
+ *    PRIVATE FUNCTIONS
  *****************************************************************************/
 
 static void DHT22_Task(void *pvParameters);
@@ -63,7 +63,7 @@ static void SDCard_WriteFile(char *p_path, char *p_data);
 static void RS3485_Task(void *pvParameter);
 
 /******************************************************************************
- *       MAIN FUNCTION
+ *     MAIN FUNCTION
  *****************************************************************************/
 
 void
@@ -195,18 +195,6 @@ MCP4822_Task (void *pvParameter)
 }
 
 static void
-SDCard_ReadFile (char *p_path)
-{
-  DEV_SDCard_Read_File(p_path);
-}
-
-static void
-SDCard_WriteFile (char *p_path, char *p_data)
-{
-  DEV_SDCard_WriteFile(p_path, p_data);
-}
-
-static void
 RS3485_Task (void *pvParameter)
 {
   DEV_RS3485_Init();
@@ -221,4 +209,16 @@ RS3485_Task (void *pvParameter)
     DEV_RS3485_SendRequest(&request);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
+}
+
+static void
+SDCard_ReadFile (char *p_path)
+{
+  DEV_SDCard_Read_File(p_path);
+}
+
+static void
+SDCard_WriteFile (char *p_path, char *p_data)
+{
+  DEV_SDCard_WriteFile(p_path, p_data);
 }
