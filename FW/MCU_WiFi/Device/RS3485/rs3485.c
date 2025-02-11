@@ -97,7 +97,16 @@ DEV_RS3485_SendRequest (rs3485_request_t *request)
 uint8_t
 DEV_RS3485_ReceiveResponse (uint8_t *buffer)
 {
-  int      len        = 0;
+  int      /* The `len` variable is used to keep track of the number of bytes read into the `buffer`
+  while receiving a response from the Slave device. It is incremented as bytes are read
+  from the UART buffer and added to the `buffer` array. The `len` variable is also used to
+  determine if the received packet is long enough to be considered valid, as it needs to
+  contain at least the Address, Function, and CRC bytes. */
+  /* The `len` variable is used to keep track of the length of the data that has been read
+  into the `buffer` while receiving a response from the Slave device. It is incremented as
+  data is read into the buffer, and it is used to determine when to stop reading data based
+  on the timeout condition and the minimum required length of the received packet. */
+  len        = 0;
   uint32_t start_time = esp_timer_get_time();
 
   while (esp_timer_get_time() - start_time < 500000)
