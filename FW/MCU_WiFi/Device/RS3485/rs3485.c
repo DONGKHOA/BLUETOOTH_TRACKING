@@ -97,7 +97,7 @@ DEV_RS3485_SendRequest (rs3485_request_t *request)
 uint8_t
 DEV_RS3485_ReceiveResponse (uint8_t *buffer)
 {
-  int      len        = 0;
+  int len        = 0;
   uint32_t start_time = esp_timer_get_time();
 
   while (esp_timer_get_time() - start_time < 500000)

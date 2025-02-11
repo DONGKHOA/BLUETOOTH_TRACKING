@@ -84,27 +84,27 @@ BSP_canDriverInit (twai_mode_t           e_can_mode,
 esp_err_t
 BSP_canStart (void)
 {
-  int response = twai_start();
+  esp_err_t response = twai_start();
   return response;
 }
 
 esp_err_t
 BSP_canStop (void)
 {
-  int response = twai_stop();
+  esp_err_t response = twai_stop();
   return response;
 }
 
 esp_err_t
 BSP_canTransmit (twai_message_t *p_message, TickType_t u32_timeout)
 {
-  int response = twai_transmit(p_message, u32_timeout);
+  esp_err_t response = twai_transmit(p_message, u32_timeout);
   return response;
 }
 
 esp_err_t
 BSP_canReceive (twai_message_t *p_message, TickType_t u32_timeout)
 {
-  int response = twai_receive(p_message, u32_timeout);
+  esp_err_t response = twai_receive(p_message, u32_timeout);
   return response;
 }
