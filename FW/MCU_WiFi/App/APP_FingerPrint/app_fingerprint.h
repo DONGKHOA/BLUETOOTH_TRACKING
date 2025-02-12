@@ -1,26 +1,26 @@
-#ifndef APP_BUTTON_H_
-#define APP_BUTTON_H_
+// #ifndef APP_FINGERPRINT_H_
+// #define APP_FINGERPRINT_H_
 
-/******************************************************************************
- *      INCLUDES
- *****************************************************************************/
+// /******************************************************************************
+//  *      INCLUDES
+//  *****************************************************************************/
 
-#include <stdio.h>
+// #include <stdio.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+// #ifdef __cplusplus
+// extern "C"
+// {
+// #endif
 
-  /****************************************************************************
-   *   PUBLIC FUNCTION
-   ***************************************************************************/
+//   /****************************************************************************
+//    *   PUBLIC FUNCTION
+//    ***************************************************************************/
 
-  void APP_FingerPrint_CreateTask(void);
-  void APP_FingerPrint_Init(void);
+//   void APP_FingerPrint_CreateTask(void);
+//   void APP_FingerPrint_Init(void);
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
-#endif /* APP_BUTTON_H_ */
+// #endif /* APP_FINGERPRINT_H_ */
