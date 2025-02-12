@@ -1,0 +1,26 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R27
+Change Component Designator: OldDesignator=R? NewDesignator=R28
+Change Component Designator: OldDesignator=R? NewDesignator=R29
+Change Component Designator: OldDesignator=R? NewDesignator=R82
+Change Component Designator: OldDesignator=R? NewDesignator=R83
+Change Component Designator: OldDesignator=R? NewDesignator=R100
+Change Component Designator: OldDesignator=R? NewDesignator=R101
+Change Component Description : Designator=J5 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Change Component Description : Designator=J6 Old Description=USB Type C - Connector, Top-mount SMT, 16pos New Description=USB Type C - Connector, Top-mount SMT, 16pos | Molex Incorporated 217179-0001
+Change Net Name : Old Net Name=NetR?_1 New Net Name=NetR82_1
+Added Pin To Net: NetName=NetR83_1 Pin=R83-1
+Added Pin To Net: NetName=NetR83_1 Pin=U7-18
+Added Pin To Net: NetName=NetR83_1 Pin=U16-5
+Added Net: Name=NetR83_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
