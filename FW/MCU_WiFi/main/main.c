@@ -34,6 +34,10 @@
 #include "sdspi.h"
 
 #include "driver/twai.h"
+#include "freertos/timers.h"
+
+#include "app_rtc.h"
+#include "app_read_data.h"
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
@@ -45,23 +49,24 @@
  *    PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-dht22_data_t dht22;
+// dht22_data_t dht22;
 
-char *p_path = "hahaaa.txt";
-char *p_data = "Hello";
+// char *p_path = "hahaaa.txt";
+// char *p_data = "Hello";
 
+uint32_t count = 0;
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
 
-static void DHT22_Task(void *pvParameters);
-static void SDCard_Task(void *pvParameters);
-static void ADS1115_Task(void *pvParameter);
-static void MCP4822_Task(void *pvParameter);
-static void SDCard_ReadFile(char *p_path);
-static void SDCard_WriteFile(char *p_path, char *p_data);
-static void RS3485_Task(void *pvParameter);
+// static void DHT22_Task(void *pvParameters);
+// static void SDCard_Task(void *pvParameters);
+// static void MCP4822_Task(void *pvParameter);
+// static void SDCard_ReadFile(char *p_path);
+// static void SDCard_WriteFile(char *p_path, char *p_data);
+// static void RS3485_Task(void *pvParameter);
 
+static void Timer_Callback(TimerHandle_t xTimer);
 /******************************************************************************
  *     MAIN FUNCTION
  *****************************************************************************/
@@ -71,7 +76,8 @@ twai_init ()
 {
   // // Cấu hình chân TX và RX
   // twai_general_config_t g_config
-  //     = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_19, GPIO_NUM_20, TWAI_MODE_NORMAL);
+  //     = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_19, GPIO_NUM_20,
+  //     TWAI_MODE_NORMAL);
 
   // // Cấu hình bộ lọc (chấp nhận tất cả ID)
   // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
@@ -106,9 +112,9 @@ twai_send_message ()
   // twai_message_t message;
   // message.identifier       = 0x123; // ID của frame CAN
   // message.extd             = 0;     // Standard frame (11-bit ID)
-  // message.rtr              = 0; // Dữ liệu bình thường (không phải Remote Frame)
-  // message.data_length_code = 8; // 8 byte dữ liệu
-  // memcpy(message.data, "ESP2CAN!", 8); // Nội dung gửi
+  // message.rtr              = 0; // Dữ liệu bình thường (không phải Remote
+  // Frame) message.data_length_code = 8; // 8 byte dữ liệu memcpy(message.data,
+  // "ESP2CAN!", 8); // Nội dung gửi
 
   // if (twai_transmit(&message, pdMS_TO_TICKS(1000)) == ESP_OK)
   // {
@@ -123,17 +129,24 @@ twai_send_message ()
 void
 app_main (void)
 {
+  // Create Soft-Timer
+  TimerHandle_t timer = xTimerCreate("Timer",
+                                     pdMS_TO_TICKS(1), // Period 1ms
+                                     pdTRUE,           // Auto reload
+                                     NULL,
+                                     Timer_Callback // Callback function
+  );
 
-  // xTaskCreate(MCP4822_Task, "MCP4822_Task", 4096, NULL, 10, NULL);
-  // xTaskCreate(ADS1115_Task, "ADS1115_Task", 4096, NULL, 10, NULL);
-  twai_init();
-  vTaskDelay(pdMS_TO_TICKS(1000)); // Đợi TWAI khởi động
+  xTimerStart(timer, 0);
 
-  // Gửi dữ liệu
-  
+  APP_ReadData_Init();
+  APP_RTC_Init();
+
+  APP_ReadData_CreateTask();
+  APP_RTC_CreateTask();
+
   while (1)
   {
-    twai_send_message();
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -141,84 +154,74 @@ app_main (void)
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
-static void
-DHT22_Task (void *pvParameters)
-{
-  DEV_DHT22_Init(&dht22, DHT11_PIN);
-  while (1)
-  {
-    DEV_DHT22_GetData(&dht22, DHT11_PIN);
-
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
-}
 
 static void
-SDCard_Task (void *pvParameters)
+Timer_Callback (TimerHandle_t xTimer)
 {
-
-  while (1)
-  {
-    {
-      vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-  }
+  DEV_ADS1115_TimeOut();
 }
 
-static void
-ADS1115_Task (void *pvParameter)
-{
-  DEV_ADS1115_Init();
-  BSP_gpioOutputInit(GPIO_NUM);
-  BSP_gpioSetState(GPIO_NUM, 1);
-  while (1)
-  {
-    uint16_t adc_value = DEV_ADS1115_GetData(DEV_ADS1115_CHANNEL_0,
-                                             ADS1115_REG_CONFIG_PGA_4_096V);
-    float    voltage   = DEV_ADS1115_GetVoltage(adc_value);
+// static void
+// DHT22_Task (void *pvParameters)
+// {
+//   DEV_DHT22_Init(&dht22, DHT11_PIN);
+//   while (1)
+//   {
+//     DEV_DHT22_GetData(&dht22, DHT11_PIN);
 
-    printf("Value: %d, Voltage: %.3f V\n", adc_value, voltage);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
-}
+//     vTaskDelay(pdMS_TO_TICKS(1000));
+//   }
+// }
 
-static void
-MCP4822_Task (void *pvParameter)
-{
-  DEV_MCP4822_Init();
-  while (1)
-  {
-    DEV_MCP4822_SetValue(MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, 3000);
-    // DEV_MPC4822_Output();
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
-}
+// static void
+// SDCard_Task (void *pvParameters)
+// {
 
-static void
-RS3485_Task (void *pvParameter)
-{
-  DEV_RS3485_Init();
+//   while (1)
+//   {
+//     {
+//       vTaskDelay(pdMS_TO_TICKS(1000));
+//     }
+//   }
+// }
 
-  rs3485_request_t request = { .slave_id  = 0x01,
-                               .function  = RS3485_FUNC_READ_HOLDING_REGS,
-                               .reg_addr  = 0x0010,
-                               .reg_count = 1 };
+// static void
+// MCP4822_Task (void *pvParameter)
+// {
+//   DEV_MCP4822_Init();
+//   while (1)
+//   {
+//     DEV_MCP4822_SetValue(MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, 3000);
+//     // DEV_MPC4822_Output();
+//     vTaskDelay(pdMS_TO_TICKS(1000));
+//   }
+// }
 
-  while (1)
-  {
-    DEV_RS3485_SendRequest(&request);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
-}
+// static void
+// RS3485_Task (void *pvParameter)
+// {
+//   DEV_RS3485_Init();
 
-static void
-SDCard_ReadFile (char *p_path)
-{
-  DEV_SDCard_Read_File(p_path);
-}
+//   rs3485_request_t request = { .slave_id  = 0x01,
+//                                .function  = RS3485_FUNC_READ_HOLDING_REGS,
+//                                .reg_addr  = 0x0010,
+//                                .reg_count = 1 };
 
-static void
-SDCard_WriteFile (char *p_path, char *p_data)
-{
-  DEV_SDCard_WriteFile(p_path, p_data);
-}
+//   while (1)
+//   {
+//     DEV_RS3485_SendRequest(&request);
+//     vTaskDelay(pdMS_TO_TICKS(1000));
+//   }
+// }
+
+// static void
+// SDCard_ReadFile (char *p_path)
+// {
+//   DEV_SDCard_Read_File(p_path);
+// }
+
+// static void
+// SDCard_WriteFile (char *p_path, char *p_data)
+// {
+//   DEV_SDCard_WriteFile(p_path, p_data);
+// }

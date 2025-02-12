@@ -3,20 +3,13 @@
  *****************************************************************************/
 
 #include "esp_log.h"
+#include "stdio.h"
 
 #include "ads1115.h"
 
 /******************************************************************************
  *      PRIVATE DEFINES
  *****************************************************************************/
-
-#define I2C_NUM        0
-#define I2C_MODE       I2C_MODE_MASTER
-#define I2C_SDA        GPIO_NUM_41
-#define I2C_SCL        GPIO_NUM_42
-#define I2C_SDA_PULLUP GPIO_PULLUP_ENABLE
-#define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
-#define I2C_CLK_SPEED  100000
 
 #define ADS1115_RESOLUTION 16 // bit
 #define ADS1115_STEP        \
@@ -28,9 +21,9 @@
  *      PRIVATE VARIABLES
  *****************************************************************************/
 
-static uint8_t i2c_buffer[3];
-
-static const char *TAG = "ADS1115";
+static uint8_t           i2c_buffer[3];
+static volatile uint32_t u32_ads1115_timeout = 0;
+static const char       *TAG                 = "ADS1115";
 
 /*****************************************************************************
  *      PRIVATE PROTOTYPE FUNCTIONS
@@ -39,19 +32,11 @@ static const char *TAG = "ADS1115";
 /*****************************************************************************
  *      PUBLIC FUNCTIONS
  *****************************************************************************/
-void
-DEV_ADS1115_Init (void)
-{
-  BSP_i2cDriverInit(I2C_NUM,
-                    I2C_MODE,
-                    I2C_SDA,
-                    I2C_SCL,
-                    I2C_SDA_PULLUP,
-                    I2C_SCL_PULLUP,
-                    I2C_CLK_SPEED);
-}
-uint16_t
-DEV_ADS1115_GetData (ads1115_channel_t e_channel, ads1115_gain_t e_gain)
+
+int16_t
+DEV_ADS1115_GetData (i2c_port_t        e_i2c_port,
+                     ads1115_channel_t e_channel,
+                     ads1115_gain_t    e_gain)
 {
   // Start with default values
   uint16_t config
@@ -87,38 +72,55 @@ DEV_ADS1115_GetData (ads1115_channel_t e_channel, ads1115_gain_t e_gain)
   i2c_buffer[1] = (uint8_t)(config >> 8);
   i2c_buffer[2] = (uint8_t)(config & 0xFF);
 
-  BSP_i2cWriteToDevice(I2C_NUM, ADS_ADDR_GND, i2c_buffer, 3, 1000);
+  BSP_i2cWriteBuffer(e_i2c_port, ADS_ADDR_GND, i2c_buffer, 3, 1000);
 
   // Wait for the conversion to complete
-  vTaskDelay(ADS1115_CONVERSIONDELAY_8 / portTICK_PERIOD_MS);
+  u32_ads1115_timeout = ADS1115_CONVERSIONDELAY_8;
+  while (u32_ads1115_timeout == 0)
+  {
+    break;
+  }
 
   // Read the conversion results
   uint8_t reg         = ADS1115_REG_POINTER_CONVERT;
   uint8_t adc_data[2] = { 0 };
 
-  BSP_i2cWriteReadToDevice(I2C_NUM, ADS_ADDR_GND, &reg, 1, adc_data, 2, 1000);
+  BSP_i2cWriteReadBuffer(e_i2c_port, ADS_ADDR_GND, &reg, 1, adc_data, 2, 1000);
 
   // Convert the results
-  uint16_t result = (adc_data[0] << 8) | adc_data[1];
+  int16_t result = (int16_t)(adc_data[0] << 8) | adc_data[1];
 
-  ESP_LOGI(TAG, "ADC Value: %d", result);
+  // ESP_LOGI(TAG, "ADC Value: %d", result);
   return result;
 }
+
 float
-DEV_ADS1115_ReadVoltage (ads1115_channel_t e_channel, ads1115_gain_t e_gain)
+DEV_ADS1115_ReadVoltage (i2c_port_t        e_i2c_port,
+                         ads1115_channel_t e_channel,
+                         ads1115_gain_t    e_gain)
 {
   // Read raw Data
-  uint16_t value = DEV_ADS1115_GetData(e_channel, e_gain);
+  int16_t value = DEV_ADS1115_GetData(e_i2c_port, e_channel, e_gain);
 
   // Calib ADC
 
   // Convert voltage
   return (float)(value * ADS1115_VREF) / ADS1115_STEP;
 }
+
 float
-DEV_ADS1115_GetVoltage (uint16_t u16_value_adc)
+DEV_ADS1115_GetVoltage (int16_t i16_value_adc)
 {
   // Convert voltage
-  float voltage = (float)(u16_value_adc * ADS1115_VREF) / ADS1115_STEP;
+  float voltage = (float)(i16_value_adc * ADS1115_VREF) / ADS1115_STEP;
   return voltage;
+}
+
+void
+DEV_ADS1115_TimeOut (void)
+{
+  if (u32_ads1115_timeout != 0)
+  {
+    u32_ads1115_timeout--;
+  }
 }
