@@ -1,0 +1,29 @@
+menu "AWS MQTT File Streams"
+
+    menu "Logging"
+
+        config AWS_OTA_LOG_ERROR
+            bool "Enable Error Logging"
+            default y
+        
+        config AWS_OTA_LOG_WARN
+            bool "Enable Warning Logging"
+            default y
+
+        config AWS_OTA_LOG_INFO
+            bool "Enable Info Logging"
+            default y
+
+        config AWS_OTA_LOG_DEBUG
+            bool "Enable Debug Logging"
+            default n
+
+    endmenu # AWS OTA Logging
+
+    config MQTT_STREAMS_USE_CUSTOM_CONFIG
+        bool "MQTT Streams use custom config"
+        default n
+        help
+            This configuration parameter allows you to provide custom configurations for OTA over MQTT.
+
+endmenu # AWS OTA
