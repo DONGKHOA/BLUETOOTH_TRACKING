@@ -12,8 +12,8 @@
  *      DEFINES
  *****************************************************************************/
 
-#define SSID_WIFI "🍑"
-#define PASS_WIFI "20112011"
+#define SSID_WIFI "Tiger"
+#define PASS_WIFI "thanhTRI1972"
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -41,8 +41,8 @@ APP_WIFI_CONNECT_Init (void)
   s_wifi_connect_data.p_pass = s_data_system.u8_pass;
   s_wifi_connect_data.p_ssid = s_data_system.u8_ssid;
 
-  memcpy(s_wifi_connect_data.p_ssid, SSID_WIFI, 5);
-  memcpy(s_wifi_connect_data.p_pass, PASS_WIFI, 9);
+  memcpy(s_wifi_connect_data.p_ssid, SSID_WIFI, sizeof(SSID_WIFI));
+  memcpy(s_wifi_connect_data.p_pass, PASS_WIFI, sizeof(PASS_WIFI));
 
   WIFI_StaInit();
   WIFI_Connect(s_wifi_connect_data.p_ssid, s_wifi_connect_data.p_pass);

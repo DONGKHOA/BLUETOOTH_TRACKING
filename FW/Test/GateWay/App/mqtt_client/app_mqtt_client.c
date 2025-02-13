@@ -95,8 +95,12 @@ APP_MQTT_CLIENT_task (void *arg)
         == pdPASS)
     {
       sprintf(c_data_pub, "%d", i8_buffer);
-      esp_mqtt_client_publish(
-          s_mqtt_client_data.s_MQTT_Client, "GL-IoT/dataTopic/E465B84062D2", c_data_pub, 0, 1, 0);
+      esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                              "GL-IoT/dataTopic/E465B84062D2",
+                              c_data_pub,
+                              0,
+                              1,
+                              0);
     }
   }
 }
