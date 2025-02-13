@@ -35,7 +35,7 @@
  *
  */
 #ifndef AWS_IOT_ENDPOINT
-#define AWS_IOT_ENDPOINT CONFIG_MQTT_BROKER_ENDPOINT
+    #define AWS_IOT_ENDPOINT    CONFIG_MQTT_BROKER_ENDPOINT
 #endif
 
 /**
@@ -47,7 +47,7 @@
  * name. When using port 8883, ALPN is not required.
  */
 #ifndef AWS_MQTT_PORT
-#define AWS_MQTT_PORT (CONFIG_MQTT_BROKER_PORT)
+    #define AWS_MQTT_PORT    ( CONFIG_MQTT_BROKER_PORT )
 #endif
 
 /**
@@ -60,10 +60,10 @@
  * As mentioned in the link above, an authorizer setup needs to be done to use
  * username/password based client authentication.
  *
- * @note AWS IoT message broker requires either a set of client
- * certificate/private key or username/password to authenticate the client. If
- * this config is defined, the username and password will be used instead of the
- * client certificate and private key for client authentication.
+ * @note AWS IoT message broker requires either a set of client certificate/private key
+ * or username/password to authenticate the client. If this config is defined,
+ * the username and password will be used instead of the client certificate and
+ * private key for client authentication.
  *
  * #define CLIENT_USERNAME    "...insert here..."
  */
@@ -78,8 +78,8 @@
  * As mentioned in the link above, an authorizer setup needs to be done to use
  * username/password based client authentication.
  *
- * @note AWS IoT message broker requires either a set of client
- * certificate/private key or username/password to authenticate the client.
+ * @note AWS IoT message broker requires either a set of client certificate/private key
+ * or username/password to authenticate the client.
  *
  * #define CLIENT_PASSWORD    "...insert here..."
  */
@@ -90,40 +90,40 @@
  * No two clients may use the same client identifier simultaneously.
  */
 #ifndef CLIENT_IDENTIFIER
-#define CLIENT_IDENTIFIER CONFIG_MQTT_CLIENT_IDENTIFIER
+    #define CLIENT_IDENTIFIER    CONFIG_MQTT_CLIENT_IDENTIFIER
 #endif
 
 /**
  * @brief Size of the network buffer for MQTT packets.
  */
-#define NETWORK_BUFFER_SIZE (CONFIG_MQTT_NETWORK_BUFFER_SIZE)
+#define NETWORK_BUFFER_SIZE       ( CONFIG_MQTT_NETWORK_BUFFER_SIZE )
 
 /**
  * @brief The name of the operating system that the application is running on.
  * The current value is given as an example. Please update for your specific
  * operating system.
  */
-#define OS_NAME "FreeRTOS"
+#define OS_NAME                   "FreeRTOS"
 
 /**
  * @brief The version of the operating system that the application is running
  * on. The current value is given as an example. Please update for your specific
  * operating system version.
  */
-#define OS_VERSION tskKERNEL_VERSION_NUMBER
+#define OS_VERSION                tskKERNEL_VERSION_NUMBER
 
 /**
  * @brief The name of the hardware platform the application is running on. The
  * current value is given as an example. Please update for your specific
  * hardware platform.
  */
-#define HARDWARE_PLATFORM_NAME CONFIG_HARDWARE_PLATFORM_NAME
+#define HARDWARE_PLATFORM_NAME    CONFIG_HARDWARE_PLATFORM_NAME
 
 /**
  * @brief The name of the MQTT library used and its version, following an "@"
  * symbol.
  */
 #include "core_mqtt.h"
-#define MQTT_LIB "core-mqtt@" MQTT_LIBRARY_VERSION
+#define MQTT_LIB    "core-mqtt@" MQTT_LIBRARY_VERSION
 
 #endif /* ifndef DEMO_CONFIG_H_ */

@@ -5,8 +5,11 @@
 
 #include "app_mqtt_aws.h"
 
-static uint8_t ssid[] = "PIF_CLUB";
-static uint8_t pass[] = "chinsochin";
+// static uint8_t ssid[] = "PIF_CLUB";
+// static uint8_t pass[] = "chinsochin";
+
+static uint8_t ssid[] = "Thuc Coffee";
+static uint8_t pass[] = "18006230";
 
 void app_main(void)
 {

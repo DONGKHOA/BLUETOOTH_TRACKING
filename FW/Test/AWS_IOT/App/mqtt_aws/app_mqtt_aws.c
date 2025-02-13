@@ -4,6 +4,8 @@
 
 #include "app_mqtt_aws.h"
 
+#include <string.h>
+
 /* POSIX includes. */
 #include <unistd.h>
 
@@ -29,9 +31,43 @@
  *      PRIVATE DEFINES
  *****************************************************************************/
 
-extern const char root_cert_auth_start[] asm(
-    "_binary_root_cert_auth_crt_start");
-extern const char root_cert_auth_end[] asm("_binary_root_cert_auth_crt_end");
+#ifdef CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR
+#include "esp_secure_cert_read.h"
+#endif
+
+#ifndef CLIENT_IDENTIFIER
+    #error "Please define a unique client identifier, CLIENT_IDENTIFIER, in menuconfig"
+#endif
+
+/* The AWS IoT message broker requires either a set of client certificate/private key
+ * or username/password to authenticate the client. */
+#ifdef CLIENT_USERNAME
+/* If a username is defined, a client password also would need to be defined for
+ * client authentication. */
+    #ifndef CLIENT_PASSWORD
+        #error "Please define client password(CLIENT_PASSWORD) in demo_config.h for client authentication based on username/password."
+    #endif
+/* AWS IoT MQTT broker port needs to be 443 for client authentication based on
+ * username/password. */
+    #if AWS_MQTT_PORT != 443
+        #error "Broker port, AWS_MQTT_PORT, should be defined as 443 in demo_config.h for client authentication based on username/password."
+    #endif
+#else /* !CLIENT_USERNAME */
+/*
+ *!!! Please note democonfigCLIENT_PRIVATE_KEY_PEM in used for
+ *!!! convenience of demonstration only.  Production devices should
+ *!!! store keys securely, such as within a secure element.
+ */
+    #ifndef CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR
+        extern const char client_cert_start[] asm("_binary_client_crt_start");
+        extern const char client_cert_end[] asm("_binary_client_crt_end");
+        extern const char client_key_start[] asm("_binary_client_key_start");
+        extern const char client_key_end[] asm("_binary_client_key_end");
+    #endif /* CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR */
+#endif /* CLIENT_USERNAME */
+
+extern const char root_cert_auth_start[]   asm("_binary_root_cert_auth_crt_start");
+extern const char root_cert_auth_end[]   asm("_binary_root_cert_auth_crt_end");
 
 /**
  * These configuration settings are required to run the mutual auth demo.
@@ -41,62 +77,59 @@ extern const char root_cert_auth_end[] asm("_binary_root_cert_auth_crt_end");
 /**
  * @brief Length of MQTT server host name.
  */
-#define AWS_IOT_ENDPOINT_LENGTH ((uint16_t)(sizeof(AWS_IOT_ENDPOINT) - 1))
+#define AWS_IOT_ENDPOINT_LENGTH         ( ( uint16_t ) ( sizeof( AWS_IOT_ENDPOINT ) - 1 ) )
 
 /**
  * @brief Length of client identifier.
  */
-#define CLIENT_IDENTIFIER_LENGTH ((uint16_t)(sizeof(CLIENT_IDENTIFIER) - 1))
+#define CLIENT_IDENTIFIER_LENGTH        ( ( uint16_t ) ( sizeof( CLIENT_IDENTIFIER ) - 1 ) )
 
 /**
- * @brief ALPN (Application-Layer Protocol Negotiation) protocol name for AWS
- * IoT MQTT.
+ * @brief ALPN (Application-Layer Protocol Negotiation) protocol name for AWS IoT MQTT.
  *
- * This will be used if the AWS_MQTT_PORT is configured as 443 for AWS IoT MQTT
- * broker. Please see more details about the ALPN protocol for AWS IoT MQTT
- * endpoint in the link below.
+ * This will be used if the AWS_MQTT_PORT is configured as 443 for AWS IoT MQTT broker.
+ * Please see more details about the ALPN protocol for AWS IoT MQTT endpoint
+ * in the link below.
  * https://aws.amazon.com/blogs/iot/mqtt-with-tls-client-authentication-on-port-443-why-it-is-useful-and-how-it-works/
  */
-#define AWS_IOT_MQTT_ALPN "x-amzn-mqtt-ca"
+#define AWS_IOT_MQTT_ALPN               "x-amzn-mqtt-ca"
 
 /**
  * @brief Length of ALPN protocol name.
  */
-#define AWS_IOT_MQTT_ALPN_LENGTH ((uint16_t)(sizeof(AWS_IOT_MQTT_ALPN) - 1))
+#define AWS_IOT_MQTT_ALPN_LENGTH        ( ( uint16_t ) ( sizeof( AWS_IOT_MQTT_ALPN ) - 1 ) )
 
 /**
  * @brief This is the ALPN (Application-Layer Protocol Negotiation) string
  * required by AWS IoT for password-based authentication using TCP port 443.
  */
-#define AWS_IOT_PASSWORD_ALPN "mqtt"
+#define AWS_IOT_PASSWORD_ALPN           "mqtt"
 
 /**
  * @brief Length of password ALPN.
  */
-#define AWS_IOT_PASSWORD_ALPN_LENGTH \
-  ((uint16_t)(sizeof(AWS_IOT_PASSWORD_ALPN) - 1))
+#define AWS_IOT_PASSWORD_ALPN_LENGTH    ( ( uint16_t ) ( sizeof( AWS_IOT_PASSWORD_ALPN ) - 1 ) )
+
 
 /**
  * @brief The maximum number of retries for connecting to server.
  */
-#define CONNECTION_RETRY_MAX_ATTEMPTS (5U)
+#define CONNECTION_RETRY_MAX_ATTEMPTS            ( 5U )
 
 /**
- * @brief The maximum back-off delay (in milliseconds) for retrying connection
- * to server.
+ * @brief The maximum back-off delay (in milliseconds) for retrying connection to server.
  */
-#define CONNECTION_RETRY_MAX_BACKOFF_DELAY_MS (5000U)
+#define CONNECTION_RETRY_MAX_BACKOFF_DELAY_MS    ( 5000U )
 
 /**
- * @brief The base back-off delay (in milliseconds) to use for connection retry
- * attempts.
+ * @brief The base back-off delay (in milliseconds) to use for connection retry attempts.
  */
-#define CONNECTION_RETRY_BACKOFF_BASE_MS (500U)
+#define CONNECTION_RETRY_BACKOFF_BASE_MS         ( 500U )
 
 /**
  * @brief Timeout for receiving CONNACK packet in milli seconds.
  */
-#define CONNACK_RECV_TIMEOUT_MS (1000U)
+#define CONNACK_RECV_TIMEOUT_MS                  ( 1000U )
 
 /**
  * @brief The topic to subscribe and publish to in the example.
@@ -104,40 +137,39 @@ extern const char root_cert_auth_end[] asm("_binary_root_cert_auth_crt_end");
  * The topic name starts with the client identifier to ensure that each demo
  * interacts with a unique topic name.
  */
-#define MQTT_EXAMPLE_TOPIC CLIENT_IDENTIFIER "/example/topic"
+#define MQTT_EXAMPLE_TOPIC                  CLIENT_IDENTIFIER "/example/topic"
 
 /**
  * @brief Length of client MQTT topic.
  */
-#define MQTT_EXAMPLE_TOPIC_LENGTH ((uint16_t)(sizeof(MQTT_EXAMPLE_TOPIC) - 1))
+#define MQTT_EXAMPLE_TOPIC_LENGTH           ( ( uint16_t ) ( sizeof( MQTT_EXAMPLE_TOPIC ) - 1 ) )
 
 /**
  * @brief The MQTT message published in this example.
  */
-#define MQTT_EXAMPLE_MESSAGE "Hello World!"
+#define MQTT_EXAMPLE_MESSAGE                "Hello World!"
 
 /**
  * @brief The length of the MQTT message published in this example.
  */
-#define MQTT_EXAMPLE_MESSAGE_LENGTH \
-  ((uint16_t)(sizeof(MQTT_EXAMPLE_MESSAGE) - 1))
+#define MQTT_EXAMPLE_MESSAGE_LENGTH         ( ( uint16_t ) ( sizeof( MQTT_EXAMPLE_MESSAGE ) - 1 ) )
 
 /**
  * @brief Maximum number of outgoing publishes maintained in the application
  * until an ack is received from the broker.
  */
-#define MAX_OUTGOING_PUBLISHES (5U)
+#define MAX_OUTGOING_PUBLISHES              ( 5U )
 
 /**
  * @brief Invalid packet identifier for the MQTT packets. Zero is always an
  * invalid packet identifier as per MQTT 3.1.1 spec.
  */
-#define MQTT_PACKET_ID_INVALID ((uint16_t)0U)
+#define MQTT_PACKET_ID_INVALID              ( ( uint16_t ) 0U )
 
 /**
  * @brief Timeout for MQTT_ProcessLoop function in milliseconds.
  */
-#define MQTT_PROCESS_LOOP_TIMEOUT_MS (5000U)
+#define MQTT_PROCESS_LOOP_TIMEOUT_MS        ( 5000U )
 
 /**
  * @brief The maximum time interval in seconds which is allowed to elapse
@@ -148,63 +180,155 @@ extern const char root_cert_auth_end[] asm("_binary_root_cert_auth_crt_end");
  *  absence of sending any other Control Packets, the Client MUST send a
  *  PINGREQ Packet.
  */
-#define MQTT_KEEP_ALIVE_INTERVAL_SECONDS (60U)
+#define MQTT_KEEP_ALIVE_INTERVAL_SECONDS    ( 60U )
 
 /**
  * @brief Delay between MQTT publishes in seconds.
  */
-#define DELAY_BETWEEN_PUBLISHES_SECONDS (1U)
+#define DELAY_BETWEEN_PUBLISHES_SECONDS     ( 1U )
 
 /**
  * @brief Number of PUBLISH messages sent per iteration.
  */
-#define MQTT_PUBLISH_COUNT_PER_LOOP (5U)
+#define MQTT_PUBLISH_COUNT_PER_LOOP         ( 5U )
 
 /**
  * @brief Delay in seconds between two iterations of subscribePublishLoop().
  */
-#define MQTT_SUBPUB_LOOP_DELAY_SECONDS (5U)
+#define MQTT_SUBPUB_LOOP_DELAY_SECONDS      ( 5U )
 
 /**
  * @brief Transport timeout in milliseconds for transport send and receive.
  */
-#define TRANSPORT_SEND_RECV_TIMEOUT_MS (1500U)
+#define TRANSPORT_SEND_RECV_TIMEOUT_MS      ( 1500U )
 
 /**
  * @brief The MQTT metrics string expected by AWS IoT.
  */
-#define METRICS_STRING                                                       \
-  "?SDK=" OS_NAME "&Version=" OS_VERSION "&Platform=" HARDWARE_PLATFORM_NAME \
-  "&MQTTLib=" MQTT_LIB
+#define METRICS_STRING                      "?SDK=" OS_NAME "&Version=" OS_VERSION "&Platform=" HARDWARE_PLATFORM_NAME "&MQTTLib=" MQTT_LIB
 
 /**
  * @brief The length of the MQTT metrics string expected by AWS IoT.
  */
-#define METRICS_STRING_LENGTH ((uint16_t)(sizeof(METRICS_STRING) - 1))
+#define METRICS_STRING_LENGTH               ( ( uint16_t ) ( sizeof( METRICS_STRING ) - 1 ) )
+
 
 #ifdef CLIENT_USERNAME
 
 /**
- * @brief Append the username with the metrics string if #CLIENT_USERNAME is
- * defined.
+ * @brief Append the username with the metrics string if #CLIENT_USERNAME is defined.
  *
  * This is to support both metrics reporting and username/password based client
  * authentication by AWS IoT.
  */
-#define CLIENT_USERNAME_WITH_METRICS CLIENT_USERNAME METRICS_STRING
+    #define CLIENT_USERNAME_WITH_METRICS    CLIENT_USERNAME METRICS_STRING
 #endif
 
 /**
  * @brief The length of the outgoing publish records array used by the coreMQTT
  * library to track QoS > 0 packet ACKS for outgoing publishes.
  */
-#define OUTGOING_PUBLISH_RECORD_LEN (10U)
+#define OUTGOING_PUBLISH_RECORD_LEN    ( 10U )
 
 /**
  * @brief The length of the incoming publish records array used by the coreMQTT
  * library to track QoS > 0 packet ACKS for incoming publishes.
  */
-#define INCOMING_PUBLISH_RECORD_LEN (10U)
+#define INCOMING_PUBLISH_RECORD_LEN    ( 10U )
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+
+/**
+ * @brief Structure to keep the MQTT publish packets until an ack is received
+ * for QoS1 publishes.
+ */
+typedef struct PublishPackets
+{
+    /**
+     * @brief Packet identifier of the publish packet.
+     */
+    uint16_t packetId;
+
+    /**
+     * @brief Publish info of the publish packet.
+     */
+    MQTTPublishInfo_t pubInfo;
+} PublishPackets_t;
+
+
+/*****************************************************************************
+ *      PRIVATE DATA
+ *****************************************************************************/
+
+/**
+ * @brief Packet Identifier updated when an ACK packet is received.
+ *
+ * It is used to match an expected ACK for a transmitted packet.
+ */
+static uint16_t globalAckPacketIdentifier = 0U;
+
+/**
+ * @brief Packet Identifier generated when Subscribe request was sent to the broker;
+ * it is used to match received Subscribe ACK to the transmitted subscribe.
+ */
+static uint16_t globalSubscribePacketIdentifier = 0U;
+
+/**
+ * @brief Packet Identifier generated when Unsubscribe request was sent to the broker;
+ * it is used to match received Unsubscribe ACK to the transmitted unsubscribe
+ * request.
+ */
+static uint16_t globalUnsubscribePacketIdentifier = 0U;
+
+/**
+ * @brief Array to keep the outgoing publish messages.
+ * These stored outgoing publish messages are kept until a successful ack
+ * is received.
+ */
+static PublishPackets_t outgoingPublishPackets[ MAX_OUTGOING_PUBLISHES ] = { 0 };
+
+/**
+ * @brief Array to keep subscription topics.
+ * Used to re-subscribe to topics that failed initial subscription attempts.
+ */
+static MQTTSubscribeInfo_t pGlobalSubscriptionList[ 1 ];
+
+/**
+ * @brief The network buffer must remain valid for the lifetime of the MQTT context.
+ */
+static uint8_t buffer[ NETWORK_BUFFER_SIZE ];
+
+/**
+ * @brief Status of latest Subscribe ACK;
+ * it is updated every time the callback function processes a Subscribe ACK
+ * and accounts for subscription to a single topic.
+ */
+static MQTTSubAckStatus_t globalSubAckStatus = MQTTSubAckFailure;
+
+/**
+ * @brief Array to track the outgoing publish records for outgoing publishes
+ * with QoS > 0.
+ *
+ * This is passed into #MQTT_InitStatefulQoS to allow for QoS > 0.
+ *
+ */
+static MQTTPubAckInfo_t pOutgoingPublishRecords[ OUTGOING_PUBLISH_RECORD_LEN ];
+
+/**
+ * @brief Array to track the incoming publish records for incoming publishes
+ * with QoS > 0.
+ *
+ * This is passed into #MQTT_InitStatefulQoS to allow for QoS > 0.
+ *
+ */
+static MQTTPubAckInfo_t pIncomingPublishRecords[ INCOMING_PUBLISH_RECORD_LEN ];
+
+/**
+ * @brief Static buffer for TLS Context Semaphore.
+ */
+static StaticSemaphore_t xTlsContextSemaphoreBuffer;
 
 /*****************************************************************************
  *      PROTOTYPE PRIVATE FUNCTION
@@ -217,6 +341,9 @@ extern const char root_cert_auth_end[] asm("_binary_root_cert_auth_crt_end");
  * @return The generated random number.
  */
 static uint32_t generateRandomNumber();
+
+static void
+cleanupESPSecureMgrCerts (NetworkContext_t *pNetworkContext);
 
 /**
  * @brief Connect to MQTT broker with reconnection retries.
@@ -556,12 +683,35 @@ aws_iot_demo_main (int argc, char **argv)
  *      PRIVATE FUNCTION
  *****************************************************************************/
 
+/*-----------------------------------------------------------*/
+
 static uint32_t
 generateRandomNumber ()
 {
   return (rand());
 }
 
+/*-----------------------------------------------------------*/
+
+static void
+cleanupESPSecureMgrCerts (NetworkContext_t *pNetworkContext)
+{
+#ifdef CONFIG_EXAMPLE_USE_SECURE_ELEMENT
+  /* Nothing to be freed */
+#elif defined(CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR)
+  esp_secure_cert_free_device_cert(&pNetworkContext->pcClientCert);
+#ifdef CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL
+  esp_secure_cert_free_ds_ctx(pNetworkContext->ds_data);
+#else  /* !CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL */
+  esp_secure_cert_free_priv_key(&pNetworkContext->pcClientKey);
+#endif /* CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL */
+
+#else /* !CONFIG_EXAMPLE_USE_SECURE_ELEMENT && \
+         !CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR  */
+  /* Nothing to be freed */
+#endif
+  return;
+}
 
 /*-----------------------------------------------------------*/
 
@@ -596,6 +746,33 @@ connectToServerWithBackoffRetries (NetworkContext_t *pNetworkContext,
 #ifdef CONFIG_EXAMPLE_USE_SECURE_ELEMENT
   pNetworkContext->use_secure_element = true;
 
+#elif defined(CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR)
+  if (esp_secure_cert_get_device_cert(&pNetworkContext->pcClientCert,
+                                      &pNetworkContext->pcClientCertSize)
+      != ESP_OK)
+  {
+    LogError(("Failed to obtain flash address of device cert"));
+    return EXIT_FAILURE;
+  }
+#ifdef CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL
+  pNetworkContext->ds_data = esp_secure_cert_get_ds_ctx();
+  if (pNetworkContext->ds_data == NULL)
+  {
+    LogError(("Failed to obtain the ds context"));
+    return EXIT_FAILURE;
+  }
+#else  /* !CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL */
+  if (esp_secure_cert_get_priv_key(&pNetworkContext->pcClientKey,
+                                   &pNetworkContext->pcClientKeySize)
+      != ESP_OK)
+  {
+    LogError(("Failed to obtain flash address of private_key"));
+    return EXIT_FAILURE;
+  }
+#endif /* CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL */
+
+#else /* !CONFIG_EXAMPLE_USE_SECURE_ELEMENT && \
+         !CONFIG_EXAMPLE_USE_ESP_SECURE_CERT_MGR  */
 #ifndef CLIENT_USERNAME
   pNetworkContext->pcClientCert     = client_cert_start;
   pNetworkContext->pcClientCertSize = client_cert_end - client_cert_start;
@@ -1630,3 +1807,5 @@ processLoopWithTimeout (MQTTContext_t *pMqttContext, uint32_t ulTimeoutMs)
 
   return eMqttStatus;
 }
+
+/*-----------------------------------------------------------*/

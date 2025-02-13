@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 set(EXTRA_COMPONENT_DIRS ${CMAKE_CURRENT_LIST_DIR}/aws/backoffAlgorithm
 						 ${CMAKE_CURRENT_LIST_DIR}/aws/coreMQTT
 						 ${CMAKE_CURRENT_LIST_DIR}/aws/common/posix_compat
+						 ${CMAKE_CURRENT_LIST_DIR}/aws/coreJSON
 						 ${CMAKE_CURRENT_LIST_DIR}/Bsp
 						 ${CMAKE_CURRENT_LIST_DIR}/Middleware
 						 ${CMAKE_CURRENT_LIST_DIR}/App
