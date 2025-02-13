@@ -1,26 +1,26 @@
-#ifndef APP_BLE_TRACKING_H_
-#define APP_BLE_TRACKING_H_
+// #ifndef APP_BLE_TRACKING_H_
+// #define APP_BLE_TRACKING_H_
 
-/******************************************************************************
- *      INCLUDES
- *****************************************************************************/
+// /******************************************************************************
+//  *      INCLUDES
+//  *****************************************************************************/
 
-#include <stdio.h>
+// #include <stdio.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+// #ifdef __cplusplus
+// extern "C"
+// {
+// #endif
 
-  /****************************************************************************
-   *   PUBLIC FUNCTION
-   ***************************************************************************/
+//   /****************************************************************************
+//    *   PUBLIC FUNCTION
+//    ***************************************************************************/
 
-  void APP_BLE_TRACKING_CreateTask(void);
-  void APP_BLE_TRACKING_Init(void);
+//   void APP_BLE_TRACKING_CreateTask(void);
+//   void APP_BLE_TRACKING_Init(void);
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
-#endif /* APP_BLE_TRACKING_H_ */
+// #endif /* APP_BLE_TRACKING_H_ */
