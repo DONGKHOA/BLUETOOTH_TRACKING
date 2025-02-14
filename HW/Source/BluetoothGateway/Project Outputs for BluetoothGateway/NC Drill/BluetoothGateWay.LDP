@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: C:\Users\thanh\OneDrive\Disk_1\HCMUT-COURSE\HK242\BLUETOOTH_TRACKING_PROJECT\BLUETOOTH_TRACKING\HW\Source\BluetoothGateway\BluetoothGateWay.PcbDoc
+LayersSetName=Top_Bot_Thru_Holes|DrillFile=bluetoothgateway-roundholes.txt|DrillLayers=gtl,g1,g2,gbl
+LayersSetName=Top_Bot_Slot_Holes|DrillFile=bluetoothgateway-slotholes.txt|DrillLayers=gtl,g1,g2,gbl
