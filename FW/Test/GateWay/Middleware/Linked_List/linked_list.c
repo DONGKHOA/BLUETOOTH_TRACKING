@@ -54,39 +54,40 @@ LINKED_LIST_InsertAtTail (Node_t **p_head, void *p_value, uint8_t u8_dataSize)
 Node_t *
 LINKED_LIST_DeleteNode (Node_t *p_head, uint32_t u32_position)
 {
-  if (p_head == NULL || u32_position == 0)
-  {
-    return p_head; // Edge case: empty list or invalid position
-  }
-
-  Node_t *temp = p_head;
   Node_t *prev = NULL;
+  Node_t *temp = p_head;
 
-  // Case 1: Head node needs to be deleted
+  // Base case if linked list is empty
+  if (temp == NULL)
+    return p_head;
+
+  // Case 1: p_head is to be deleted
   if (u32_position == 1)
   {
+    // make next node as p_head and free old p_head
     p_head = temp->p_next;
-    free(temp);
     return p_head;
   }
 
-  // Traverse till the given position
+  // Case 2: Node to be deleted is in the middle
+  // Traverse till the given u32_position
   for (uint32_t i = 1; temp != NULL && i < u32_position; i++)
   {
     prev = temp;
     temp = temp->p_next;
   }
 
-  // If position is out of bounds
-  if (temp == NULL)
+  // If the given position is found, delete node
+  if (temp != NULL)
   {
-    printf("Error: Position out of range\n");
-    return p_head;
+    prev->p_next = temp->p_next;
+    free(temp);
   }
-
-  // Unlink the node from the list
-  prev->p_next = temp->p_next;
-  free(temp);
+  // If the given position is not present
+  else
+  {
+    printf("Data not present\n");
+  }
 
   return p_head;
 }

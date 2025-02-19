@@ -160,7 +160,7 @@ APP_BLE_IBEACON_Init (void)
 static void
 APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
 {
-  uint32_t u32_index = 0;
+  uint32_t u32_index = 1;
   Node_t  *p_temp    = p_head_linked_list_ble_inf;
   while (p_temp != NULL)
   {
@@ -174,7 +174,7 @@ APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
              == 0)
     {
       u32_number_node--;
-      printf("Delete Node:");
+      printf("\r\nDelete Node:");
       for (uint8_t i = 0; i < 6; i++)
       {
         printf("%02X ", ((beacon_data_t *)(p_temp->p_data))->beacon_addr[i]);
@@ -182,7 +182,7 @@ APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
       printf("\r\n");
 
       p_head_linked_list_ble_inf
-          = LINKED_LIST_DeleteNode(p_head_linked_list_ble_inf, u32_index - 1);
+          = LINKED_LIST_DeleteNode(p_head_linked_list_ble_inf, u32_index);
     }
     u32_index++;
     p_temp = p_temp->p_next;
