@@ -1,26 +1,31 @@
-// #ifndef APP_FINGERPRINT_H_
-// #define APP_FINGERPRINT_H_
+#ifndef APP_FINGERPRINT_H_
+#define APP_FINGERPRINT_H_
 
-// /******************************************************************************
-//  *      INCLUDES
-//  *****************************************************************************/
+/******************************************************************************
+ *      INCLUDES
+ *****************************************************************************/
 
-// #include <stdio.h>
+#include <stdio.h>
+#include "as608.h"
 
-// #ifdef __cplusplus
-// extern "C"
-// {
-// #endif
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-//   /****************************************************************************
-//    *   PUBLIC FUNCTION
-//    ***************************************************************************/
 
-//   void APP_FingerPrint_CreateTask(void);
-//   void APP_FingerPrint_Init(void);
+#define UART_TXD GPIO_NUM_17
+#define UART_RXD GPIO_NUM_15
 
-// #ifdef __cplusplus
-// }
-// #endif
+  /****************************************************************************
+   *   PUBLIC FUNCTION
+   ***************************************************************************/
 
-// #endif /* APP_FINGERPRINT_H_ */
+  void APP_FingerPrint_CreateTask(void);
+  void APP_FingerPrint_Init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* APP_FINGERPRINT_H_ */
