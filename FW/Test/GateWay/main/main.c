@@ -5,10 +5,10 @@
 #include <string.h>
 
 #include "nvs_rw.h"
- #include "app_mqtt_client.h"
+#include "app_mqtt_client.h"
 #include "app_data.h"
 //  #include "app_ble_tracking.h"
- #include "app_wifi_connect.h"
+#include "app_wifi_connect.h"
 #include "app_ble_ibeacon.h"
 
 /******************************************************************************
@@ -38,13 +38,13 @@ app_main (void)
   APP_MAIN_InitDataSystem();
 
   // App Initialization
-   APP_WIFI_CONNECT_Init();
-  //  APP_BLE_TRACKING_Init();
-   APP_MQTT_CLIENT_Init();
+  //  APP_WIFI_CONNECT_Init();
+  // APP_MQTT_CLIENT_Init();
   APP_BLE_IBEACON_Init();
+  //  APP_BLE_TRACKING_Init();
 
   // App Create Task X
-   APP_MQTT_CLIENT_CreateTask();
+  //  APP_MQTT_CLIENT_CreateTask();
+  APP_BLE_IBEACON_CreateTask();
   //  APP_BLE_TRACKING_CreateTask();
-  APP_BLE_IBEACON_CreateTask(); 
 }

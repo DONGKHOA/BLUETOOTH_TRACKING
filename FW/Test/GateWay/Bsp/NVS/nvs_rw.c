@@ -29,13 +29,13 @@
  * Storage) is successful.
  */
 esp_err_t NVS_Init(void)
-{
+{ 
   esp_err_t retVal = nvs_flash_init();
   if (retVal == ESP_ERR_NVS_NO_FREE_PAGES || retVal == ESP_ERR_NVS_NEW_VERSION_FOUND)
   {
     // NVS partition was truncated and needs to be erased
     // Retry nvs_flash_init
-    nvs_flash_erase();
+    ESP_ERROR_CHECK(nvs_flash_erase());
     retVal = nvs_flash_init();
   }
   return retVal;
