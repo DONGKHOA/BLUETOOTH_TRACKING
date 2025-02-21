@@ -20,14 +20,12 @@
 #include "driver/gpio.h"
 #include "string.h"
 
-// #include "app_fingerprint.h"
+#include "app_fingerprint.h"
 // #include "ds3231.h"
 #include "dht22.h"
 #include "sdcard.h"
 #include "ads1115.h"
 #include "mcp4822.h"
-
-#include "rs3485.h"
 
 #include "ff.h"
 #include "diskio.h"
@@ -38,12 +36,25 @@
 
 #include "app_rtc.h"
 #include "app_read_data.h"
+#include "sn65hvd230dr.h"
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
 #define DHT11_PIN GPIO_NUM_4
 #define GPIO_NUM  GPIO_NUM_14
+
+#define CAN_MODE      TWAI_MODE_NO_ACK
+#define TXD_PIN       GPIO_NUM_19
+#define RXD_PIN       GPIO_NUM_20
+#define TXD_QUEUE_LEN 1024
+#define RXD_QUEUE_LEN 1024
+#define INTR_FLAG     ESP_INTR_FLAG_LEVEL1 // lowest priority
+#define CAN_BITRATE   5
+
+#define CAN_ID   0x123
+#define CAN_EXTD 0
+#define CAN_RTR  0
 
 /******************************************************************************
  *    PRIVATE PROTOTYPE FUNCTION
@@ -55,6 +66,11 @@
 // char *p_data = "Hello";
 
 uint32_t count = 0;
+
+char *p_text = "ESP2CAN";
+
+uint8_t default_address_1[4]  = { 0xFF, 0xFF, 0xFF, 0xFF };
+uint8_t default_password_1[4] = { 0x00, 0x00, 0x00, 0x00 };
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
@@ -72,60 +88,60 @@ static void Timer_Callback(TimerHandle_t xTimer);
  *****************************************************************************/
 
 void
-twai_init ()
+twai_init (void)
 {
-  // // Cấu hình chân TX và RX
-  // twai_general_config_t g_config
-  //     = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_19, GPIO_NUM_20,
-  //     TWAI_MODE_NORMAL);
 
-  // // Cấu hình bộ lọc (chấp nhận tất cả ID)
-  // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+  BSP_canConfigDefault();
+  BSP_canConfigMode(CAN_MODE);
+  BSP_canConfigIO(TXD_PIN, RXD_PIN);
+  BSP_canConfigQueue(TXD_QUEUE_LEN, RXD_QUEUE_LEN);
+  BSP_canConfigIntr(INTR_FLAG);
+  BSP_canConfigBitRate(CAN_BITRATE);
 
-  // // Cấu hình tốc độ baud 500kbps
-  // // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+  // Cài đặt TWAI driver
+  if (BSP_canDriverInit() == ESP_OK)
+  {
+    printf("TWAI driver installed\n");
+  }
+  else
+  {
+    printf("Failed to install TWAI driver\n");
+  }
 
-  // // Cài đặt TWAI driver
-  // if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK)
-  // {
-  //   printf("TWAI driver installed\n");
-  // }
-  // else
-  // {
-  //   printf("Failed to install TWAI driver\n");
-  // }
-
-  // // Bật TWAI driver
-  // if (twai_start() == ESP_OK)
-  // {
-  //   printf("TWAI driver started\n");
-  // }
-  // else
-  // {
-  //   printf("Failed to start TWAI driver\n");
-  // }
+  // Bật TWAI driver
+  if (BSP_canStart() == ESP_OK)
+  {
+    printf("TWAI driver started\n");
+  }
+  else
+  {
+    printf("Failed to start TWAI driver\n");
+  }
 }
 
 void
-twai_send_message ()
+twai_send_message (void)
 {
-  // twai_message_t message;
-  // message.identifier       = 0x123; // ID của frame CAN
-  // message.extd             = 0;     // Standard frame (11-bit ID)
-  // message.rtr              = 0; // Dữ liệu bình thường (không phải Remote
-  // Frame) message.data_length_code = 8; // 8 byte dữ liệu memcpy(message.data,
-  // "ESP2CAN!", 8); // Nội dung gửi
-
-  // if (twai_transmit(&message, pdMS_TO_TICKS(1000)) == ESP_OK)
-  // {
-  //   printf("Message sent\n");
-  // }
-  // else
-  // {
-  //   printf("Failed to send message\n");
-  // }
+  DEV_CAN_SendMessage(
+      CAN_ID, CAN_EXTD, CAN_RTR, (uint8_t *)p_text, strlen(p_text));
 }
 
+void
+twai_receive_message (void)
+{
+  uint32_t id, extd, rtr;
+  uint8_t  data[8]; // Buffer để lưu dữ liệu nhận được
+  uint8_t  len;
+
+  if (DEV_CAN_ReceiveMessage(&id, &extd, &rtr, data, &len))
+  {
+    printf("Received message");
+  }
+  else
+  {
+    printf("Failed to receive message.\n");
+  }
+}
 void
 app_main (void)
 {
@@ -139,14 +155,20 @@ app_main (void)
 
   xTimerStart(timer, 0);
 
-  APP_ReadData_Init();
-  APP_RTC_Init();
+  // APP_ReadData_Init();
+  // APP_RTC_Init();
+  APP_FingerPrint_Init();
 
-  APP_ReadData_CreateTask();
-  APP_RTC_CreateTask();
+  // APP_ReadData_CreateTask();
+  // APP_RTC_CreateTask();
+  // APP_FingerPrint_CreateTask();
 
+  // twai_init();
   while (1)
   {
+    DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
+    // twai_receive_message();
+    // twai_send_message();
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -158,7 +180,8 @@ app_main (void)
 static void
 Timer_Callback (TimerHandle_t xTimer)
 {
-  DEV_ADS1115_TimeOut();
+  // DEV_ADS1115_TimeOut();
+  DEV_AS608_TimeOut();
 }
 
 // static void

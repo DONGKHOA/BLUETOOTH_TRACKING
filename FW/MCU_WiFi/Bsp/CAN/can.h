@@ -28,19 +28,25 @@ extern "C"
     CAN_500KBITS, // 5
     CAN_800KBITS, // 6
     CAN_1MBITS    // 7
-  } can_config_bit_rate_t;
+  } can_bit_rate_t;
 
   /*****************************************************************************
    *      PUBLIC FUNCTIONS
    *****************************************************************************/
 
-  void BSP_canDriverInit(twai_mode_t           e_can_mode,
-                         gpio_num_t            e_tx_pin,
-                         gpio_num_t            e_rx_pin,
-                         uint32_t              u32_tx_queue_len,
-                         uint32_t              u32_rx_queue_len,
-                         int                   i_intr_flag,
-                         can_config_bit_rate_t e_bitrate);
+  esp_err_t BSP_canDriverInit(void);
+
+  void BSP_canConfigDefault(void);
+
+  void BSP_canConfigMode(twai_mode_t e_can_mode);
+
+  void BSP_canConfigIO(gpio_num_t e_tx_pin, gpio_num_t e_rx_pin);
+
+  void BSP_canConfigQueue(uint32_t u32_tx_queue_len, uint32_t u32_rx_queue_len);
+
+  void BSP_canConfigIntr(int i_intr_flag);
+
+  void BSP_canConfigBitRate(can_bit_rate_t e_bitrate);
 
   esp_err_t BSP_canStart(void);
 

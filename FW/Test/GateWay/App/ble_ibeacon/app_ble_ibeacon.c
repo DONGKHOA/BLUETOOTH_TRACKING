@@ -115,7 +115,7 @@ void
 APP_BLE_IBEACON_CreateTask (void)
 {
   xTaskCreate(
-      APP_BLE_IBEACON_Task, "ble ibeacon task", 1024 * 2, NULL, 8, NULL);
+      APP_BLE_IBEACON_Task, "ble ibeacon task", 1024 * 2, NULL, 5, NULL);
 }
 
 void
@@ -162,18 +162,15 @@ APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
 {
   uint32_t u32_index = 1;
   Node_t  *p_temp    = p_head_linked_list_ble_inf;
+
   while (p_temp != NULL)
   {
-    if (((beacon_data_t *)(p_head_linked_list_ble_inf->p_data))->flag_timeout
-        == 1)
+    if (((beacon_data_t *)(p_temp->p_data))->flag_timeout == 1)
     {
-      ((beacon_data_t *)(p_head_linked_list_ble_inf->p_data))->flag_timeout = 0;
+      ((beacon_data_t *)(p_temp->p_data))->flag_timeout = 0;
     }
-    else if (((beacon_data_t *)(p_head_linked_list_ble_inf->p_data))
-                 ->flag_timeout
-             == 0)
+    else if (((beacon_data_t *)(p_temp->p_data))->flag_timeout == 0)
     {
-      u32_number_node--;
       printf("\r\nDelete Node:");
       for (uint8_t i = 0; i < 6; i++)
       {
@@ -183,7 +180,13 @@ APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
 
       p_head_linked_list_ble_inf
           = LINKED_LIST_DeleteNode(p_head_linked_list_ble_inf, u32_index);
+
+      u32_number_node--;
+      u32_index = 1;
+      p_temp    = p_head_linked_list_ble_inf;
+      continue;
     }
+
     u32_index++;
     p_temp = p_temp->p_next;
   }
@@ -194,7 +197,7 @@ APP_BLE_IBEACON_Task (void *arg)
 {
   beacon_data_t    s_beacon_data_task;
   beacon_data_cb_t s_beacon_data_cb;
-  Node_t *p_temp = p_head_linked_list_ble_inf;
+  Node_t          *p_temp = p_head_linked_list_ble_inf;
   while (1)
   {
     if (xQueueReceive(s_ble_ibeacon_data.s_queue_ble_inf,
@@ -238,14 +241,12 @@ APP_BLE_IBEACON_Task (void *arg)
         }
 
         KALMAN_FILTER_Init(
-            &((beacon_data_t *)(p_temp->p_data))
-                 ->s_Kalman_Filter,
+            &((beacon_data_t *)(p_temp->p_data))->s_Kalman_Filter,
             2,
             2,
             0.001,
             -50);
-        ((beacon_data_t *)(p_temp->p_data))->flag_timeout
-            = 0;
+        ((beacon_data_t *)(p_temp->p_data))->flag_timeout = 0;
         u32_number_node++;
       }
 
@@ -299,7 +300,7 @@ APP_BLE_IBEACON_UpdateDataDevice (beacon_data_t *p_data)
               (double)((beacon_data_t *)(p_temp->p_data))->rssi);
 
       ((beacon_data_t *)(p_temp->p_data))->flag_timeout = 1;
-      
+
       printf("\r\n");
       ESP_LOGI(TAG, "----------iBeacon Found----------");
       for (uint8_t i = 0; i < 6; i++)
@@ -348,13 +349,6 @@ APP_BLE_IBEACON_GAP_Callback (esp_gap_ble_cb_event_t  event,
           if (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv,
                                         scan_result->scan_rst.adv_data_len))
           {
-            // ESP_LOGI(TAG, "----------iBeacon Found----------");
-            // esp_log_buffer_hex("IBEACON_DEMO: Device address:",
-            //                    scan_result->scan_rst.bda,
-            //                    ESP_BD_ADDR_LEN);
-            // ESP_LOGI(TAG, "RSSI of packet:%d dbm",
-            // scan_result->scan_rst.rssi);
-
             memcpy(s_beacon_data_cb.beacon_addr, scan_result->scan_rst.bda, 6);
             s_beacon_data_cb.rssi = (int8_t)scan_result->scan_rst.rssi;
 

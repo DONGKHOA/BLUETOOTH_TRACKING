@@ -43,47 +43,50 @@ LINKED_LIST_InsertAtTail (Node_t **p_head, void *p_value, uint8_t u8_dataSize)
     return;
   }
 
-  Node_t *temp = *p_head;
-  while (temp->p_next != NULL)
+  Node_t *p_temp = *p_head;
+  while (p_temp->p_next != NULL)
   {
-    temp = temp->p_next;
+    p_temp = p_temp->p_next;
   }
-  temp->p_next = newNode;
+  p_temp->p_next = newNode;
 }
 
 Node_t *
-LINKED_LIST_DeleteNode (Node_t *p_head, uint32_t u32_position)
+LINKED_LIST_DeleteNode (Node_t *p_head, uint32_t position)
 {
-  Node_t *prev = NULL;
-  Node_t *temp = p_head;
+  Node_t *p_temp = p_head;
+  Node_t *prev   = NULL;
 
   // Base case if linked list is empty
-  if (temp == NULL)
-    return p_head;
-
-  // Case 1: p_head is to be deleted
-  if (u32_position == 1)
+  if (p_temp == NULL)
   {
-    // make next node as p_head and free old p_head
-    p_head = temp->p_next;
     return p_head;
   }
 
-  // Case 2: Node to be deleted is in the middle
-  // Traverse till the given u32_position
-  for (uint32_t i = 1; temp != NULL && i < u32_position; i++)
+  // Case 1: Head is to be deleted
+  if (position == 1)
   {
-    prev = temp;
-    temp = temp->p_next;
+    p_head = p_temp->p_next;
+    free(p_temp->p_data);
+    free(p_temp);
+    return p_head;
   }
 
-  // If the given position is found, delete node
-  if (temp != NULL)
+  // Case 2: Node to be deleted is in middle
+  // Traverse till given position
+  for (int i = 1; p_temp != NULL && i < position; i++)
   {
-    prev->p_next = temp->p_next;
-    free(temp);
+    prev   = p_temp;
+    p_temp = p_temp->p_next;
   }
-  // If the given position is not present
+
+  // If given position is found, delete node
+  if (p_temp != NULL)
+  {
+    prev->p_next = p_temp->p_next;
+    free(p_temp->p_data);
+    free(p_temp);
+  }
   else
   {
     printf("Data not present\n");

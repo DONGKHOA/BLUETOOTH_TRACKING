@@ -9,35 +9,63 @@
 #include "sdkconfig.h"
 
 /*****************************************************************************
- *      PRIVATE DEFINES
+ *      PRIVATE VARIABLES
  *****************************************************************************/
+
+static twai_general_config_t g_config = { 0 };
+static twai_timing_config_t  t_config = { 0 };
+static twai_filter_config_t  f_config = { 0 };
 
 /*****************************************************************************
  *      PUBLIC FUNCTION
  *****************************************************************************/
 
-void
-BSP_canDriverInit (twai_mode_t           e_can_mode,
-                   gpio_num_t            e_tx_pin,
-                   gpio_num_t            e_rx_pin,
-                   uint32_t              u32_tx_queue_len,
-                   uint32_t              u32_rx_queue_len,
-                   int                   i_intr_flag,
-                   can_config_bit_rate_t e_bitrate)
+esp_err_t
+BSP_canDriverInit (void)
 {
-  twai_general_config_t g_config = { .mode           = e_can_mode,
-                                     .tx_io          = e_tx_pin,
-                                     .rx_io          = e_rx_pin,
-                                     .clkout_io      = TWAI_IO_UNUSED,
-                                     .bus_off_io     = TWAI_IO_UNUSED,
-                                     .tx_queue_len   = u32_tx_queue_len,
-                                     .rx_queue_len   = u32_rx_queue_len,
-                                     .alerts_enabled = TWAI_ALERT_NONE,
-                                     .clkout_divider = 0,
-                                     .intr_flags     = i_intr_flag };
+  return twai_driver_install(&g_config, &t_config, &f_config);
+}
 
-  twai_timing_config_t t_config = { 0 };
+void
+BSP_canConfigDefault (void)
+{
+  g_config.clkout_io      = TWAI_IO_UNUSED;
+  g_config.bus_off_io     = TWAI_IO_UNUSED;
+  g_config.alerts_enabled = TWAI_ALERT_NONE;
+  g_config.clkout_divider = 0;
 
+  f_config = (twai_filter_config_t)TWAI_FILTER_CONFIG_ACCEPT_ALL();
+}
+
+void
+BSP_canConfigMode (twai_mode_t e_can_mode)
+{
+  g_config.mode = e_can_mode;
+}
+
+void
+BSP_canConfigIO (gpio_num_t e_tx_pin, gpio_num_t e_rx_pin)
+{
+  g_config.tx_io = e_tx_pin;
+  g_config.rx_io = e_rx_pin;
+}
+
+void
+BSP_canConfigQueue (uint32_t u32_tx_queue_len, uint32_t u32_rx_queue_len)
+{
+  g_config.tx_queue_len = u32_tx_queue_len;
+  g_config.rx_queue_len = u32_rx_queue_len;
+}
+
+void
+BSP_canConfigIntr (int i_intr_flag)
+{
+  g_config.intr_flags = i_intr_flag;
+}
+
+void
+BSP_canConfigBitRate (can_bit_rate_t e_bitrate)
+{
   switch (e_bitrate)
   {
     case CAN_25KBITS:
@@ -75,10 +103,6 @@ BSP_canDriverInit (twai_mode_t           e_can_mode,
     default:
       break;
   }
-
-  twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
-
-  twai_driver_install(&g_config, &t_config, &f_config);
 }
 
 esp_err_t
