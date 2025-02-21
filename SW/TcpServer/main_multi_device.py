@@ -5,7 +5,13 @@ import struct
 import numpy as np
 import json
 
+<<<<<<< HEAD
 HOST = '10.0.96.80'
+=======
+import requests
+
+HOST = '192.168.100.211'
+>>>>>>> c51aeaec853b2cef977a6c8437993c1625caf304
 PORT = 8899
 
 # Global counter (uint32)
