@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 
 import requests
 
-HOST = '192.168.10.17'
+HOST = '192.168.100.211'
 PORT = 8899
 
 # MQTT broker information

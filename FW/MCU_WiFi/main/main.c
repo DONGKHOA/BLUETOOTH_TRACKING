@@ -37,6 +37,7 @@
 #include "app_rtc.h"
 #include "app_read_data.h"
 #include "sn65hvd230dr.h"
+#include "rs485.h"
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
@@ -45,8 +46,8 @@
 #define GPIO_NUM  GPIO_NUM_14
 
 #define CAN_MODE      TWAI_MODE_NO_ACK
-#define TXD_PIN       GPIO_NUM_19
-#define RXD_PIN       GPIO_NUM_20
+#define TXD_PIN       GPIO_NUM_18
+#define RXD_PIN       GPIO_NUM_19
 #define TXD_QUEUE_LEN 1024
 #define RXD_QUEUE_LEN 1024
 #define INTR_FLAG     ESP_INTR_FLAG_LEVEL1 // lowest priority
@@ -80,7 +81,7 @@ uint8_t default_password_1[4] = { 0x00, 0x00, 0x00, 0x00 };
 // static void MCP4822_Task(void *pvParameter);
 // static void SDCard_ReadFile(char *p_path);
 // static void SDCard_WriteFile(char *p_path, char *p_data);
-// static void RS3485_Task(void *pvParameter);
+// static void RS485_Task(void *pvParameter);
 
 static void Timer_Callback(TimerHandle_t xTimer);
 /******************************************************************************
@@ -145,30 +146,39 @@ twai_receive_message (void)
 void
 app_main (void)
 {
-  // Create Soft-Timer
-  TimerHandle_t timer = xTimerCreate("Timer",
-                                     pdMS_TO_TICKS(1), // Period 1ms
-                                     pdTRUE,           // Auto reload
-                                     NULL,
-                                     Timer_Callback // Callback function
-  );
+  // // Create Soft-Timer
+  // TimerHandle_t timer = xTimerCreate("Timer",
+  //                                    pdMS_TO_TICKS(1), // Period 1ms
+  //                                    pdTRUE,           // Auto reload
+  //                                    NULL,
+  //                                    Timer_Callback // Callback function
+  // );
 
-  xTimerStart(timer, 0);
+  // xTimerStart(timer, 0);
 
   // APP_ReadData_Init();
   // APP_RTC_Init();
-  APP_FingerPrint_Init();
+  // APP_FingerPrint_Init();
 
   // APP_ReadData_CreateTask();
   // APP_RTC_CreateTask();
   // APP_FingerPrint_CreateTask();
 
   // twai_init();
+  DEV_RS485_Init();
+
+  rs485_request_t request = { .slave_id  = 0x01,
+                              .function  = RS485_FUNC_READ_HOLDING_REGS,
+                              .reg_addr  = 0x0010,
+                              .reg_count = 1 };
+
+  // xTaskCreate(RS485_Task, "RS3485_Task", 4096, NULL, 9, NULL);
   while (1)
   {
-    DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
+    // DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
     // twai_receive_message();
     // twai_send_message();
+    DEV_RS485_SendRequest(&request);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -177,12 +187,12 @@ app_main (void)
  *  PRIVATE FUNCTION
  *****************************************************************************/
 
-static void
-Timer_Callback (TimerHandle_t xTimer)
-{
-  // DEV_ADS1115_TimeOut();
-  DEV_AS608_TimeOut();
-}
+// static void
+// Timer_Callback (TimerHandle_t xTimer)
+// {
+//   // DEV_ADS1115_TimeOut();
+//   DEV_AS608_TimeOut();
+// }
 
 // static void
 // DHT22_Task (void *pvParameters)
@@ -221,18 +231,16 @@ Timer_Callback (TimerHandle_t xTimer)
 // }
 
 // static void
-// RS3485_Task (void *pvParameter)
+// RS485_Task (void *pvParameter)
 // {
-//   DEV_RS3485_Init();
-
-//   rs3485_request_t request = { .slave_id  = 0x01,
-//                                .function  = RS3485_FUNC_READ_HOLDING_REGS,
-//                                .reg_addr  = 0x0010,
-//                                .reg_count = 1 };
+//   rs485_request_t request = { .slave_id  = 0x01,
+//                               .function  = RS485_FUNC_READ_HOLDING_REGS,
+//                               .reg_addr  = 0x0010,
+//                               .reg_count = 1 };
 
 //   while (1)
 //   {
-//     DEV_RS3485_SendRequest(&request);
+//     DEV_RS485_SendRequest(&request);
 //     vTaskDelay(pdMS_TO_TICKS(1000));
 //   }
 // }
