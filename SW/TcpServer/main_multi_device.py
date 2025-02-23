@@ -1,18 +1,18 @@
+import http_client
+
 import asyncio
 import struct
 import numpy as np
 import json
-import paho.mqtt.client as mqtt
 
+<<<<<<< HEAD
+HOST = '10.0.96.80'
+=======
 import requests
 
 HOST = '192.168.100.211'
+>>>>>>> c51aeaec853b2cef977a6c8437993c1625caf304
 PORT = 8899
-
-# MQTT broker information
-MQTT_BROKER = "broker.emqx.io"
-MQTT_PORT = 1883
-MQTT_TOPIC_PUBLISH = "IOT/dataTopic/AEROSENSE"
 
 # Global counter (uint32)
 count = np.uint32(0)
@@ -22,58 +22,6 @@ ip_to_id_map = {}
 
 # Maps client_ip -> current writer (so we can close the old writer if the same IP reconnects)
 ip_to_writer_map = {}
-
-# Global MQTT client (Paho)
-mqtt_client = None
-
-#TCP server information
-TCP_SERVER_NAME = "TCP_SERVER"
-
-# Base API URL
-BASE_URL = "http://3.106.166.172:8000"
-
-# Authentication Token
-AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk5NjMzMDIsInN1YiI6IjMifQ.jgDmriRFFx9PAHdaMwjJWzc-Q_3bkGP_FukERJEGbU0"
-
-# Headers for authentication
-HEADERS = {
-    "Authorization": f"Bearer {AUTH_TOKEN}",
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-}
-
-# Function to register a new device
-def register_device(device_id, device_name="AerosenseDevice_Test"):
-    url = f"{BASE_URL}/device/create"
-
-    # Payload with Aerosense Device ID
-    data = {
-        "id": device_id,  # Use Aerosense Device ID
-        "name": device_name
-    }
-
-    try:
-        response = requests.post(url, json=data, headers=HEADERS)
-        response.raise_for_status()  # Raise an error for non-200 responses
-
-        new_device = response.json()
-
-        # Print the JSON response in a readable format
-        print(json.dumps(new_device, indent=4, ensure_ascii=False))
-
-        # print("Device successfully registered:", response.json())
-        return response.json()
-
-    except requests.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-        print(f"Response Content: {response.text}")
-    except requests.RequestException as e:
-        print("Request error:", e)
-
-    return None
-
-def generate_topic(device_id):
-    return f"{TCP_SERVER_NAME}/{device_id}"  # Format: [tcp_server_unique_name]/[device_id]
 
 def parse_28_byte_content(data_28):
     """
@@ -195,9 +143,13 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                     new_id_hex = content_data[-13:].hex()
                 else:
                     new_id_hex = "TooShort"
+                device_list = http_client.get_device_list()
+                if device_list:
+                    ret_dev_val = http_client.check_device(device_list, new_id_hex)
+                    if ret_dev_val == 0:
+                        print("Create device")
+                        http_client.register_device(new_id_hex)
 
-                register_device(new_id_hex)
-                DEVICE_TOPIC = generate_topic(new_id_hex)
                 ip_to_id_map[client_ip] = new_id_hex
                 print(f"[Server] (1) Registered new: IP={client_ip}, ID={new_id_hex}. count={count}")
 
@@ -248,7 +200,8 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         json_data = json.dumps([index_data, parsed], indent=4)
                         print(json_data)
 
-                        mqtt_client.publish(DEVICE_TOPIC, json_data)
+                        # DEVICE_TOPIC = http_client.generate_topic(new_id_hex)
+                        # mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
 
                     elif len(content_data) == 36:
                         parsed = parse_36_byte_content(content_data)
@@ -261,7 +214,8 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         json_data = json.dumps([index_data, parsed], indent=4)
                         print(json_data)
 
-                        mqtt_client.publish(DEVICE_TOPIC, json_data)
+                        # DEVICE_TOPIC = http_client.generate_topic(new_id_hex)
+                        # mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
 
                     else:
                         print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
@@ -289,18 +243,6 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         count = count - 1
 
 async def main():
-    global mqtt_client
-
-    # ---------------- MQTT Setup ----------------
-    mqtt_client = mqtt.Client(client_id="AEROSENSEClient")
-
-    # Connect to broker
-    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
-
-    # Start a background thread to handle the network loop
-    mqtt_client.loop_start()
-    print(f"[MQTT] Connected to {MQTT_BROKER}:{MQTT_PORT}, client is running in background.")
-
     # ---------------- TCP Server Setup (asyncio) ----------------
     server = await asyncio.start_server(
         handle_client,
@@ -316,4 +258,11 @@ async def main():
         await server.serve_forever()
 
 if __name__ == '__main__':
+    facilities = http_client.get_facility_list()
+    ret_val = http_client.check_facility(facilities)
+    if ret_val == 0:
+        unique_name = http_client.TCP_SERVER_NAME
+        print(f"Selected Facility ID: {http_client.number_of_facility}, Unique Name: {unique_name}")
+        http_client.register_tcp_server(http_client.number_of_facility, unique_name)
+
     asyncio.run(main())

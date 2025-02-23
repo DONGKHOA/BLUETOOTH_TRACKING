@@ -33,7 +33,7 @@ extern "C"
   void    LINKED_LIST_InsertAtTail(Node_t **p_head,
                                    void    *p_value,
                                    uint8_t  u8_dataSize);
-  Node_t *LINKED_LIST_DeleteNode(Node_t *p_head, uint32_t u32_position);
+  Node_t* LINKED_LIST_DeleteNode(Node_t *p_head, uint32_t u32_position);
 
 #ifdef __cplusplus
 }

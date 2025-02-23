@@ -5,22 +5,23 @@ import json
 BASE_URL = "http://3.106.166.172:8000"
 
 # Authentication Token (Replace with the correct token)
-AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAwMjUyNzMsInN1YiI6IjMifQ.ubaZAmIiQNr52KXdMmkFBuQVnswOkZZwj9wQ9xS_nCk"
+AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAwMjU0ODAsInN1YiI6IjMifQ.IcUAOeBPHkJrd7BASD417rl5k5Ya7_5yaxzGBdkdDdQ"
 
 # Headers with authentication
 HEADERS = {
     "Authorization": f"Bearer {AUTH_TOKEN}",
     "Content-Type": "application/json",
-    "accept": "application/json"
+    "Accept": "application/json"
 }
 
-#TCP server information
+# TCP server information
 TCP_SERVER_NAME = "TCP_SERVER_Aerosense"
 
-#Deivice name
+# Deivice name
 DEVICE_NAME = "AerosenseDevice"
 
 number_of_facility = 0
+
 
 def get_facility_list(skip=0, limit=100):
     url = f"{BASE_URL}/facility/list?skip={skip}&limit={limit}"
@@ -35,7 +36,7 @@ def get_facility_list(skip=0, limit=100):
         facility_list = response.json()
 
         # Print the JSON response in a readable format
-        print(json.dumps(facility_list, indent=4, ensure_ascii=False))
+        # print(json.dumps(facility_list, indent=4, ensure_ascii=False))
 
         return facility_list
     except requests.exceptions.Timeout:
@@ -48,6 +49,7 @@ def get_facility_list(skip=0, limit=100):
         print(f"Error fetching facility list: {e}")
 
     return None
+
 
 def get_device_list(skip=0, limit=100):
     url = f"{BASE_URL}/device/list?skip={skip}&limit={limit}"
@@ -62,7 +64,7 @@ def get_device_list(skip=0, limit=100):
         device_list = response.json()
 
         # Print the JSON response in a readable format
-        print(json.dumps(device_list, indent=4, ensure_ascii=False))
+        # print(json.dumps(device_list, indent=4, ensure_ascii=False))
 
         return device_list
     except requests.exceptions.Timeout:
@@ -76,6 +78,7 @@ def get_device_list(skip=0, limit=100):
 
     return None
 
+
 def check_facility(facility_list):
     global number_of_facility
     number_of_facility = facility_list["count"]
@@ -85,13 +88,14 @@ def check_facility(facility_list):
             return 1
     return 0
 
+
 def check_device(device_list, device_id):
     for element in device_list:
         if element["name"] == DEVICE_NAME:
             if element["id"] == device_id:
                 return 1
-
     return 0
+
 
 def register_tcp_server(facility_id, unique_name):
     url = f"{BASE_URL}/facility/register-tcp-server"
@@ -108,7 +112,7 @@ def register_tcp_server(facility_id, unique_name):
         register_tcp = response.json()
 
         # Print the JSON response in a readable format
-        print(json.dumps(register_tcp, indent=4, ensure_ascii=False))
+        # print(json.dumps(register_tcp, indent=4, ensure_ascii=False))
 
     except requests.HTTPError as http_err:
         print(f"Error registering TCP server: {http_err}")
@@ -116,19 +120,34 @@ def register_tcp_server(facility_id, unique_name):
     except requests.RequestException as e:
         print("Request error:", e)
 
+def register_device(device_id):
+    url = f"{BASE_URL}/device/create"
 
-# Run the function
-if __name__ == "__main__":
-    # global number_of_facility
-    get_device_list()
+    # Payload with Aerosense Device ID
+    data = {
+        "name": DEVICE_NAME,
+        "id": device_id
+    }
 
-    # facilities = get_facility_list()
-    #
-    # if facilities:
-    #     ret_val = check_facility(facilities)
-    #     print(ret_val)
-    #     if ret_val == 0:
-    #         unique_name = TCP_SERVER_NAME
-    #         print(f"Selected Facility ID: {number_of_facility}, Unique Name: {unique_name}")
-    #         register_tcp_server(number_of_facility, unique_name)
-    # get_facility_list()
+    try:
+        response = requests.post(url, json=data, headers=HEADERS)
+        response.raise_for_status()  # Raise an error for non-200 responses
+
+        new_device = response.json()
+
+        # Print the JSON response in a readable format
+        print(json.dumps(new_device, indent=4, ensure_ascii=False))
+
+        print("Device successfully registered:", response.json())
+        return response.json()
+
+    except requests.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+        print(f"Response Content: {response.text}")
+    except requests.RequestException as e:
+        print("Request error:", e)
+
+    return None
+
+def generate_topic(device_id):
+    return f"{TCP_SERVER_NAME}/{device_id}"  # Format: [tcp_server_unique_name]/[device_id]

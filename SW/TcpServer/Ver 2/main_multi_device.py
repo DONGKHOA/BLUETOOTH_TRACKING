@@ -4,7 +4,7 @@ import numpy as np
 import json
 import paho.mqtt.client as mqtt
 
-HOST = '192.168.1.6'
+HOST = '192.168.10.5'
 PORT = 8899
 
 # MQTT broker information
@@ -193,7 +193,6 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # Publish the data to MQTT as JSON
                         index_data = {"ID": client_id}
                         json_data = json.dumps([index_data, parsed], indent=4)
-                        print(json_data)
 
                         mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
 
@@ -206,7 +205,6 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # Publish the data to MQTT as JSON
                         index_data = {"ID": client_id}
                         json_data = json.dumps([index_data, parsed], indent=4)
-                        print(json_data)
 
                         mqtt_client.publish(MQTT_TOPIC_PUBLISH, json_data)
 
@@ -217,6 +215,10 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 new_id_hex = content_data[-13:].hex()
                 ip_to_id_map[client_ip] = new_id_hex
                 print(f"[Server] (1) Registered new: IP={client_ip}, ID={new_id_hex}. count={count}")
+            elif function == 0x040f:
+                float_value = struct.unpack('!f', content_data[:4])[0]
+
+                print(float_value)
 
     except Exception as e:
         print(f"[Async] Exception for {client_ip}: {e}")
