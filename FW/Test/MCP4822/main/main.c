@@ -67,7 +67,8 @@ TestMain_MCP4822_Init (void)
 {
   BSP_spiConfigDefault();
   BSP_spiConfigMode(SPI_MODE);
-  BSP_spiConfigIO(MISO_PIN, MOSI_PIN, SCLK_PIN, CS_PIN);
+  BSP_spiConfigIO(MISO_PIN, MOSI_PIN, SCLK_PIN);
+  BSP_spiConfigCS(CS_PIN);
   BSP_spiMaxTransferSize(MAX_TRANSFER_SZ);
   BSP_spiClockSpeed(CLOCK_SPEED_HZ);
   BSP_spiTransactionQueueSize(QUEUE_SIZE);

@@ -4,18 +4,16 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include "sdkconfig.h"
 
 #include "gpio.h"
-
 #include "spi.h"
 
 /*****************************************************************************
  *   PRIVATE VARIABLES
  *****************************************************************************/
 
-spi_device_handle_t spi_handle = NULL;
+spi_device_handle_t spi_handle;
 
 spi_bus_config_t buscfg = { 0 };
 
@@ -55,13 +53,16 @@ BSP_spiConfigMode (uint8_t u8_spi_mode)
 void
 BSP_spiConfigIO (gpio_num_t e_miso_io,
                  gpio_num_t e_mosi_io,
-                 gpio_num_t e_sclk_io,
-                 gpio_num_t e_cs_io)
+                 gpio_num_t e_sclk_io)
 {
   buscfg.miso_io_num = e_miso_io;
   buscfg.mosi_io_num = e_mosi_io;
   buscfg.sclk_io_num = e_sclk_io;
+}
 
+void
+BSP_spiConfigCS (gpio_num_t e_cs_io)
+{
   devcfg.spics_io_num = e_cs_io;
 }
 
@@ -72,9 +73,9 @@ BSP_spiMaxTransferSize (int i_max_transfer_sz)
 }
 
 void
-BSP_spiClockSpeed (int i_clock_speed_hz)
+BSP_spiClockSpeed (spi_config_clock_t e_clock_speed_hz)
 {
-  devcfg.clock_speed_hz = i_clock_speed_hz;
+  devcfg.clock_speed_hz = e_clock_speed_hz;
 }
 
 void
@@ -84,12 +85,12 @@ BSP_spiTransactionQueueSize (uint32_t u32_queue_size)
 }
 
 void
-BSP_spiWriteBuffer (uint8_t *u8_tx_data, uint32_t u32_length)
+BSP_spiWriteBuffer (uint8_t *p_tx_data, uint32_t u32_length)
 {
   spi_transaction_t t;
   memset(&t, 0, sizeof(t));
   t.length    = u32_length * 8;
-  t.tx_buffer = u8_tx_data;
+  t.tx_buffer = p_tx_data;
   spi_device_polling_transmit(spi_handle, &t);
 }
 
@@ -129,11 +130,12 @@ BSP_spiDeselectDevice (gpio_num_t e_gpio_pin)
   BSP_gpioSetState(e_gpio_pin, 1);
 }
 
-void
-BSP_spiSChangeClock (spi_host_device_t e_spi_host, int i_clock_speed_hz)
+esp_err_t
+BSP_spiSChangeClock (spi_host_device_t  e_spi_host,
+                     spi_config_clock_t e_clock_speed_hz)
 {
-  spi_device_interface_config_t devcfg
-      = { .clock_speed_hz = i_clock_speed_hz, .queue_size = 50 };
+  // spi_bus_remove_device(spi_handle); // Remove device
+  devcfg.clock_speed_hz = e_clock_speed_hz;
 
-  spi_bus_add_device(e_spi_host, &devcfg, &spi_handle);
+  return spi_bus_add_device(e_spi_host, &devcfg, &spi_handle);
 }

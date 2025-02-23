@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include "uart.h"
+#include "gpio.h"
 
 #ifdef __cplusplus
 extern "C"

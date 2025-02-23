@@ -70,50 +70,6 @@ MID_ModbusRTU_SendRequest (uart_port_num_t      e_uart_port,
   printf("Sent Modbus request.\r\n");
 }
 
-// // Function to receive response from Slave
-// uint8_t
-// MID_ModbusRTU_ReceiveResponse (uint8_t *buffer)
-// {
-//   int      len        = 0;
-//   uint32_t start_time = esp_timer_get_time();
-
-//   while (esp_timer_get_time() - start_time < 500000)
-//   { // 500ms timeout
-//     int bytes_read
-//         = BSP_uartReadData(RS485_UART_NUM, buffer + len, 1,
-//         pdMS_TO_TICKS(50));
-//     if (bytes_read > 0)
-//     {
-//       len += bytes_read;
-//     }
-//     else if (len > 3)
-//     { // At least Address, Function, and CRC
-//       break;
-//     }
-//   }
-
-//   if (len < 5)
-//   { // Packet too short
-//     printf("Received packet is invalid (too short).");
-//     return false;
-//   }
-
-//   uint16_t received_crc   = (buffer[len - 1] << 8) | buffer[len - 2];
-//   uint16_t calculated_crc = MID_CheckCRC16(buffer, len - 2);
-
-//   if (received_crc == calculated_crc)
-//   {
-//     printf("Successfully received Modbus packet.");
-//     return true;
-//   }
-//   else
-//   {
-//     printf("CRC error: Expected 0x%04X, received 0x%04X",
-//            calculated_crc,
-//            received_crc);
-//     return false;
-//   }
-// }
 /******************************************************************************
  *   PRIVATE FUNCTION
  *****************************************************************************/

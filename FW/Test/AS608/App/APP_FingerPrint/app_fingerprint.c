@@ -176,7 +176,7 @@ APP_Fingerprint_Register_Task (void *pvParameters)
 static void
 APP_Finger_Delete_All_Task (void *pvParameters)
 {
-  uint8_t u8_confirmation_code = DEV_AS608_DeletChar(
+  uint8_t u8_confirmation_code = DEV_AS608_DeleteChar(
       UART_PORT_NUM_2, default_address, start_page, page_number);
   if (u8_confirmation_code != 0)
   {

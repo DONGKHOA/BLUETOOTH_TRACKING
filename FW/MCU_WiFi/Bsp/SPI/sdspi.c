@@ -336,8 +336,7 @@ BSP_sdSpiWriteBlocks (uint8_t   *p_data,
     BSP_sdSpiWriteByte(0xFF);
 
     response = BSP_sdSpiReadByte();
-    // printf("Write Response for WriteAddr %lu: 0x%02X\n", writeAddr,
-    // response);
+    printf("Write Response for WriteAddr %lu: 0x%02X\n", writeAddr, response);
 
     if ((response & 0x1F) != 0x05)
     {

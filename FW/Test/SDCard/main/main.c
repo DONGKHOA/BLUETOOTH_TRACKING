@@ -11,164 +11,67 @@
 #include "freertos/task.h"
 #include "esp_freertos_hooks.h"
 #include "freertos/semphr.h"
+#include "freertos/timers.h"
 #include "esp_system.h"
 #include "esp_timer.h"
-// #include "esp_event.h"
 #include "esp_log.h"
 
-// #include "uart.h"
-#include "driver/gpio.h"
-#include "string.h"
-
-#include "app_fingerprint.h"
-// #include "ds3231.h"
-#include "dht22.h"
-#include "sdcard.h"
-#include "ads1115.h"
-#include "mcp4822.h"
+#include "main.h"
 
 #include "ff.h"
 #include "diskio.h"
-#include "sdspi.h"
 
-#include "driver/twai.h"
-#include "freertos/timers.h"
-
-#include "app_rtc.h"
-#include "app_read_data.h"
-#include "sn65hvd230dr.h"
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define DHT11_PIN GPIO_NUM_4
-#define GPIO_NUM  GPIO_NUM_14
-
-#define CAN_MODE      TWAI_MODE_NO_ACK
-#define TXD_PIN       GPIO_NUM_19
-#define RXD_PIN       GPIO_NUM_20
-#define TXD_QUEUE_LEN 1024
-#define RXD_QUEUE_LEN 1024
-#define INTR_FLAG     ESP_INTR_FLAG_LEVEL1 // lowest priority
-#define CAN_BITRATE   5
-
-#define CAN_ID   0x123
-#define CAN_EXTD 0
-#define CAN_RTR  0
+#define MOUNT_POINT "0:" // Mount point
 
 /******************************************************************************
- *    PRIVATE PROTOTYPE FUNCTION
+ *    PRIVATE VARIABLES
  *****************************************************************************/
 
-// dht22_data_t dht22;
+char *p_namefile = "test2.txt";
+char *p_data     = "Hello";
 
-// char *p_path = "hahaaa.txt";
-// char *p_data = "Hello";
+FRESULT fr;
+FATFS   fs;
+FIL     fil;
+UINT    bw;
+UINT    br;
 
-uint32_t count = 0;
-
-char *p_text = "ESP2CAN";
-
-uint8_t default_address_1[4]  = { 0xFF, 0xFF, 0xFF, 0xFF };
-uint8_t default_password_1[4] = { 0x00, 0x00, 0x00, 0x00 };
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
 
-// static void DHT22_Task(void *pvParameters);
-// static void SDCard_Task(void *pvParameters);
-// static void MCP4822_Task(void *pvParameter);
-// static void SDCard_ReadFile(char *p_path);
-// static void SDCard_WriteFile(char *p_path, char *p_data);
-// static void RS3485_Task(void *pvParameter);
+static void SDCard_ReadFile(char *p_namefile);
+static void SDCard_WriteFile(char *p_namefile, char *p_data);
 
-static void Timer_Callback(TimerHandle_t xTimer);
 /******************************************************************************
  *     MAIN FUNCTION
  *****************************************************************************/
 
 void
-twai_init (void)
-{
-
-  BSP_canConfigDefault();
-  BSP_canConfigMode(CAN_MODE);
-  BSP_canConfigIO(TXD_PIN, RXD_PIN);
-  BSP_canConfigQueue(TXD_QUEUE_LEN, RXD_QUEUE_LEN);
-  BSP_canConfigIntr(INTR_FLAG);
-  BSP_canConfigBitRate(CAN_BITRATE);
-
-  // Cài đặt TWAI driver
-  if (BSP_canDriverInit() == ESP_OK)
-  {
-    printf("TWAI driver installed\n");
-  }
-  else
-  {
-    printf("Failed to install TWAI driver\n");
-  }
-
-  // Bật TWAI driver
-  if (BSP_canStart() == ESP_OK)
-  {
-    printf("TWAI driver started\n");
-  }
-  else
-  {
-    printf("Failed to start TWAI driver\n");
-  }
-}
-
-void
-twai_send_message (void)
-{
-  DEV_CAN_SendMessage(
-      CAN_ID, CAN_EXTD, CAN_RTR, (uint8_t *)p_text, strlen(p_text));
-}
-
-void
-twai_receive_message (void)
-{
-  uint32_t id, extd, rtr;
-  uint8_t  data[8]; // Buffer để lưu dữ liệu nhận được
-  uint8_t  len;
-
-  if (DEV_CAN_ReceiveMessage(&id, &extd, &rtr, data, &len))
-  {
-    printf("Received message");
-  }
-  else
-  {
-    printf("Failed to receive message.\n");
-  }
-}
-void
 app_main (void)
 {
-  // Create Soft-Timer
-  TimerHandle_t timer = xTimerCreate("Timer",
-                                     pdMS_TO_TICKS(1), // Period 1ms
-                                     pdTRUE,           // Auto reload
-                                     NULL,
-                                     Timer_Callback // Callback function
-  );
+  // Init SPI
+  BSP_spiConfigIO(MISO_PIN, MOSI_PIN, SCLK_PIN);
+  BSP_spiConfigCS(CS_PIN);
+  BSP_spiMaxTransferSize(MAX_TRANSFER_SZ);
+  BSP_spiConfigDefault();
+  BSP_spiClockSpeed(SPI_CLOCK_400KHz);
+  BSP_spiTransactionQueueSize(1);
+  BSP_spiConfigMode(SPI_MODE);
+  BSP_spiDMADriverInit(HSPI_HOST, 3);
 
-  xTimerStart(timer, 0);
+  // Write file to SD Card
+  SDCard_WriteFile(p_namefile, p_data);
 
-  // APP_ReadData_Init();
-  // APP_RTC_Init();
-  APP_FingerPrint_Init();
+  // Read file from SD Card
+  SDCard_ReadFile(p_namefile);
 
-  // APP_ReadData_CreateTask();
-  // APP_RTC_CreateTask();
-  // APP_FingerPrint_CreateTask();
-
-  twai_init();
   while (1)
   {
-    DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
-    twai_receive_message();
-    twai_send_message();
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -178,73 +81,81 @@ app_main (void)
  *****************************************************************************/
 
 static void
-Timer_Callback (TimerHandle_t xTimer)
+SDCard_ReadFile (char *p_namefile)
 {
-  // DEV_ADS1115_TimeOut();
-  DEV_AS608_TimeOut();
+  char full_path[128];
+  char buffer[128];
+
+  // Mount SD Card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+  }
+
+  // Create a full path to the file
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+
+  // Open the file at read mode (FA_READ)
+  fr = f_open(&fil, full_path, FA_READ);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1); // If not successful, unmount the SD card
+  }
+
+  // Reset the buffer
+  // Read the file with maximum size of buffer buffer - 1, reverse a place for
+  // null-terminator
+  memset(buffer, 0, sizeof(buffer));
+  fr = f_read(&fil, buffer, sizeof(buffer) - 1, &br);
+  if (fr == FR_OK)
+  {
+    buffer[br] = '\0'; // Null-terminate the string
+    printf("Read from file: %s\n", buffer);
+  }
+  else
+  {
+    printf("f_read failed! error=%d\n", fr);
+  }
+
+  f_close(&fil);
 }
-
-// static void
-// DHT22_Task (void *pvParameters)
-// {
-//   DEV_DHT22_Init(&dht22, DHT11_PIN);
-//   while (1)
-//   {
-//     DEV_DHT22_GetData(&dht22, DHT11_PIN);
-
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//   }
-// }
-
-// static void
-// SDCard_Task (void *pvParameters)
-// {
-
-//   while (1)
-//   {
-//     {
-//       vTaskDelay(pdMS_TO_TICKS(1000));
-//     }
-//   }
-// }
 
 static void
-MCP4822_Task (void *pvParameter)
+SDCard_WriteFile (char *p_namefile, char *p_data)
 {
-  DEV_MCP4822_Init();
-  while (1)
+  char full_path[128];
+
+  // Mount SD Card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
   {
-    DEV_MCP4822_SetValue(MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, 3000);
-    // DEV_MPC4822_Output();
-    vTaskDelay(pdMS_TO_TICKS(1000));
+    printf("f_mount failed! error=%d\n", fr);
   }
+
+  // Create a full path to the file
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+
+  // Open the file at write mode (FA_WRITE) and create a new file if it does not
+  // exist (FA_CREATE_ALWAYS)
+  fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+  }
+
+  // Write the data to the file
+  fr = f_write(&fil, p_data, strlen(p_data), &bw);
+  if (fr == FR_OK && bw == strlen(p_data))
+  {
+    printf("Write file successfully: %s\n", full_path);
+  }
+  else
+  {
+    printf("Write file failed! error=%d, written=%u\n", fr, bw);
+  }
+
+  f_close(&fil);
 }
-
-// static void
-// RS3485_Task (void *pvParameter)
-// {
-//   DEV_RS3485_Init();
-
-//   rs3485_request_t request = { .slave_id  = 0x01,
-//                                .function  = RS3485_FUNC_READ_HOLDING_REGS,
-//                                .reg_addr  = 0x0010,
-//                                .reg_count = 1 };
-
-//   while (1)
-//   {
-//     DEV_RS3485_SendRequest(&request);
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//   }
-// }
-
-// static void
-// SDCard_ReadFile (char *p_path)
-// {
-//   DEV_SDCard_Read_File(p_path);
-// }
-
-// static void
-// SDCard_WriteFile (char *p_path, char *p_data)
-// {
-//   DEV_SDCard_WriteFile(p_path, p_data);
-// }

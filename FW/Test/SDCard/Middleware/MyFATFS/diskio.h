@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 #include "ff.h"
-
+#include "sdcard.h"
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
@@ -82,9 +82,9 @@ DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 #define CT_MMC4		0x02		/* MMC ver 4+ */
 #define CT_MMC		0x03		/* MMC */
 #define CT_SDC1		0x02		/* SDC ver 1 */
-#define CT_SDC2		0x04		/* SDC ver 2+ */
+#define CT_SDC2		0x04		/* SDC ver 2+ (SDHC/SDXC) */
 #define CT_SDC		0x0C		/* SDC */
-#define CT_BLOCK	0x10		/* Block addressing */
+#define CT_BLOCK	0x10		/* Access via Block */
 
 
 #ifdef __cplusplus
