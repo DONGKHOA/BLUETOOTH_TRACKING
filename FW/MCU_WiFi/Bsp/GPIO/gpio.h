@@ -53,7 +53,10 @@ extern "C"
    * specified GPIO pin. It can have a value of either 0 or 1, where 0 typically
    * represents a low state (logic 0) and
    */
-  void BSP_gpioSetState(gpio_num_t e_gpio_pin, uint8_t u8_state);
+  static inline void BSP_gpioSetState (gpio_num_t e_gpio_pin, uint8_t u8_state)
+  {
+    gpio_set_level(e_gpio_pin, u8_state);
+  }
 
   /**
    * The function `GPIO_GetState` returns the state of a specified GPIO pin.
@@ -68,7 +71,10 @@ extern "C"
    * specified by `e_gpio_pin`. It is using the `gpio_get_level` function to get
    * the level of the GPIO pin and returning it as a `uint8_t` value.
    */
-  uint8_t BSP_gpioGetState(gpio_num_t e_gpio_pin);
+  static inline uint8_t BSP_gpioGetState (gpio_num_t e_gpio_pin)
+  {
+    return gpio_get_level(e_gpio_pin);
+  }
 
 #ifdef __cplusplus
 }

@@ -111,36 +111,9 @@ BSP_canConfigBitRate (can_bit_rate_t e_bitrate)
   }
 }
 
-esp_err_t
-BSP_canStart (void)
-{
-  esp_err_t response = twai_start();
-  return response;
-}
 
-esp_err_t
-BSP_canStop (void)
-{
-  esp_err_t response = twai_stop();
-  return response;
-}
 
-esp_err_t
-BSP_canTransmit (twai_message_t *p_message, TickType_t u32_timeout)
-{
-  esp_err_t response = twai_transmit(p_message, u32_timeout);
-  return response;
-}
 
-esp_err_t
-BSP_canReceive (twai_message_t *p_message, TickType_t u32_timeout)
-{
-  esp_err_t response = twai_receive(p_message, u32_timeout);
-  return response;
-}
-esp_err_t
-BSP_canGetStatus (twai_status_info_t *status_info)
-{
-  esp_err_t response = twai_get_status_info(status_info);
-  return response;
-}
+
+
+

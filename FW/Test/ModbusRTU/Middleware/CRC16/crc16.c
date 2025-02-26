@@ -16,7 +16,7 @@
   *   PUBLIC FUNCTION
   *****************************************************************************/
  uint16_t
- MID_CheckCRC16 (const uint8_t *data, uint16_t length)
+ MID_EndcodeCRC16 (const uint8_t *data, uint16_t length)
  {
    uint16_t crc = 0xFFFF;
    for (uint16_t i = 0; i < length; i++)

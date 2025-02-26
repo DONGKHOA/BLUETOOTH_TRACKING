@@ -120,6 +120,8 @@ SDCard_ReadFile (char *p_namefile)
   }
 
   f_close(&fil);
+
+  // Unmount the SD card
 }
 
 static void

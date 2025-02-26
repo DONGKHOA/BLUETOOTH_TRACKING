@@ -39,7 +39,7 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
                          1000 / portTICK_PERIOD_MS);
 
   if (status_reg & (1 << 7))
-  { // Kiểm tra bit OSF (bit 7)
+  { // Cehck bit OSF (bit 7)
     printf("Oscillator stopped. Initializing RTC...\n");
     // Reset bit OSF
     status_reg &= ~(1 << 7);
@@ -54,7 +54,7 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
 
     DEV_DS3231_Register_Write(p_ds3231_data, e_i2c_port);
 
-    // Xóa bit OSF
+    // Clear bit OSF
     status_reg &= ~(1 << 7);
     reg_addr = DS3231_STATUS;
     BSP_i2cWriteBuffer(e_i2c_port,

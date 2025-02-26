@@ -107,7 +107,7 @@ extern "C"
    * @param p_tx_data Pointer to the data buffer to write.
    * @param u32_length The length of the data buffer.
    */
-  void BSP_spiWriteBuffer(uint8_t *p_tx_data, uint32_t u32_length);
+  void BSP_spiWriteMultipleByte(uint8_t *p_tx_data, uint32_t u32_length);
 
   /**
    * @brief Write a single byte to the SPI bus.

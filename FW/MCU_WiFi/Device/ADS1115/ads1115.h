@@ -6,7 +6,7 @@
  *****************************************************************************/
 
 #include "i2c.h"
-#include "gpio.h"
+
 /*****************************************************************************
  *      PUBLIC DEFINES
  *****************************************************************************/
@@ -182,19 +182,5 @@ int16_t DEV_ADS1115_GetData(i2c_port_t        e_i2c_port,
 float DEV_ADS1115_ReadVoltage(i2c_port_t        e_i2c_port,
                               ads1115_channel_t e_channel,
                               ads1115_gain_t    e_gain);
-
-/**
- * @brief Converts the raw ADC value to a voltage.
- *
- * This function takes a 16-bit raw ADC value and converts it to the
- * corresponding voltage. The conversion is based on the reference voltage and
- * the resolution of the ADS1115 ADC.
- *
- * @param u16_value_adc The raw 16-bit ADC value to be converted.
- * @return The corresponding voltage as a float.
- */
-float DEV_ADS1115_GetVoltage(int16_t i16_value_adc);
-
-void DEV_ADS1115_TimeOut(void);
 
 #endif /* ADS1115_H_ */

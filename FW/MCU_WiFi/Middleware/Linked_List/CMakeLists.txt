@@ -1,3 +1,3 @@
-idf_component_register(SRCS "kalman_filter.c"
+idf_component_register(SRCS "linked_list.c"
                        INCLUDE_DIRS "."
                        )

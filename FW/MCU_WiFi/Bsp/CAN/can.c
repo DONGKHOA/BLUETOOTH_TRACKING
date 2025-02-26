@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "esp_log.h"
+
 #include "can.h"
 #include "sdkconfig.h"
 
@@ -15,6 +17,10 @@
 static twai_general_config_t g_config = { 0 };
 static twai_timing_config_t  t_config = { 0 };
 static twai_filter_config_t  f_config = { 0 };
+
+/*****************************************************************************
+ *      PRIVATE PROTOTYPE FUNCTION
+ *****************************************************************************/
 
 /*****************************************************************************
  *      PUBLIC FUNCTION
@@ -105,30 +111,9 @@ BSP_canConfigBitRate (can_bit_rate_t e_bitrate)
   }
 }
 
-esp_err_t
-BSP_canStart (void)
-{
-  esp_err_t response = twai_start();
-  return response;
-}
 
-esp_err_t
-BSP_canStop (void)
-{
-  esp_err_t response = twai_stop();
-  return response;
-}
 
-esp_err_t
-BSP_canTransmit (twai_message_t *p_message, TickType_t u32_timeout)
-{
-  esp_err_t response = twai_transmit(p_message, u32_timeout);
-  return response;
-}
 
-esp_err_t
-BSP_canReceive (twai_message_t *p_message, TickType_t u32_timeout)
-{
-  esp_err_t response = twai_receive(p_message, u32_timeout);
-  return response;
-}
+
+
+

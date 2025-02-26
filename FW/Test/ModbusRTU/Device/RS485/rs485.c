@@ -34,7 +34,7 @@ DEV_RS485_SendData (uart_port_num_t e_uart_port,
   BSP_gpioSetState(e_modbus_de_io, 1); // Transmit mode
 
   BSP_uartSendData(e_uart_port, u8_data, u32_len);
-  BSP_uartWaitTXDone(e_uart_port, pdMS_TO_TICKS(100));
+  BSP_uartWaitTXDone(e_uart_port, pdMS_TO_TICKS(100));  //Test thử xuống thấp nhất (us nếu được) 
 
   BSP_gpioSetState(e_modbus_re_io, 0);
   BSP_gpioSetState(e_modbus_de_io, 0); // Receive mode

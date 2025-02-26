@@ -38,7 +38,7 @@ DEV_MCP4822_SetValue (mcp4822_channel_t e_channel,
 
   BSP_spiDeselectDevice(u8_cs_io);
 
-  BSP_spiWriteBuffer(data, sizeof(data));
+  BSP_spiWriteMultipleByte(data, 2);
 
   BSP_spiSelectDevice(u8_cs_io);
 }
@@ -49,3 +49,5 @@ DEV_MPC4822_Output (uint8_t u8_ldac_io)
   BSP_gpioSetState(u8_ldac_io, 0);
   // BSP_gpioSetState(u8_ldac_io, 1);
 }
+
+//không cho phép output

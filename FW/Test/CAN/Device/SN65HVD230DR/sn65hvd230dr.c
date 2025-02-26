@@ -29,7 +29,7 @@ DEV_CAN_SendMessage (uint32_t u32_id,
 
   memcpy(transmit_message.data, p_data, u8_len);
 
-  if (BSP_canTransmit(&transmit_message, pdMS_TO_TICKS(1000)) == ESP_OK)
+  if (BSP_canTransmit(&transmit_message, 0) == ESP_OK)
   {
     printf("Message sent\n");
     return 1;

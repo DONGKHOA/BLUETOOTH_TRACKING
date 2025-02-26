@@ -85,7 +85,7 @@ BSP_spiTransactionQueueSize (uint32_t u32_queue_size)
 }
 
 void
-BSP_spiWriteBuffer (uint8_t *p_tx_data, uint32_t u32_length)
+BSP_spiWriteMultipleByte (uint8_t *p_tx_data, uint32_t u32_length)
 {
   spi_transaction_t t;
   memset(&t, 0, sizeof(t));

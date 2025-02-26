@@ -34,7 +34,7 @@ extern "C"
    * @param length Length of the data buffer in bytes.
    * @return The computed CRC-16 checksum.
    */
-  uint16_t MID_CheckCRC16(const uint8_t *data, uint16_t length);
+  uint16_t MID_EncodeCRC16(const uint8_t *data, uint16_t length);
 
 #ifdef __cplusplus
 }

@@ -76,15 +76,13 @@ BSP_uartSendData (uart_port_num_t e_uart_port,
   return bytes_sent;
 }
 
-int
-BSP_uartReadData (uart_port_num_t e_uart_port,
+void
+BSP_uartReadByte (uart_port_num_t e_uart_port,
                   uint8_t        *u8_data,
-                  size_t          u32_len,
                   uint32_t        u32_timeout)
 {
-  int bytes_receive
-      = uart_read_bytes(e_uart_port, u8_data, u32_len, u32_timeout);
-  return bytes_receive;
+
+  return uart_read_bytes(e_uart_port, u8_data, 1, u32_timeout);
 }
 
 esp_err_t

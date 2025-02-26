@@ -95,7 +95,7 @@ TestMain_CAN_ReceiveMessage_Task (void *pvParameters)
     BSP_canGetStatus(&status);
     if (status.msgs_to_rx > 0)
     {
-      BSP_canReceive(&receive_message, pdMS_TO_TICKS(100));
+      BSP_canReceive(&receive_message, portMax_DELAY);
       if (receive_message.extd)
       {
         printf("Message is in Extended Format\n");
@@ -114,6 +114,5 @@ TestMain_CAN_ReceiveMessage_Task (void *pvParameters)
         }
       }
     }
-    vTaskDelay(pdMS_TO_TICKS(10));
   }
 }

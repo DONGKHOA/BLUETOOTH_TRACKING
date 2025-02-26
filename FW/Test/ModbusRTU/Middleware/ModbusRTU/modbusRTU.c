@@ -60,7 +60,7 @@ MID_ModbusRTU_SendRequest (uart_port_num_t      e_uart_port,
   }
 
   // Little Endian
-  uint16_t crc = MID_CheckCRC16(packet, 6);
+  uint16_t crc = MID_EncodeCRC16(packet, 6);
   packet[6]    = crc & 0xFF;        // LSB
   packet[7]    = (crc >> 8) & 0xFF; // MSB
 
