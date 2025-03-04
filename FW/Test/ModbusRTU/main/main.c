@@ -34,7 +34,7 @@
  *    PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static modbusRTU_request_t request;
+static modbusRTU_request_t s_modbus_request;
 
 /******************************************************************************
  *    PRIVATE FUNCTIONS
@@ -65,7 +65,7 @@ app_main (void)
 
   // Config the message want to transmit
   MID_ModbusRTU_InfoMessage(
-      &request, 0x01, MODBUSRTU_FUNC_READ_HOLDING_REGS, 0x0010, 1);
+      &s_modbus_request, 0x01, MODBUSRTU_FUNC_READ_HOLDING_REGS, 0x0010, 1);
 
   // Create Task to receive Data from uart
   xTaskCreate(
@@ -74,7 +74,7 @@ app_main (void)
   while (1)
   {
     // Send data
-    MID_ModbusRTU_SendRequest(UART_PORT_NUM_2, UART_RE, UART_DE, &request);
+    // MID_ModbusRTU_SendRequest(UART_PORT_NUM_2, UART_RE, UART_DE, &s_modbus_request);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -86,17 +86,9 @@ app_main (void)
 void
 ModbusRTU_Receive_Task (void *arg)
 {
-  uint8_t data[1];
-  int     Bytes = 0;
   while (1)
   {
-    // Read data from UART
-    Bytes = BSP_uartReadData(UART_PORT_NUM_2, data, 1, pdMS_TO_TICKS(1));
-    if (Bytes > 0)
-    {
-      // Print data
-      ESP_LOGI("MODBUS", "Received 1 byte: 0x%02X", data[0]);
-    }
+    MID_ModbusRTU_ReceiveResponse(UART_PORT_NUM_2, &s_modbus_request);
     vTaskDelay(pdMS_TO_TICKS(10));
   }
 }

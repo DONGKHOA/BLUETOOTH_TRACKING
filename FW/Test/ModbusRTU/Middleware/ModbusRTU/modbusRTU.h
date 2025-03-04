@@ -24,6 +24,7 @@ extern "C"
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
+
   typedef struct
   {
     uint8_t  slave_id;  // Slave device address
@@ -31,6 +32,12 @@ extern "C"
     uint16_t reg_addr;  // Register address
     uint16_t reg_count; // Number of registers to read/write
   } modbusRTU_request_t;
+
+  typedef struct
+  {
+    uint8_t u8_data_rec[32];
+    uint8_t u8_index_data_rec : 5; // value from 0 to 31
+  } modbusRTU_rec_data_t;
 
   /****************************************************************************
    *   PUBLIC FUNCTION
@@ -46,6 +53,9 @@ extern "C"
                                  gpio_num_t           e_modbus_re_io,
                                  gpio_num_t           e_modbus_de_io,
                                  modbusRTU_request_t *request);
+
+  void MID_ModbusRTU_ReceiveResponse(uart_port_num_t      e_uart_port,
+                                     modbusRTU_request_t *request);
 
 #ifdef __cplusplus
 }

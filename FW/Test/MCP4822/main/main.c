@@ -27,14 +27,16 @@
 #define CS_PIN    GPIO_NUM_21
 #define LDAC_PIN  GPIO_NUM_47
 
-#define CLOCK_SPEED_HZ  1000000
+#define CLOCK_SPEED_HZ  40000000
 #define MAX_TRANSFER_SZ 4096
 #define DMA_CHANNEL     3
 #define SPI_MODE        0
 #define QUEUE_SIZE      50
 /******************************************************************************
- *    PRIVATE PROTOTYPE FUNCTION
+ *    PRIVATE VARIABLES
  *****************************************************************************/
+
+spi_device_handle_t spi_mcp4822_handle;
 
 /******************************************************************************
  *    PRIVATE FUNCTIONS
@@ -72,16 +74,18 @@ TestMain_MCP4822_Init (void)
   BSP_spiMaxTransferSize(MAX_TRANSFER_SZ);
   BSP_spiClockSpeed(CLOCK_SPEED_HZ);
   BSP_spiTransactionQueueSize(QUEUE_SIZE);
-  BSP_spiDriverInit(HSPI_HOST);
+
+  BSP_spiDriverInit(&spi_mcp4822_handle, HSPI_HOST);
+  DEV_MPC4822_EnableOutput(LDAC_PIN);
 }
 
 static void
 TestMain_MCP4822_Task (void *pvParameter)
 {
+  DEV_MCP4822_SetValue(
+      spi_mcp4822_handle, MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, CS_PIN, 3000);
   while (1)
   {
-    DEV_MCP4822_SetValue(MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, CS_PIN, 3000);
-    DEV_MPC4822_Output(LDAC_PIN);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

@@ -22,7 +22,6 @@ static uart_config_t uart_config = { 0 };
 void
 BSP_uartDriverInit (uart_port_num_t e_uart_port)
 {
-  // using buffer in rx data
   uart_driver_install(e_uart_port, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
   uart_param_config(e_uart_port, &uart_config);
 }
@@ -64,38 +63,4 @@ void
 BSP_uartConfigHWFlowCTRL (uart_hw_flowcontrol_t e_flow_control)
 {
   uart_config.flow_ctrl = e_flow_control;
-}
-
-int
-BSP_uartSendData (uart_port_num_t e_uart_port,
-                  const uint8_t  *u8_data,
-                  size_t          u32_len)
-{
-  int bytes_sent
-      = uart_write_bytes(e_uart_port, (const char *)u8_data, u32_len);
-  return bytes_sent;
-}
-
-int
-BSP_uartReadData (uart_port_num_t e_uart_port,
-                  uint8_t        *u8_data,
-                  size_t          u32_len,
-                  uint32_t        u32_timeout)
-{
-  int bytes_receive
-      = uart_read_bytes(e_uart_port, u8_data, u32_len, u32_timeout);
-  return bytes_receive;
-}
-
-esp_err_t
-BSP_uartWaitTXDone (uart_port_num_t e_uart_port, uint32_t u32_timeout)
-{
-  esp_err_t response = uart_wait_tx_done(e_uart_port, u32_timeout);
-  return response;
-}
-
-esp_err_t
-BSP_resetBuffer (uart_port_num_t e_uart_port)
-{
-  return uart_flush_input(e_uart_port);
 }

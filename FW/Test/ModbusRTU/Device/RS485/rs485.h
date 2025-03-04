@@ -19,18 +19,29 @@ extern "C"
    ***************************************************************************/
 
   void DEV_RS485_SendData(uart_port_num_t e_uart_port,
-                          gpio_num_t      e_modbus_re_io,
-                          gpio_num_t      e_modbus_de_io,
                           const uint8_t  *u8_data,
                           size_t          u32_len);
 
-  uint8_t DEV_RS485_ReceiveResponse(uart_port_num_t e_uart_port,
-                                    uint8_t        *u8_data,
-                                    size_t          u32_len,
-                                    uint32_t        u32_timeout);
+  static inline int DEV_RS485_ReceiveByte (uart_port_num_t e_uart_port,
+                                           uint8_t        *u8_data,
+                                           uint32_t        u32_timeout)
+  {
+    return BSP_uartReadByte(e_uart_port, u8_data, u32_timeout);
+  }
 
-  void DEV_RS485_ReceiveMode(gpio_num_t e_modbus_re_io,
-                             gpio_num_t e_modbus_de_io);
+  static inline void DEV_RS485_ReceiveMode (gpio_num_t e_modbus_re_io,
+                                            gpio_num_t e_modbus_de_io)
+  {
+    BSP_gpioSetState(e_modbus_re_io, 0);
+    BSP_gpioSetState(e_modbus_de_io, 0); // Receive mode
+  }
+
+  static inline void DEV_RS485_TransmitMode (gpio_num_t e_modbus_re_io,
+                                             gpio_num_t e_modbus_de_io)
+  {
+    BSP_gpioSetState(e_modbus_re_io, 1);
+    BSP_gpioSetState(e_modbus_de_io, 1); // Transmit mode
+  }
 
 #ifdef __cplusplus
 }

@@ -31,6 +31,8 @@
  *    PRIVATE VARIABLES
  *****************************************************************************/
 
+spi_device_handle_t spi_sdcard_handle;
+
 char *p_namefile = "test2.txt";
 char *p_data     = "Hello";
 
@@ -62,7 +64,7 @@ app_main (void)
   BSP_spiClockSpeed(SPI_CLOCK_400KHz);
   BSP_spiTransactionQueueSize(1);
   BSP_spiConfigMode(SPI_MODE);
-  BSP_spiDMADriverInit(HSPI_HOST, 3);
+  BSP_spiDMADriverInit(&spi_sdcard_handle, HSPI_HOST, 3);
 
   // Write file to SD Card
   SDCard_WriteFile(p_namefile, p_data);
@@ -122,6 +124,7 @@ SDCard_ReadFile (char *p_namefile)
   f_close(&fil);
 
   // Unmount the SD card
+  f_mount(NULL, MOUNT_POINT, 1);
 }
 
 static void
@@ -160,4 +163,7 @@ SDCard_WriteFile (char *p_namefile, char *p_data)
   }
 
   f_close(&fil);
+
+  // Unmount the SD card
+  f_mount(NULL, MOUNT_POINT, 1);
 }

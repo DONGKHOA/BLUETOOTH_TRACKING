@@ -11,10 +11,10 @@
 #include "diskio.h" /* Declarations of disk functions */
 
 #include "main.h"
-
 /* Private variables ---------------------------------------------------------*/
-static volatile DSTATUS Stat        = STA_NOINIT;
-static volatile UINT    WriteStatus = 0, ReadStatus = 0;
+
+static volatile DSTATUS    Stat        = STA_NOINIT;
+static volatile UINT       WriteStatus = 0, ReadStatus = 0;
 
 /* Private define ------------------------------------------------------------*/
 
@@ -52,7 +52,7 @@ disk_initialize(BYTE pdrv /* Physical drive nmuber to identify the drive */
 )
 {
   Stat = STA_NOINIT;
-  if (DEV_SDCard_Init(HSPI_HOST, CS_PIN) == MSD_OK)
+  if (DEV_SDCard_Init(&spi_sdcard_handle, HSPI_HOST, CS_PIN) == MSD_OK)
   {
     Stat &= ~STA_NOINIT;
   }
@@ -72,7 +72,8 @@ disk_read(BYTE  pdrv,   /* Physical drive nmuber to identify the drive */
 {
   DRESULT res = RES_ERROR;
 
-  if (DEV_SDCard_ReadBlock((uint8_t *)buff, (uint32_t)(sector), count, CS_PIN)
+  if (DEV_SDCard_ReadBlock(
+          spi_sdcard_handle, (uint8_t *)buff, (uint32_t)(sector), count, CS_PIN)
       == MSD_OK)
   {
     res = RES_OK;
@@ -105,8 +106,12 @@ disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
   DRESULT res = RES_ERROR;
 
-  if (DEV_SDCard_WriteBlock(
-          (uint8_t *)buff, (uint32_t)sector, count, SD_TIMEOUT, CS_PIN)
+  if (DEV_SDCard_WriteBlock(spi_sdcard_handle,
+                            (uint8_t *)buff,
+                            (uint32_t)sector,
+                            count,
+                            SD_TIMEOUT,
+                            CS_PIN)
       == MSD_OK)
   {
     res = RES_OK;

@@ -11,9 +11,27 @@
 #include "as608.h"
 
 /******************************************************************************
- *    PRIVATE DEFINES
+ *    PRIVATE TYEPDEFS
  *****************************************************************************/
 
+typedef enum
+{
+  STATE_HEADING_1 = 0,
+  STATE_HEADING_2,
+  STATE_ADDRESS,
+  STATE_PACKAGE_ID,
+  STATE_PACKAGE_LENGTH,
+  STATE_COMFIRMATION_CODE,
+  STATE_DATA,
+  STATE_CHECKSUM,
+  STATE_PROCESS_DATA
+} as608_state_t;
+
+/******************************************************************************
+ *    PRIVATE VARRIALBES
+ *****************************************************************************/
+
+static as608_state_t     e_as608_state     = STATE_HEADING_1;
 static volatile uint32_t u32_as608_timeout = 0;
 
 /******************************************************************************
@@ -37,25 +55,88 @@ static void DEV_AS608_Response_Parser(uint8_t  instruction_code,
  *****************************************************************************/
 
 uint8_t
-DEV_AS608_Reponse (uart_port_num_t e_uart_port, uint8_t p_instruction_code)
+DEV_AS608_Reponse (uart_port_num_t e_uart_port,
+                   uint8_t         p_instruction_code,
+                   uint16_t       *p_stored_fingerprints)
 {
-  uint8_t   received_confirmation_code = 0;
-  uint8_t  *p_received_package         = (uint8_t *)malloc(RX_BUF_SIZE + 1);
-  const int rxBytes                    = BSP_uartReadData(
-      e_uart_port, p_received_package, RX_BUF_SIZE, pdMS_TO_TICKS(500));
+  uint8_t  u8_received_byte              = 0;
+  uint8_t  u8_received_confirmation_code = 0;
+  uint8_t  u8_buffer_index               = 0;
+  uint16_t u16_expected_len              = 0;
+  uint8_t *p_received_package = (uint8_t *)calloc(RX_BUF_SIZE, sizeof(uint8_t));
 
-  if (rxBytes > 0)
+  int Byte = BSP_uartReadByte(e_uart_port, &u8_received_byte, portMAX_DELAY);
+
+  if (Byte > 0 && u8_received_byte == 0xEF) // Check Baotou (Header)
   {
-    // Pass the received response to the parser function
+    p_received_package[u8_buffer_index++] = u8_received_byte; // Store 0xEF
+    // Receive 6 bytes (Baotou + Address + Package ID)
+    for (int i = 0; i < 6; i++)
+    {
+      if (BSP_uartReadByte(e_uart_port, &u8_received_byte, portMAX_DELAY) > 0)
+      {
+        p_received_package[u8_buffer_index++] = u8_received_byte;
+      }
+      else
+      {
+        free(p_received_package);
+        return 0xFF; // Error: Unable to receive
+      }
+    }
+
+    // Receive 2 bytes of Package Length
+    for (int i = 0; i < 2; i++)
+    {
+      if (BSP_uartReadByte(e_uart_port, &u8_received_byte, portMAX_DELAY) > 0)
+      {
+        p_received_package[u8_buffer_index++] = u8_received_byte;
+      }
+      else
+      {
+        free(p_received_package);
+        return 0xFF; // Error: Unable to receive
+      }
+    }
+
+    // Calculate remaining bytes to receive
+    u16_expected_len
+        = (p_received_package[7] << 8) | p_received_package[8]; // Big-endian
+
+    // Receive remaining bytes
+    for (int i = 0; i < u16_expected_len; i++)
+    {
+      if (BSP_uartReadByte(e_uart_port, &u8_received_byte, portMAX_DELAY) > 0)
+      {
+        p_received_package[u8_buffer_index++] = u8_received_byte;
+      }
+      else
+      {
+        free(p_received_package);
+        return 0xFF; // Error: Unable to receive
+      }
+    }
+
+    // Retrieve Confirmation Code
+    u8_received_confirmation_code = p_received_package[9];
+
+    // Extract stored fingerprint count (TempleteNum function response)
+    if (p_stored_fingerprints != NULL)
+    {
+      *p_stored_fingerprints
+          = (p_received_package[10] << 8) | p_received_package[11];
+    }
+
     DEV_AS608_Response_Parser(p_instruction_code, p_received_package);
 
-    // Get the Confirmation Code from received from the response
-    received_confirmation_code = p_received_package[9];
+    // Free Memory
+    free(p_received_package);
+
+    return u8_received_confirmation_code;
   }
 
+  // Free memory if no valid header detected
   free(p_received_package);
-
-  return received_confirmation_code;
+  return 0xFF; // Invalid response
 }
 
 uint8_t
@@ -94,7 +175,7 @@ DEV_AS608_GenImg (uart_port_num_t e_uart_port, uint8_t *p_AS608_address)
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }
@@ -137,7 +218,7 @@ DEV_AS608_Img2Tz (uart_port_num_t e_uart_port,
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }
@@ -196,7 +277,7 @@ DEV_AS608_Search (uart_port_num_t e_uart_port,
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }
@@ -236,7 +317,7 @@ DEV_AS608_RegModel (uart_port_num_t e_uart_port, uint8_t *p_AS608_address)
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }
@@ -273,7 +354,8 @@ DEV_AS608_Store (uart_port_num_t e_uart_port,
       tx_cmd_data[i + 13] = check_sum_data[i];
     }
   }
-  // ESP_LOG_BUFFER_HEXDUMP("Store | tx_cmd_data", tx_cmd_data, 15, ESP_LOG_INFO);
+  // ESP_LOG_BUFFER_HEXDUMP("Store | tx_cmd_data", tx_cmd_data, 15,
+  // ESP_LOG_INFO);
 
   uint8_t instruction_code;
 
@@ -289,7 +371,7 @@ DEV_AS608_Store (uart_port_num_t e_uart_port,
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }
@@ -325,18 +407,6 @@ DEV_AS608_TempleteNum (uart_port_num_t e_uart_port,
   const int package_length = sizeof(tx_cmd_data);
   BSP_uartSendData(e_uart_port, tx_cmd_data, package_length);
 
-  // Export the number of stored fingerprints
-  uint8_t response[14] = { 0 };
-  int     rxBytes      = BSP_uartReadData(
-      e_uart_port, response, sizeof(response), pdMS_TO_TICKS(100));
-
-  if (rxBytes >= 12 && response[9] == 0x00)
-  {
-    *p_stored_fingerprints
-        = (response[10] << 8) | response[11]; // Combinned 2 Bytes to ID
-    printf("Stored Fingerprints: %d\n", *p_stored_fingerprints);
-  }
-
   u32_as608_timeout = 500;
   while (u32_as608_timeout == 0)
   {
@@ -344,16 +414,17 @@ DEV_AS608_TempleteNum (uart_port_num_t e_uart_port,
   }
 
   // Get the Confirmation Code from received from the response
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code
+      = DEV_AS608_Reponse(e_uart_port, instruction_code, p_stored_fingerprints);
 
   return confirmation_code;
 }
 
 uint8_t
 DEV_AS608_DeleteChar (uart_port_num_t e_uart_port,
-                     uint8_t        *p_AS608_address,
-                     uint8_t        *p_page_id,
-                     uint8_t        *p_number_of_templates)
+                      uint8_t        *p_AS608_address,
+                      uint8_t        *p_page_id,
+                      uint8_t        *p_number_of_templates)
 {
   uint8_t tx_cmd_data[16]
       = { 0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x07, 0x0C };
@@ -397,7 +468,7 @@ DEV_AS608_DeleteChar (uart_port_num_t e_uart_port,
     break;
   }
 
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
+  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code, NULL);
 
   return confirmation_code;
 }

@@ -75,7 +75,9 @@ extern "C"
    *
    * @return Returns 0 on success (MSD_OK), or an error code on failure.
    */
-  uint8_t DEV_SDCard_Init(spi_host_device_t e_spi_host, gpio_num_t e_cs_io);
+  uint8_t DEV_SDCard_Init(spi_device_handle_t *spi_handle,
+                          spi_host_device_t   e_spi_host,
+                          gpio_num_t          e_cs_io);
 
   /**
    * @brief Reads single block or multiple block of data from the SD card.
@@ -92,10 +94,11 @@ extern "C"
    *
    * @return Returns 0 on success (MSD_OK), or an error code on failure.
    */
-  uint8_t DEV_SDCard_ReadBlock(uint8_t   *p_data,
-                               uint32_t   u32_readAddr,
-                               uint32_t   u32_numOfBlocks,
-                               gpio_num_t e_cs_io);
+  uint8_t DEV_SDCard_ReadBlock(spi_device_handle_t spi_handle,
+                               uint8_t            *p_data,
+                               uint32_t            u32_readAddr,
+                               uint32_t            u32_numOfBlocks,
+                               gpio_num_t          e_cs_io);
 
   /**
    * @brief Writes single block or multiple block of data to the SD card.
@@ -110,11 +113,12 @@ extern "C"
    * @param e_cs_io GPIO pin used for chip select.
    * @return  SReturns 0 on success (MSD_OK), or an error code on failure.
    */
-  uint8_t DEV_SDCard_WriteBlock(uint8_t   *p_data,
-                                uint32_t   u32_writeAddr,
-                                uint32_t   u32_numOfBlocks,
-                                uint32_t   u32_timeout,
-                                gpio_num_t e_cs_io);
+  uint8_t DEV_SDCard_WriteBlock(spi_device_handle_t spi_handle,
+                                uint8_t            *p_data,
+                                uint32_t            u32_writeAddr,
+                                uint32_t            u32_numOfBlocks,
+                                uint32_t            u32_timeout,
+                                gpio_num_t          e_cs_io);
 
   /**
    * @brief Retrieves information about the SD card.

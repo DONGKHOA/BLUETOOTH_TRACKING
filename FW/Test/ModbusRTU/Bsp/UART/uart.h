@@ -109,23 +109,27 @@ extern "C"
    * @param u32_len Length of the data to send.
    * @return int The number of bytes sent, or a negative error code.
    */
-  int BSP_uartSendData(uart_port_num_t e_uart_port,
-                       const uint8_t  *u8_data,
-                       size_t          u32_len);
+  static inline int BSP_uartSendData (uart_port_num_t e_uart_port,
+                                      const uint8_t  *u8_data,
+                                      size_t          u32_len)
+  {
+    return uart_write_bytes(e_uart_port, (const char *)u8_data, u32_len);
+  }
 
   /**
    * @brief Read data from the specified UART port.
    *
    * @param e_uart_port The UART port number to read data.
    * @param u8_data Pointer to the buffer to store received data.
-   * @param u32_len Length of the data to read.
    * @param u32_timeout Timeout for the read operation in milliseconds.
    * @return int The number of bytes read, or a negative error code.
    */
-  int BSP_uartReadData(uart_port_num_t e_uart_port,
-                       uint8_t        *u8_data,
-                       size_t          u32_len,
-                       uint32_t        u32_timeout);
+  static inline int BSP_uartReadByte (uart_port_num_t e_uart_port,
+                                      uint8_t        *u8_data,
+                                      uint32_t        u32_timeout)
+  {
+    return uart_read_bytes(e_uart_port, u8_data, 1, u32_timeout);
+  }
 
   /**
    * @brief Wait until the UART transmission is done.
@@ -134,8 +138,11 @@ extern "C"
    * @param u32_timeout Timeout for the wait operation in milliseconds.
    * @return esp_err_t ESP_OK on success, or an error code on failure.
    */
-  esp_err_t BSP_uartWaitTXDone(uart_port_num_t e_uart_port,
-                               uint32_t        u32_timeout);
+  static inline esp_err_t BSP_uartWaitTXDone (uart_port_num_t e_uart_port,
+                                              uint32_t        u32_timeout)
+  {
+    return uart_wait_tx_done(e_uart_port, u32_timeout);
+  }
 
   /**
    * @brief Reset the UART buffer for the specified port.
@@ -143,7 +150,10 @@ extern "C"
    * @param e_uart_port The UART port number to reset the buffer.
    * @return esp_err_t ESP_OK on success, or an error code on failure.
    */
-  esp_err_t BSP_resetBuffer(uart_port_num_t e_uart_port);
+  static inline esp_err_t BSP_resetBuffer (uart_port_num_t e_uart_port)
+  {
+    return uart_flush_input(e_uart_port);
+  }
 
 #ifdef __cplusplus
 }

@@ -24,7 +24,8 @@ extern "C"
    * @return Returns confirmation code received from the response
    */
   uint8_t DEV_AS608_Reponse(uart_port_num_t e_uart_port,
-                            uint8_t        p_instruction_code);
+                            uint8_t         p_instruction_code,
+                            uint16_t       *p_stored_fingerprints);
 
   /**
    * @brief Function to detect finger and store image in imagebuffer
@@ -106,9 +107,9 @@ extern "C"
    * @return Returns received confirmation code from module
    */
   uint8_t DEV_AS608_DeleteChar(uart_port_num_t e_uart_port,
-                              uint8_t        *p_AS608_address,
-                              uint8_t        *p_page_id,
-                              uint8_t        *p_number_of_templates);
+                               uint8_t        *p_AS608_address,
+                               uint8_t        *p_page_id,
+                               uint8_t        *p_number_of_templates);
 
   void DEV_AS608_TimeOut(void);
 

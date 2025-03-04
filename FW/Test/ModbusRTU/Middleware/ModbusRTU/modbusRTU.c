@@ -12,12 +12,22 @@
 #include "modbusRTU.h"
 
 /******************************************************************************
- *    PRIVATE DEFINES
+ *  PRIVATE TYPEDEFS
  *****************************************************************************/
 
+typedef enum
+{
+  STATE_HEADING = 0,
+  STATE_DATA,
+} modbus_state_t;
+
 /******************************************************************************
- *  PRIVATE PROTOTYPE FUNCTION
+ *  PRIVATE DATA
  *****************************************************************************/
+
+// modbusRTU_request_t  modbus_request;
+modbusRTU_rec_data_t modbus_data;
+modbus_state_t       e_modbus_state = STATE_HEADING;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -64,11 +74,119 @@ MID_ModbusRTU_SendRequest (uart_port_num_t      e_uart_port,
   packet[6]    = crc & 0xFF;        // LSB
   packet[7]    = (crc >> 8) & 0xFF; // MSB
 
-  DEV_RS485_SendData(
-      e_uart_port, e_modbus_re_io, e_modbus_de_io, packet, sizeof(packet));
+  DEV_RS485_TransmitMode(e_modbus_re_io, e_modbus_de_io);
+  DEV_RS485_SendData(e_uart_port, packet, sizeof(packet));
 
   printf("Sent Modbus request.\r\n");
 }
+
+void
+MID_ModbusRTU_ReceiveResponse (uart_port_num_t      e_uart_port,
+                               modbusRTU_request_t *request)
+{
+  int      Bytes              = 0;
+  uint8_t  u8_byte_count      = 0;
+  uint8_t  u8_expected_bytes  = 0;
+  uint16_t u16_received_crc   = 0;
+  uint16_t u16_calculated_crc = 0;
+
+  while (1)
+  {
+    switch (e_modbus_state)
+    {
+      case STATE_HEADING:
+
+        Bytes = DEV_RS485_ReceiveByte(
+            e_uart_port,
+            &modbus_data.u8_data_rec[modbus_data.u8_index_data_rec],
+            pdMS_TO_TICKS(1));
+
+        if (Bytes > 0)
+        {
+
+          modbus_data.u8_index_data_rec++;
+
+          if (modbus_data.u8_data_rec[0] == request->slave_id)
+          {
+            if (modbus_data.u8_data_rec[1] == request->function)
+            {
+              e_modbus_state = STATE_DATA;
+            }
+            else
+            {
+              modbus_data.u8_index_data_rec = 0;
+              continue;
+            }
+          }
+          else
+          {
+            modbus_data.u8_index_data_rec = 0;
+            continue;
+          }
+        }
+        break;
+
+      case STATE_DATA:
+
+        Bytes = DEV_RS485_ReceiveByte(
+            e_uart_port,
+            &modbus_data.u8_data_rec[modbus_data.u8_index_data_rec],
+            pdMS_TO_TICKS(1));
+
+        if (Bytes > 0)
+        {
+          modbus_data.u8_index_data_rec++;
+
+          // Check the number of data need to read via Byte Count
+          if (modbus_data.u8_index_data_rec == 3)
+          {
+            u8_byte_count = modbus_data.u8_data_rec[2];
+            u8_expected_bytes
+                = 3 + u8_byte_count + 2; // Slave ID (1), Function (1), Byte
+                                         // Count (1), Data (N*8), CRC (2)
+          }
+
+          if (modbus_data.u8_index_data_rec >= u8_expected_bytes)
+          {
+            // Extract CRC from last two bytes
+            u16_received_crc
+                = (modbus_data.u8_data_rec[modbus_data.u8_index_data_rec - 1]
+                   << 8)
+                  | modbus_data.u8_data_rec[modbus_data.u8_index_data_rec - 2];
+
+            u16_calculated_crc = MID_EncodeCRC16(
+                modbus_data.u8_data_rec, modbus_data.u8_index_data_rec - 2);
+
+            if (u16_received_crc == u16_calculated_crc)
+            {
+              // Valid CRC: Data had been received successfully
+              for (int i = 0; i < u8_expected_bytes; i++)
+              {
+                printf("Data receive: %d", modbus_data.u8_data_rec[i]);
+              }
+              modbus_data.u8_index_data_rec = 0;
+              e_modbus_state                = STATE_HEADING;
+            }
+            else
+            {
+              memset(
+                  modbus_data.u8_data_rec, 0, sizeof(modbus_data.u8_data_rec));
+              modbus_data.u8_index_data_rec = 0;
+              e_modbus_state                = STATE_HEADING;
+
+              // Requese the data again
+            }
+          }
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+
+
 
 /******************************************************************************
  *   PRIVATE FUNCTION
