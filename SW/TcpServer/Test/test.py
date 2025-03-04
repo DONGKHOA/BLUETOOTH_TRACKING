@@ -1,8 +1,10 @@
-import struct
+from datetime import datetime
 
-content_data  = 429334E8
+# Get local time
+local_time = datetime.now()
 
-# Unpack as float
-float_value = struct.unpack('!f', content_data[:4])[0]
 
-print(float_value)
+print("Local Time:", local_time)
+
+formatted_time = local_time.strftime("%Y-%m-%d %H:%M:%S")
+print("Formatted Local Time:", formatted_time)
