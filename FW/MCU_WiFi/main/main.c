@@ -63,8 +63,8 @@
 
 // dht22_data_t dht22;
 
-// char *p_path = "hahaaa.txt";
-// char *p_data = "Hello";
+char *p_path = "hahaaa.txt";
+char *p_data = "Hello";
 
 uint32_t count = 0;
 
@@ -79,8 +79,8 @@ uint8_t default_password_1[4] = { 0x00, 0x00, 0x00, 0x00 };
 // static void DHT22_Task(void *pvParameters);
 // static void SDCard_Task(void *pvParameters);
 // static void MCP4822_Task(void *pvParameter);
-// static void SDCard_ReadFile(char *p_path);
-// static void SDCard_WriteFile(char *p_path, char *p_data);
+static void SDCard_ReadFile(char *p_path);
+static void SDCard_WriteFile(char *p_path, char *p_data);
 // static void RS485_Task(void *pvParameter);
 
 static void Timer_Callback(TimerHandle_t xTimer);
@@ -165,20 +165,23 @@ app_main (void)
   // APP_FingerPrint_CreateTask();
 
   // twai_init();
-  DEV_RS485_Init();
+  // DEV_RS485_Init();
 
-  rs485_request_t request = { .slave_id  = 0x01,
-                              .function  = RS485_FUNC_READ_HOLDING_REGS,
-                              .reg_addr  = 0x0010,
-                              .reg_count = 1 };
+  // rs485_request_t request = { .slave_id  = 0x01,
+  //                             .function  = RS485_FUNC_READ_HOLDING_REGS,
+  //                             .reg_addr  = 0x0010,
+  //                             .reg_count = 1 };
 
   // xTaskCreate(RS485_Task, "RS3485_Task", 4096, NULL, 9, NULL);
+
+  DEV_SDCard_Init();
+  SDCard_WriteFile(p_path, p_data);
   while (1)
   {
     // DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
     // twai_receive_message();
     // twai_send_message();
-    DEV_RS485_SendRequest(&request);
+    // DEV_RS485_SendRequest(&request);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -245,14 +248,14 @@ app_main (void)
 //   }
 // }
 
-// static void
-// SDCard_ReadFile (char *p_path)
-// {
-//   DEV_SDCard_Read_File(p_path);
-// }
+static void
+SDCard_ReadFile (char *p_path)
+{
+  DEV_SDCard_Read_File(p_path);
+}
 
-// static void
-// SDCard_WriteFile (char *p_path, char *p_data)
-// {
-//   DEV_SDCard_WriteFile(p_path, p_data);
-// }
+static void
+SDCard_WriteFile (char *p_path, char *p_data)
+{
+  DEV_SDCard_WriteFile(p_path, p_data);
+}

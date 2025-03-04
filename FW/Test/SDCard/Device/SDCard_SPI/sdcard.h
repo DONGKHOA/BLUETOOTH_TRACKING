@@ -6,62 +6,129 @@
  *****************************************************************************/
 
 #include <stdint.h>
-#include "driver/gpio.h"
-#include "sdspi.h"
+#include "spi.h"
 
-/*****************************************************************************
- *      PUBLIC DEFINES
- *****************************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-#define HSPI_HOST       SPI2_HOST
-#define MISO_PIN        11
-#define MOSI_PIN        13
-#define SCLK_PIN        12
-#define CS_PIN          48
-#define MAX_TRANSFER_SZ 4096
-#define SPI_MODE        0
-#define DMA_CHANNEL     3
+  /*****************************************************************************
+   *      PUBLIC DEFINES
+   *****************************************************************************/
 
-#define SD_INIT_FREQ 400000
-#define SD_WORK_FREQ 10000000
+  /* MMC/SD command */
+#define CMD0   (0)         /* GO_IDLE_STATE */
+#define CMD1   (1)         /* SEND_OP_COND (MMC) */
+#define ACMD41 (0x80 + 41) /* SEND_OP_COND (SDC) */
+#define CMD8   (8)         /* SEND_IF_COND */
+#define CMD9   (9)         /* SEND_CSD */
+#define CMD10  (10)        /* SEND_CID */
+#define CMD12  (12)        /* STOP_TRANSMISSION */
+#define ACMD13 (0x80 + 13) /* SD_STATUS (SDC) */
+#define CMD16  (16)        /* SET_BLOCKLEN */
+#define CMD17  (17)        /* READ_SINGLE_BLOCK */
+#define CMD18  (18)        /* READ_MULTIPLE_BLOCK */
+#define CMD23  (23)        /* SET_BLOCK_COUNT (MMC) */
+#define ACMD23 (0x80 + 23) /* SET_WR_BLK_ERASE_COUNT (SDC) */
+#define CMD24  (24)        /* WRITE_BLOCK */
+#define CMD25  (25)        /* WRITE_MULTIPLE_BLOCK */
+#define CMD32  (32)        /* ERASE_ER_BLK_START */
+#define CMD33  (33)        /* ERASE_ER_BLK_END */
+#define CMD41  (0x40 + 41) /* SEND_OP_COND (ACMD) */
+#define CMD38  (38)        /* ERASE */
+#define CMD55  (55)        /* APP_CMD */
+#define CMD58  (58)        /* READ_OCR */
 
-/*****************************************************************************
- *      PUBLIC FUNCTIONS
- *****************************************************************************/
+#define MSD_OK                   0x00
+#define MSD_ERROR                0x01
+#define MSD_ERROR_SD_NOT_PRESENT 0x02
+#define SD_TRANSFER_OK           0x00
+#define SD_TRANSFER_BUSY         0x01
+#define SD_PRESENT               0x01
+#define SD_NOT_PRESENT           0x00
 
-/**
- * @brief Initializes the SD card.
- *
- * This function sets up the necessary configurations and initializes the SD
- * card for use. It prepares the SD card interface for read and write
- * operations.
- */
-void DEV_SDCard_Init(void);
+  /*****************************************************************************
+   *      PUBLIC TYPEDEFS
+   *****************************************************************************/
+  typedef struct
+  {
+    uint32_t CardType;
+    uint32_t LogBlockNbr;
+    uint32_t LogBlockSize;
+  } SDCard_Info_t;
 
-/**
- * @brief Writes data to a file on the SD card.
- *
- * This function writes the specified data to a file on the SD card. If the file
- * does not exist, it will be created. If the file already exists, its contents
- * will be overwritten.
- *
- * @param p_filename Pointer to a null-terminated string that specifies the name
- *                   of the file to write to.
- * @param p_data     Pointer to a null-terminated string that contains the data
- *                   to be written to the file.
- */
-void DEV_SDCard_WriteFile(const char *p_filename, const char *p_data);
+  /*****************************************************************************
+   *      PUBLIC FUNCTIONS
+   *****************************************************************************/
 
-/**
- * @brief Reads the contents of a file from the SD card.
- *
- * This function opens the file specified by the given path and reads its
- * contents. The path should be a null-terminated string representing the
- * location of the file on the SD card.
- *
- * @param p_path A pointer to a null-terminated string that specifies the path
- * of the file to be read.
- */
-void DEV_SDCard_Read_File(const char *p_path);
+  /**
+   * @brief Initializes the SD card.
+   *
+   * This function initializes the SD card by setting up the SPI interface and
+   * check type of SD card.
+   *
+   * @param e_spi_host The SPI host device to be used for communication with the
+   * SD card.
+   * @param e_cs_io The GPIO pin number used for chip select (CS) to communicate
+   * with the SD card.
+   *
+   * @return Returns 0 on success (MSD_OK), or an error code on failure.
+   */
+  uint8_t DEV_SDCard_Init(spi_host_device_t e_spi_host, gpio_num_t e_cs_io);
+
+  /**
+   * @brief Reads single block or multiple block of data from the SD card.
+   *
+   * This function reads a specified number of blocks from the SD card starting
+   * from a given address and stores the data in the provided buffer.
+   *
+   * @param p_data Pointer to the buffer where the read data will be stored.
+   * @param u32_readAddr The starting address on the SD card from where the data
+   *                     will be read.
+   * @param u32_numOfBlocks The number of blocks to read from the SD card.
+   * @param e_cs_io The GPIO pin number used for chip select (CS) to communicate
+   *                with the SD card.
+   *
+   * @return Returns 0 on success (MSD_OK), or an error code on failure.
+   */
+  uint8_t DEV_SDCard_ReadBlock(uint8_t   *p_data,
+                               uint32_t   u32_readAddr,
+                               uint32_t   u32_numOfBlocks,
+                               gpio_num_t e_cs_io);
+
+  /**
+   * @brief Writes single block or multiple block of data to the SD card.
+   *
+   * This function writes a specified number of blocks of data to the SD card at
+   * a given address.
+   *
+   * @param p_data Pointer to the data to be written.
+   * @param u32_writeAddr Address on the SD card where the data will be written.
+   * @param u32_numOfBlocks Number of blocks to write.
+   * @param u32_timeout Timeout duration for the write operation.
+   * @param e_cs_io GPIO pin used for chip select.
+   * @return  SReturns 0 on success (MSD_OK), or an error code on failure.
+   */
+  uint8_t DEV_SDCard_WriteBlock(uint8_t   *p_data,
+                                uint32_t   u32_writeAddr,
+                                uint32_t   u32_numOfBlocks,
+                                uint32_t   u32_timeout,
+                                gpio_num_t e_cs_io);
+
+  /**
+   * @brief Retrieves information about the SD card.
+   *
+   * This function populates the provided SDCard_Info_t structure with
+   * information about the SD card.
+   *
+   * @param p_CardInfo Pointer to an SDCard_Info_t structure that will be filled
+   * with the card information.
+   */
+  void DEV_SDCard_Info(SDCard_Info_t *p_CardInfo);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* SDCARD_H_ */

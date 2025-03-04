@@ -37,22 +37,6 @@ extern "C"
   /****************************************************************************
    *   PUBLIC FUNCTIONS
    ***************************************************************************/
-  /**
-   * @brief Initialize the DHT22 sensor.
-   *
-   * This function initializes the DHT22 sensor by setting up the specified GPIO
-   * pin and preparing the provided data structure for use.
-   *
-   * @param p_dht22_data Pointer to a dht22_data_t structure where sensor data
-   * will be stored.
-   * @param e_gpio_pin GPIO pin number to which the DHT22 sensor is connected.
-   *
-   * @return
-   *     - ESP_OK: Success
-   *     - ESP_ERR_INVALID_ARG: Invalid argument
-   *     - ESP_FAIL: Initialization failed
-   */
-  esp_err_t DEV_DHT22_Init(dht22_data_t *p_dht22_data, gpio_num_t e_gpio_pin);
 
   /**
    * @brief Retrieves data from the DHT22 sensor.

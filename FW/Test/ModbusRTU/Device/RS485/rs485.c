@@ -47,16 +47,6 @@ DEV_RS485_ReceiveMode (gpio_num_t e_modbus_re_io, gpio_num_t e_modbus_de_io)
   BSP_gpioSetState(e_modbus_de_io, 0); // Receive mode
 }
 
-// Function to receive response from Slave
-uint8_t
-DEV_RS485_ReceiveResponse (uart_port_num_t e_uart_port,
-                           uint8_t        *u8_data,
-                           size_t          u32_len,
-                           uint32_t        u32_timeout)
-{
-  return BSP_uartReadData(e_uart_port, u8_data, u32_len, u32_timeout);
-}
-
 /******************************************************************************
  *   PRIVATE FUNCTION
  *****************************************************************************/

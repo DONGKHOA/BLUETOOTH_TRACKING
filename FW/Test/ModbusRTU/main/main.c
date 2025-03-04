@@ -30,19 +30,17 @@
 #define HW_FLOWCTRL UART_HW_FLOWCTRL_DISABLE
 #define STOP_BITS   UART_STOP_BITS_1
 
-#define BUF_SIZE 256
-
 /******************************************************************************
  *    PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
+
 static modbusRTU_request_t request;
-static QueueHandle_t       uart_event_queue;
 
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
-void IRAM_ATTR ModbusRTU_UART_EventHandler(void *arg);
-void           ModbusRTU_EventTask(void *arg);
+
+void ModbusRTU_Receive_Task(void *arg);
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -51,27 +49,31 @@ void           ModbusRTU_EventTask(void *arg);
 void
 app_main (void)
 {
-  uart_event_queue = xQueueCreate(10, sizeof(uart_event_t));
-
+  // Config UART
   BSP_uartConfigIO(UART_PORT_NUM_2, UART_TXD, UART_RXD);
   BSP_uartConfigParity(UART_PARITY_EVEN);
   BSP_uartConfigDataLen(UART_DATA_8_BITS);
   BSP_uartConfigStopBits(UART_STOP_BITS_1);
   BSP_uartConfigBaudrate(UART_BAUDRATE_9600);
   BSP_uartConfigHWFlowCTRL(UART_HW_FLOWCTRL_DISABLE);
-
   BSP_uartDriverInit(UART_PORT_NUM_2);
 
-  BSP_uartIntrInit(UART_RXD, GPIO_INTR_POSEDGE, ModbusRTU_UART_EventHandler);
-
+  // Init RE and DE Pin
+  BSP_gpioSetDirection(UART_RE, GPIO_MODE_OUTPUT, GPIO_PULL_DOWN);
+  BSP_gpioSetDirection(UART_DE, GPIO_MODE_OUTPUT, GPIO_PULL_DOWN);
   DEV_RS485_ReceiveMode(UART_RE, UART_DE);
-  // MID_ModbusRTU_InfoMessage(
-  //     &request, 0x01, MODBUSRTU_FUNC_READ_HOLDING_REGS, 0x0010, 1);
 
-  xTaskCreate(ModbusRTU_EventTask, "ModbusRTU_EventTask", 2048, NULL, 10, NULL);
+  // Config the message want to transmit
+  MID_ModbusRTU_InfoMessage(
+      &request, 0x01, MODBUSRTU_FUNC_READ_HOLDING_REGS, 0x0010, 1);
+
+  // Create Task to receive Data from uart
+  xTaskCreate(
+      ModbusRTU_Receive_Task, "ModbusRTU_Receive_Task", 2048, NULL, 10, NULL);
 
   while (1)
   {
+    // Send data
     MID_ModbusRTU_SendRequest(UART_PORT_NUM_2, UART_RE, UART_DE, &request);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
@@ -80,53 +82,21 @@ app_main (void)
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
-void IRAM_ATTR
-ModbusRTU_UART_EventHandler (void *arg)
-{
-  uart_event_t event;
-  event.type = UART_DATA;
-  printf("EventHandler\n");
-  xQueueSendFromISR(uart_event_queue, &event, NULL);
-}
 
 void
-ModbusRTU_EventTask (void *arg)
+ModbusRTU_Receive_Task (void *arg)
 {
-  // uart_event_t event;
-  // uint8_t      data[RX_BUF_SIZE];
-
-  // while (1)
-  // {
-  //   if (xQueueReceive(uart_event_queue, &event, portMAX_DELAY))
-  //   {
-  //     printf("ISR\n");
-  //     if (event.type == UART_DATA)
-  //     {
-  //     }
-  //   }
-  // }
-
-  uart_event_t event;
-  uint8_t      data[RX_BUF_SIZE];
-
+  uint8_t data[1];
+  int     Bytes = 0;
   while (1)
   {
-    if (xQueueReceive(uart_event_queue, &event, portMAX_DELAY))
+    // Read data from UART
+    Bytes = BSP_uartReadData(UART_PORT_NUM_2, data, 1, pdMS_TO_TICKS(1));
+    if (Bytes > 0)
     {
-      if (event.type == UART_DATA)
-      {
-        int len = uart_read_bytes(
-            UART_PORT_NUM_2, data, sizeof(data), pdMS_TO_TICKS(10));
-        if (len > 0)
-        {
-          printf("Received: ");
-          for (int i = 0; i < len; i++)
-          {
-            printf("%02X ", data[i]);
-          }
-          printf("\n");
-        }
-      }
+      // Print data
+      ESP_LOGI("MODBUS", "Received 1 byte: 0x%02X", data[0]);
     }
+    vTaskDelay(pdMS_TO_TICKS(10));
   }
 }

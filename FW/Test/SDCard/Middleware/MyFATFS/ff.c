@@ -3439,7 +3439,6 @@ static FRESULT mount_volume (	/* FR_OK(0): successful, !=0: an error occurred */
 
 	/* Find an FAT volume on the hosting drive */
 	fmt = find_volume(fs, LD2PT(vol));
-	printf("fmt = %d\n", fmt);
 	if (fmt == 4) return FR_DISK_ERR;		/* An error occurred in the disk I/O layer */
 	if (fmt >= 2) return FR_NO_FILESYSTEM;	/* No FAT volume is found */
 	bsect = fs->winsect;					/* Volume offset in the hosting physical drive */
@@ -3708,7 +3707,6 @@ FRESULT f_mount (
 	if (opt == 0) return FR_OK;	/* Do not mount now, it will be mounted in subsequent file functions */
 
 	res = mount_volume(&path, &fs, 0);	/* Force mounted the volume */
-	printf("Mount result: %d\n", res);
 	LEAVE_FF(fs, res);
 }
 

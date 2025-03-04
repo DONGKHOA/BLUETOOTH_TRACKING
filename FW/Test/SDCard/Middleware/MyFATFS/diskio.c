@@ -10,8 +10,7 @@
 #include "ff.h"     /* Obtains integer types */
 #include "diskio.h" /* Declarations of disk functions */
 
-#include "sdspi.h"
-#include "sdcard.h"
+#include "main.h"
 
 /* Private variables ---------------------------------------------------------*/
 static volatile DSTATUS Stat        = STA_NOINIT;
@@ -25,7 +24,7 @@ static volatile UINT    WriteStatus = 0, ReadStatus = 0;
  * BSP_SD_WriteCpltCallback() the value by default is as defined in the BSP
  * platform driver otherwise 30 secs
  */
-#define SD_TIMEOUT 30 * 1000000 //Unit: us -> s
+#define SD_TIMEOUT 30 * 1000000 // Unit: us -> s
 
 #define SD_DEFAULT_BLOCK_SIZE 512
 
@@ -53,17 +52,7 @@ disk_initialize(BYTE pdrv /* Physical drive nmuber to identify the drive */
 )
 {
   Stat = STA_NOINIT;
-  if (BSP_sdSpiInit(HSPI_HOST,
-                    MISO_PIN,
-                    MOSI_PIN,
-                    SCLK_PIN,
-                    MAX_TRANSFER_SZ,
-                    CS_PIN,
-                    DMA_CHANNEL,
-                    SD_INIT_FREQ,
-                    SD_WORK_FREQ,
-                    SPI_MODE)
-      == MSD_OK)
+  if (DEV_SDCard_Init(HSPI_HOST, CS_PIN) == MSD_OK)
   {
     Stat &= ~STA_NOINIT;
   }
@@ -83,8 +72,7 @@ disk_read(BYTE  pdrv,   /* Physical drive nmuber to identify the drive */
 {
   DRESULT res = RES_ERROR;
 
-  if (BSP_sdSpiReadBlocks(
-          (uint8_t *)buff, (uint32_t)(sector), count, SD_TIMEOUT, CS_PIN)
+  if (DEV_SDCard_ReadBlock((uint8_t *)buff, (uint32_t)(sector), count, CS_PIN)
       == MSD_OK)
   {
     res = RES_OK;
@@ -117,7 +105,7 @@ disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
   DRESULT res = RES_ERROR;
 
-  if (BSP_sdSpiWriteBlocks(
+  if (DEV_SDCard_WriteBlock(
           (uint8_t *)buff, (uint32_t)sector, count, SD_TIMEOUT, CS_PIN)
       == MSD_OK)
   {
@@ -139,8 +127,8 @@ disk_ioctl(BYTE  pdrv, /* Physical drive nmuber (0..) */
            void *buff  /* Buffer to send/receive control data */
 )
 {
-  DRESULT             res = RES_ERROR;
-  BSP_SD_SPI_CardInfo CardInfo;
+  DRESULT       res = RES_ERROR;
+  SDCard_Info_t CardInfo;
 
   if (Stat & STA_NOINIT)
   {
@@ -156,21 +144,21 @@ disk_ioctl(BYTE  pdrv, /* Physical drive nmuber (0..) */
 
     /* Get number of sectors on the disk (DWORD) */
     case GET_SECTOR_COUNT:
-      BSP_sdSpiGetCardInfo(&CardInfo);
+      DEV_SDCard_Info(&CardInfo);
       *(DWORD *)buff = CardInfo.LogBlockNbr;
       res            = RES_OK;
       break;
 
     /* Get R/W sector size (WORD) */
     case GET_SECTOR_SIZE:
-      BSP_sdSpiGetCardInfo(&CardInfo);
+      DEV_SDCard_Info(&CardInfo);
       *(WORD *)buff = CardInfo.LogBlockSize;
       res           = RES_OK;
       break;
 
     /* Get erase block size in unit of sector (DWORD) */
     case GET_BLOCK_SIZE:
-      BSP_sdSpiGetCardInfo(&CardInfo);
+      DEV_SDCard_Info(&CardInfo);
       *(DWORD *)buff = CardInfo.LogBlockSize / SD_DEFAULT_BLOCK_SIZE;
       res            = RES_OK;
       break;
@@ -193,7 +181,6 @@ disk_ioctl(BYTE  pdrv, /* Physical drive nmuber (0..) */
 void
 BSP_sdSpiWriteCpltCallback (void)
 {
-
   WriteStatus = 1;
 }
 

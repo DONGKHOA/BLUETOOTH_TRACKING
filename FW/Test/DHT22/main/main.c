@@ -9,9 +9,6 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_freertos_hooks.h"
-#include "freertos/semphr.h"
-#include "esp_system.h"
 #include "esp_timer.h"
 #include "esp_log.h"
 
@@ -20,7 +17,7 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define DHT22_PIN GPIO_NUM_10
+#define DHT22_PIN GPIO_NUM_18
 
 /******************************************************************************
  *    PRIVATE PROTOTYPE FUNCTION
@@ -32,7 +29,7 @@ dht22_data_t dht22;
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
 
-static void DHT22_Task(void *pvParameters);
+static void TestMain_DHT22_Task(void *pvParameters);
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -41,9 +38,10 @@ static void DHT22_Task(void *pvParameters);
 void
 app_main (void)
 {
+  xTaskCreate(TestMain_DHT22_Task, "TestMain_DHT22_Task", 4096, NULL, 10, NULL);
   while (1)
   {
-    vTaskDelay(pdMS_TO_TICKS(1000));
+    vTaskDelay(pdMS_TO_TICKS(2000));
   }
 }
 
@@ -52,9 +50,8 @@ app_main (void)
  *****************************************************************************/
 
 static void
-DHT22_Task (void *pvParameters)
+TestMain_DHT22_Task (void *pvParameters)
 {
-  DEV_DHT22_Init(&dht22, DHT22_PIN);
   while (1)
   {
     DEV_DHT22_GetData(&dht22, DHT22_PIN);

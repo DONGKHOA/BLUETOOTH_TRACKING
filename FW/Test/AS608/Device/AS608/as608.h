@@ -24,18 +24,7 @@ extern "C"
    * @return Returns confirmation code received from the response
    */
   uint8_t DEV_AS608_Reponse(uart_port_num_t e_uart_port,
-                            uint8_t        *p_instruction_code);
-
-  /**
-   * @brief Function to verify password by handshaking
-   *
-   * @param p_AS608_address Current module address
-   * @param p_vfy_password Current module password
-   * @return Returns received confirmation code from module
-   */
-  uint8_t DEV_AS608_VfyPwd(uart_port_num_t e_uart_port,
-                           uint8_t        *p_AS608_address,
-                           uint8_t        *p_vfy_password);
+                            uint8_t        p_instruction_code);
 
   /**
    * @brief Function to detect finger and store image in imagebuffer
@@ -116,7 +105,7 @@ extern "C"
    * @param p_number_of_templates N : Number of templates to be deleted
    * @return Returns received confirmation code from module
    */
-  uint8_t DEV_AS608_DeletChar(uart_port_num_t e_uart_port,
+  uint8_t DEV_AS608_DeleteChar(uart_port_num_t e_uart_port,
                               uint8_t        *p_AS608_address,
                               uint8_t        *p_page_id,
                               uint8_t        *p_number_of_templates);

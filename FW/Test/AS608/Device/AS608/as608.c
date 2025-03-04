@@ -37,7 +37,7 @@ static void DEV_AS608_Response_Parser(uint8_t  instruction_code,
  *****************************************************************************/
 
 uint8_t
-DEV_AS608_Reponse (uart_port_num_t e_uart_port, uint8_t *p_instruction_code)
+DEV_AS608_Reponse (uart_port_num_t e_uart_port, uint8_t p_instruction_code)
 {
   uint8_t   received_confirmation_code = 0;
   uint8_t  *p_received_package         = (uint8_t *)malloc(RX_BUF_SIZE + 1);
@@ -46,14 +46,6 @@ DEV_AS608_Reponse (uart_port_num_t e_uart_port, uint8_t *p_instruction_code)
 
   if (rxBytes > 0)
   {
-    p_received_package[rxBytes] = 0;
-    printf("Read %d bytes:", rxBytes);
-    for (int i = 0; i < rxBytes; i++)
-    {
-      printf("0x%02X ", p_received_package[i]);
-    }
-    printf("\r\n");
-
     // Pass the received response to the parser function
     DEV_AS608_Response_Parser(p_instruction_code, p_received_package);
 
@@ -67,70 +59,12 @@ DEV_AS608_Reponse (uart_port_num_t e_uart_port, uint8_t *p_instruction_code)
 }
 
 uint8_t
-DEV_AS608_VfyPwd (uart_port_num_t e_uart_port,
-                  uint8_t        *p_AS608_address,
-                  uint8_t        *p_vfy_password)
-{
-  uint8_t tx_cmd_data[16]
-      = { 0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x07, 0x13 };
-  uint8_t check_sum_data[2] = { 0x00, 0x00 };
-  uint8_t confirmation_code = 0;
-
-  // Get the checksum result
-  uint16_t checksum_value = DEV_AS608_Checksum(tx_cmd_data, p_vfy_password);
-
-  check_sum_data[0]
-      = (checksum_value >> 8) & (0xFF);        // Split checksum in Higher bits
-  check_sum_data[1] = checksum_value & (0xFF); // Split checksum in Lower bits
-
-  // Loop to add module address and password
-  for (int i = 0; i < 4; i++)
-  {
-    tx_cmd_data[i + 2]  = p_AS608_address[i];
-    tx_cmd_data[i + 10] = p_vfy_password[i];
-
-    // Loop to add checksum to the packet
-    if (i < 2)
-    {
-      tx_cmd_data[i + 14] = check_sum_data[i];
-    }
-  }
-
-  uint8_t instruction_code = 0;
-
-  // Get the Instruction Code (0x13)
-  instruction_code = tx_cmd_data[9];
-
-  // Send entire packet over UART
-  const int package_length = sizeof(tx_cmd_data);
-  BSP_uartSendData(e_uart_port, tx_cmd_data, package_length);
-
-  u32_as608_timeout = 500;
-  while (u32_as608_timeout == 0)
-  {
-    break;
-  }
-
-  confirmation_code = DEV_AS608_Reponse(e_uart_port, instruction_code);
-
-  return confirmation_code;
-}
-
-uint8_t
 DEV_AS608_GenImg (uart_port_num_t e_uart_port, uint8_t *p_AS608_address)
 {
   uint8_t tx_cmd_data[12]
       = { 0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x03, 0x01 };
   uint8_t check_sum_data[2] = { 0x00, 0x00 };
   uint8_t confirmation_code = 0;
-
-  BSP_resetBuffer(e_uart_port);
-
-  u32_as608_timeout = 50;
-  while (u32_as608_timeout == 0)
-  {
-    break;
-  }
 
   uint16_t checksum_value = DEV_AS608_Checksum(tx_cmd_data, (uint8_t *)"#12");
   check_sum_data[0]       = (checksum_value >> 8) & (0xFF);
@@ -174,14 +108,6 @@ DEV_AS608_Img2Tz (uart_port_num_t e_uart_port,
       = { 0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x04, 0x02 };
   uint8_t check_sum_data[2] = { 0x00, 0x00 };
   uint8_t confirmation_code = 0;
-
-  BSP_resetBuffer(e_uart_port);
-
-  u32_as608_timeout = 50;
-  while (u32_as608_timeout == 0)
-  {
-    break;
-  }
 
   uint16_t checksum_value = DEV_AS608_Checksum(tx_cmd_data, p_buffer_id);
   check_sum_data[0]       = (checksum_value >> 8) & (0xFF);
@@ -228,14 +154,6 @@ DEV_AS608_Search (uart_port_num_t e_uart_port,
   uint8_t check_sum_data[2]   = { 0x00, 0x00 };
   uint8_t u8_combined_data[5] = { 0 };
   uint8_t confirmation_code   = 0;
-
-  BSP_resetBuffer(e_uart_port);
-
-  u32_as608_timeout = 500;
-  while (u32_as608_timeout == 0)
-  {
-    break;
-  }
 
   memset(u8_combined_data, 0, sizeof(u8_combined_data));
   u8_combined_data[0] = p_buffer_id[0];
@@ -291,14 +209,6 @@ DEV_AS608_RegModel (uart_port_num_t e_uart_port, uint8_t *p_AS608_address)
   uint8_t check_sum_data[2] = { 0x00, 0x00 };
   uint8_t confirmation_code = 0;
 
-  BSP_resetBuffer(e_uart_port);
-
-  u32_as608_timeout = 50;
-  while (u32_as608_timeout == 0)
-  {
-    break;
-  }
-
   uint16_t checksum_value = DEV_AS608_Checksum(tx_cmd_data, (uint8_t *)"#12");
   check_sum_data[0]       = (checksum_value >> 8) & (0xFF);
   check_sum_data[1]       = checksum_value & (0xFF);
@@ -349,7 +259,7 @@ DEV_AS608_Store (uart_port_num_t e_uart_port,
 
   uint16_t checksum_value
       = DEV_AS608_Checksum_Store(tx_cmd_data, u8_combined_data);
-  ESP_LOGI("Store | checksum_value", "checksum: %d", checksum_value);
+  // ESP_LOGI("Store | checksum_value", "checksum: %d", checksum_value);
   check_sum_data[0] = (checksum_value >> 8) & (0xFF);
   check_sum_data[1] = checksum_value & (0xFF);
 
@@ -363,7 +273,7 @@ DEV_AS608_Store (uart_port_num_t e_uart_port,
       tx_cmd_data[i + 13] = check_sum_data[i];
     }
   }
-  ESP_LOG_BUFFER_HEXDUMP("Store | tx_cmd_data", tx_cmd_data, 15, ESP_LOG_INFO);
+  // ESP_LOG_BUFFER_HEXDUMP("Store | tx_cmd_data", tx_cmd_data, 15, ESP_LOG_INFO);
 
   uint8_t instruction_code;
 
@@ -440,7 +350,7 @@ DEV_AS608_TempleteNum (uart_port_num_t e_uart_port,
 }
 
 uint8_t
-DEV_AS608_DeletChar (uart_port_num_t e_uart_port,
+DEV_AS608_DeleteChar (uart_port_num_t e_uart_port,
                      uint8_t        *p_AS608_address,
                      uint8_t        *p_page_id,
                      uint8_t        *p_number_of_templates)
@@ -524,11 +434,6 @@ DEV_AS608_Checksum (uint8_t *p_tx_cmd_data, uint8_t *p_AS608_data)
     }
   }
 
-  if (u16_result <= 256)
-  {
-    u16_result = u16_result % 256;
-  }
-
   return u16_result;
 }
 
@@ -547,11 +452,6 @@ DEV_AS608_Checksum_Search (uint8_t *p_tx_cmd_data, uint8_t *p_AS608_data)
     u16_result = u16_result + p_AS608_data[i];
   }
 
-  if (u16_result <= 256)
-  {
-    u16_result = u16_result % 256;
-  }
-
   return u16_result;
 }
 
@@ -567,11 +467,6 @@ DEV_AS608_Checksum_Store (uint8_t *p_tx_cmd_data, uint8_t *p_AS608_data)
     {
       u16_result = u16_result + p_AS608_data[i];
     }
-  }
-
-  if (u16_result <= 256)
-  {
-    u16_result = u16_result % 256;
   }
 
   return u16_result;
