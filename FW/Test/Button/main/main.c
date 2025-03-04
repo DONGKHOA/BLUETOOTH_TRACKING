@@ -2,29 +2,28 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_freertos_hooks.h"
-#include "freertos/semphr.h"
-#include "esp_system.h"
-#include "esp_timer.h"
+#include "freertos/queue.h"
 #include "esp_log.h"
-/******************************************************************************
- *    PRIVATE DEFINES
- *****************************************************************************/
 
-/******************************************************************************
- *    PRIVATE PROTOTYPE FUNCTION
- *****************************************************************************/
+#include "gpio.h"
+#include "exti.h"
+#include "button.h"
 
-/******************************************************************************
- *    PRIVATE FUNCTIONS
- *****************************************************************************/
+static BUTTON_INF_t button_0;
+static TaskHandle_t  exti_handle_task = NULL;
+
+static void
+EXIT_Task_Handle ()
+{
+  while (1)
+  {
+    DEV_BUTTON_Handle(&button_0);
+  }
+}
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -33,12 +32,14 @@
 void
 app_main (void)
 {
-  while (1)
-  {
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
-}
+  button_0.e_gpio_pin = GPIO_NUM_33;
+  button_0.e_button_state = BUTTON_RELEASING;
 
-/******************************************************************************
- *  PRIVATE FUNCTION
- *****************************************************************************/
+  BSP_EXIT_Init(GPIO_NUM_33, GPIO_MODE_INPUT, GPIO_PULL_UP);
+
+  DEV_BUTTON_Init();
+  printf("BUTTON_RELEASING\r\n\r\n\r\n");
+
+  xTaskCreate(
+      EXIT_Task_Handle, "exti_handle_task", 1024, 0, 15, &exti_handle_task);
+}

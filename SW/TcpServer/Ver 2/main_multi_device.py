@@ -4,7 +4,7 @@ import numpy as np
 import json
 import paho.mqtt.client as mqtt
 
-HOST = '192.168.10.5'
+HOST = '192.168.1.9'
 PORT = 8899
 
 # MQTT broker information

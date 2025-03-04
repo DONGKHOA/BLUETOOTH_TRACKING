@@ -5,7 +5,7 @@ import json
 BASE_URL = "http://3.106.166.172:8000"
 
 # Authentication Token (Replace with the correct token)
-AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAwMjU0ODAsInN1YiI6IjMifQ.IcUAOeBPHkJrd7BASD417rl5k5Ya7_5yaxzGBdkdDdQ"
+AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAzNzE3MDAsInN1YiI6IjMifQ.PL9EpTeipZe6GGA-Ql09oPkV2LGT_ewAaLWZsDm518g"
 
 # Headers with authentication
 HEADERS = {
