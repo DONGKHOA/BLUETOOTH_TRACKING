@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">TCP<span>SERVER</span></h2>
+        <ul class="menu">
+            <li class="menu-item"><a href="{{ url_for('server_status') }}">Server Status</a></li>
+            <li class="active"><a href="{{ url_for('dashboard') }}">Configuration TCP Server</a></li>
+        </ul>
+
+        <a href="/logout" class="logout-button">Logout</a>
+    </div>
+
+    <div class="container">
+        <!-- Data from API Section -->
+        <div class="data-section">
+            <h2>Facility Lists</h2>
+            <p>Total Entries: {{ count }}</p>
+    
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Timezone</th>
+                    <th>TCP Server Name</th>
+                    <th>Created At</th>
+                </tr>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.timezone }}</td>
+                    <td>{{ item.tcp_server_name }}</td>
+                    <td>{{ item.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Select Facility ID -->
+        <div class="select-facility">
+            <h2>Select Facility ID</h2>
+            <form id="facilityForm">
+                <label for="facility_id">Choose an ID:</label>
+                <select name="facility_id" id="facility_id">
+                    {% for item in data %}
+                        <option value="{{ item.id }}">{{ item.id }} - {{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="facilityMessage"></div>  <!-- Display messages dynamically -->
+        </div>
+
+        <!-- Upload Files Section -->
+        <div class="upload-section">
+            <h2>Certificate Files</h2>
+
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" name="file1" id="file1"><br>
+                <input type="file" name="file2" id="file2"><br>
+                <input type="file" name="file3" id="file3"><br>
+                <button type="submit">Upload</button>
+            </form>
+            <div id="uploadMessage"></div>  <!-- Display messages dynamically -->
+        </div>
+
+        <div class="aws-update-section">
+            <h2>Update AWS IoT Endpoint</h2>
+        
+            <!-- AWS_IOT_ENDPOINT -->
+            <form id="awsEndpointForm">
+                <label for="aws_iot_endpoint">AWS IoT Endpoint:</label>
+                <input type="text" id="aws_iot_endpoint" name="aws_iot_endpoint" value="{{ aws_endpoint }}" required>
+                <button type="submit">Update</button>
+                <button type="button" id="checkConnection">Check Connection</button>
+            </form>
+            
+            <div id="loadingSpinner" style="display: none;">
+                <p>Checking connection...</p>
+            </div>
+
+            <div id="AWSEndPoint"></div> <!-- Display messages dynamically -->
+        </div>
+    </div> 
+    <br>
+
+    <!-- JavaScript to Handle AJAX Requests -->
+    <script>
+        $(document).ready(function () {
+            // Handle Facility ID Submission
+            $("#facilityForm").submit(function (event) {
+            event.preventDefault(); // Prevent page refresh
+
+            var selectedId = $("#facility_id").val(); // Get selected facility ID
+
+                $.post("/select_facility_id", $(this).serialize(), function (response) {
+                    $("#facilityMessage").html("<p style='color: green;'>Facility ID = \"" + selectedId + "\" updated successfully!</p>");
+                }).fail(function () {
+                    $("#facilityMessage").html("<p style='color: red;'>Error updating Facility ID.</p>");
+                });
+            });
+
+            // Handle File Upload Submission
+            $("#uploadForm").submit(function (event) {
+                event.preventDefault(); // Prevent page refresh
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "/upload_cert",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // Retrieve uploaded file names
+                        var uploadedFiles = [];
+                        if ($("#file1")[0].files.length > 0) uploadedFiles.push($("#file1")[0].files[0].name);
+                        if ($("#file2")[0].files.length > 0) uploadedFiles.push($("#file2")[0].files[0].name);
+                        if ($("#file3")[0].files.length > 0) uploadedFiles.push($("#file3")[0].files[0].name);
+
+                        // Format message correctly
+                        if (uploadedFiles.length > 0) {
+                            $("#uploadMessage").html("<p style='color: green;'>Uploaded: " + uploadedFiles.map(f => `"${f}"`).join(", ") + " successfully!</p>");
+                        } else {
+                            $("#uploadMessage").html("<p style='color: red;'>No files selected!</p>");
+                        }
+
+                        // Clear file input fields
+                        $("#file1").val(""); 
+                        $("#file2").val(""); 
+                        $("#file3").val(""); 
+                    },
+                    error: function () {
+                        $("#uploadMessage").html("<p style='color: red;'>Error uploading files.</p>");
+                    }
+                });
+            });
+
+            // Handle AWS IOT ENDPOINT Submission
+            $("#awsEndpointForm").submit(function (event) {
+                event.preventDefault(); // Prevent page refresh
+
+                var newEndpoint = $("#aws_iot_endpoint").val(); // Get input value
+
+                $.post("/update_aws_endpoint", { aws_iot_endpoint: newEndpoint }, function (response) {
+                    $("#AWSEndPoint").html("<p style='color: green;'>AWS IoT Endpoint updated successfully!</p>");
+                
+                    $("#aws_iot_endpoint").val("");
+                
+                }).fail(function () {
+                    $("#AWSEndPoint").html("<p style='color: red;'>Error updating AWS IoT Endpoint.</p>");
+                });
+            });
+
+            $("#checkConnection").click(function () {
+                // 1) Clear old status text
+                $("#AWSEndPoint").empty();
+                
+                // 2) Show a "checking..." message or spinner
+                $("#loadingSpinner").show();
+
+                // Disable the button so it can’t be clicked again during the check
+                $(this).prop("disabled", true);
+
+                $.get("/check_aws_connection", function (response) {
+                    // Hide spinner once we have a response
+                    $("#loadingSpinner").hide();
+
+                    // Inspect response.status
+                    if (response.status === "success") {
+                        $("#AWSEndPoint").html("<p style='color: green;'>Connection successful!</p>");
+                    } else if (response.status === "failure") {
+                        $("#AWSEndPoint").html("<p style='color: red;'>Connection failed!</p>");
+                    } else if (response.status === "timeout") {
+                        $("#AWSEndPoint").html("<p style='color: orange;'>Connection check timed out!</p>");
+                    } else {
+                        $("#AWSEndPoint").html("<p style='color: red;'>Unknown status returned.</p>");
+                    }
+                })
+                .fail(function () {
+                    $("#loadingSpinner").hide();
+                    $("#AWSEndPoint").html("<p style='color: red;'>Request error calling /check_aws_connection</p>");
+                })
+                .always(function() {
+                    $("#checkConnection").prop("disabled", false);
+                });
+            });
+        });
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

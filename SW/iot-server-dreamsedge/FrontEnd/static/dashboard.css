@@ -1,0 +1,206 @@
+/* ✅ Dashboard layout */
+.dashboard-page {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    display: flex;
+}
+
+/* ✅ Sidebar Styling */
+.sidebar {
+    width: 250px;
+    height: 100vh; /* Full height */
+    position: fixed; /* Fix position */
+    left: 0;
+    top: 0;
+    background-color: #2C2F33;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.logo span {
+    color: #ff4500;
+}
+
+/* Sidebar menu */
+.menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li {
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ✅ Set default text color to white */
+.menu li a {
+    text-decoration: none;
+    color: white;  /* Ensures text is white */
+    display: block;
+    padding: 12px;
+}
+
+/* ✅ Ensure active menu item remains white */
+.menu li.active {
+    background-color: #ff4500;
+}
+
+.menu li.active a {
+    color: white;
+}
+
+/* ✅ Hover effect */
+.menu li:hover {
+    background-color: #444;
+}
+
+.menu li:hover a {
+    color: white;
+}
+
+/* ✅ Main content layout */
+.container {
+    margin-left: 270px; /* Push content to the right */
+    padding: 30px;
+    width: calc(100% - 270px);
+}
+
+
+/* ✅ Facility Table Styling */
+.data-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+/* ✅ Alternating row colors */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+
+/* ✅ Select Dropdown */
+.select-facility select {
+    padding: 8px;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+
+/* ✅ Buttons */
+button {
+    width: 300px;
+    max-width: 100%;
+    display: block;
+    margin: 20px auto;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* ✅ AWS IoT Endpoint Input */
+.aws-update-section input[type="text"] {
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.aws-update-section input[type="text"]:focus {
+    border-color: #007BFF;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+.data-section, 
+.select-facility, 
+.upload-section, 
+.aws-update-section {
+    width: 80%;
+    max-width: 900px;
+    background: white;
+    padding: 20px;
+    margin: 20px auto; /* Centers and spaces elements */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+input[type="text"], 
+input[type="file"] {
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* ✅ Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .container {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
+    .upload-section, .data-section, .aws-update-section {
+        width: 100%;
+    }
+    .data-section {
+        overflow-x: auto;
+    }
+    table {
+        font-size: 14px;
+    }
+    .sidebar {
+        width: 200px;
+    }
+}

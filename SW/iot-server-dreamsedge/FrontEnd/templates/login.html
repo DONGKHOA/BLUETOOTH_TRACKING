@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginForm = document.getElementById("loginForm");
+            const loginButton = document.getElementById("loginButton");
+
+            loginForm.addEventListener("submit", function(event) {
+                loginButton.disabled = true;  // Disable button to prevent multiple clicks
+                loginButton.innerText = "Logging in...";  // Change button text
+
+                // Set a timeout (same as backend timeout) to re-enable the button after 7 seconds
+                setTimeout(() => {
+                    loginButton.disabled = false;  // Re-enable the button
+                    loginButton.innerText = "Login";  // Reset button text
+                }, 7000); // 7 seconds timeout
+            });
+        });
+    </script>
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <h2>Welcome Back</h2>
+        <p>Please enter your details to sign in</p>
+
+        <form id="loginForm" action="/login" method="post">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" id="loginButton">Login</button>
+        </form>
+    </div>
+</body>
+</html>
