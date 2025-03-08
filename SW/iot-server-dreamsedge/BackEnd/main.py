@@ -39,19 +39,35 @@ from environment_manager import (
     update_auth_token,
     update_facility_list,
     get_facility_id,
+    get_aws_endpoint,
     update_connection_aws,
     update_start_check_aws,
     get_start_check_aws,
     update_status_tcp_server,
-    update_status_aws_server
+    update_status_aws_server,
+    get_status_tcp_server,
+    get_start_server,
+    get_stop_server,
+    update_stop_server,
+    update_start_server,
+    get_reconfig_server,
+    update_reconfig_server,
+    get_reconfig_info,
+    update_reconfig_info,
+    get_reconfig_facility_id,
+    update_reconfig_facility_id,
+    get_reconfig_facility_list,
+    update_reconfig_facility_list,
+    get_reconfig_aws_endpoint,
+    update_reconfig_aws_endpoint
 )
 
 # Global condition variables
-environment_data_ready = False
-auth_token_received = False
-facilities_received = False
-facility_id_received = False
-aws_iot_endpoint_connection = False
+environment_data_ready = False      # Indicates if environment data is fully updated.
+auth_token_received = False         # Tracks whether the authentication token is obtained.
+facilities_received = False         # Tracks whether the facility list is fetched.
+facility_id_received = False        # Tracks whether the facility ID is updated.
+aws_iot_endpoint_connection = False #
 
 # Global counter (uint32)
 count = np.uint32(0)
@@ -65,25 +81,86 @@ ip_to_writer_map = {}
 # Global MQTT client
 mqtt_client = None
 
-update_status_tcp_server(None)
-update_status_aws_server(None)
+# Server variables to control start/stop server
+server = None
+server_task = None
+reconfig_server = None
 
+reconfig_task = None
+environment_task_running = False
+aws_task_running = False
+
+# -----------------------------------------------
+# Start TCP Server
+# -----------------------------------------------
+async def start_tcp_server():
+    global server
+
+    if server is not None:  # Prevent multiple instances
+        print("[WARNING] TCP Server is already running.")
+        return
+    try:
+        server = await asyncio.start_server(
+            handle_client,
+            host=environment.TCP_SERVER_HOST,
+            port=environment.TCP_SERVER_PORT
+        )
+
+        addrs = ', '.join(str(sock.getsockname()) for sock in server.sockets)
+        print(f"[Async] TCP Server is running on {addrs}")
+
+        async with server:
+            await server.serve_forever()
+    
+    except OSError as e:
+        print(f"[ERROR] Failed to start TCP Server: {e}")
+
+# -----------------------------------------------
+# Stop TCP Server
+# -----------------------------------------------
+async def stop_tcp_server():
+    global server, ip_to_writer_map
+
+    if server is not None:
+        print("[INFO] Stopping TCP Server...")
+
+        # Close all active client connections
+        for writer in list(ip_to_writer_map.values()):  # Close all active client sockets
+            writer.close()
+            try:
+                await writer.wait_closed()  # Ensure closure
+            except Exception as e:
+                print(f"[WARNING] Error closing client socket: {e}")
+                writer.transport.abort()  # Force close if needed
+
+        ip_to_writer_map.clear()  # Clear all connections
+
+        # Stop the server
+        server.close()
+        try:
+            await asyncio.wait_for(server.wait_closed(), timeout=5)
+        except asyncio.TimeoutError:
+            print("[WARNING] Server took too long to close, forcing shutdown.")
+
+        server = None
+        print("[INFO] TCP Server stopped.")
+
+# -----------------------------------------------
+# Check connection aws with server
+# -----------------------------------------------
 def check_tcp_connection(host, port, timeout=5):
     try:
         # Resolve hostname
         addr_info = socket.getaddrinfo(host, port)
         if not addr_info:
-            print(1)  # Failed DNS resolution
             return False
 
         # Attempt to create a socket connection
         with socket.create_connection((host, port), timeout=timeout):
             return True
     except socket.gaierror:
-        print(1)  # DNS resolution failure
         return False
     except (socket.timeout, ConnectionRefusedError, OSError):
-        print(1)  # TCP connection failure
         return False
 
 # -----------------------------------------------
@@ -101,104 +178,152 @@ async def refresh_auth_token():
 
 # -----------------------------------------------
 # Update Variables in Environment.py via UI
+# This function ensures that the system has:
+# - A valid authentication token.
+# - An updated facility list.
+# - A registered Facility ID.
 # -----------------------------------------------            
 async def update_data_environment():
-    global environment_data_ready ,info_user_received, auth_token_received, facilities_received, facility_id_received
-    while not environment_data_ready:
-        
-        # Reload environment variables
-        importlib.reload(environment)
-        
+    global environment_data_ready, info_user_received, auth_token_received
+    global facilities_received, facility_id_received, environment_task_running
+
+    if environment_task_running:
+        print("[WARNING] update_data_environment() is already running! Skipping duplicate execution.")
+        return
+
+    environment_task_running = True  # Set flag when function starts
+
+    # Get data at the first time to go into the while
+    reconfig_server = get_reconfig_server()
+    stop_server = get_stop_server()
+    start_server = get_start_server()
+
+    info_update = get_reconfig_info()
+    facility_id_update = get_reconfig_facility_id()
+
+    print(f"[INFO] Initial facility_id_update: {facility_id_update}")
+
+    while not environment_data_ready or (reconfig_server and stop_server and not start_server):
+
+        # get data to break the while when it false
+        reconfig_server = get_reconfig_server()
+        stop_server = get_stop_server()
+        start_server = get_start_server()
+
+        # Get information of user to get Authenticate
         credentials = get_info_user()
-        username = credentials["username"]
-        password = credentials["password"]
-        
-        # Get AUTH_TOKEN    
-        if not auth_token_received:
-            print(username)
-            print(password)
-            environment.AUTH_TOKEN = http_client.login_access_token(username, password)
-        
-            if environment.AUTH_TOKEN:
+        username, password = credentials["username"], credentials["password"]
+
+        if not auth_token_received or info_update:
+            print("[INFO] Fetching new auth token...")
+            new_auth_token = http_client.login_access_token(username, password)
+
+            if new_auth_token:
+                update_auth_token(new_auth_token)
+                environment.AUTH_TOKEN = new_auth_token
+                
                 auth_token_received = True
-                update_auth_token(environment.AUTH_TOKEN)
-                print("[INFO] Auth token received:", environment.AUTH_TOKEN)
+                facilities_received = False  # Reset facility flag
+                update_reconfig_info(False)
+                print("[INFO] Auth token received and updated.")
             else:
-                print("[WARNING] Failed to get Auth Token.")
-       
-        # Get FACILITY_LIST         
+                print("[WARNING] Failed to obtain auth token. Retrying...")
+                auth_token_received = False
+                update_auth_token(None)
+                update_reconfig_info(True)
+                update_facility_list(None)
+
         if auth_token_received and not facilities_received:
+            print("[INFO] Fetching facility list...")
             facilities = http_client.get_facility_list()
-            
+
             if facilities:
-                facilities_received = True 
                 update_facility_list(facilities)
-                print("[INFO] Facility list updated in environment.py")
+                facilities_received = True
+                print("[INFO] Facility list updated.")
             else:
                 print("[WARNING] No facilities available.")
-                
-        # Get FACILITY_ID 
-        if facilities_received and not facility_id_received:
-            facility_id = get_facility_id()
-            
-            if facility_id:
-                facility_id_received = True
-                print("[INFO] Facility ID:", environment.FACILITY_ID)
 
-                http_client.register_tcp_server(environment.FACILITY_ID, environment.TCP_SERVER_NAME)
-        
-        # If all data ready -> break
+        if (facilities_received and not facility_id_received) or facility_id_update:
+            facility_id = get_facility_id()
+
+            if facility_id:
+                update_reconfig_facility_id(False)
+                facility_id_received = True
+                print(f"[INFO] Facility ID updated: {facility_id}")
+
+                # Register TCP server
+                http_client.register_tcp_server(facility_id, environment.TCP_SERVER_NAME)
+
+                # Update devices with new ID
+                for value in ip_to_id_map.values():
+                    http_client.register_device(value)
+
+            else:
+                print("[WARNING] Facility ID is missing. Retrying...")
+
+        print(f"[INFO] Status - Auth Token: {auth_token_received}, Facilities: {facilities_received}, Facility ID: {facility_id_received}")
+
         if auth_token_received and facilities_received and facility_id_received:
             environment_data_ready = True
+            reconfig_server = False
+            print("[INFO] Environment data fully updated. Exiting loop.")
             break
-                  
+        
         await asyncio.sleep(1)
+
+    environment_task_running = False
 
 # -----------------------------------------------
 # Check the connection with AWS IoT Endpoint 
 # before connect MQTT
 # -----------------------------------------------
 async def verify_aws_connection():
-    global aws_iot_endpoint_connection, environment_data_ready
-    
-    while not aws_iot_endpoint_connection and environment_data_ready:
-        
-        start_check_aws = get_start_check_aws()
-        print("Start Check AWS", start_check_aws)
-        
-        if start_check_aws:
+    global aws_task_running, aws_iot_endpoint_connection, environment_data_ready
+
+    if aws_task_running:
+        print("[WARNING] verify_aws_connection() is already running!")
+        return
+
+    aws_task_running = True  # Set flag when function starts
+
+    # Ensure environment is fully set up before proceeding
+    while not environment_data_ready:
+        print("[INFO] Waiting for environment_data_ready...")
+        await asyncio.sleep(1)
+
+    print("[INFO] environment_data_ready is True. Proceeding with AWS IoT verification...")
+
+    while not aws_iot_endpoint_connection or get_reconfig_aws_endpoint():
+        if get_start_check_aws():
             print("[BackEnd] Detected START_CHECK_AWS flag. Checking AWS IoT connection...")
-            
+
             if check_tcp_connection(environment.AWS_IOT_ENDPOINT, environment.MQTT_PORT):
+                print("[INFO] MQTT Connected Successfully.")
+
+                # Establish MQTT connection
                 mqtt_client.connect(environment.AWS_IOT_ENDPOINT, environment.MQTT_PORT, 60)
                 mqtt_client.loop_start()
-                update_connection_aws(True)  
+                
+                # Update connection status
+                update_connection_aws(True)
+                update_status_aws_server(True)
                 aws_iot_endpoint_connection = True
-                update_status_tcp_server(True)
-                print("MQTT Connected Successfully")
+                update_reconfig_aws_endpoint(False)
                 break
-                
             else:
-                update_connection_aws(False)  
-                aws_iot_endpoint_connection = False
-                print("Failed to establish TCP connection to AWS IoT")
+                print("[WARNING] Failed to establish TCP connection to AWS IoT.")
                 
-            update_start_check_aws(False)
-            
-        await asyncio.sleep(1)
-        
-# ------------------------------------------------
-# Always check status of TCP server and AWS Server
-# ------------------------------------------------       
-# async def verify_status_server():
-#     while True:
-        
-#         tcp_server_status = get_status_tcp_server()
-#         aws_server_status = get_status_aws_server()
-        
-            
-#         time.sleep(1)
+                # Update failure status
+                update_connection_aws(False)
+                update_status_aws_server(False)
+                aws_iot_endpoint_connection = False
 
+            update_start_check_aws(False)  # Reset flag before retrying
+
+        await asyncio.sleep(1)
+
+    aws_task_running = False 
 
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
     global count
@@ -361,45 +486,80 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         count = count - 1
 
 async def main():
-    global mqtt_client
+    global mqtt_client, server_task, reconfig_task, aws_task_running, environment_task_running
 
-    # Create and start the background task for refreshing token:
-    # asyncio.create_task(refresh_auth_token())
-    asyncio.create_task(update_data_environment())
-    # asyncio.create_task(verify_aws_connection())
-    
-    # Wait for all variables in environment.py to be received
-    while not environment_data_ready:
-        print("[INFO] Waiting for environment setup to complete...")
-        await asyncio.sleep(1)
-    
-    # ---------------- MQTT Setup ----------------
-    mqtt_client = mqtt.Client(client_id="AEROSENSEClient")
+    try:
+        # Start background task for refreshing authentication tokens
+        asyncio.create_task(refresh_auth_token())
 
-    # Configure SSL for secure connections to AWS IoT
-    mqtt_client.tls_set(ca_certs=environment.root_ca_path,
-                   certfile=environment.cert_path,
-                   keyfile=environment.private_key_path,
-                   tls_version=ssl.PROTOCOL_TLSv1_2)
+        # Ensure all environment variables are ready
+        await update_data_environment()
+        while not environment_data_ready:
+            print("[INFO] Waiting for environment setup to complete...")
+            await asyncio.sleep(1)
 
-    # Attempt to connect to AWS
-    print(f"Connecting to AWS")
-    
-    await verify_aws_connection()
-    update_status_aws_server(True)
-    
-    # ---------------- TCP Server Setup (asyncio) ----------------
-    server = await asyncio.start_server(
-        handle_client,
-        host = environment.TCP_SERVER_HOST,
-        port = environment.TCP_SERVER_PORT
-    )
+        # ---------------- MQTT Setup ----------------
+        mqtt_client = mqtt.Client(client_id="AEROSENSEClient")
 
-    addrs = ', '.join(str(sock.getsockname()) for sock in server.sockets)
-    print(f"[Async] TCP Server is running on {addrs}")
-    async with server:
-        # Serve requests until the program is stopped
-        await server.serve_forever()
+        # Configure SSL for secure connections to AWS IoT
+        mqtt_client.tls_set(
+            ca_certs=environment.root_ca_path,
+            certfile=environment.cert_path,
+            keyfile=environment.private_key_path,
+            tls_version=ssl.PROTOCOL_TLSv1_2
+        )
 
+        print("[INFO] Connecting to AWS IoT...")
+        await verify_aws_connection()
+        update_status_aws_server(True)
+
+        # update_start_server(True)
+        # update_stop_server(False)
+
+        # ---------------- TCP Server Setup (asyncio) ----------------
+        while True:
+            start_server = get_start_server()
+            stop_server = get_stop_server()
+            reconfig_server = get_reconfig_server()
+
+            if stop_server and server_task:
+                print("[INFO] Stopping TCP Server...")
+                asyncio.create_task(stop_tcp_server())  # Correctly run stop task
+                server_task = None  # Reset task reference
+                environment_task_running = False
+                aws_task_running = False
+                update_status_tcp_server(False)
+                update_reconfig_server(True)
+
+            elif start_server and not server_task:
+                print("[INFO] Starting TCP Server...")
+                server_task = asyncio.create_task(start_tcp_server())  # Start TCP server
+                update_status_tcp_server(True)
+                update_reconfig_server(False)
+
+            if reconfig_server:
+                if not environment_task_running:
+                    print("[INFO] Starting environment update task...")
+                    asyncio.create_task(update_data_environment())
+
+                if not aws_task_running:
+                    print("[INFO] Starting AWS connection verification task...")
+                    asyncio.create_task(verify_aws_connection())
+
+            await asyncio.sleep(1)
+
+    except asyncio.CancelledError:
+        print("[INFO] Tasks were cancelled.")
+
+    except KeyboardInterrupt:
+        print("\n[INFO] Shutting down gracefully...")
+
+    finally:
+        print("[INFO] Cleaning up before exit...")
+        update_status_tcp_server(None)
+        update_status_aws_server(None)
+        update_start_server(True)
+        update_stop_server(False)
+        
 if __name__ == '__main__':
     asyncio.run(main())

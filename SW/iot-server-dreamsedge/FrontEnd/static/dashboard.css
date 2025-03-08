@@ -185,9 +185,171 @@ input[type="file"] {
     text-align: center;
 }
 
+/* ✅ Input Field Container */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* ✅ Input Fields */
+.input-group input {
+    width: 92%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+    border-color: #4CAF50;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    outline: none;
+}
+
+.server-control {
+    text-align: center;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 400px;
+}
+
+.server-control h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.server-control button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.server-control button:hover {
+    background-color: #45a049;
+}
+
+.server-control button:active {
+    transform: scale(0.98);
+}
+
+.file-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px auto;
+}
+
+/* ✅ Fixed file name (root-CA, private.key, cert.pem) */
+.fixed-file-name {
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 100px; /* Ensure all labels have the same width */
+    text-align: right;
+    padding-right: 10px;
+}
+
+/* ✅ Choose File button */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    min-width: 150px; 
+}
+
+.custom-file-upload:hover {
+    background-color: #45a049;
+}
+
+/* ✅ Display selected file name / uploaded path */
+.file-path {
+    font-size: 14px;
+    color: black;
+    flex-grow: 1; /* Make it take the remaining space */
+    text-align: left;
+    padding-left: 10px;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ✅ Big Rectangle Container */
+/* .aws-configuration-container,
+.tcp-server-container {
+    max-width: 1500px;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    text-align: center;
+    padding: 30px;
+    width: calc(100% - 270px);
+} */
+
+.tcp-server-container, .aws-configuration-container {
+    width: 100%; /* Full width */
+    max-width: 800px; /* Set max width for consistency */
+    padding: 30px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    margin-bottom: 20px; /* Add space between sections */
+}
+
+/* ✅ Title for the Big Rectangle */
+.tcp-server-container h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center; /* Center content */
+    max-width: 1000px;
+    margin: 20px auto;
+    padding-left: 270px; /* Ensure space for sidebar */
+}
+
 /* ✅ Responsive adjustments */
 @media screen and (max-width: 768px) {
     .container {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
+    .tcp-server-container {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
+    .aws-configuration-container{
         margin-left: 220px;
         width: calc(100% - 220px);
     }
@@ -202,5 +364,18 @@ input[type="file"] {
     }
     .sidebar {
         width: 200px;
+    }
+
+    .file-input-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .fixed-file-name,
+    .custom-file-upload,
+    .file-path {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
     }
 }

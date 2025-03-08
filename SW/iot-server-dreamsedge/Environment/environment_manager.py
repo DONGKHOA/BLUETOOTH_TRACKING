@@ -5,6 +5,24 @@ import json
 import environment 
 
 ENV_FILE_PATH = os.path.join(os.path.dirname(__file__), "environment.py")
+UPLOAD_FOLDER = "Environment/upload"
+
+
+def reset_auth_token():
+    # Read the data in environment.py
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "AUTH_TOKEN", None)
+
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)
+
 
 # -------------------------------------------------
 # Convert Python values to the correct format for 
@@ -48,14 +66,14 @@ def reset_credentials():
         lines = f.readlines()
 
     # Find the "keyword" and replace None
-    lines = _update_env_line(lines, "USERNAME", None)
-    lines = _update_env_line(lines, "PASSWORD", None)
-    lines = _update_env_line(lines, "AUTH_TOKEN", None)
-    lines = _update_env_line(lines, "FACILITY_LIST", None)
-    lines = _update_env_line(lines, "FACILITY_ID", None)
-    lines = _update_env_line(lines, "AWS_IOT_ENDPOINT", None)
-    lines = _update_env_line(lines, "CONNECTION_AWS", None)
-    lines = _update_env_line(lines, "START_CHECK_AWS", None)
+    # lines = _update_env_line(lines, "USERNAME", None)
+    # lines = _update_env_line(lines, "PASSWORD", None)
+    # lines = _update_env_line(lines, "AUTH_TOKEN", None)
+    # lines = _update_env_line(lines, "FACILITY_LIST", None)
+    # lines = _update_env_line(lines, "FACILITY_ID", None)
+    # lines = _update_env_line(lines, "AWS_IOT_ENDPOINT", None)
+    # lines = _update_env_line(lines, "CONNECTION_AWS", None)
+    # lines = _update_env_line(lines, "START_CHECK_AWS", None)
     
     
     # Open and Write in environment.py
@@ -80,6 +98,14 @@ def update_info_user(username, password):
 
     # Reload to updated values
     importlib.reload(environment)
+
+# -------------------------------------------------
+# Return the latest USERNAME and PASSWORD from 
+# environment.py.
+# -------------------------------------------------
+def get_login_info():
+    importlib.reload(environment)
+    return {"login_username": environment.LOGIN_USERNAME, "login_password": environment.LOGIN_PASSWORD}
 
 # -------------------------------------------------
 # Return the latest USERNAME and PASSWORD from 
@@ -168,6 +194,14 @@ def get_facility_id():
     # Reload environment to get updated values
     importlib.reload(environment)  
     return environment.FACILITY_ID
+
+# -------------------------------------------------
+# Retrieve the aws iot endpoint from environment.py 
+# -------------------------------------------------
+def get_aws_endpoint():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.AWS_IOT_ENDPOINT
 
 # -------------------------------------------------
 # Update AWS_IOT_ENDPOINT in environment.py.
@@ -283,3 +317,218 @@ def update_status_aws_server(value):
 
     # Reload to get updated values
     importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the START_SERVER from environment.py 
+# -------------------------------------------------    
+def get_start_server():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.START_SERVER
+
+# -------------------------------------------------
+# Update START_SERVER in environment.py.
+# -------------------------------------------------    
+def update_start_server(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "START_SERVER", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+    
+# -------------------------------------------------
+# Retrieve the STOP_SERVER from environment.py 
+# -------------------------------------------------    
+def get_stop_server():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.STOP_SERVER
+
+# -------------------------------------------------
+# Update STOP_SERVER in environment.py.
+# -------------------------------------------------    
+def update_stop_server(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "STOP_SERVER", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the RECONFIG_SERVER from environment.py 
+# -------------------------------------------------    
+def get_reconfig_server():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.RECONFIG_SERVER
+ 
+# -------------------------------------------------
+# Update RECONFIG_SERVER in environment.py.
+# -------------------------------------------------   
+def update_reconfig_server(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "RECONFIG_SERVER", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the INFO_UPDATED from environment.py 
+# -------------------------------------------------    
+def get_reconfig_info():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.INFO_UPDATED
+ 
+# -------------------------------------------------
+# Update INFO_UPDATED in environment.py.
+# -------------------------------------------------   
+def update_reconfig_info(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "INFO_UPDATED", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the FACILITY_LIST_UPDATED from environment.py 
+# -------------------------------------------------    
+def get_reconfig_facility_list():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.FACILITY_ID_UPDATED
+ 
+# -------------------------------------------------
+# Update FACILITY_LIST_UPDATED in environment.py.
+# -------------------------------------------------   
+def update_reconfig_facility_list(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "FACILITY_LIST_UPDATED", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the FACILITY_ID_UPDATED from environment.py 
+# -------------------------------------------------    
+def get_reconfig_facility_id():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.FACILITY_ID_UPDATED
+ 
+# -------------------------------------------------
+# Update FACILITY_ID_UPDATED in environment.py.
+# -------------------------------------------------   
+def update_reconfig_facility_id(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "FACILITY_ID_UPDATED", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+
+# -------------------------------------------------
+# Retrieve the AWS_IOT_ENDPOINT_UPDATED from 
+# environment.py 
+# -------------------------------------------------    
+def get_reconfig_aws_endpoint():
+    # Reload environment to get updated values
+    importlib.reload(environment)  
+    return environment.AWS_IOT_ENDPOINT_UPDATED
+ 
+# -------------------------------------------------
+# Update AWS_IOT_ENDPOINT_UPDATED in environment.py.
+# -------------------------------------------------   
+def update_reconfig_aws_endpoint(value):
+    with open(ENV_FILE_PATH, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # Find the "keyword" and replace None
+    lines = _update_env_line(lines, "AWS_IOT_ENDPOINT_UPDATED", value)
+    
+    # Open and Write in environment.py
+    with open(ENV_FILE_PATH, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    # Reload to get updated values
+    importlib.reload(environment)  
+# ------------------------------------------------- 
+# Update environment.py with new file paths
+# ------------------------------------------------- 
+def update_environment_file(new_file_path, file_type):
+    
+    # Convert to relative path
+    relative_path = os.path.relpath(new_file_path, start=os.getcwd())  
+
+    with open(ENV_FILE_PATH, "r") as file:
+        lines = file.readlines()
+
+    # Identify which variable needs updating
+    updated_lines = []
+    for line in lines:
+        if file_type == "root_ca" and line.startswith("root_ca_path"):
+            updated_lines.append(f'root_ca_path = "{relative_path}"\n')
+        elif file_type == "private_key" and line.startswith("private_key_path"):
+            updated_lines.append(f'private_key_path = "{relative_path}"\n')
+        elif file_type == "cert" and line.startswith("cert_path"):
+            updated_lines.append(f'cert_path = "{relative_path}"\n')
+        else:
+            updated_lines.append(line)  # Keep other lines unchanged
+
+    # Write the updated content back to the file
+    with open(ENV_FILE_PATH, "w") as file:
+        file.writelines(updated_lines)
+
+    # Reload to get updated values
+    importlib.reload(environment) 
+
+    return relative_path  # Return the updated relative path
+    
+# ------------------------------------------------- 
+# Reload value of variables in Environment.py
+# -------------------------------------------------
+def reload_environment():
+    # Reload environment.py to get the latest updates
+    importlib.reload(environment)
+

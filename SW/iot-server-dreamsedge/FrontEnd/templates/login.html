@@ -5,23 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const loginForm = document.getElementById("loginForm");
-            const loginButton = document.getElementById("loginButton");
 
-            loginForm.addEventListener("submit", function(event) {
-                loginButton.disabled = true;  // Disable button to prevent multiple clicks
-                loginButton.innerText = "Logging in...";  // Change button text
-
-                // Set a timeout (same as backend timeout) to re-enable the button after 7 seconds
-                setTimeout(() => {
-                    loginButton.disabled = false;  // Re-enable the button
-                    loginButton.innerText = "Login";  // Reset button text
-                }, 7000); // 7 seconds timeout
-            });
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="login-page">
     <div class="login-container">
@@ -40,7 +25,36 @@
             </div>
 
             <button type="submit" id="loginButton">Login</button>
+
+            <!-- 🔹 Error message area (Displays wrong password messages) -->
+            <div id="authMessage" style="color: red; margin-top: 10px;"></div>
         </form>
     </div>
+    
+    <!-- JavaScript to Handle AJAX Requests -->
+    <script>
+        $(document).ready(function() {
+            $("#loginForm").submit(function (event) {
+                event.preventDefault(); // Prevent form from reloading the page
+
+                $("#loginButton").prop("disabled", true).text("Logging in..."); // Disable button
+
+                $.post("/login", $(this).serialize(), function (response) {
+                    console.log("Server response:", response); // Debugging log
+
+                    if (response.success) {
+                        console.log("Redirecting to:", response.redirect);
+                        window.location.href = response.redirect; // ✅ Redirect on success
+                    } else {
+                        $("#authMessage").css("color", "red").text(response.message);
+                        $("#loginButton").prop("disabled", false).text("Login"); // Re-enable button
+                    }
+                }).fail(function () {
+                    $("#authMessage").css("color", "red").text("Server error! Please try again.");
+                    $("#loginButton").prop("disabled", false).text("Login");
+                });
+            });
+        });
+    </script>
 </body>
 </html>

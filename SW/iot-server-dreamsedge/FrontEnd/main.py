@@ -37,8 +37,22 @@ from environment_manager import (
     update_status_tcp_server,
     update_status_aws_server,
     get_status_aws_server,
-    get_status_tcp_server
+    get_status_tcp_server,
+    update_start_server,
+    update_stop_server,
+    get_reconfig_server,
+    reset_auth_token,
+    get_info_user,
+    update_reconfig_info,
+    update_reconfig_facility_id,
+    update_reconfig_aws_endpoint,
+    get_start_server,
+    get_login_info,
+    update_environment_file,
+    reload_environment
 )
+
+server_running = False
 
 # -------------------------------------------------
 # Application to interface with User
@@ -70,57 +84,110 @@ def home():
 
 # --------------------------------------------------
 # Login function: 
+# -> Check the username and password if it matched 
+# -> Entry to the server_status page
+# --------------------------------------------------
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        login_username_new = request.form.get("username", "").strip()
+        login_password_new = request.form.get("password", "").strip()
+
+        print(f"[INFO] Received login request - Username: {login_username_new}, Password: {'*' * len(login_password_new)}")
+
+        # Fetch stored credentials
+        credentials = get_login_info()  # ⬅ Fetch stored username & password
+        login_username_old = credentials["login_username"]
+        login_password_old = credentials["login_password"]
+
+        # Check if username and password match
+        if login_username_new == login_username_old and login_password_new == login_password_old:
+            print("[INFO] Login successful! Redirecting to server.")
+            session["authenticated"] = True  # Set session
+            return jsonify({"success": True, "redirect": url_for("server_status")}) 
+
+        else:
+            print("[ERROR] Incorrect username or password.")
+            return jsonify({"success": False, "message": "Incorrect username or password.", "redirect": url_for("login")})
+
+    # 🔹 Fix: Return login page on GET request
+    return render_template("login.html")
+
+# --------------------------------------------------
+# Authenticate function: 
 # -> Received username and password and update 
 # to Environment.py
 # -> Get auth_token and update to Environment.py
 # --------------------------------------------------
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route("/authenticate", methods=["GET", "POST"])
+def authenticate():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
 
     if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
+        username_new = request.form.get("username", "").strip()
+        password_new = request.form.get("password", "").strip()
 
-        print(f"[INFO] Received login request - Username: {username}, Password: {'*' * len(password)}")
+        print(f"[INFO] Received authenticate request - Username: {username_new}, Password: {'*' * len(password_new)}")
 
-        update_info_user(username, password)
+        credentials = get_info_user()
+        username_old = credentials["username"]
+        password_old = credentials["password"]
 
-        timeout = 7  # Stop waiting after 7 seconds
+        # Check if there is a change
+        if (username_new != username_old or password_new != password_old):
+            print("[INFO] Detected change in credentials. Updating...")
+            # reset_auth_token()
+            update_info_user(username_new, password_new)
+            update_reconfig_info(True)
+        else:
+            print("[INFO] No changes detected.")
+
+        timeout = 2  # Stop waiting after 5 seconds
         start_time = time.time()
-        
+
+        while time.time() - start_time <= timeout:
+            print("[INFO] Waiting for Auth Token to update...")
+            auth_token = get_auth_token()
+            time.sleep(0.5)
+
         # --------------------------------------------------
         # Check for AUTH_TOKEN every second
         # If received, set session and redirect to dashboard
         # --------------------------------------------------
+        start_time = time.time()
         while True:
             auth_token = get_auth_token()
+            tcp_server_status = get_status_tcp_server()
 
             if auth_token:
                 print(f"[INFO] AUTH_TOKEN received: {auth_token}")
                 session["authenticated"] = True  # Set session
-                # return redirect(url_for("dashboard"))
-                return redirect(url_for("server_status"))
+                return jsonify({"success": True, "redirect": url_for("dashboard")})
 
             if time.time() - start_time > timeout:
                 print("Timeout: AUTH_TOKEN not received.")
-                reset_credentials()
+
+                if tcp_server_status:  
+                    print("[INFO] Redirecting to Server Status due to TCP Server running")
+                    session["authenticated"] = True
+                    return jsonify({"success": True, "redirect": url_for("dashboard")})
                 break
 
             print("[INFO] Waiting for AUTH_TOKEN from BackEnd...")
             
             time.sleep(1)
             
-        return render_template("login.html", error="Login failed. Please try again.")
-    return render_template("login.html")
+        return jsonify({"success": False, "redirect": url_for("dashboard")})
+    
+    return jsonify({"success": False, "redirect": url_for("dashboard")})
 
 @app.route("/server_status")
 def server_status():
-    # Optional: check if user is authenticated
-    if not session.get("authenticated"):
-        return redirect(url_for("login"))
-    
-    # Render the configuration.html template
-    return render_template("server_status.html")
+    if "authenticated" in session and session["authenticated"]:
+        return render_template("server_status.html")
+
+    return render_template("login.html")
 
 # --------------------------------------------------
 # Dashboard function: 
@@ -131,32 +198,42 @@ def dashboard():
     if not session.get("authenticated"):
         return redirect(url_for("login"))
 
-    # Check if Facility List Fetching Should Be Skipped
     skip_fetch = request.args.get("skip_fetch", "false").lower() == "true"
-    if not skip_fetch:
-        timeout = 3  # Stop waiting after 7 seconds
-        start_time = time.time()
+    
+    api_data = {"data": [], "count": 0}
 
-        # Fetch stored API data from environment.py
-        while True:
+    if not skip_fetch:
+        timeout = 3  # Stop waiting after 3 seconds
+        start_time = time.time()
+        
+        auth_token = get_auth_token()
+        reconfig_server = get_reconfig_server()
+
+        while reconfig_server and time.time() - start_time <= timeout:
+            print("[INFO] Waiting for Auth Token to update...")
+            auth_token = get_auth_token()
+            time.sleep(0.5)
+
+        if not auth_token and reconfig_server:
+            print("[WARNING] No Auth Token found. Showing blank table.")
+            api_data = {"data": [], "count": 0}
+            return render_template("dashboard.html", data=api_data["data"], count=api_data["count"])
+        
+        start_time = time.time()
+        while time.time() - start_time <= timeout:
             api_data = get_facility_list()
-            
+
             if api_data and "data" in api_data and len(api_data["data"]) > 0:
+                
                 print("[INFO] Facility list updated, rendering dashboard...")
                 break
 
-            if time.time() - start_time > timeout:
-                print("Timeout: Can not get Facility List from HTTP.")
-                reset_credentials()
-                return redirect(url_for("login"))
-                
             time.sleep(1)
-        
-    else:
-        # Reset the api_data variable, not rest FACILITY_LIST (avoid error - NoneType)
-        api_data = {"data": [], "count": 0}
-        
 
+        if not api_data or not api_data.get("data"):
+            print("[WARNING] Facility list fetch failed. Showing blank table.")
+            api_data = {"data": [], "count": 0}
+        
     return render_template("dashboard.html", data=api_data["data"], count=api_data["count"])
 
 # --------------------------------------------------
@@ -169,32 +246,49 @@ def upload_cert():
     if not session.get("authenticated"):
         return redirect(url_for("login"))
 
+    file_mapping = {
+        "file1": "root_ca",
+        "file2": "private_key",
+        "file3": "cert"
+    }
+
     saved_files = []
-    for key in ['file1', 'file2', 'file3']:
+    updated_paths = {}
+
+    for key, file_type in file_mapping.items():
         file = request.files.get(key)
 
         if not file or file.filename == '':
-            continue
+            continue  # Skip empty file selections
 
         try:
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file_path = os.path.join(UPLOAD_FOLDER, file.filename)
 
+            # Remove old file if it exists
             if os.path.exists(file_path):
                 os.remove(file_path)
 
+            # Save new file
             file.save(file_path)
-            saved_files.append(file.filename)   
+
+            # Ensure relative path format
+            file_path = file_path.replace("\\", "/")  
+
+            # Update environment.py with the new path and store the updated path
+            updated_paths[key] = update_environment_file(file_path, file_type)
+
+            saved_files.append(file.filename)
 
         except Exception as e:
             flash(f"Error: {str(e)}", "error")
-            return redirect(url_for("dashboard"))
+            return jsonify({"success": False, "error": str(e)}), 500
 
     if saved_files:
         flash(f"Uploaded files: {', '.join(saved_files)}", "success")
+        return jsonify({"success": True, "uploaded_files": saved_files, "updated_paths": updated_paths}), 200
     else:
         flash("No files selected!", "error")
-
-    return redirect(url_for("dashboard", skip_fetch = "true"))
+        return jsonify({"success": False, "message": "No files selected"}), 400
 
 # --------------------------------------------------
 # Select facility ID function: 
@@ -214,6 +308,9 @@ def select_facility_id():
     try:
         update_facility_id(facility_id)
         flash(f"Facility ID updated to {facility_id}", "facility_id_success")
+        
+        update_reconfig_facility_id(True)
+        print("[INFO] Notified backend: Facility ID has changed.")
 
     except Exception as e:
         flash(f"Error updating Facility ID: {str(e)}", "facility_id_error")
@@ -251,28 +348,26 @@ def update_aws_endpoint_route():
 # ------------------------------------------------------
 @app.route("/check_aws_connection", methods=["GET"])
 def check_aws_connection():
-    
     if not session.get("authenticated"):
         return redirect(url_for("login"))
-    
+
+    # Initiate AWS connection check
     update_start_check_aws(True)
-    update_connection_aws(None)     
-    
-    timeout = 10  # Stop waiting after 7 seconds
+    update_connection_aws(None)
+    update_reconfig_aws_endpoint(True)  
+
+    timeout = 10  # Timeout in seconds
     start_time = time.time()
-    
+
     while time.time() - start_time < timeout:
-        
         connection_aws = get_connection_aws()
-        if connection_aws is True:
-            update_connection_aws(None) 
-            return jsonify({"status": "success"})
-        elif connection_aws is False:
-            update_connection_aws(None) 
-            return jsonify({"status": "failure"})
-        
-        time.sleep(0.5)
-    
+        if connection_aws is not None:
+            update_connection_aws(connection_aws)
+            update_reconfig_aws_endpoint(False)
+            return jsonify({"status": "success" if connection_aws else "failure"})
+
+        time.sleep(0.5)  # Reduce CPU usage
+
     return jsonify({"status": "timeout"})
 
 # ------------------------------------------------------
@@ -281,13 +376,9 @@ def check_aws_connection():
 # ------------------------------------------------------
 @app.route("/check_status_server", methods=["GET"])
 def check_status_server():
-    
     if not session.get("authenticated"):
         return redirect(url_for("login"))
-    
-    # update_status_tcp_server(None)
-    # update_status_aws_server(None)
-    
+
     timeout = 10  # Stop waiting after 10 seconds
     start_time = time.time()
     
@@ -298,7 +389,7 @@ def check_status_server():
 
         if tcp_status is not None and aws_status is not None:
             return jsonify({
-                "tcp_status": "connected" if tcp_status else "disconnected",
+                "tcp_status": "running" if tcp_status else "stopping",
                 "aws_status": "connected" if aws_status else "disconnected"
             })
 
@@ -310,20 +401,113 @@ def check_status_server():
     })
     
 # ------------------------------------------------------
+# Set START_SERVER to True and check if server needs 
+# to start 
+# ------------------------------------------------------ 
+@app.route("/start_server", methods=["GET"])  
+def start_server():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+
+    global server_running
+
+    if not get_status_tcp_server():  # If the server is NOT running
+        
+        server_running = True
+
+        update_start_server(True)
+        update_stop_server(False)
+
+        return jsonify({"message": "TCP Server started successfully."}), 200
+
+    return jsonify({"message": "TCP Server is already running."}), 200
+    
+# ------------------------------------------------------
+# Set STOP_SERVER to True and check if server needs 
+# to stop 
+# ------------------------------------------------------   
+
+@app.route("/stop_server", methods=["GET"])
+def stop_server():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+
+    global server_running
+
+    if get_status_tcp_server():  # If the server IS running
+
+        server_running = False
+
+        update_stop_server(True)
+        update_start_server(False)
+
+        return jsonify({"message": "TCP Server stopped successfully."}), 200
+
+    return jsonify({"message": "TCP Server is already stopped."}), 200   
+
+# ------------------------------------------------------
+# Check the current status of server to disable buttons 
+# ------------------------------------------------------
+@app.route("/button_server_status")
+def button_server_status():
+    global server_running
+
+    status_server = get_start_server()
+
+    if status_server:
+        server_running = True
+    else:
+        server_running = False
+
+    auth_token = get_auth_token()
+    if auth_token:
+        enable_start_button = True
+    else:
+        enable_start_button = False
+
+    return jsonify({"running": server_running, "enable_start_button": enable_start_button})
+
+# ------------------------------------------------------
+# Get data of device: number of devices connect to 
+# server, the last messages server received
+# ------------------------------------------------------
+@app.route("/get_device_management", methods=["GET"])
+def get_device_management():
+    # Simulating device data (Replace this with actual data retrieval logic)
+    device_data = {
+        "devices": [
+            {"id": 1, "last_message": "2025-03-07 14:30:00"},
+            {"id": 2, "last_message": "2025-03-07 14:32:15"},
+        ]
+    }
+    return jsonify(device_data)  # Return JSON response
+
+
+@app.route('/get_existing_files', methods=['GET'])
+def get_existing_files():
+
+    # Reload environment.py to get the latest updates
+    reload_environment()
+
+    return jsonify({
+        "success": True,
+        "root_ca_path": environment.root_ca_path,
+        "private_key_path": environment.private_key_path,
+        "cert_path": environment.cert_path
+    })
+
+# ------------------------------------------------------
 # Logout function: 
 # -> Log out dashboard and return login screen
 # ------------------------------------------------------
 @app.route("/logout")
 def logout():
     session.pop("authenticated", None)
-    
-    reset_credentials() 
-    
     return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(port = 5000, debug=True, use_reloader=False)
     
 
 
