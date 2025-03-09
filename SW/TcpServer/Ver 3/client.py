@@ -4,7 +4,7 @@ import time
 import os
 import random
 
-SERVER_HOST = "192.168.0.123"
+SERVER_HOST = "192.168.1.190"
 SERVER_PORT = 8899
 
 count = 0x00000001

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Status</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='server_status.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">TCP<span>SERVER</span></h2>
+        <ul class="menu">
+            <li class="active"><a href="{{ url_for('server_status') }}">Server Status</a></li>
+            <li class="menu-item"><a href="{{ url_for('dashboard') }}">Configuration TCP Server</a></li>
+            <li class="menu-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Server Status</h1>
+        <div class="status-container">
+            <div class="status-card green" id="tcpServerStatus">TCP Server: <span id="tcpStatusText">Loading...</span></div>
+            <div class="status-card green" id="awsServerStatus">AWS Server: <span id="awsStatusText">Loading...</span></div>
+        </div>
+    </div>
+
+    <script>
+        function fetchServerStatus() {
+            $.get("/check_status_server", function (response) {
+                // Update the TCP Server status UI
+                if (response.tcp_status === "running") {
+                    $("#tcpStatusText").text("Running");
+                    $("#tcpServerStatus").removeClass("red").addClass("green");
+                } else if (response.tcp_status === "stopping") {
+                    $("#tcpStatusText").text("Stopping");
+                    $("#tcpServerStatus").removeClass("green").addClass("red");
+                } else if (response.tcp_status === "timeout") {
+                    $("#tcpStatusText").text("Timeout");
+                    $("#tcpServerStatus").removeClass("green").addClass("red");
+                }
+
+                // Update the AWS Server status UI
+                if (response.aws_status === "connected") {
+                    $("#awsStatusText").text("Connected");
+                    $("#awsServerStatus").removeClass("red").addClass("green");
+                } else if (response.aws_status === "disconnected") {
+                    $("#awsStatusText").text("Disconnected");
+                    $("#awsServerStatus").removeClass("green").addClass("red");
+                } else if (response.aws_status === "timeout") {
+                    $("#awsStatusText").text("Timeout");
+                    $("#awsServerStatus").removeClass("green").addClass("red");
+                }
+            }).fail(function () {
+                $("#tcpStatusText").text("Error");
+                $("#awsStatusText").text("Error");
+            });
+        }
+
+        function fetchDeviceManagement() {
+            $.get("/get_device_management", function (response) {
+                var tableBody = $("#deviceManageTable tbody");
+                tableBody.empty();
+                
+                response.devices.forEach(function(device) {
+                    var row = "<tr><td>" + device.id + "</td><td>" + device.last_message + "</td></tr>";
+                    tableBody.append(row);
+                });
+            }).fail(function () {
+                console.log("Failed to fetch device management data");
+            });
+        }
+
+        // Call the function when the page loads (after login)
+        fetchServerStatus();
+        fetchDeviceManagement();
+    </script>
+</body>
+</html>
