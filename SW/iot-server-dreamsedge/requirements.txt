@@ -1,7 +1,0 @@
-numpy==2.2.2
-paho-mqtt==2.1.0
-requests==2.32.3
-flask==2.2.5
-werkzeug==2.2.3
-pandas==2.2.3
-aiohttp==3.11.13

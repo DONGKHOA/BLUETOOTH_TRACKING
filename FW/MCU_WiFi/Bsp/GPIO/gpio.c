@@ -42,3 +42,15 @@ BSP_gpioSetDirection (gpio_num_t       e_gpio_pin,
     }
   }
 }
+
+void
+BSP_gpioSetState (gpio_num_t e_gpio_pin, uint8_t u8_state)
+{
+  gpio_set_level(e_gpio_pin, u8_state);
+}
+
+uint8_t
+BSP_gpioGetState (gpio_num_t e_gpio_pin)
+{
+  return gpio_get_level(e_gpio_pin);
+}

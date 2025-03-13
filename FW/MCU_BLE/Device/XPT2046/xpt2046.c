@@ -69,7 +69,7 @@ DEV_XPT2046_Init (xpt2046_handle_t *p_xpt2046_handle)
     .intr_type    = GPIO_INTR_DISABLE,
   };
 
-  esp_err_t ret = gpio_config(&irq_config);
+  gpio_config(&irq_config);
 }
 
 bool

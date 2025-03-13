@@ -2,56 +2,40 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+/*** standard ****************************************************************/
+
 #include <string.h>
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_freertos_hooks.h"
-#include "freertos/semphr.h"
-#include "esp_system.h"
-#include "esp_timer.h"
-// #include "esp_event.h"
-#include "esp_log.h"
+/*** esp - idf ***************************************************************/
 
-// #include "uart.h"
-#include "driver/gpio.h"
-#include "string.h"
+/*** bsp *********************************************************************/
 
-#include "app_fingerprint.h"
-// #include "ds3231.h"
-#include "dht22.h"
-#include "sdcard.h"
-#include "ads1115.h"
-#include "mcp4822.h"
+#include "can.h"
+#include "spi.h"
+#include "gpio.h"
+#include "nvs_rw.h"
 
-#include "ff.h"
-#include "diskio.h"
-#include "sdspi.h"
+/*** device ******************************************************************/
 
-#include "driver/twai.h"
-#include "freertos/timers.h"
+/*** application *************************************************************/
 
-#include "app_rtc.h"
-#include "app_read_data.h"
-#include "sn65hvd230dr.h"
-#include "rs485.h"
+#include "app_data.h"
+#include "app_mqtt_client.h"
+#include "app_data_receive.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define DHT11_PIN GPIO_NUM_4
-#define GPIO_NUM  GPIO_NUM_14
+/*** CAN peripheral **********************************************************/
 
-#define CAN_MODE      TWAI_MODE_NO_ACK
-#define TXD_PIN       GPIO_NUM_18
-#define RXD_PIN       GPIO_NUM_19
-#define TXD_QUEUE_LEN 1024
-#define RXD_QUEUE_LEN 1024
-#define INTR_FLAG     ESP_INTR_FLAG_LEVEL1 // lowest priority
-#define CAN_BITRATE   5
+#define CAN_MODE          TWAI_MODE_NORMAL
+#define CAN_TXD_PIN       GPIO_NUM_42
+#define CAN_RXD_PIN       GPIO_NUM_41
+#define CAN_TXD_QUEUE_LEN 1024
+#define CAN_RXD_QUEUE_LEN 1024
+#define CAN_INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
+#define CAN_BITRATE       5
 
 #define CAN_ID   0x123
 #define CAN_EXTD 0
@@ -61,201 +45,76 @@
  *    PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-// dht22_data_t dht22;
+static inline void APP_MAIN_InitGPIO(void);
+static inline void APP_MAIN_InitCan(void);
+static inline void APP_MAIN_InitNVS(void);
+static inline void APP_MAIN_InitDataSystem(void);
 
-char *p_path = "hahaaa.txt";
-char *p_data = "Hello";
-
-uint32_t count = 0;
-
-char *p_text = "ESP2CAN";
-
-uint8_t default_address_1[4]  = { 0xFF, 0xFF, 0xFF, 0xFF };
-uint8_t default_password_1[4] = { 0x00, 0x00, 0x00, 0x00 };
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
 
-// static void DHT22_Task(void *pvParameters);
-// static void SDCard_Task(void *pvParameters);
-// static void MCP4822_Task(void *pvParameter);
-static void SDCard_ReadFile(char *p_path);
-static void SDCard_WriteFile(char *p_path, char *p_data);
-// static void RS485_Task(void *pvParameter);
-
-static void Timer_Callback(TimerHandle_t xTimer);
 /******************************************************************************
  *     MAIN FUNCTION
  *****************************************************************************/
 
 void
-twai_init (void)
-{
-
-  BSP_canConfigDefault();
-  BSP_canConfigMode(CAN_MODE);
-  BSP_canConfigIO(TXD_PIN, RXD_PIN);
-  BSP_canConfigQueue(TXD_QUEUE_LEN, RXD_QUEUE_LEN);
-  BSP_canConfigIntr(INTR_FLAG);
-  BSP_canConfigBitRate(CAN_BITRATE);
-
-  // Cài đặt TWAI driver
-  if (BSP_canDriverInit() == ESP_OK)
-  {
-    printf("TWAI driver installed\n");
-  }
-  else
-  {
-    printf("Failed to install TWAI driver\n");
-  }
-
-  // Bật TWAI driver
-  if (BSP_canStart() == ESP_OK)
-  {
-    printf("TWAI driver started\n");
-  }
-  else
-  {
-    printf("Failed to start TWAI driver\n");
-  }
-}
-
-void
-twai_send_message (void)
-{
-  DEV_CAN_SendMessage(
-      CAN_ID, CAN_EXTD, CAN_RTR, (uint8_t *)p_text, strlen(p_text));
-}
-
-void
-twai_receive_message (void)
-{
-  uint32_t id, extd, rtr;
-  uint8_t  data[8]; // Buffer để lưu dữ liệu nhận được
-  uint8_t  len;
-
-  if (DEV_CAN_ReceiveMessage(&id, &extd, &rtr, data, &len))
-  {
-    printf("Received message");
-  }
-  else
-  {
-    printf("Failed to receive message.\n");
-  }
-}
-void
 app_main (void)
 {
-  // // Create Soft-Timer
-  // TimerHandle_t timer = xTimerCreate("Timer",
-  //                                    pdMS_TO_TICKS(1), // Period 1ms
-  //                                    pdTRUE,           // Auto reload
-  //                                    NULL,
-  //                                    Timer_Callback // Callback function
-  // );
+  // BSP Initialization
+  APP_MAIN_InitCan();
+  APP_MAIN_InitNVS();
 
-  // xTimerStart(timer, 0);
+  // Main Initialization data system
 
-  // APP_ReadData_Init();
-  // APP_RTC_Init();
-  // APP_FingerPrint_Init();
+  APP_MAIN_InitDataSystem();
 
-  // APP_ReadData_CreateTask();
-  // APP_RTC_CreateTask();
-  // APP_FingerPrint_CreateTask();
+  // App Initialization
 
-  // twai_init();
-  // DEV_RS485_Init();
+  APP_DATA_RECEIVE_Init();
+  APP_MQTT_CLIENT_Init();
 
-  // rs485_request_t request = { .slave_id  = 0x01,
-  //                             .function  = RS485_FUNC_READ_HOLDING_REGS,
-  //                             .reg_addr  = 0x0010,
-  //                             .reg_count = 1 };
+  // App Create Task
 
-  // xTaskCreate(RS485_Task, "RS3485_Task", 4096, NULL, 9, NULL);
-
-  DEV_SDCard_Init();
-  SDCard_WriteFile(p_path, p_data);
-  while (1)
-  {
-    // DEV_AS608_VfyPwd(UART_PORT_NUM_2, default_address_1, default_password_1);
-    // twai_receive_message();
-    // twai_send_message();
-    // DEV_RS485_SendRequest(&request);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-  }
+  APP_DATA_RECEIVE_CreateTask();
+  APP_MQTT_CLIENT_CreateTask();
 }
 
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
 
-// static void
-// Timer_Callback (TimerHandle_t xTimer)
-// {
-//   // DEV_ADS1115_TimeOut();
-//   DEV_AS608_TimeOut();
-// }
-
-// static void
-// DHT22_Task (void *pvParameters)
-// {
-//   DEV_DHT22_Init(&dht22, DHT11_PIN);
-//   while (1)
-//   {
-//     DEV_DHT22_GetData(&dht22, DHT11_PIN);
-
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//   }
-// }
-
-// static void
-// SDCard_Task (void *pvParameters)
-// {
-
-//   while (1)
-//   {
-//     {
-//       vTaskDelay(pdMS_TO_TICKS(1000));
-//     }
-//   }
-// }
-
-// static void
-// MCP4822_Task (void *pvParameter)
-// {
-//   DEV_MCP4822_Init();
-//   while (1)
-//   {
-//     DEV_MCP4822_SetValue(MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, 3000);
-//     // DEV_MPC4822_Output();
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//   }
-// }
-
-// static void
-// RS485_Task (void *pvParameter)
-// {
-//   rs485_request_t request = { .slave_id  = 0x01,
-//                               .function  = RS485_FUNC_READ_HOLDING_REGS,
-//                               .reg_addr  = 0x0010,
-//                               .reg_count = 1 };
-
-//   while (1)
-//   {
-//     DEV_RS485_SendRequest(&request);
-//     vTaskDelay(pdMS_TO_TICKS(1000));
-//   }
-// }
-
-static void
-SDCard_ReadFile (char *p_path)
+static inline void
+APP_MAIN_InitGPIO (void)
 {
-  DEV_SDCard_Read_File(p_path);
 }
 
-static void
-SDCard_WriteFile (char *p_path, char *p_data)
+static inline void
+APP_MAIN_InitCan (void)
 {
-  DEV_SDCard_WriteFile(p_path, p_data);
+  // Config parameter of CAN protocol
+  BSP_canConfigDefault();
+  BSP_canConfigMode(CAN_MODE);
+  BSP_canConfigIO(CAN_TXD_PIN, CAN_RXD_PIN);
+  BSP_canConfigQueue(CAN_TXD_QUEUE_LEN, CAN_RXD_QUEUE_LEN);
+  BSP_canConfigIntr(CAN_INTR_FLAG);
+  BSP_canConfigBitRate(CAN_BITRATE);
+
+  // Install TWAI driver
+  BSP_canDriverInit();
+
+  // Start TWAI driver
+  BSP_canStart();
+}
+
+static inline void
+APP_MAIN_InitNVS (void)
+{
+  NVS_Init();
+}
+
+static inline void
+APP_MAIN_InitDataSystem (void)
+{
+  s_data_system.s_data_mqtt_queue = xQueueCreate(16, sizeof(location_infor_tag_t));
 }
