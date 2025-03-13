@@ -1,0 +1,330 @@
+/media/quocthang/Data/Github/BLUETOOTH_TRACKING/SW/iot-server-dreamsedge/BackEnd/main.py:400: RuntimeWarning: coroutine 'register_device' was never awaited
+  http_client.register_device(new_id_hex)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/media/quocthang/Data/Github/BLUETOOTH_TRACKING/SW/iot-server-dreamsedge/BackEnd/main.py:406: DeprecationWarning: Callback API version 1 is deprecated, update to latest version
+  mqtt_client = mqtt.Client(client_id=new_id_hex)
+[INFO] Starting TCP Server...
+[Async] TCP Server is running on ('0.0.0.0', 8899)
+[Async] Handling new client from IP=192.168.10.13
+Received data (hex): 1301010100000001000a000000140001010200001d13d2f349200080712111152d07
+[Parsed] function=0x0001, content_len=20, content_data=010200001d13d2f349200080712111152d07
+[Server] (1) Registered new: IP=192.168.10.13, ID=13d2f349200080712111152d07. count=1
+Environment/upload/root-CA.crt
+[Server] Sent response for function=1 with count=1
+Received data (hex): 1301020100000002000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754715,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=1
+Received data (hex): 1301020100000003000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754717,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=2
+Received data (hex): 1301020100000004000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754718,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=3
+Received data (hex): 1301020100000005000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754721,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=4
+Received data (hex): 1301020100000006000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754723,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=5
+Received data (hex): 1301020100000007000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754724,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=6
+Received data (hex): 1301020100000008000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754727,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=7
+Received data (hex): 1301020100000009000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754730,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=8
+Received data (hex): 130102010000000a000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754732,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=9
+Received data (hex): 130102010000000b000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754734,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=10
+Received data (hex): 130102010000000c000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754735,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=11
+Received data (hex): 130102010000000d000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754738,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=12
+Received data (hex): 130102010000000e000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754741,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=13
+Received data (hex): 130102010000000f000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754742,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=14
+Received data (hex): 1301020100000010000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754743,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=15
+Received data (hex): 1301020100000011000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754746,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=16
+Received data (hex): 1301020100000012000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754747,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=17
+Received data (hex): 1301020100000013000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754748,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=18
+Received data (hex): 1301020100000014000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754750,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=19
+Received data (hex): 1301020100000015000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754751,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=20
+Received data (hex): 1301020100000016000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+{
+    "device_id": "13d2f349200080712111152d07",
+    "current_time": 1741754752,
+    "breath_bpm": -3.7013452280583027e-26,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 1.5759833219526545e-37,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188
+}
+[Before Publish] Preparing to publish data for device 13d2f349200080712111152d07
+[MQTT] Successfully published message ID=21
+Received data (hex): 1301020100000017000a0000001e03e895374820519683740256830194756283019475638291047563829104
+[Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104

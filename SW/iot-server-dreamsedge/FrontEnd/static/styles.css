@@ -1,0 +1,284 @@
+/* ✅ Full-page centering */
+.login-page {
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.dashboard-page {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+/* ✅ Center the login box */
+.login-container {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ✅ Title & Subtitle */
+h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* ✅ Input Field Container */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ✅ Input Fields */
+.input-group input {
+  width: 92%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+  border-color: #4CAF50;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  outline: none;
+}
+
+/* ✅ Login Button */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1b84ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Main container layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  width: 90%;
+}
+
+/* ✅ Styling sections */
+.upload-section, .data-section {
+  width: 80%;
+  max-width: 900px;
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ✅ Centering and restricting button width */
+.upload-section button,
+.select-facility button {
+  width: 300px;
+  max-width: 100%;
+  display: block;
+  margin: 20px auto;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upload-section button:hover,
+.select-facility button:hover {
+  background-color: #45a049;
+}
+
+/* ✅ Fixes table width issue */
+.data-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.data-section {
+  text-align: center;
+  overflow-x: auto;
+}
+
+/* ✅ Table Styling */
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+/* ✅ Alternating row colors */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+/* ✅ Select facility ID */
+.select-facility {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  width: 73.5%;
+  margin: 20px auto;
+  text-align: center;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.select-facility h2 {
+  margin-bottom: 10px;
+}
+
+.select-facility select {
+  padding: 8px;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+/* ✅ AWS IoT Endpoint Update Section */
+.aws-update-section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 73.5%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.aws-update-section h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.aws-update-section label {
+  font-size: 16px;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ✅ Input Field for AWS IoT Endpoint */
+.aws-update-section input[type="text"] {
+  width: 90%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.aws-update-section input[type="text"]:focus {
+  border-color: #007BFF;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* ✅ Button for AWS IoT Update */
+.aws-update-section button {
+  width: 300px;
+  max-width: 100%;
+  display: block;
+  margin: 20px auto;
+  padding: 12px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.aws-update-section button:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ Success Message */
+#updateMessage p {
+  font-size: 16px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: green;
+}
+
+/* ✅ Error Message */
+#updateMessage p.error {
+  color: red;
+}
+
+/* ✅ Responsive fix for small screens */
+@media screen and (max-width: 768px) {
+  .container {
+      width: 95%;
+  }
+  .upload-section, .data-section, .aws-update-section {
+      width: 100%;
+  }
+  .data-section {
+      overflow-x: auto;
+  }
+  table {
+      font-size: 14px;
+  }
+  .login-container {
+    width: 90%;
+  }
+}

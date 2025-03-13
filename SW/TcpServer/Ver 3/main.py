@@ -144,7 +144,6 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                     if len(content_data) == 28:
                         parsed = handle_data.parse_28_byte_content(content_data)
 
-                        # local_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         local_time = int(time.time())
                         # Publish the data to MQTT as JSON
                         index_data = {
@@ -157,12 +156,11 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # print(json_data)
                         
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
-                        mqtt_client.publish(http_client.generate_topic(client_id), json_data)
+                        mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
 
                     elif len(content_data) == 36:
                         parsed = handle_data.parse_36_byte_content(content_data)
 
-                        # local_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         local_time = int(time.time())
                         # Publish the data to MQTT as JSON
                         index_data = {
@@ -175,7 +173,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # print(json_data)
                         
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
-                        mqtt_client.publish(http_client.generate_topic(client_id), json_data)
+                        mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
 
                     else:
                         print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")

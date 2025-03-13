@@ -1,0 +1,9 @@
+Current working directory: /media/quocthang/Data/Github/BLUETOOTH_TRACKING/SW/iot-server-dreamsedge
+Upload folder path: /media/quocthang/Data/Github/BLUETOOTH_TRACKING/SW/iot-server-dreamsedge/Environment/upload
+ * Serving Flask app 'main'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8500
+ * Running on http://192.168.10.13:8500
+Press CTRL+C to quit
