@@ -6,7 +6,7 @@
  *****************************************************************************/
 
 #include <stdint.h>
-#include "driver/gpio.h"
+#include "gpio.h"
 #include "driver/spi_master.h"
 
 #ifdef __cplusplus
@@ -58,6 +58,11 @@ extern "C"
    * @brief Configure the SPI with default settings.
    */
   void BSP_spiConfigDefault(void);
+
+  /**
+   * @brief Configure the SPI with command settings.
+   */
+  void BSP_spiConfigCommand(void);
 
   /**
    * @brief Configure the SPI mode.

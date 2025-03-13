@@ -15,6 +15,7 @@
 #include "can.h"
 #include "spi.h"
 #include "gpio.h"
+#include "nvs_rw.h"
 
 /*** device ******************************************************************/
 
@@ -27,6 +28,9 @@
 #include "app_data.h"
 #include "app_display.h"
 #include "app_ble_ibeacon.h"
+#include "app_ble_tracking.h"
+#include "app_data_transmit.h"
+// #include "app_data_receive.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -35,8 +39,8 @@
 /*** CAN peripheral **********************************************************/
 
 #define CAN_MODE          TWAI_MODE_NORMAL
-#define CAN_TXD_PIN       GPIO_NUM_19
-#define CAN_RXD_PIN       GPIO_NUM_20
+#define CAN_TXD_PIN       GPIO_NUM_21
+#define CAN_RXD_PIN       GPIO_NUM_14
 #define CAN_TXD_QUEUE_LEN 1024
 #define CAN_RXD_QUEUE_LEN 1024
 #define CAN_INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
@@ -59,11 +63,6 @@
 #define SPI2_SPI_MODE                0
 #define SPI2_QUEUE_SIZE              50
 
-/*** ILI9341 device **********************************************************/
-
-#define ILI9341_DC_PIN  GPIO_NUM_39
-#define ILI9341_RST_PIN GPIO_NUM_5
-
 /*** SPI3 peripheral *********************************************************/
 
 #define SPI3_MISO_PIN GPIO_NUM_40
@@ -76,6 +75,11 @@
 #define SPI3_DMA_CHANNEL             3
 #define SPI3_SPI_MODE                0
 #define SPI3_QUEUE_SIZE              1
+
+/*** ILI9341 device **********************************************************/
+
+#define ILI9341_DC_PIN  GPIO_NUM_39
+#define ILI9341_RST_PIN GPIO_NUM_5
 
 /*** XPT2046 device **********************************************************/
 
@@ -102,6 +106,7 @@ static spi_device_handle_t spi_xpt2046_handle;
 static inline void APP_MAIN_InitGPIO(void);
 static inline void APP_MAIN_InitCan(void);
 static inline void APP_MAIN_InitSpi(void);
+static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
 
 /******************************************************************************
@@ -116,6 +121,7 @@ app_main (void)
   APP_MAIN_InitGPIO();
   APP_MAIN_InitSpi();
   APP_MAIN_InitCan();
+  APP_MAIN_InitNVS();
 
   // Main Initialization data system
 
@@ -124,10 +130,17 @@ app_main (void)
   // App Initialization
 
   APP_DISPLAY_Init();
+  APP_BLE_IBEACON_Init();
+  APP_BLE_TRACKING_Init();
+  APP_DATA_TRANSMIT_Init();
+  // APP_DATA_RECEIVE_Init();
 
-  // App Create Task X
+  // App Create Task
 
   APP_DISPLAY_CreateTask();
+  APP_BLE_IBEACON_CreateTask();
+  APP_BLE_TRACKING_CreateTask();
+  APP_DATA_TRANSMIT_CreateTask();
 }
 
 /******************************************************************************
@@ -147,12 +160,19 @@ APP_MAIN_InitGPIO (void)
 static inline void
 APP_MAIN_InitCan (void)
 {
+  // Config parameter of CAN protocol
   BSP_canConfigDefault();
   BSP_canConfigMode(CAN_MODE);
   BSP_canConfigIO(CAN_TXD_PIN, CAN_RXD_PIN);
   BSP_canConfigQueue(CAN_TXD_QUEUE_LEN, CAN_RXD_QUEUE_LEN);
   BSP_canConfigIntr(CAN_INTR_FLAG);
   BSP_canConfigBitRate(CAN_BITRATE);
+
+  // Install TWAI driver
+  BSP_canDriverInit();
+
+  // Start TWAI driver
+  BSP_canStart();
 }
 
 static inline void
@@ -180,6 +200,12 @@ APP_MAIN_InitSpi (void)
 }
 
 static inline void
+APP_MAIN_InitNVS (void)
+{
+  NVS_Init();
+}
+
+static inline void
 APP_MAIN_InitDataSystem (void)
 {
   s_ili9341_0.p_spi_Handle = &spi_ili9341_handle;
@@ -188,4 +214,7 @@ APP_MAIN_InitDataSystem (void)
 
   s_xpt2046_0.p_spi_Handle = &spi_xpt2046_handle;
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
+
+  s_data_system.s_rssi_ibeacon_queue = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
+  s_data_system.s_location_tag_queue = xQueueCreate(16, sizeof(location_infor_tag_t));
 }
