@@ -8,7 +8,6 @@
 
 /*** esp - idf ***************************************************************/
 
-#include "esp_bt.h"
 
 /*** bsp *********************************************************************/
 
@@ -27,8 +26,6 @@
 
 #include "app_data.h"
 #include "app_display.h"
-#include "app_ble_ibeacon.h"
-#include "app_ble_tracking.h"
 #include "app_data_transmit.h"
 // #include "app_data_receive.h"
 
@@ -130,16 +127,12 @@ app_main (void)
   // App Initialization
 
   APP_DISPLAY_Init();
-  APP_BLE_IBEACON_Init();
-  APP_BLE_TRACKING_Init();
   APP_DATA_TRANSMIT_Init();
   // APP_DATA_RECEIVE_Init();
 
   // App Create Task
 
   APP_DISPLAY_CreateTask();
-  APP_BLE_IBEACON_CreateTask();
-  APP_BLE_TRACKING_CreateTask();
   APP_DATA_TRANSMIT_CreateTask();
 }
 
@@ -214,7 +207,4 @@ APP_MAIN_InitDataSystem (void)
 
   s_xpt2046_0.p_spi_Handle = &spi_xpt2046_handle;
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
-
-  s_data_system.s_rssi_ibeacon_queue = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
-  s_data_system.s_location_tag_queue = xQueueCreate(16, sizeof(location_infor_tag_t));
 }

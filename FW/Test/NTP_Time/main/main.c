@@ -12,8 +12,8 @@
 
 #define TAG "NTP"
 
-uint8_t ssid_name[] = "Van Son";
-uint8_t password[]  = "26061975";
+uint8_t ssid_name[] = "Khoa";
+uint8_t password[]  = "17042021";
 
 void
 time_sync_notification_cb (struct timeval *tv)
