@@ -156,7 +156,12 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # print(json_data)
                         
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
-                        mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
+                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
+                        
+                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
+                            print(f"Message successfully sent with {client_id}!")
+                        else:
+                            print(f"Failed to send message with {client_id}:", info.rc)
 
                     elif len(content_data) == 36:
                         parsed = handle_data.parse_36_byte_content(content_data)
@@ -173,7 +178,12 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         # print(json_data)
                         
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
-                        mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
+                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=0)
+                        
+                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
+                            print(f"Message successfully sent with {client_id}!")
+                        else:
+                            print(f"Failed to send message with {client_id}:", info.rc)
 
                     else:
                         print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
