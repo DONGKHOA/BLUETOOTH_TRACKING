@@ -1,0 +1,226 @@
+Chip is ESP32-D0WD (revision v1.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: e465b84062d0
+Manufacturer: 5e
+Device: 4016
+Status value: 0x100200
+Detected flash size: 4MB
+
+
+start detect chip...please wait
+chip sync ...
+Chip is ESP32-D0WD-V3 (revision v3.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: b8d61a6a3d0c
+Manufacturer: 5e
+Device: 4016
+Status value: 0x100200
+Detected flash size: 4MB
+
+I (63) boot: Chip Revision: 3
+I (65) boot_comm: chip revision: 3, min. bootloader chip revision: 0
+I (39) boot: ESP-IDF v3.3.2-323-gbf0220609-dirty 2nd stage bootloader
+I (40) boot: compile time 00:41:19
+I (41) boot: Enabling RNG early entropy source...
+I (46) boot: SPI Speed      : 80MHz
+I (50) boot: SPI Mode       : DIO
+I (54) boot: SPI Flash Size : 4MB
+I (58) boot: Partition Table:
+I (62) boot: ## Label            Usage          Type ST Offset   Length
+I (69) boot:  0 otadata          OTA data         01 00 0000b000 00002000
+I (77) boot:  1 phy_init         RF data          01 01 0000d000 00001000
+I (84) boot:  2 cert             WiFi data        01 02 0000e000 00008000
+I (92) boot:  3 nvs              WiFi data        01 02 00016000 0002a000
+I (99) boot:  4 ota_0            OTA app          00 10 00040000 001e0000
+I (107) boot:  5 ota_1            OTA app          00 11 00220000 001e0000
+I (114) boot: End of partition table
+I (119) boot_comm: chip revision: 3, min. application chip revision: 0
+I (126) esp_image: segment 0: paddr=0x00220020 vaddr=0x3f400020 size=0x34b30 (21                                 5856) map
+I (198) esp_image: segment 1: paddr=0x00254b58 vaddr=0x3ffbdb60 size=0x049dc ( 1                                 8908) load
+I (204) esp_image: segment 2: paddr=0x0025953c vaddr=0x40080000 size=0x06adc ( 2                                 7356) load
+I (214) esp_image: segment 3: paddr=0x00260020 vaddr=0x400d0020 size=0xf5330 (10                                 04336) map
+I (507) esp_image: segment 4: paddr=0x00355358 vaddr=0x40086adc size=0x14574 ( 8                                 3316) load
+I (553) boot: Loaded app from partition at offset 0x220000
+I (553) boot: Disabling RNG early entropy source...
+I (553) psram: This chip is ESP32-D0WD
+E (558) psram: PSRAM ID read error: 0xffffffff
+E (563) cpu_start: Failed to init external RAM!
+Re-enable cpu cache.
+
+abort() was called at PC 0x40081efc on core 0
+
+Backtrace:0x40093eb9:0x3ffe3b40 0x40094499:0x3ffe3b60 0x40098165:0x3ffe3b80 0x40                                 081efc:0x3ffe3bf0 0x400795d7:0x3ffe3c30 |<-CORRUPTED
+
+
+ELF file SHA256: d988f62e4dd85f27
+
+Rebooting...
+ets Jul 29 2019 12:21:46
+
+--------------------------------------------------------------------------------------
+Log của GL-S10
+
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x12 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0018,len:4
+load:0x3fff001c,len:6840
+load:0x40078000,len:12132
+load:0x40080400,len:6692
+entry 0x40080774
+I (62) boot: Chip Revision: 1
+I (63) boot_comm: chip revision: 1, min. bootloader chip revision: 0
+I (39) boot: ESP-IDF v3.3.2-323-gbf0220609-dirty 2nd stage bootloader
+I (39) boot: compile time 00:41:19
+I (40) boot: Enabling RNG early entropy source...
+I (45) boot: SPI Speed      : 80MHz
+I (49) boot: SPI Mode       : DIO
+I (53) boot: SPI Flash Size : 4MB
+I (58) boot: Partition Table:
+I (61) boot: ## Label            Usage          Type ST Offset   Length
+I (68) boot:  0 otadata          OTA data         01 00 0000b000 00002000
+I (76) boot:  1 phy_init         RF data          01 01 0000d000 00001000
+I (83) boot:  2 cert             WiFi data        01 02 0000e000 00008000
+I (91) boot:  3 nvs              WiFi data        01 02 00016000 0002a000
+I (98) boot:  4 ota_0            OTA app          00 10 00040000 001e0000
+I (106) boot:  5 ota_1            OTA app          00 11 00220000 001e0000
+I (113) boot: End of partition table
+I (118) boot_comm: chip revision: 1, min. application chip revision: 0
+I (125) esp_image: segment 0: paddr=0x00220020 vaddr=0x3f400020 size=0x34b30 (215856) map
+I (197) esp_image: segment 1: paddr=0x00254b58 vaddr=0x3ffbdb60 size=0x049dc ( 18908) load
+I (203) esp_image: segment 2: paddr=0x0025953c vaddr=0x40080000 size=0x06adc ( 27356) load
+I (213) esp_image: segment 3: paddr=0x00260020 vaddr=0x400d0020 size=0xf5330 (1004336) map
+I (506) esp_image: segment 4: paddr=0x00355358 vaddr=0x40086adc size=0x14574 ( 83316) load
+I (552) boot: Loaded app from partition at offset 0x220000
+I (552) boot: Disabling RNG early entropy source...
+I (552) psram: This chip is ESP32-D0WD
+I (557) spiram: Found 64MBit SPI RAM device
+I (562) spiram: SPI RAM mode: flash 80m sram 80m
+I (567) spiram: PSRAM initialized, cache is in low/high (2-core) mode.
+I (574) cpu_start: Pro cpu up.
+I (578) cpu_start: Application information:
+I (583) cpu_start: Project name:     gl-s10-v3_0_3
+I (588) cpu_start: App version:      3.0.3
+I (593) cpu_start: Compile time:     Jul  7 2022 11:34:05
+I (599) cpu_start: ELF file SHA256:  d988f62e4dd85f27...
+I (605) cpu_start: ESP-IDF:          v4.2.3-98-g85337dc428
+I (611) cpu_start: Starting app cpu, entry point is 0x40081e28
+I (0) cpu_start: App cpu up.
+I (1118) spiram: SPI SRAM memory test OK
+I (1118) heap_init: Initializing. RAM available for dynamic allocation:
+I (1118) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM
+I (1124) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM
+I (1131) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM
+I (1137) heap_init: At 3FFCB4A8 len 00014B58 (82 KiB): DRAM
+I (1143) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM
+I (1150) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM
+I (1156) heap_init: At 4009B050 len 00004FB0 (19 KiB): IRAM
+I (1162) cpu_start: Pro cpu start user code
+I (1167) spiram: Adding pool of 4096K of external SPI memory to heap allocator
+I (1188) spi_flash: detected chip: generic
+I (1188) spi_flash: flash io: dio
+I (1189) cpu_start: Starting scheduler on PRO CPU.
+I (0) cpu_start: Starting scheduler on APP CPU.
+I (1197) spiram: Reserving pool of 32K of internal memory for DMA/internal allocations
+../components/gl_dev_nvs/src/gl_dev_nvs.c[39]: ***NVS INIT***
+../components/gl_dev_nvs/src/gl_dev_nvs.c[553]: This is the 60 boot
+I (1287) system_api: Base MAC address is not set
+I (1297) system_api: read default base MAC address from EFUSE
+../main/src/app_sync_info.c[61]: Data has been synced
+I (1307) gpio: GPIO[33]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
+../components/gl_dev_protocol/src/gl_dev_protocol.c[42]: BLE MAC: E465B84062D2
+../components/gl_dev_protocol/src/gl_dev_protocol.c[46]: p_aes128cbc_config->key = goodlife--00C132
+I (1337) gpio: GPIO[14]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (1347) gpio: GPIO[12]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (1357) gpio: GPIO[32]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (1377) wifi:wifi driver task: 3ffd7af8, prio:23, stack:3584, core=0
+I (1387) wifi:wifi firmware version: e2a0df7
+I (1387) wifi:wifi certification version: v7.0
+I (1387) wifi:config NVS flash: enabled
+I (1387) wifi:config nano formating: disabled
+I (1387) wifi:Init data frame dynamic rx buffer num: 32
+I (1397) wifi:Init management frame dynamic rx buffer num: 32
+I (1397) wifi:Init management short buffer num: 32
+I (1407) wifi:Init static tx buffer num: 16
+I (1407) wifi:Init tx cache buffer num: 32
+I (1407) wifi:Init static rx buffer size: 1600
+I (1417) wifi:Init static rx buffer num: 10
+I (1417) wifi:Init dynamic rx buffer num: 32
+I (1427) wifi_init: rx ba win: 6
+I (1427) wifi_init: tcpip mbox: 32
+I (1427) wifi_init: udp mbox: 6
+I (1437) wifi_init: tcp mbox: 6
+I (1437) wifi_init: tcp tx win: 5744
+I (1447) wifi_init: tcp rx win: 5744
+I (1447) wifi_init: tcp mss: 1440
+I (1457) phy_init: phy_version 4670,719f9f6,Feb 18 2021,17:07:07
+I (1537) wifi:mode : sta (e4:65:b8:40:62:d0)
+../main/src/app_dev_info.c[177]: WIFI_EVENT_STA_START
+../components/gl_dev_network/src/gl_dev_network.c[66]: Get efuse device hardware version: 2
+I (1557) wifi:new:<9,2>, old:<1,0>, ap:<255,255>, sta:<9,2>, prof:1
+I (1557) wifi:state: init -> auth (b0)
+I (1567) wifi:state: auth -> assoc (0)
+I (1567) wifi:state: assoc -> run (10)
+I (1597) esp_eth.netif.glue: e4:65:b8:40:62:d3
+I (1597) esp_eth.netif.glue: ethernet attached to netif
+I (1687) wifi:connected with 47.47, aid = 5, channel 9, 40D, bssid = 48:22:54:62:33:74
+I (1697) wifi:security: WPA2-PSK, phy: bgn, rssi: -68
+I (1697) wifi:pm start, type: 1
+
+../main/src/app_dev_info.c[184]: WIFI_EVENT_STA_CONNECTED
+I (1837) wifi:AP's beacon interval = 102400 us, DTIM period = 1
+E (3367) ping_sock: esp_ping_stop(339): ping handle can't be null
+E (3367) ping_sock: esp_ping_delete_session(315): ping handle can't be null
+PING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+I (3377) esp_netif_handlers: sta ip: 192.168.0.144, mask: 255.255.255.0, gw: 192.168.0.1
+AvgTime:nanmS Sent:1 Rec:0 min(mS):0 max(mS):0 Resp(mS):994 Timeouts:1 Total Time:0
+../main/src/app_dev_info.c[126]: gl_network_set_ip return err:20484
+../main/src/app_dev_info.c[128]: ETHERNET_EVENT_START
+I (5607) BTDM_INIT: BT controller compile version [5688ed5]
+../components/gl_dev_ble/src/gl_dev_ble.c[168]: Enable GAP
+free_size: 4127204
+../main/src/app_mqtt_info.c[245]: p_gl_mqtt_client_userConfig->host:192.168.0.131
+../main/src/app_mqtt_info.c[246]: p_gl_mqtt_client_userConfig->port:1883
+../main/src/app_mqtt_info.c[247]: p_gl_mqtt_client_userConfig->username:
+../main/src/app_mqtt_info.c[248]: p_gl_mqtt_client_userConfig->password:
+../main/src/app_mqtt_info.c[60]: Other event id:7ble cmd list create
+
+mqtt cmd list create
+use esp timer !!!
+I (5897) gpio: GPIO[33]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:3
+AvgTime:nanmS Sent:2 Rec:0 min(mS):0 max(mS):0 Resp(mS):1000 Timeouts:2 Total Time:0
+../components/gl_dev_sntp/src/iot_dev_sntp.c[71]: sntp_server_url:time.pool.aliyun.com   dev_time_zone:UTC+7
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 1
+../main/src/app_ble_info.c[723]: r=7,w=7
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 2
+../main/src/app_ble_info.c[723]: r=14,w=14
+AvgTime:nanmS Sent:3 Rec:0 min(mS):0 max(mS):0 Resp(mS):1000 Timeouts:3 Total Time:0
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 3
+../main/src/app_ble_info.c[723]: r=23,w=23
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 4
+../main/src/app_ble_info.c[723]: r=27,w=27
+AvgTime:nanmS Sent:4 Rec:0 min(mS):0 max(mS):0 Resp(mS):1000 Timeouts:4 Total Time:0
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 5
+../main/src/app_ble_info.c[723]: r=39,w=39
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 6
+AvgTime:nanmS Sent:5 Rec:0 min(mS):0 max(mS):0 Resp(mS):999 Timeouts:5 Total Time:0
+../main/src/app_ble_info.c[723]: r=54,w=54
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 7
+../main/src/app_ble_info.c[723]: r=65,w=65
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 8
+AvgTime:nanmS Sent:6 Rec:0 min(mS):0 max(mS):0 Resp(mS):999 Timeouts:6 Total Time:0
+../main/src/app_ble_info.c[723]: r=75,w=75
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 9
+../main/src/app_ble_info.c[723]: r=78,w=78
+E (15897) TRANS_TCP: [sock=55] select() timeout
+E (15897) MQTT_CLIENT: Error transport connect
+../main/src/app_mqtt_info.c[57]: MQTT_EVENT_ERROR
+../main/src/app_mqtt_info.c[36]: MQTT_EVENT_DISCONNECTED
+../components/gl_dev_sntp/src/iot_dev_sntp.c[74]: Waiting for system time to be set... 10
+../main/src/app_dev_info.c[546]: OTA functionality is ready
+

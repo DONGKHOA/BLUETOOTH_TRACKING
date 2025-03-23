@@ -22,9 +22,9 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define UART_TXD  GPIO_NUM_16
+#define UART_TXD  GPIO_NUM_15
 #define UART_RXD  GPIO_NUM_17
-#define UART_NUM  UART_NUM_2
+#define UART_NUM  UART_NUM_1
 #define BAUD_RATE 115200
 
 /******************************************************************************
@@ -108,7 +108,7 @@ TestMain_FingerPrint_Detect_Task (void *pvParameters)
   while (1)
   {
     // Get fingerprint image with retry if error code is 0x02
-    confirmation_code = DEV_AS608_GenImg(UART_PORT_NUM_2, default_address);
+    confirmation_code = DEV_AS608_GenImg(UART_NUM, default_address);
     if (confirmation_code == 0xFF)
     {
       printf("Error: Timeout\n");
@@ -117,12 +117,12 @@ TestMain_FingerPrint_Detect_Task (void *pvParameters)
     if (confirmation_code == 0x00)
     {
       confirmation_code
-          = DEV_AS608_Img2Tz(UART_PORT_NUM_2, default_address, buffer1);
+          = DEV_AS608_Img2Tz(UART_NUM, default_address, buffer1);
       if (confirmation_code == 0x00)
       {
         // Search in the database
         confirmation_code = DEV_AS608_Search(
-            UART_PORT_NUM_2, default_address, buffer1, start_page, page_number);
+            UART_NUM, default_address, buffer1, start_page, page_number);
 
         switch (confirmation_code)
         {
@@ -161,7 +161,7 @@ TestMain_Fingerprint_Register_Task (void *pvParameters)
   {
     // Get the number of saved fingerprint templates
     DEV_AS608_TempleteNum(
-        UART_PORT_NUM_2, default_address, &u16_stored_fingerprints);
+        UART_NUM, default_address, &u16_stored_fingerprints);
     u16_user_id = u16_stored_fingerprints
                   + 1; // add new fingerprint = store templates + 1 (new user)
     page_id[0] = ((u16_user_id >> 8) & 0xFF);
@@ -169,7 +169,7 @@ TestMain_Fingerprint_Register_Task (void *pvParameters)
     printf("User ID: %d\n", u16_user_id);
 
     // Get the first fingerprint image
-    confirmation_code = DEV_AS608_GenImg(UART_PORT_NUM_2, default_address);
+    confirmation_code = DEV_AS608_GenImg(UART_NUM, default_address);
     if (confirmation_code == 0xFF)
     {
       printf("Error: Timeout\n");
@@ -178,29 +178,29 @@ TestMain_Fingerprint_Register_Task (void *pvParameters)
     if (confirmation_code == 0x00)
     {
       confirmation_code
-          = DEV_AS608_Img2Tz(UART_PORT_NUM_2, default_address, buffer1);
+          = DEV_AS608_Img2Tz(UART_NUM, default_address, buffer1);
       if (confirmation_code == 0x00)
       {
         printf("Remove your finger\n");
         vTaskDelay(pdMS_TO_TICKS(2000));
 
         // Get the second fingerprint image
-        confirmation_code = DEV_AS608_GenImg(UART_PORT_NUM_2, default_address);
+        confirmation_code = DEV_AS608_GenImg(UART_NUM, default_address);
         if (confirmation_code == 0x00)
         {
           if (confirmation_code == 0x00)
           {
             confirmation_code
-                = DEV_AS608_Img2Tz(UART_PORT_NUM_2, default_address, buffer2);
+                = DEV_AS608_Img2Tz(UART_NUM, default_address, buffer2);
             if (confirmation_code == 0x00)
             {
               // Merge fingerprint features confirmation_code
               confirmation_code
-                  = DEV_AS608_RegModel(UART_PORT_NUM_2, default_address);
+                  = DEV_AS608_RegModel(UART_NUM, default_address);
               if (confirmation_code == 0)
               {
                 // Check that the fingerprint template exists in flash or not
-                confirmation_code = DEV_AS608_Search(UART_PORT_NUM_2,
+                confirmation_code = DEV_AS608_Search(UART_NUM,
                                                      default_address,
                                                      buffer1,
                                                      start_page,
@@ -208,7 +208,7 @@ TestMain_Fingerprint_Register_Task (void *pvParameters)
                 if (confirmation_code != 0)
                 {
                   confirmation_code = DEV_AS608_Store(
-                      UART_PORT_NUM_2, default_address, buffer1, page_id);
+                      UART_NUM, default_address, buffer1, page_id);
                   if (confirmation_code == 0)
                   {
                     printf("Enroll success! Stored template with ID: %d\n",
@@ -233,7 +233,7 @@ static void
 TestMain_Finger_Delete_All_Task (void *pvParameters)
 {
   uint8_t confirmation_code = DEV_AS608_DeleteChar(
-      UART_PORT_NUM_2, default_address, start_page, page_number);
+      UART_NUM, default_address, start_page, page_number);
   if (confirmation_code != 0)
   {
     printf("Failed to delete all templates");
