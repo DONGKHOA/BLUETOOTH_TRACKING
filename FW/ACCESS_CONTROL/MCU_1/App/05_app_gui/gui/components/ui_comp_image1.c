@@ -3,15 +3,6 @@
 // LVGL version: 8.3.6
 // Project name: access_control
 
-#ifndef _UI_EVENTS_H
-#define _UI_EVENTS_H
+#include "../ui.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif
+// COMPONENT Image1

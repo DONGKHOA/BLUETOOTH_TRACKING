@@ -3,12 +3,19 @@
 // LVGL version: 8.3.6
 // Project name: access_control
 
-#ifndef _UI_EVENTS_H
-#define _UI_EVENTS_H
+#ifndef _UI_COMP_IMAGE1_H
+#define _UI_COMP_IMAGE1_H
+
+#include "../ui.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// COMPONENT Image1
+#define UI_COMP_IMAGE1_IMAGE1 0
+#define _UI_COMP_IMAGE1_NUM 1
+lv_obj_t * ui_Image1_create(lv_obj_t * comp_parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -9,6 +9,7 @@
 /*** esp - idf ***************************************************************/
 
 #include "driver/spi_master.h"
+#include "esp_camera.h"
 
 /*** bsp *********************************************************************/
 
@@ -29,6 +30,7 @@
 #include "app_display.h"
 #include "app_data_transmit.h"
 // #include "app_data_receive.h"
+#include "app_handle_camera.h"
 
 #include "environment.h"
 
@@ -123,20 +125,25 @@ app_main (void)
   APP_MAIN_InitCan();
   APP_MAIN_InitNVS();
 
+  // cam_buf_size = CAMERA_WIDTH * CAMERA_HEIGHT * sizeof(lv_color_t);
+  // cam_buffer = heap_caps_malloc(cam_buf_size, MALLOC_CAP_DEFAULT);
+
   // Main Initialization data system
 
   APP_MAIN_InitDataSystem();
 
   // App Initialization
 
-  // APP_DISPLAY_Init();
-  APP_DATA_TRANSMIT_Init();
+  APP_DISPLAY_Init();
+  APP_HANDLE_CAMERA_Init();
+  // APP_DATA_TRANSMIT_Init();
   // APP_DATA_RECEIVE_Init();
 
   // App Create Task
 
-  // APP_DISPLAY_CreateTask();
-  APP_DATA_TRANSMIT_CreateTask();
+  APP_DISPLAY_CreateTask();
+  // APP_HANDLE_CAMERA_CreateTask();
+  // APP_DATA_TRANSMIT_CreateTask();
 }
 
 /******************************************************************************
@@ -211,6 +218,7 @@ APP_MAIN_InitDataSystem (void)
   s_xpt2046_0.p_spi_Handle = &spi_xpt2046_handle;
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
 
-  s_data_system.s_send_data_queue    = xQueueCreate(8, sizeof(DATA_SYNC_t));
-  s_data_system.s_receive_data_queue = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_send_data_queue      = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_receive_data_queue   = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_camera_capture_queue = xQueueCreate(8, sizeof(camera_fb_t *));
 }
