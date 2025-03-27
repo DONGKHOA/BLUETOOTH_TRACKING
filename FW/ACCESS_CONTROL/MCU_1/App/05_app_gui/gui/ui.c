@@ -12,7 +12,7 @@
 void ui_Home_screen_init(void);
 void ui_event_Home(lv_event_t * e);
 lv_obj_t * ui_Home;
-lv_obj_t * ui_Panel2;
+lv_obj_t * ui_POPUPHomePanel;
 lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
@@ -22,6 +22,7 @@ void ui_event_Menu(lv_event_t * e);
 lv_obj_t * ui_Menu;
 lv_obj_t * ui_Panel3;
 lv_obj_t * ui_AttendanceButton;
+lv_obj_t * ui_Label4;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
@@ -94,6 +95,8 @@ void ui_event_Menu(lv_event_t * e)
 
 void ui_init(void)
 {
+    LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);

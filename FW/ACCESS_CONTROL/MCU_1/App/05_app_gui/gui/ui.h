@@ -13,6 +13,8 @@ extern "C" {
 #include "lvgl.h"
 
 #include "ui_helpers.h"
+#include "components/ui_comp.h"
+#include "components/ui_comp_hook.h"
 #include "ui_events.h"
 
 
@@ -20,7 +22,7 @@ extern "C" {
 void ui_Home_screen_init(void);
 void ui_event_Home(lv_event_t * e);
 extern lv_obj_t * ui_Home;
-extern lv_obj_t * ui_Panel2;
+extern lv_obj_t * ui_POPUPHomePanel;
 extern lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
@@ -30,6 +32,7 @@ void ui_event_Menu(lv_event_t * e);
 extern lv_obj_t * ui_Menu;
 extern lv_obj_t * ui_Panel3;
 extern lv_obj_t * ui_AttendanceButton;
+extern lv_obj_t * ui_Label4;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance

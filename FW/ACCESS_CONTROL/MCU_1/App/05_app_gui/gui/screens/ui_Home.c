@@ -12,17 +12,9 @@ void ui_Home_screen_init(void)
     lv_obj_set_style_bg_color(ui_Home, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Home, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Panel2 = lv_obj_create(ui_Home);
-    lv_obj_set_width(ui_Panel2, 280);
-    lv_obj_set_height(ui_Panel2, 180);
-    lv_obj_set_align(ui_Panel2, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_Panel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_shadow_color(ui_Panel2, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_Panel2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui_Panel2, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_spread(ui_Panel2, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_x(ui_Panel2, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_y(ui_Panel2, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_POPUPHomePanel = ui_POPUPHome_create(ui_Home);
+    lv_obj_set_x(ui_POPUPHomePanel, 0);
+    lv_obj_set_y(ui_POPUPHomePanel, 0);
 
     ui_Label2 = lv_label_create(ui_Home);
     lv_obj_set_width(ui_Label2, LV_SIZE_CONTENT);   /// 1
