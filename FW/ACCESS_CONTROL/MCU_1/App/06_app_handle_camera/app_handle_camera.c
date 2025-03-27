@@ -23,6 +23,7 @@
 typedef struct
 {
   QueueHandle_t *p_camera_capture_queue;
+  QueueHandle_t *p_camera_recognition_queue;
 } app_handle_camera_t;
 
 /******************************************************************************
@@ -57,7 +58,7 @@ static camera_config_t camera_config = {
   .pin_pclk  = CAM_PIN_PCLK,
 
   // XCLK 20MHz or 10MHz for OV2640 double FPS (Experimental)
-  .xclk_freq_hz = 10000000,
+  .xclk_freq_hz = 8000000,
   .ledc_timer   = LEDC_TIMER_0,
   .ledc_channel = LEDC_CHANNEL_0,
 
@@ -65,12 +66,12 @@ static camera_config_t camera_config = {
   .frame_size
   = FRAMESIZE_QVGA, // QQVGA-UXGA Do not use sizes above QVGA when not JPEG
 
-  .jpeg_quality = 0, // 0-63 lower number means higher quality
+  .jpeg_quality = 10, // 0-63 lower number means higher quality
   .fb_count
   = 2, // if more than one, i2s runs in continuous mode. Use only with JPEG
 
   .fb_location = CAMERA_FB_IN_PSRAM,
-  .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
+  .grab_mode   = CAMERA_GRAB_WHEN_EMPTY,
 };
 
 /******************************************************************************
@@ -81,7 +82,7 @@ void
 APP_HANDLE_CAMERA_CreateTask (void)
 {
   xTaskCreate(
-      APP_HANDLE_CAMERA_task, "handle camera task", 1024 * 2, NULL, 6, NULL);
+      APP_HANDLE_CAMERA_task, "handle camera task", 1024 * 4, NULL, 6, NULL);
 }
 void
 APP_HANDLE_CAMERA_Init (void)
@@ -89,8 +90,11 @@ APP_HANDLE_CAMERA_Init (void)
   s_app_handle_camera.p_camera_capture_queue
       = &s_data_system.s_camera_capture_queue;
 
+  s_app_handle_camera.p_camera_recognition_queue
+      = &s_data_system.s_camera_recognition_queue;
+
   // initialize the camera
-  esp_err_t err            = esp_camera_init(&camera_config);
+  esp_err_t err = esp_camera_init(&camera_config);
   if (err != ESP_OK)
   {
     ESP_LOGE(TAG, "Camera Init Failed");
@@ -104,23 +108,36 @@ APP_HANDLE_CAMERA_Init (void)
 static void
 APP_HANDLE_CAMERA_task (void *arg)
 {
+  camera_fb_t *fb             = NULL;
+  camera_fb_t *fb_recognition = NULL;
+  uint8_t      u8_count       = 0;
+
   while (1)
   {
-    // for(int i=0;i<1;i++) {
-    //   camera_fb_t * fb = esp_camera_fb_get();
-    //   ESP_LOGI(TAG, "fb->len=%d", fb->len);
-    //   esp_camera_fb_return(fb);
-    // }
-  
-    //acquire a frame
-    camera_fb_t * fb = esp_camera_fb_get();
-    if (!fb) {
+    u8_count++;
+    fb = esp_camera_fb_get();
+
+    if (!fb)
+    {
       ESP_LOGE(TAG, "Camera Capture Failed");
-      return;
+      continue;
+    }
+    xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
+
+    if (u8_count == 3)
+    {
+      u8_count       = 0;
+      fb_recognition = esp_camera_fb_get();
+
+      if (!fb_recognition)
+      {
+        ESP_LOGE(TAG, "Camera Capture Failed");
+        continue;
+      }
+      xQueueSend(
+          *s_app_handle_camera.p_camera_recognition_queue, &fb_recognition, 0);
     }
 
-    xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
-    esp_camera_fb_return(fb);
-    vTaskDelay(pdMS_TO_TICKS(10));
+    vTaskDelay(pdMS_TO_TICKS(33));
   }
 }

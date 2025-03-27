@@ -2,9 +2,3 @@
 // SquareLine Studio version: SquareLine Studio 1.5.1
 // LVGL version: 8.3.6
 // Project name: access_control
-
-#include "../ui.h"
-
-void ui_comp_Image1_create_hook(lv_obj_t * comp)
-{
-}

@@ -30,6 +30,8 @@ static void APP_STATUS_LED_Task(void *arg);
 void
 APP_STATUS_LED_CreateTask (void)
 {
+  xTaskCreate(
+    APP_STATUS_LED_Task, "led status task", 1024 * 2, NULL, 13, NULL);
 }
 
 void
