@@ -31,6 +31,7 @@
 #include "app_data_transmit.h"
 // #include "app_data_receive.h"
 #include "app_handle_camera.h"
+#include "app_face_recognition.hpp"
 
 #include "environment.h"
 
@@ -94,6 +95,8 @@
 ili9341_handle_t s_ili9341_0;
 xpt2046_handle_t s_xpt2046_0;
 
+Face *p_face;
+
 /******************************************************************************
  *    PRIVATE VARIABLES
  *****************************************************************************/
@@ -108,7 +111,6 @@ static spi_device_handle_t spi_xpt2046_handle;
 static inline void APP_MAIN_InitGPIO(void);
 static inline void APP_MAIN_InitCan(void);
 static inline void APP_MAIN_InitSpi(void);
-static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
 
 /******************************************************************************
@@ -123,7 +125,6 @@ app_main (void)
   APP_MAIN_InitGPIO();
   APP_MAIN_InitSpi();
   APP_MAIN_InitCan();
-  APP_MAIN_InitNVS();
 
   // cam_buf_size = CAMERA_WIDTH * CAMERA_HEIGHT * sizeof(lv_color_t);
   // cam_buffer = heap_caps_malloc(cam_buf_size, MALLOC_CAP_DEFAULT);
@@ -135,7 +136,8 @@ app_main (void)
   // App Initialization
 
   APP_DISPLAY_Init();
-  APP_HANDLE_CAMERA_Init();
+  // APP_HANDLE_CAMERA_Init();
+  // p_face = new Face();
   // APP_DATA_TRANSMIT_Init();
   // APP_DATA_RECEIVE_Init();
 
@@ -143,6 +145,7 @@ app_main (void)
 
   APP_DISPLAY_CreateTask();
   // APP_HANDLE_CAMERA_CreateTask();
+  // p_face->CreateTask();
   // APP_DATA_TRANSMIT_CreateTask();
 }
 
@@ -203,12 +206,6 @@ APP_MAIN_InitSpi (void)
 }
 
 static inline void
-APP_MAIN_InitNVS (void)
-{
-  // NVS_Init();
-}
-
-static inline void
 APP_MAIN_InitDataSystem (void)
 {
   s_ili9341_0.p_spi_Handle = &spi_ili9341_handle;
@@ -221,4 +218,8 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_send_data_queue      = xQueueCreate(8, sizeof(DATA_SYNC_t));
   s_data_system.s_receive_data_queue   = xQueueCreate(8, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(8, sizeof(camera_fb_t *));
+  s_data_system.s_camera_recognition_queue
+      = xQueueCreate(8, sizeof(camera_fb_t *));
+  s_data_system.s_result_recognition_queue
+      = xQueueCreate(8, sizeof(coord_data_recognition_t));
 }

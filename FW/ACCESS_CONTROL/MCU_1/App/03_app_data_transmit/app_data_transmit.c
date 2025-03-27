@@ -60,7 +60,7 @@ APP_DATA_TRANSMIT_CreateTask (void)
 void
 APP_DATA_TRANSMIT_Init (void)
 {
-  data_transmit_data.p_send_data_queue = s_data_system.s_send_data_queue;
+  data_transmit_data.p_send_data_queue = &s_data_system.s_send_data_queue;
 }
 
 /******************************************************************************

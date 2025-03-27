@@ -32,6 +32,7 @@ static void APP_DISPLAY_Task(void *arg);
 
 extern ili9341_handle_t s_ili9341_0;
 extern xpt2046_handle_t s_xpt2046_0;
+extern lv_obj_t *ui_Time;
 
 /******************************************************************************
  *   PUBLIC FUNCTION

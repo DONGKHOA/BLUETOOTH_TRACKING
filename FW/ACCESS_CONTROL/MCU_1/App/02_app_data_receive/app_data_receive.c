@@ -48,6 +48,8 @@ static void APP_DATA_RECEIVE_task(void *arg);
 void
 APP_DATA_RECEIVE_CreateTask (void)
 {
+  xTaskCreate(
+    APP_DATA_RECEIVE_task, "data receive task", 1024 * 2, NULL, 13, NULL);
 }
 void
 APP_DATA_RECEIVE_Init (void)
