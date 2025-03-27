@@ -1,4 +1,6 @@
-SET(SOURCES screens/ui_Home.c
+SET(SOURCES components/ui_comp_popuphome.c
+    components/ui_comp.c
+    screens/ui_Home.c
     screens/ui_Menu.c
     screens/ui_Attendance.c
     screens/ui_UserData.c

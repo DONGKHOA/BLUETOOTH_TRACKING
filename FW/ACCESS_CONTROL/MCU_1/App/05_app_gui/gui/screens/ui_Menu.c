@@ -23,9 +23,24 @@ void ui_Menu_screen_init(void)
     lv_obj_set_style_shadow_ofs_y(ui_Panel3, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_AttendanceButton = lv_btn_create(ui_Menu);
-    lv_obj_set_width(ui_AttendanceButton, 100);
-    lv_obj_set_height(ui_AttendanceButton, 50);
+    lv_obj_set_width(ui_AttendanceButton, 180);
+    lv_obj_set_height(ui_AttendanceButton, 30);
+    lv_obj_set_x(ui_AttendanceButton, 0);
+    lv_obj_set_y(ui_AttendanceButton, -40);
     lv_obj_set_align(ui_AttendanceButton, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_AttendanceButton, lv_color_hex(0xCEC9C9), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_AttendanceButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_AttendanceButton, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_AttendanceButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_AttendanceButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Label4 = lv_label_create(ui_Menu);
+    lv_obj_set_width(ui_Label4, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label4, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Label4, 0);
+    lv_obj_set_y(ui_Label4, -40);
+    lv_obj_set_align(ui_Label4, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label4, "Attendance");
 
     lv_obj_add_event_cb(ui_Menu, ui_event_Menu, LV_EVENT_ALL, NULL);
 
