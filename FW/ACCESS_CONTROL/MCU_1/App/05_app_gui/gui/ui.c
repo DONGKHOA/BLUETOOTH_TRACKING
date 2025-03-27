@@ -12,17 +12,21 @@
 void ui_Home_screen_init(void);
 void ui_event_Home(lv_event_t * e);
 lv_obj_t * ui_Home;
+lv_obj_t * ui_HomeText;
 lv_obj_t * ui_POPUPHomePanel;
-lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
 void ui_Menu_screen_init(void);
 void ui_event_Menu(lv_event_t * e);
 lv_obj_t * ui_Menu;
-lv_obj_t * ui_Panel3;
+lv_obj_t * ui_Menu1;
+lv_obj_t * ui_POPUPMenuPanel1;
 lv_obj_t * ui_AttendanceButton;
-lv_obj_t * ui_Label4;
+lv_obj_t * ui_Label1;
+void ui_event_DataButton(lv_event_t * e);
+lv_obj_t * ui_DataButton;
+lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
@@ -77,7 +81,7 @@ void ui_event_Home(lv_event_t * e)
 
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Menu_screen_init);
+        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Menu_screen_init);
     }
 }
 
@@ -87,7 +91,16 @@ void ui_event_Menu(lv_event_t * e)
 
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_screen_init);
+        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
+    }
+}
+
+void ui_event_DataButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        Data_List(e);
     }
 }
 

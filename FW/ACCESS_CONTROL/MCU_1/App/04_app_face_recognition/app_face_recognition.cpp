@@ -13,6 +13,22 @@
 #define TAG "APP_FACE_RECOGNITION"
 
 /******************************************************************************
+ *    PRIVATE TYPEDEFS
+ *****************************************************************************/
+
+typedef struct
+{
+  int left_eye_x;
+  int left_eye_y;
+  int right_eye_x;
+  int right_eye_y;
+  int left_mouth_x;
+  int left_mouth_y;
+  int right_mouth_x;
+  
+} app_handle_camera_t;
+
+/******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
@@ -101,17 +117,17 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
  *  PRIVATE FUNCTION
  *****************************************************************************/
 
-static void APP_FACE_RECOGNITION_Attendance(Face *self)
+static void
+APP_FACE_RECOGNITION_Attendance (Face *self)
 {
-
 }
 
-static void APP_FACE_RECOGNITION_Enroll(Face *self)
+static void
+APP_FACE_RECOGNITION_Enroll (Face *self)
 {
-
 }
 
-static void APP_FACE_RECOGNITION_Delete(Face *self)
+static void
+APP_FACE_RECOGNITION_Delete (Face *self)
 {
-
 }
