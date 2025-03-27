@@ -1,0 +1,2 @@
+Removed Pin From Net: NetName=Vref_0.75V Pin=VREF_0.75V-1
+Removed Member From Class: ClassName=4-20mA_Converter Member=VREF_0.75V

@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=Net0-10V_ADC_1 Pin=D1-A
+Removed Pin From Net: NetName=GND Pin=D2-A
+Removed Pin From Net: NetName=Net0-10V_ADC_1 Pin=D2-C
+Removed Pin From Net: NetName=Net4-20mA_ADC_1 Pin=D3-A
+Removed Pin From Net: NetName=GND Pin=D4-A
+Removed Pin From Net: NetName=Net4-20mA_ADC_1 Pin=D4-C
+Removed Member From Class: ClassName=0-10V_Converter Member=3V3
+Removed Member From Class: ClassName=0-10V_Converter Member=D1
+Removed Member From Class: ClassName=0-10V_Converter Member=D2
+Removed Member From Class: ClassName=4-20mA_Converter Member=D3
+Removed Member From Class: ClassName=4-20mA_Converter Member=D4

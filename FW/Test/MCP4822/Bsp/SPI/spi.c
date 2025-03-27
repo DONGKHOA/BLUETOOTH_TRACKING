@@ -120,12 +120,12 @@ BSP_spiReadByte (spi_device_handle_t spi_handle)
   return rxData;
 }
 
-esp_err_t
-BSP_spiSChangeClock (spi_device_handle_t *spi_handle,
-                     spi_host_device_t    e_spi_host,
-                     spi_config_clock_t   e_clock_speed_hz)
-{
-  devcfg.clock_speed_hz = e_clock_speed_hz;
+// esp_err_t
+// BSP_spiSChangeClock (spi_device_handle_t *spi_handle,
+//                      spi_host_device_t    e_spi_host,
+//                      spi_config_clock_t   e_clock_speed_hz)
+// {
+//   devcfg.clock_speed_hz = e_clock_speed_hz;
 
-  return spi_bus_add_device(e_spi_host, &devcfg, &spi_handle);
-}
+//   return spi_bus_add_device(e_spi_host, &devcfg, &spi_handle);
+// }

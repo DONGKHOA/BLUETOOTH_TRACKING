@@ -83,7 +83,7 @@ static void
 TestMain_MCP4822_Task (void *pvParameter)
 {
   DEV_MCP4822_SetValue(
-      spi_mcp4822_handle, MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, CS_PIN, 3000);
+      spi_mcp4822_handle, MCP4822_DAC_A, MCP4822_OUTPUT_GAIN_x2, CS_PIN, 2000);
   while (1)
   {
     vTaskDelay(pdMS_TO_TICKS(1000));

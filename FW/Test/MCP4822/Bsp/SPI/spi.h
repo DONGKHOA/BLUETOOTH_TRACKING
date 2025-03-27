@@ -161,9 +161,9 @@ extern "C"
    *
    * @return esp_err_t ESP_OK on success, or an error code on failure.
    */
-  esp_err_t BSP_spiSChangeClock(spi_device_handle_t spi_handle,
-                                spi_host_device_t   e_spi_host,
-                                spi_config_clock_t  e_clock_speed_hz);
+  // esp_err_t BSP_spiSChangeClock(spi_device_handle_t spi_handle,
+  //                               spi_host_device_t   e_spi_host,
+  //                               spi_config_clock_t  e_clock_speed_hz);
 #ifdef __cplusplus
 }
 #endif

@@ -1,0 +1,7 @@
+Added Component: Designator=GND(TestPoint_Pad_3.0x3.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=GND-1
+Added Member To Class: ClassName=Power_Supply Member=Component GND Testpoint_SMD

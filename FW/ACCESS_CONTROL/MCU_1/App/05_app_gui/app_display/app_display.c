@@ -41,7 +41,7 @@ void
 APP_DISPLAY_CreateTask (void)
 {
   // Create task
-  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 10, NULL, 5, NULL);
+  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 40, NULL, 5, NULL);
 }
 
 void

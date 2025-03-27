@@ -1,0 +1,2 @@
+Removed Pin From Net: NetName=2V5 Pin=2V5-1
+Removed Member From Class: ClassName=4-20mA_Converter Member=2V5
