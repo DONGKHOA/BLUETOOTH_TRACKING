@@ -22,7 +22,9 @@ class Face
 {
   private:
   QueueHandle_t          *p_camera_recognition_queue;
-  QueueHandle_t *p_result_recognition_queue;
+  QueueHandle_t          *p_result_recognition_queue;
+  EventGroupHandle_t     *p_display_event;
+  std::list<dl::detect::result_t> detect_results;
   HumanFaceDetectMSR01    detector;
   HumanFaceDetectMNP01    detector2;
   FaceRecognition112V1S8 *recognizer;

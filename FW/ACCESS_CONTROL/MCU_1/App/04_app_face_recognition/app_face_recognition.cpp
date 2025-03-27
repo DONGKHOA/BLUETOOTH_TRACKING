@@ -16,6 +16,10 @@
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
+static void APP_FACE_RECOGNITION_Attendance(Face *self);
+static void APP_FACE_RECOGNITION_Enroll(Face *self);
+static void APP_FACE_RECOGNITION_Delete(Face *self);
+
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
@@ -28,6 +32,7 @@ Face::Face ()
 {
   this->p_camera_recognition_queue = &s_data_system.s_camera_recognition_queue;
   this->p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
+  this->p_display_event            = &s_data_system.s_display_event;
   this->recognizer                 = new FaceRecognition112V1S8();
 }
 
@@ -50,23 +55,63 @@ Face::CreateTask ()
 void
 Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 {
-  Face               *self = static_cast<Face *>(pvParameters);
+  Face        *self = static_cast<Face *>(pvParameters);
   camera_fb_t *fb   = nullptr;
+  EventBits_t  uxBits;
 
-  coord_data_recognition_t s_coord_data_recognition = 
-  {
-    .s_coord_face = {0, 0, 0, 0},
-    .s_coord_eye = {0, 0, 0, 0},
-    .ena_face = false,
-    .ena_eye = false
-  };
+  coord_data_recognition_t s_coord_data_recognition
+      = { .s_coord_face = { 0, 0, 0, 0 },
+          .s_coord_eye  = { 0, 0, 0, 0 },
+          .ena_face     = false,
+          .ena_eye      = false };
 
   while (1)
   {
     if (xQueueReceive(*self->p_camera_recognition_queue, &fb, portMAX_DELAY)
         == pdPASS)
     {
+      uxBits = xEventGroupWaitBits(*self->p_display_event,
+                                   ATTENDANCE_BIT | ENROLL_FACE_ID_BIT
+                                       | DELETE_FACE_ID_BIT,
+                                   pdFALSE,
+                                   pdFALSE,
+                                   0);
+
+      if ((uxBits & ATTENDANCE_BIT) != 0)
+      {
+        APP_FACE_RECOGNITION_Attendance(self);
+      }
+
+      if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
+      {
+        APP_FACE_RECOGNITION_Enroll(self);
+      }
+
+      if ((uxBits & DELETE_FACE_ID_BIT) != 0)
+      {
+        APP_FACE_RECOGNITION_Delete(self);
+      }
+
       esp_camera_fb_return(fb);
     }
   }
+}
+
+/******************************************************************************
+ *  PRIVATE FUNCTION
+ *****************************************************************************/
+
+static void APP_FACE_RECOGNITION_Attendance(Face *self)
+{
+
+}
+
+static void APP_FACE_RECOGNITION_Enroll(Face *self)
+{
+
+}
+
+static void APP_FACE_RECOGNITION_Delete(Face *self)
+{
+
 }
