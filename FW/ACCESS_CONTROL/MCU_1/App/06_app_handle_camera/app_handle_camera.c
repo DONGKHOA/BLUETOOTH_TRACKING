@@ -22,8 +22,9 @@
 
 typedef struct
 {
-  QueueHandle_t *p_camera_capture_queue;
-  QueueHandle_t *p_camera_recognition_queue;
+  QueueHandle_t      *p_camera_capture_queue;
+  QueueHandle_t      *p_camera_recognition_queue;
+  EventGroupHandle_t *p_display_event;
 } app_handle_camera_t;
 
 /******************************************************************************
@@ -93,6 +94,8 @@ APP_HANDLE_CAMERA_Init (void)
   s_app_handle_camera.p_camera_recognition_queue
       = &s_data_system.s_camera_recognition_queue;
 
+  s_app_handle_camera.p_display_event = &s_data_system.s_display_event;
+
   // initialize the camera
   esp_err_t err = esp_camera_init(&camera_config);
   if (err != ESP_OK)
@@ -108,13 +111,23 @@ APP_HANDLE_CAMERA_Init (void)
 static void
 APP_HANDLE_CAMERA_task (void *arg)
 {
+  EventBits_t  uxBits;
   camera_fb_t *fb             = NULL;
   camera_fb_t *fb_recognition = NULL;
-  uint8_t      u8_count       = 0;
 
   while (1)
   {
-    u8_count++;
+    uxBits = xEventGroupWaitBits(*s_app_handle_camera.p_display_event,
+                                 ATTENDANCE_BIT | ENROLL_FACE_ID_BIT,
+                                 pdFALSE,
+                                 pdFALSE,
+                                 portMAX_DELAY);
+
+    if (uxBits == 0)
+    {
+      continue;
+    }
+
     fb = esp_camera_fb_get();
 
     if (!fb)
@@ -124,19 +137,15 @@ APP_HANDLE_CAMERA_task (void *arg)
     }
     xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
 
-    if (u8_count == 3)
-    {
-      u8_count       = 0;
-      fb_recognition = esp_camera_fb_get();
+    fb_recognition = esp_camera_fb_get();
 
-      if (!fb_recognition)
-      {
-        ESP_LOGE(TAG, "Camera Capture Failed");
-        continue;
-      }
-      xQueueSend(
-          *s_app_handle_camera.p_camera_recognition_queue, &fb_recognition, 0);
+    if (!fb_recognition)
+    {
+      ESP_LOGE(TAG, "Camera Capture Failed");
+      continue;
     }
+    xQueueSend(
+        *s_app_handle_camera.p_camera_recognition_queue, &fb_recognition, 0);
 
     vTaskDelay(pdMS_TO_TICKS(33));
   }

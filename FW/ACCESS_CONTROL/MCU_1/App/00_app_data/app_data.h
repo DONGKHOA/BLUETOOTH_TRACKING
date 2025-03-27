@@ -22,6 +22,13 @@ extern "C"
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
 
+#define ATTENDANCE_BIT         BIT0
+#define ENROLL_FACE_ID_BIT     BIT1
+#define ENROLL_FINGERPRINT_BIT BIT2
+#define DELETE_FACE_ID_BIT     BIT3
+#define DELETE_FINGERPRINT_BIT BIT4
+#define AUTHENTICATION_BIT     BIT5
+
   typedef struct
   {
     struct coord_face
@@ -57,11 +64,12 @@ extern "C"
    */
   typedef struct _DATA_System_t
   {
-    QueueHandle_t s_camera_capture_queue;
-    QueueHandle_t s_camera_recognition_queue;
-    QueueHandle_t s_result_recognition_queue;
-    QueueHandle_t s_send_data_queue;
-    QueueHandle_t s_receive_data_queue;
+    QueueHandle_t      s_camera_capture_queue;
+    QueueHandle_t      s_camera_recognition_queue;
+    QueueHandle_t      s_result_recognition_queue;
+    QueueHandle_t      s_send_data_queue;
+    QueueHandle_t      s_receive_data_queue;
+    EventGroupHandle_t s_display_event;
   } DATA_System_t;
 
   /****************************************************************************
