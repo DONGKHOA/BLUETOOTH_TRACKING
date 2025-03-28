@@ -7,7 +7,9 @@ file(GLOB_RECURSE gui_sources
 list(APPEND sources ${gui_sources})
 
 set (sources    "app_display/app_display.c"
-                "ui_events.c")
+                "events/attendance_event.c"
+                "events/enroll_event.c"
+                "events/data_event.c")
 
 set (includes   "gui"
                 "app_display")

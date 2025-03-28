@@ -139,16 +139,16 @@ app_main (void)
   // App Initialization
 
   APP_DISPLAY_Init();
-  // APP_HANDLE_CAMERA_Init();
-  // p_face = new Face();
+  APP_HANDLE_CAMERA_Init();
+  p_face = new Face();
   // APP_DATA_TRANSMIT_Init();
   // APP_DATA_RECEIVE_Init();
 
   // App Create Task
 
   APP_DISPLAY_CreateTask();
-  // APP_HANDLE_CAMERA_CreateTask();
-  // p_face->CreateTask();
+  APP_HANDLE_CAMERA_CreateTask();
+  p_face->CreateTask();
   // APP_DATA_TRANSMIT_CreateTask();
 }
 
@@ -220,7 +220,7 @@ APP_MAIN_InitDataSystem (void)
 
   s_data_system.s_send_data_queue      = xQueueCreate(8, sizeof(DATA_SYNC_t));
   s_data_system.s_receive_data_queue   = xQueueCreate(8, sizeof(DATA_SYNC_t));
-  s_data_system.s_camera_capture_queue = xQueueCreate(8, sizeof(camera_fb_t *));
+  s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_camera_recognition_queue
       = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_result_recognition_queue
