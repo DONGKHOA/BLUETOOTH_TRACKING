@@ -21,8 +21,8 @@
  *****************************************************************************/
 
 #define CAN_MODE      TWAI_MODE_NORMAL
-#define TXD_PIN       GPIO_NUM_19
-#define RXD_PIN       GPIO_NUM_20
+#define TXD_PIN       GPIO_NUM_42
+#define RXD_PIN       GPIO_NUM_41
 #define TXD_QUEUE_LEN 1024
 #define RXD_QUEUE_LEN 1024
 #define INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
@@ -66,12 +66,12 @@ app_main (void)
   BSP_canStart();
 
   // Create Task to receive data
-  xTaskCreate(TestMain_CAN_ReceiveMessage_Task,
-              "TestMain_CAN_ReceiveMessage_Task",
-              4096,
-              NULL,
-              10,
-              NULL);
+  // xTaskCreate(TestMain_CAN_ReceiveMessage_Task,
+  //             "TestMain_CAN_ReceiveMessage_Task",
+  //             4096,
+  //             NULL,
+  //             10,
+  //             NULL);
   while (1)
   {
     // Send Message
@@ -95,7 +95,7 @@ TestMain_CAN_ReceiveMessage_Task (void *pvParameters)
     BSP_canGetStatus(&status);
     if (status.msgs_to_rx > 0)
     {
-      BSP_canReceive(&receive_message, portMax_DELAY);
+      BSP_canReceive(&receive_message, portMAX_DELAY);
       if (receive_message.extd)
       {
         printf("Message is in Extended Format\n");

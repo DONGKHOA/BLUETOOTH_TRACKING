@@ -30,3 +30,7 @@ def EVENT_Enroll_Before(event_struct):
 def EVENT_Enroll_After(event_struct):
     return
 
+
+def EVENT_Data_List(event_struct):
+    return
+
