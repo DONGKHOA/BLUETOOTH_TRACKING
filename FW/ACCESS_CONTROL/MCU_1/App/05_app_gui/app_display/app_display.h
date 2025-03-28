@@ -5,10 +5,6 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <stdio.h>
-
-#include "lvgl.h"
-
 #ifdef __cplusplus
 extern "C"
 {

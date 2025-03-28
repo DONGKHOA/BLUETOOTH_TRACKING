@@ -2,15 +2,20 @@
  *      INCLUDES
  ******************************************************************************/
 
-#include "app_display.h"
-#include "app_data.h"
-#include "ui.h"
+ #include "freertos/FreeRTOS.h"
+ #include "freertos/queue.h"
+ #include "freertos/event_groups.h"
 
 #include "ili9341.h"
 #include "xpt2046.h"
 
 #include "esp_log.h"
 #include "esp_timer.h"
+
+#include "lvgl.h"
+#include "ui.h"
+#include "app_display.h"
+#include "app_data.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -32,7 +37,7 @@ static void APP_DISPLAY_Task(void *arg);
 
 extern ili9341_handle_t s_ili9341_0;
 extern xpt2046_handle_t s_xpt2046_0;
-extern lv_obj_t *ui_Time;
+extern lv_obj_t        *ui_Time;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -69,8 +74,8 @@ APP_DISPLAY_Init (void)
 
   static lv_indev_drv_t indev_drv;
   lv_indev_drv_init(&indev_drv);
-  indev_drv.type          = LV_INDEV_TYPE_POINTER; // Touch device type: pointer
-  indev_drv.read_cb       = DEV_XPT2046_Read; // Callback to read touch data
+  indev_drv.type    = LV_INDEV_TYPE_POINTER; // Touch device type: pointer
+  indev_drv.read_cb = DEV_XPT2046_Read;      // Callback to read touch data
   lv_indev_drv_register(&indev_drv);
 
   // Create a timer to increase LVGL tick

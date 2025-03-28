@@ -5,10 +5,6 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <stdio.h>
-
-#include <stdint.h>
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/event_groups.h"

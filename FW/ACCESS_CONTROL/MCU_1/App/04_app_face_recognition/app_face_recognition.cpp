@@ -2,9 +2,12 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include "app_face_recognition.hpp"
-
+#include "sdkconfig.h"
 #include "esp_camera.h"
+#include "esp_log.h"
+
+#include "app_data.h"
+#include "app_face_recognition.hpp"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -25,16 +28,14 @@ typedef struct
   int left_mouth_x;
   int left_mouth_y;
   int right_mouth_x;
-  
+
 } app_handle_camera_t;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_FACE_RECOGNITION_Attendance(Face *self);
-static void APP_FACE_RECOGNITION_Enroll(Face *self);
-static void APP_FACE_RECOGNITION_Delete(Face *self);
+static void print_detection_result(std::list<dl::detect::result_t> &results);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -93,19 +94,61 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
                                    pdFALSE,
                                    0);
 
+      std::list<dl::detect::result_t> &detect_candidates = self->detector.infer(
+          (uint16_t *)fb->buf, { (int)fb->height, (int)fb->width, 3 });
+      std::list<dl::detect::result_t> &detect_results
+          = self->detector2.infer((uint16_t *)fb->buf,
+                                  { (int)fb->height, (int)fb->width, 3 },
+                                  detect_candidates);
+
+      if (detect_results.size() != 1)
+      {
+        continue;
+      }
+
       if ((uxBits & ATTENDANCE_BIT) != 0)
       {
-        APP_FACE_RECOGNITION_Attendance(self);
+        self->recognizer->enroll_id((uint16_t *)fb->buf,
+                                    { (int)fb->height, (int)fb->width, 3 },
+                                    detect_results.front().keypoint,
+                                    "",
+                                    true);
+        ESP_LOGW("ENROLL",
+                 "ID %d is enrolled",
+                 self->recognizer->get_enrolled_ids().back().id);
       }
 
       if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
       {
-        APP_FACE_RECOGNITION_Enroll(self);
+        self->recognize_result = self->recognizer->recognize(
+            (uint16_t *)fb->buf,
+            { (int)fb->height, (int)fb->width, 3 },
+            detect_results.front().keypoint);
+
+        print_detection_result(detect_results);
+
+        if (self->recognize_result.id > 0)
+        {
+          ESP_LOGI("RECOGNIZE",
+                   "Similarity: %f, Match ID: %d",
+                   self->recognize_result.similarity,
+                   self->recognize_result.id);
+        }
+        else
+        {
+          ESP_LOGE("RECOGNIZE",
+                   "Similarity: %f, Match ID: %d",
+                   self->recognize_result.similarity,
+                   self->recognize_result.id);
+        }
       }
 
       if ((uxBits & DELETE_FACE_ID_BIT) != 0)
       {
-        APP_FACE_RECOGNITION_Delete(self);
+        vTaskDelay(10);
+        self->recognizer->delete_id(true);
+        ESP_LOGE(
+            "DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
       }
 
       esp_camera_fb_return(fb);
@@ -118,16 +161,36 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
  *****************************************************************************/
 
 static void
-APP_FACE_RECOGNITION_Attendance (Face *self)
+print_detection_result (std::list<dl::detect::result_t> &results)
 {
-}
+  int i = 0;
+  for (std::list<dl::detect::result_t>::iterator prediction = results.begin();
+       prediction != results.end();
+       prediction++, i++)
+  {
+    ESP_LOGI("detection_result",
+             "[%2d]: (%3d, %3d, %3d, %3d)",
+             i,
+             prediction->box[0],
+             prediction->box[1],
+             prediction->box[2],
+             prediction->box[3]);
 
-static void
-APP_FACE_RECOGNITION_Enroll (Face *self)
-{
-}
-
-static void
-APP_FACE_RECOGNITION_Delete (Face *self)
-{
+    if (prediction->keypoint.size() == 10)
+    {
+      ESP_LOGI("detection_result",
+               "      left eye: (%3d, %3d), right eye: (%3d, %3d), nose: (%3d, "
+               "%3d), mouth left: (%3d, %3d), mouth right: (%3d, %3d)",
+               prediction->keypoint[0],
+               prediction->keypoint[1], // left eye
+               prediction->keypoint[6],
+               prediction->keypoint[7], // right eye
+               prediction->keypoint[4],
+               prediction->keypoint[5], // nose
+               prediction->keypoint[2],
+               prediction->keypoint[3], // mouth left corner
+               prediction->keypoint[8],
+               prediction->keypoint[9]); // mouth right corner
+    }
+  }
 }
