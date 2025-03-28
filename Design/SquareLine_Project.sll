@@ -22,10 +22,10 @@
     "theme_dark": false,
     "theme_color1": 5,
     "theme_color2": 0,
-    "uiExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
-    "projectExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
+    "uiExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
+    "projectExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 51,
+    "backup_cnt": 61,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
@@ -42,5 +42,5 @@
     "drive_fatfs_path": "",
     "naming": "Name",
     "naming_force_lowercase": false,
-    "nidcnt": 1000374
+    "nidcnt": 1000434
 }

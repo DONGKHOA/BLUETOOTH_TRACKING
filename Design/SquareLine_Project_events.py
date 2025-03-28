@@ -14,3 +14,19 @@ def Data_List(event_struct):
 def TestFunction(event_struct):
     return
 
+
+def EVENT_Attendance_Before(event_struct):
+    return
+
+
+def EVENT_Attendance_After(event_struct):
+    return
+
+
+def EVENT_Enroll_Before(event_struct):
+    return
+
+
+def EVENT_Enroll_After(event_struct):
+    return
+

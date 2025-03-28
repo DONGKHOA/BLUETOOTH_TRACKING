@@ -77,6 +77,7 @@ void ui_Menu_screen_init(void)
     lv_obj_set_y(ui_Button1, 50);
     lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
 
+    lv_obj_add_event_cb(ui_AttendanceButton, ui_event_AttendanceButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_DataButton, ui_event_DataButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Menu, ui_event_Menu, LV_EVENT_ALL, NULL);

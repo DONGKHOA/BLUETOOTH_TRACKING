@@ -32,6 +32,7 @@ void ui_event_Menu(lv_event_t * e);
 extern lv_obj_t * ui_Menu;
 extern lv_obj_t * ui_Menu1;
 extern lv_obj_t * ui_POPUPMenuPanel1;
+void ui_event_AttendanceButton(lv_event_t * e);
 extern lv_obj_t * ui_AttendanceButton;
 extern lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);

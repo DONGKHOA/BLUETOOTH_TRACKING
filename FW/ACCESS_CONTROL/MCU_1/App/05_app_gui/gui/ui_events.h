@@ -10,8 +10,11 @@
 extern "C" {
 #endif
 
-void Data_List(lv_event_t * e);
-void TestFunction(lv_event_t * e);
+void EVENT_Attendance_Before(lv_event_t * e);
+void EVENT_Data_List(lv_event_t * e);
+void EVENT_Enroll_Before(lv_event_t * e);
+void EVENT_Attendance_After(lv_event_t * e);
+void EVENT_Enroll_After(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

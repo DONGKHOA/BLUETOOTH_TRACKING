@@ -22,6 +22,7 @@ void ui_event_Menu(lv_event_t * e);
 lv_obj_t * ui_Menu;
 lv_obj_t * ui_Menu1;
 lv_obj_t * ui_POPUPMenuPanel1;
+void ui_event_AttendanceButton(lv_event_t * e);
 lv_obj_t * ui_AttendanceButton;
 lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
@@ -99,12 +100,24 @@ void ui_event_Menu(lv_event_t * e)
     }
 }
 
+void ui_event_AttendanceButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Attendance, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Attendance_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Attendance_Before(e);
+    }
+}
+
 void ui_event_DataButton(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        Data_List(e);
+        EVENT_Data_List(e);
     }
 }
 
@@ -113,7 +126,7 @@ void ui_event_Button1(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        TestFunction(e);
+        EVENT_Enroll_Before(e);
     }
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
@@ -123,10 +136,12 @@ void ui_event_Button1(lv_event_t * e)
 void ui_event_Attendance(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
 
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
-        _ui_state_modify(ui_Attendance, LV_STATE_USER_1, _UI_MODIFY_STATE_TOGGLE);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Attendance_After(e);
     }
 }
 
@@ -136,6 +151,9 @@ void ui_event_Enroll(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_After(e);
     }
 }
 
