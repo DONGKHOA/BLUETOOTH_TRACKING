@@ -8,3 +8,7 @@
 void ui_comp_POPUPHome_create_hook(lv_obj_t * comp)
 {
 }
+
+void ui_comp_POPUPMenuPanel_create_hook(lv_obj_t * comp)
+{
+}

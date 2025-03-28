@@ -6,7 +6,8 @@ file(GLOB_RECURSE gui_sources
 
 list(APPEND sources ${gui_sources})
 
-set (sources "app_display/app_display.c")
+set (sources    "app_display/app_display.c"
+                "ui_events.c")
 
 set (includes   "gui"
                 "app_display")

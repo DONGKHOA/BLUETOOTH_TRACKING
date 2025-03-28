@@ -3,8 +3,8 @@
 // LVGL version: 8.3.6
 // Project name: SquareLine_Project
 
-#ifndef _UI_COMP_POPUPHOME_H
-#define _UI_COMP_POPUPHOME_H
+#ifndef _UI_COMP_POPUPMENUPANEL_H
+#define _UI_COMP_POPUPMENUPANEL_H
 
 #include "../ui.h"
 
@@ -12,11 +12,10 @@
 extern "C" {
 #endif
 
-// COMPONENT POPUPHome
-#define UI_COMP_POPUPHOME_POPUPHOME 0
-#define UI_COMP_POPUPHOME_LABEL1 1
-#define _UI_COMP_POPUPHOME_NUM 2
-lv_obj_t * ui_POPUPHome_create(lv_obj_t * comp_parent);
+// COMPONENT POPUPMenuPanel
+#define UI_COMP_POPUPMENUPANEL_POPUPMENUPANEL 0
+#define _UI_COMP_POPUPMENUPANEL_NUM 1
+lv_obj_t * ui_POPUPMenuPanel_create(lv_obj_t * comp_parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/

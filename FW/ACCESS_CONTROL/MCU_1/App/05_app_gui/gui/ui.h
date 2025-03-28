@@ -22,21 +22,26 @@ extern "C" {
 void ui_Home_screen_init(void);
 void ui_event_Home(lv_event_t * e);
 extern lv_obj_t * ui_Home;
+extern lv_obj_t * ui_HomeText;
 extern lv_obj_t * ui_POPUPHomePanel;
-extern lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
 void ui_Menu_screen_init(void);
 void ui_event_Menu(lv_event_t * e);
 extern lv_obj_t * ui_Menu;
-extern lv_obj_t * ui_Panel3;
+extern lv_obj_t * ui_Menu1;
+extern lv_obj_t * ui_POPUPMenuPanel1;
 extern lv_obj_t * ui_AttendanceButton;
-extern lv_obj_t * ui_Label4;
+extern lv_obj_t * ui_Label1;
+void ui_event_DataButton(lv_event_t * e);
+extern lv_obj_t * ui_DataButton;
+extern lv_obj_t * ui_Label2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
+void ui_event_Attendance(lv_event_t * e);
 extern lv_obj_t * ui_Attendance;
 // CUSTOM VARIABLES
 
