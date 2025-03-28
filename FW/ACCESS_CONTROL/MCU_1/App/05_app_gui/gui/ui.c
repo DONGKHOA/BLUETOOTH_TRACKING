@@ -14,6 +14,9 @@ void ui_event_Home(lv_event_t * e);
 lv_obj_t * ui_Home;
 lv_obj_t * ui_HomeText;
 lv_obj_t * ui_POPUPHomePanel;
+lv_obj_t * ui_Time;
+lv_obj_t * ui_Day;
+lv_obj_t * ui_Date;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -62,6 +65,17 @@ lv_obj_t * ui_FaceIDEnroll;
 // SCREEN: ui_FingerEnroll
 void ui_FingerEnroll_screen_init(void);
 lv_obj_t * ui_FingerEnroll;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Screen1
+void ui_Screen1_screen_init(void);
+lv_obj_t * ui_Screen1;
+lv_obj_t * ui_Container1;
+lv_obj_t * ui_Container2;
+lv_obj_t * ui_Container3;
+lv_obj_t * ui_Container4;
+lv_obj_t * ui_Container5;
+lv_obj_t * ui_Container6;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -175,6 +189,7 @@ void ui_init(void)
     ui_Enroll_screen_init();
     ui_FaceIDEnroll_screen_init();
     ui_FingerEnroll_screen_init();
+    ui_Screen1_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Home);
 }

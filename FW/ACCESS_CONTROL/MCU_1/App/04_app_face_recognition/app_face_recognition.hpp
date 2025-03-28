@@ -18,13 +18,16 @@
 class Face
 {
   private:
-  QueueHandle_t                  *p_camera_recognition_queue;
-  QueueHandle_t                  *p_result_recognition_queue;
-  EventGroupHandle_t             *p_display_event;
-  HumanFaceDetectMSR01            detector;
-  HumanFaceDetectMNP01            detector2;
-  FaceRecognition112V1S8         *recognizer;
-  face_info_t                     recognize_result;
+  QueueHandle_t          *p_camera_capture_queue;
+  QueueHandle_t          *p_camera_recognition_queue;
+  QueueHandle_t          *p_result_recognition_queue;
+  EventGroupHandle_t     *p_display_event;
+  HumanFaceDetectMSR01    detector;
+  HumanFaceDetectMNP01    detector2;
+  FaceRecognition112V1S8 *recognizer;
+  face_info_t             recognize_result;
+
+  uint8_t u8_stable_face_count;
 
   static void APP_FACE_RECOGNITION_Task(void *pvParameters);
 

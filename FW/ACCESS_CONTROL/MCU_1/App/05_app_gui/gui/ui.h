@@ -24,6 +24,9 @@ void ui_event_Home(lv_event_t * e);
 extern lv_obj_t * ui_Home;
 extern lv_obj_t * ui_HomeText;
 extern lv_obj_t * ui_POPUPHomePanel;
+extern lv_obj_t * ui_Time;
+extern lv_obj_t * ui_Day;
+extern lv_obj_t * ui_Date;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -72,6 +75,17 @@ extern lv_obj_t * ui_FaceIDEnroll;
 // SCREEN: ui_FingerEnroll
 void ui_FingerEnroll_screen_init(void);
 extern lv_obj_t * ui_FingerEnroll;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Screen1
+void ui_Screen1_screen_init(void);
+extern lv_obj_t * ui_Screen1;
+extern lv_obj_t * ui_Container1;
+extern lv_obj_t * ui_Container2;
+extern lv_obj_t * ui_Container3;
+extern lv_obj_t * ui_Container4;
+extern lv_obj_t * ui_Container5;
+extern lv_obj_t * ui_Container6;
 // CUSTOM VARIABLES
 
 // EVENTS

@@ -8,6 +8,7 @@ SET(SOURCES components/ui_comp_popupmenupanel.c
     screens/ui_Enroll.c
     screens/ui_FaceIDEnroll.c
     screens/ui_FingerEnroll.c
+    screens/ui_Screen1.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c)

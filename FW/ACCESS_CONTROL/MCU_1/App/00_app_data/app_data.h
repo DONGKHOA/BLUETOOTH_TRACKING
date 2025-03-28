@@ -41,8 +41,7 @@ extern "C"
       uint16_t y1;
       uint16_t y2;
     } s_coord_eye;
-    bool ena_face;
-    bool ena_eye;
+    int ID;
   } coord_data_recognition_t;
 
   /**

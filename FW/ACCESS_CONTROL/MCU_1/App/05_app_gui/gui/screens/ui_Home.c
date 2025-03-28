@@ -32,6 +32,29 @@ void ui_Home_screen_init(void)
     lv_obj_set_style_shadow_ofs_x(ui_POPUPHomePanel, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_POPUPHomePanel, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Time = lv_label_create(ui_POPUPHomePanel);
+    lv_obj_set_width(ui_Time, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Time, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Time, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Time, "11:00");
+    lv_obj_set_style_text_font(ui_Time, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Day = lv_label_create(ui_Home);
+    lv_obj_set_width(ui_Day, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Day, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Day, -100);
+    lv_obj_set_y(ui_Day, 108);
+    lv_obj_set_align(ui_Day, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Day, "21-10-2024");
+
+    ui_Date = lv_label_create(ui_Home);
+    lv_obj_set_width(ui_Date, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Date, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Date, 113);
+    lv_obj_set_y(ui_Date, 108);
+    lv_obj_set_align(ui_Date, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Date, "Monday");
+
     lv_obj_add_event_cb(ui_Home, ui_event_Home, LV_EVENT_ALL, NULL);
 
 }

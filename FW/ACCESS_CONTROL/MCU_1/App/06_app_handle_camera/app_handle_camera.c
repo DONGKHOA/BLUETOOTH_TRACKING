@@ -3,8 +3,7 @@
  *****************************************************************************/
 
 #include <stdio.h>
-
- 
+#include <string.h>
 
 #include "esp_camera.h"
 #include "esp_log.h"
@@ -25,7 +24,6 @@
 typedef struct
 {
   QueueHandle_t      *p_camera_capture_queue;
-  QueueHandle_t      *p_camera_recognition_queue;
   EventGroupHandle_t *p_display_event;
 } app_handle_camera_t;
 
@@ -61,7 +59,7 @@ static camera_config_t camera_config = {
   .pin_pclk  = CAM_PIN_PCLK,
 
   // XCLK 20MHz or 10MHz for OV2640 double FPS (Experimental)
-  .xclk_freq_hz = 8000000,
+  .xclk_freq_hz = 16000000,
   .ledc_timer   = LEDC_TIMER_0,
   .ledc_channel = LEDC_CHANNEL_0,
 
@@ -93,9 +91,6 @@ APP_HANDLE_CAMERA_Init (void)
   s_app_handle_camera.p_camera_capture_queue
       = &s_data_system.s_camera_capture_queue;
 
-  s_app_handle_camera.p_camera_recognition_queue
-      = &s_data_system.s_camera_recognition_queue;
-
   s_app_handle_camera.p_display_event = &s_data_system.s_display_event;
 
   // initialize the camera
@@ -114,8 +109,7 @@ static void
 APP_HANDLE_CAMERA_task (void *arg)
 {
   EventBits_t  uxBits;
-  camera_fb_t *fb             = NULL;
-  camera_fb_t *fb_recognition = NULL;
+  camera_fb_t *fb = NULL;
 
   while (1)
   {
@@ -137,18 +131,9 @@ APP_HANDLE_CAMERA_task (void *arg)
       ESP_LOGE(TAG, "Camera Capture Failed");
       continue;
     }
+
     xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
 
-    fb_recognition = esp_camera_fb_get();
-
-    if (!fb_recognition)
-    {
-      ESP_LOGE(TAG, "Camera Capture Failed");
-      continue;
-    }
-    xQueueSend(
-        *s_app_handle_camera.p_camera_recognition_queue, &fb_recognition, 0);
-
-    vTaskDelay(pdMS_TO_TICKS(33));
+    vTaskDelay(pdMS_TO_TICKS(10));
   }
 }
