@@ -31,6 +31,7 @@ lv_obj_t * ui_Label2;
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
+void ui_event_Attendance(lv_event_t * e);
 lv_obj_t * ui_Attendance;
 // CUSTOM VARIABLES
 
@@ -101,6 +102,16 @@ void ui_event_DataButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         Data_List(e);
+    }
+}
+
+void ui_event_Attendance(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
+        _ui_state_modify(ui_Attendance, LV_STATE_USER_1, _UI_MODIFY_STATE_TOGGLE);
     }
 }
 

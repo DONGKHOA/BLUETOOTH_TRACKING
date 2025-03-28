@@ -2,7 +2,9 @@
  *      INCLUDES
  *****************************************************************************/
 
-#include <string.h>
+#include <stdio.h>
+
+ 
 
 #include "esp_camera.h"
 #include "esp_log.h"

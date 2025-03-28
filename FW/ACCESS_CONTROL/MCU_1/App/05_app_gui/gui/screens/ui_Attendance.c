@@ -8,6 +8,9 @@
 void ui_Attendance_screen_init(void)
 {
     ui_Attendance = lv_obj_create(NULL);
+    lv_obj_add_state(ui_Attendance, LV_STATE_USER_1);       /// States
     lv_obj_clear_flag(ui_Attendance, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    lv_obj_add_event_cb(ui_Attendance, ui_event_Attendance, LV_EVENT_ALL, NULL);
 
 }

@@ -41,6 +41,7 @@ extern lv_obj_t * ui_Label2;
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
+void ui_event_Attendance(lv_event_t * e);
 extern lv_obj_t * ui_Attendance;
 // CUSTOM VARIABLES
 

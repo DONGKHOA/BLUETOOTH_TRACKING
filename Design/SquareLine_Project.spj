@@ -1810,9 +1810,14 @@
           },
           {
             "nid": 320,
-            "flags": 1048576,
             "strtype": "OBJECT/States",
             "InheritedType": 1
+          },
+          {
+            "nid": 380,
+            "strtype": "OBJECT/User_1",
+            "strval": "True",
+            "InheritedType": 2
           },
           {
             "nid": 1010,
@@ -1840,6 +1845,77 @@
             "strtype": "SCREEN/Style_scrollbar",
             "strval": "lv.PART.SCROLLBAR, Rectangle, Pad",
             "InheritedType": 11
+          },
+          {
+            "disabled": false,
+            "nid": 1000329,
+            "strtype": "_event/EventHandler",
+            "strval": "CHECKED(VALUE_CHANGED)",
+            "childs": [
+              {
+                "nid": 1000330,
+                "strtype": "_event/name",
+                "strval": "Event2",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000331,
+                "strtype": "_event/condition_C",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000332,
+                "strtype": "_event/condition_P",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000333,
+                "strtype": "_event/action",
+                "strval": "MODIFY STATE",
+                "childs": [
+                  {
+                    "nid": 1000334,
+                    "strtype": "MODIFY STATE/Name",
+                    "strval": "MODIFY STATE",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000335,
+                    "strtype": "MODIFY STATE/Call",
+                    "strval": "ModifyState( <{Object}>, lv.STATE.<{State}>, \"<{Action}>\")",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000336,
+                    "strtype": "MODIFY STATE/CallC",
+                    "strval": "_ui_state_modify( <{Object}>, LV_STATE_<{State}>, _UI_MODIFY_STATE_<{Action}>);",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000337,
+                    "strtype": "MODIFY STATE/Object",
+                    "strval": "GUID47670221-337712S486486",
+                    "InheritedType": 9
+                  },
+                  {
+                    "nid": 1000338,
+                    "strtype": "MODIFY STATE/State",
+                    "strval": "USER_1",
+                    "InheritedType": 3
+                  },
+                  {
+                    "nid": 1000339,
+                    "strtype": "MODIFY STATE/Action",
+                    "strval": "TOGGLE",
+                    "InheritedType": 3
+                  }
+                ],
+                "InheritedType": 10
+              }
+            ],
+            "InheritedType": 4
           }
         ],
         "saved_objtypeKey": "SCREEN"
@@ -2463,10 +2539,14 @@
     "theme_dark": false,
     "theme_color1": 5,
     "theme_color2": 0,
-    "uiExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
-    "projectExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
+    "uiExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
+    "projectExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
+<<<<<<< HEAD
     "backup_cnt": 46,
+=======
+    "backup_cnt": 45,
+>>>>>>> 6e04f840d8331e2064b8e374636e471089864d19
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
@@ -2483,7 +2563,7 @@
     "drive_fatfs_path": "",
     "naming": "Name",
     "naming_force_lowercase": false,
-    "nidcnt": 1000318,
+    "nidcnt": 1000340,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }
