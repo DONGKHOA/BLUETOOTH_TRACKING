@@ -2542,11 +2542,7 @@
     "uiExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "projectExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-<<<<<<< HEAD
-    "backup_cnt": 46,
-=======
     "backup_cnt": 45,
->>>>>>> 6e04f840d8331e2064b8e374636e471089864d19
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
