@@ -27,6 +27,8 @@ lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
 lv_obj_t * ui_DataButton;
 lv_obj_t * ui_Label2;
+void ui_event_Button1(lv_event_t * e);
+lv_obj_t * ui_Button1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
@@ -47,6 +49,7 @@ lv_obj_t * ui_Authenticate;
 
 // SCREEN: ui_Enroll
 void ui_Enroll_screen_init(void);
+void ui_event_Enroll(lv_event_t * e);
 lv_obj_t * ui_Enroll;
 // CUSTOM VARIABLES
 
@@ -105,6 +108,18 @@ void ui_event_DataButton(lv_event_t * e)
     }
 }
 
+void ui_event_Button1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        TestFunction(e);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
+    }
+}
+
 void ui_event_Attendance(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -112,6 +127,15 @@ void ui_event_Attendance(lv_event_t * e)
 
     if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
         _ui_state_modify(ui_Attendance, LV_STATE_USER_1, _UI_MODIFY_STATE_TOGGLE);
+    }
+}
+
+void ui_event_Enroll(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
     }
 }
 

@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 void Data_List(lv_event_t * e);
+void TestFunction(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

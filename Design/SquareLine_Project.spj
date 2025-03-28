@@ -1199,7 +1199,7 @@
                     "strtype": "OBJECT/Position",
                     "intarray": [
                       0,
-                      20
+                      4
                     ],
                     "InheritedType": 7
                   },
@@ -1537,6 +1537,261 @@
               }
             ],
             "saved_objtypeKey": "PANEL"
+          },
+          {
+            "guid": "GUID21335369-279657S42914487",
+            "deepid": 51188555,
+            "dont_export": false,
+            "locked": false,
+            "properties": [
+              {
+                "nid": 10,
+                "strtype": "OBJECT/Name",
+                "strval": "Button1",
+                "InheritedType": 10
+              },
+              {
+                "nid": 20,
+                "strtype": "OBJECT/Layout",
+                "InheritedType": 1
+              },
+              {
+                "Flow": 0,
+                "Wrap": false,
+                "Reversed": false,
+                "MainAlignment": 0,
+                "CrossAlignment": 0,
+                "TrackAlignment": 0,
+                "LayoutType": 0,
+                "nid": 30,
+                "strtype": "OBJECT/Layout_type",
+                "strval": "No_layout",
+                "InheritedType": 13
+              },
+              {
+                "nid": 40,
+                "strtype": "OBJECT/Transform",
+                "InheritedType": 1
+              },
+              {
+                "nid": 50,
+                "flags": 17,
+                "strtype": "OBJECT/Position",
+                "intarray": [
+                  0,
+                  50
+                ],
+                "InheritedType": 7
+              },
+              {
+                "nid": 60,
+                "flags": 17,
+                "strtype": "OBJECT/Size",
+                "intarray": [
+                  180,
+                  30
+                ],
+                "InheritedType": 7
+              },
+              {
+                "nid": 70,
+                "strtype": "OBJECT/Align",
+                "strval": "CENTER",
+                "InheritedType": 3
+              },
+              {
+                "nid": 90,
+                "flags": 1048576,
+                "strtype": "OBJECT/Flags",
+                "InheritedType": 1
+              },
+              {
+                "nid": 225,
+                "flags": 1048576,
+                "strtype": "OBJECT/Scrolling",
+                "InheritedType": 1
+              },
+              {
+                "nid": 300,
+                "strtype": "OBJECT/Scrollbar_mode",
+                "strval": "AUTO",
+                "InheritedType": 3
+              },
+              {
+                "nid": 310,
+                "strtype": "OBJECT/Scroll_direction",
+                "strval": "ALL",
+                "InheritedType": 3
+              },
+              {
+                "nid": 314,
+                "strtype": "OBJECT/Scroll_snap_x",
+                "strval": "NONE",
+                "InheritedType": 3
+              },
+              {
+                "nid": 315,
+                "strtype": "OBJECT/Scroll_snap_y",
+                "strval": "NONE",
+                "InheritedType": 3
+              },
+              {
+                "nid": 320,
+                "flags": 1048576,
+                "strtype": "OBJECT/States",
+                "InheritedType": 1
+              },
+              {
+                "part": "lv.PART.MAIN",
+                "childs": [],
+                "nid": 1010,
+                "strtype": "BUTTON/Style_main",
+                "strval": "lv.PART.MAIN, Rectangle, Pad, Text, Transform",
+                "InheritedType": 11
+              },
+              {
+                "disabled": false,
+                "nid": 1000340,
+                "strtype": "_event/EventHandler",
+                "strval": "CLICKED",
+                "childs": [
+                  {
+                    "nid": 1000341,
+                    "strtype": "_event/name",
+                    "strval": "Event3",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000342,
+                    "strtype": "_event/condition_C",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000343,
+                    "strtype": "_event/condition_P",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000344,
+                    "strtype": "_event/action",
+                    "strval": "CALL FUNCTION",
+                    "childs": [
+                      {
+                        "nid": 1000345,
+                        "strtype": "CALL FUNCTION/Name",
+                        "strval": "CALL FUNCTION",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000346,
+                        "strtype": "CALL FUNCTION/Call",
+                        "strval": "<{Function_name}>( event_struct )",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000347,
+                        "strtype": "CALL FUNCTION/CallC",
+                        "strval": "<{Function_name}>( e );",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000348,
+                        "strtype": "CALL FUNCTION/Function_name",
+                        "strval": "TestFunction",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000349,
+                        "strtype": "CALL FUNCTION/Dont_export_function",
+                        "strval": "True",
+                        "InheritedType": 2
+                      }
+                    ],
+                    "InheritedType": 10
+                  }
+                ],
+                "InheritedType": 4
+              },
+              {
+                "disabled": false,
+                "nid": 1000350,
+                "strtype": "_event/EventHandler",
+                "strval": "CLICKED",
+                "childs": [
+                  {
+                    "nid": 1000351,
+                    "strtype": "_event/name",
+                    "strval": "Event4",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000352,
+                    "strtype": "_event/condition_C",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000353,
+                    "strtype": "_event/condition_P",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000354,
+                    "strtype": "_event/action",
+                    "strval": "CHANGE SCREEN",
+                    "childs": [
+                      {
+                        "nid": 1000355,
+                        "strtype": "CHANGE SCREEN/Name",
+                        "strval": "CHANGE SCREEN",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000356,
+                        "strtype": "CHANGE SCREEN/Call",
+                        "strval": "ChangeScreen( <{Screen_to}>, lv.SCR_LOAD_ANIM.<{Fade_mode}>, <{Speed}>, <{Delay}>)",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000357,
+                        "strtype": "CHANGE SCREEN/CallC",
+                        "strval": "_ui_screen_change( &<{Screen_to}>, LV_SCR_LOAD_ANIM_<{Fade_mode}>, <{Speed}>, <{Delay}>, &<{Screen_to}>_screen_init);",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000358,
+                        "strtype": "CHANGE SCREEN/Screen_to",
+                        "strval": "GUID6811290-337718S944486",
+                        "InheritedType": 9
+                      },
+                      {
+                        "nid": 1000359,
+                        "strtype": "CHANGE SCREEN/Fade_mode",
+                        "strval": "MOVE_LEFT",
+                        "InheritedType": 3
+                      },
+                      {
+                        "nid": 1000360,
+                        "strtype": "CHANGE SCREEN/Speed",
+                        "integer": 50,
+                        "InheritedType": 6
+                      },
+                      {
+                        "nid": 1000361,
+                        "strtype": "CHANGE SCREEN/Delay",
+                        "InheritedType": 6
+                      }
+                    ],
+                    "InheritedType": 10
+                  }
+                ],
+                "InheritedType": 4
+              }
+            ],
+            "saved_objtypeKey": "BUTTON"
           }
         ],
         "isPage": true,
@@ -2264,6 +2519,82 @@
             "strtype": "SCREEN/Style_scrollbar",
             "strval": "lv.PART.SCROLLBAR, Rectangle, Pad",
             "InheritedType": 11
+          },
+          {
+            "disabled": false,
+            "nid": 1000362,
+            "strtype": "_event/EventHandler",
+            "strval": "CLICKED",
+            "childs": [
+              {
+                "nid": 1000363,
+                "strtype": "_event/name",
+                "strval": "Event5",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000364,
+                "strtype": "_event/condition_C",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000365,
+                "strtype": "_event/condition_P",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000366,
+                "strtype": "_event/action",
+                "strval": "CHANGE SCREEN",
+                "childs": [
+                  {
+                    "nid": 1000367,
+                    "strtype": "CHANGE SCREEN/Name",
+                    "strval": "CHANGE SCREEN",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000368,
+                    "strtype": "CHANGE SCREEN/Call",
+                    "strval": "ChangeScreen( <{Screen_to}>, lv.SCR_LOAD_ANIM.<{Fade_mode}>, <{Speed}>, <{Delay}>)",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000369,
+                    "strtype": "CHANGE SCREEN/CallC",
+                    "strval": "_ui_screen_change( &<{Screen_to}>, LV_SCR_LOAD_ANIM_<{Fade_mode}>, <{Speed}>, <{Delay}>, &<{Screen_to}>_screen_init);",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000370,
+                    "strtype": "CHANGE SCREEN/Screen_to",
+                    "strval": "GUID79504060-337710S24486",
+                    "InheritedType": 9
+                  },
+                  {
+                    "nid": 1000371,
+                    "strtype": "CHANGE SCREEN/Fade_mode",
+                    "strval": "MOVE_RIGHT",
+                    "InheritedType": 3
+                  },
+                  {
+                    "nid": 1000372,
+                    "strtype": "CHANGE SCREEN/Speed",
+                    "integer": 50,
+                    "InheritedType": 6
+                  },
+                  {
+                    "nid": 1000373,
+                    "strtype": "CHANGE SCREEN/Delay",
+                    "InheritedType": 6
+                  }
+                ],
+                "InheritedType": 10
+              }
+            ],
+            "InheritedType": 4
           }
         ],
         "saved_objtypeKey": "SCREEN"
@@ -2542,7 +2873,7 @@
     "uiExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "projectExportFolderPath": "D:\\OneDrive\\Project\\BLUETOOTH_TRACKING_PROJECT\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 45,
+    "backup_cnt": 50,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
@@ -2559,7 +2890,7 @@
     "drive_fatfs_path": "",
     "naming": "Name",
     "naming_force_lowercase": false,
-    "nidcnt": 1000340,
+    "nidcnt": 1000374,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }

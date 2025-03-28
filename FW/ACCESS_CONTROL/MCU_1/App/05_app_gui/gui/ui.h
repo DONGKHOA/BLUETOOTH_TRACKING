@@ -37,6 +37,8 @@ extern lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
 extern lv_obj_t * ui_DataButton;
 extern lv_obj_t * ui_Label2;
+void ui_event_Button1(lv_event_t * e);
+extern lv_obj_t * ui_Button1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
@@ -57,6 +59,7 @@ extern lv_obj_t * ui_Authenticate;
 
 // SCREEN: ui_Enroll
 void ui_Enroll_screen_init(void);
+void ui_event_Enroll(lv_event_t * e);
 extern lv_obj_t * ui_Enroll;
 // CUSTOM VARIABLES
 

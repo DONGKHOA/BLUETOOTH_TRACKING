@@ -54,7 +54,7 @@ void ui_Menu_screen_init(void)
     lv_obj_set_width(ui_DataButton, 180);
     lv_obj_set_height(ui_DataButton, 30);
     lv_obj_set_x(ui_DataButton, 0);
-    lv_obj_set_y(ui_DataButton, 20);
+    lv_obj_set_y(ui_DataButton, 4);
     lv_obj_set_align(ui_DataButton, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_DataButton, lv_color_hex(0xCEC9C9), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_DataButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -70,7 +70,15 @@ void ui_Menu_screen_init(void)
     lv_obj_set_style_text_color(ui_Label2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Label2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Button1 = lv_btn_create(ui_Menu);
+    lv_obj_set_width(ui_Button1, 180);
+    lv_obj_set_height(ui_Button1, 30);
+    lv_obj_set_x(ui_Button1, 0);
+    lv_obj_set_y(ui_Button1, 50);
+    lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
+
     lv_obj_add_event_cb(ui_DataButton, ui_event_DataButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Menu, ui_event_Menu, LV_EVENT_ALL, NULL);
 
 }

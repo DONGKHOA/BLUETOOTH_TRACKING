@@ -10,4 +10,6 @@ void ui_Enroll_screen_init(void)
     ui_Enroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Enroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    lv_obj_add_event_cb(ui_Enroll, ui_event_Enroll, LV_EVENT_ALL, NULL);
+
 }
