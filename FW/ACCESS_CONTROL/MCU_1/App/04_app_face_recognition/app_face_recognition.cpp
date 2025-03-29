@@ -19,54 +19,36 @@
  *    PRIVATE TYPEDEFS
  *****************************************************************************/
 
-typedef struct
-{
-  int left_eye_x;
-  int left_eye_y;
-  int right_eye_x;
-  int right_eye_y;
-  int left_mouth_x;
-  int left_mouth_y;
-  int right_mouth_x;
-  int right_mouth_y;
-  int nose_x;
-  int nose_y;
-} app_handle_camera_t;
-
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void print_detection_result(std::list<dl::detect::result_t> &results);
-static bool check_face_in_box(int left_eye_x,
-                              int left_eye_y,
-                              int right_eye_x,
-                              int right_eye_y,
-                              int nose_x,
-                              int nose_y,
-                              int mouth_left_x,
-                              int mouth_left_y,
-                              int mouth_right_x,
-                              int mouth_right_y,
-                              int x_min,
-                              int y_min,
-                              int x_max,
-                              int y_max);
+static bool check_face_in_box(uint16_t left_eye_x,
+                              uint16_t left_eye_y,
+                              uint16_t right_eye_x,
+                              uint16_t right_eye_y,
+                              uint16_t nose_x,
+                              uint16_t nose_y,
+                              uint16_t mouth_left_x,
+                              uint16_t mouth_left_y,
+                              uint16_t mouth_right_x,
+                              uint16_t mouth_right_y,
+                              uint16_t x_min,
+                              uint16_t y_min,
+                              uint16_t x_max,
+                              uint16_t y_max);
+static bool check_eyes_in_box(uint16_t left_eye_x,
+                              uint16_t left_eye_y,
+                              uint16_t right_eye_x,
+                              uint16_t right_eye_y,
+                              uint16_t x_min,
+                              uint16_t y_min,
+                              uint16_t x_max,
+                              uint16_t y_max);
 
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-
-static app_handle_camera_t s_app_handle_camera = { .left_eye_x    = 0,
-                                                   .left_eye_y    = 0,
-                                                   .right_eye_x   = 0,
-                                                   .right_eye_y   = 0,
-                                                   .left_mouth_x  = 0,
-                                                   .left_mouth_y  = 0,
-                                                   .right_mouth_x = 0,
-                                                   .right_mouth_y = 0,
-                                                   .nose_x        = 0,
-                                                   .nose_y        = 0 };
 
 /******************************************************************************
  *   METHOD
@@ -83,8 +65,6 @@ Face::Face ()
   this->p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
   this->p_display_event            = &s_data_system.s_display_event;
   this->recognizer                 = new FaceRecognition112V1S8();
-
-  this->u8_stable_face_count = 0;
 }
 
 Face::~Face () // Added destructor implementation
@@ -110,9 +90,22 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
   camera_fb_t *fb   = nullptr;
   EventBits_t  uxBits;
 
-  coord_data_recognition_t s_coord_data_recognition = {
-    .s_coord_face = { 0, 0, 0, 0 }, .s_coord_eye = { 0, 0, 0, 0 }, .ID = -1
-  };
+  uint8_t u8_post_enroll_frame_count = 0;
+  uint8_t stable_face_count          = 0;
+  bool    is_face_enrolled           = false;
+
+  std::list<dl::detect::result_t> detect_results;
+
+  data_result_recognition_t s_data_result_recognition
+      = { .s_coord_box_face           = { 0, 0, 0, 0 },
+          .s_coord_box_eye            = { 0, 0, 0, 0 },
+          .s_left_eye                 = { 0, 0 },
+          .s_right_eye                = { 0, 0 },
+          .s_left_mouth               = { 0, 0 },
+          .s_right_mouth              = { 0, 0 },
+          .s_nose                     = { 0, 0 },
+          .ID                         = -1,
+          .e_notification_recognition = NOTIFICATION_NONE };
 
   self->recognizer->set_partition(
       ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
@@ -137,88 +130,110 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
       if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
       {
-        if (self->u8_stable_face_count > 7)
+        if (stable_face_count > 255)
         {
-        //   dl::image::draw_filled_rectangle((uint16_t *)fb->buf,
-        //                                    fb->height,
-        //                                    fb->width,
-        //                                    0,
-        //                                    220,
-        //                                    340,
-        //                                    240,
-        //                                    RGB565_MASK_WHITE);
-          rgb_printf(fb, 80, 234, RGB565_MASK_GREEN, "Enroll success");
-          if (is_face_enrolled == false)
-          {
-            std::string text_id
-                = std::to_string(users[usr_data_selected_item].id);
-            self->recognizer->enroll_id(
-                (uint16_t *)fb->buf,
-                { (int)fb->height, (int)fb->width, 3 },
-                detect_results.front().keypoint,
-                text_id,
-                true);
-            ESP_LOGI(TAG,
-                     "Enroll ID %d",
-                     self->recognizer->get_enrolled_ids().back().id);
-            is_face_enrolled = true;
-          }
+          //   dl::image::draw_filled_rectangle((uint16_t *)fb->buf,
+          //                                    fb->height,
+          //                                    fb->width,
+          //                                    0,
+          //                                    220,
+          //                                    340,
+          //                                    240,
+          //                                    RGB565_MASK_WHITE);
+          // rgb_printf(fb, 80, 234, RGB565_MASK_GREEN, "Enroll success");
+          // if (is_face_enrolled == false)
+          // {
+          //   self->recognizer->enroll_id((uint16_t *)fb->buf,
+          //                               { (int)fb->height, (int)fb->width, 3
+          //                               }, detect_results.front().keypoint,
+          //                               "0",
+          //                               true);
+          //   ESP_LOGI(TAG,
+          //            "Enroll ID %d",
+          //            self->recognizer->get_enrolled_ids().back().id);
+          //   is_face_enrolled = true;
+          // }
 
-          post_enroll_fb_count++;
-          if (post_enroll_fb_count >= 10)
-          {
-            post_enroll_fb_count = 0;
-            stable_face_count       = 0;
-            ESP_LOGI(TAG, "Enroll completed.");
-            esc_faceid_enroll();
-          }
+          // u8_post_enroll_frame_count++;
+          // if (u8_post_enroll_frame_count >= 10)
+          // {
+          //   u8_post_enroll_frame_count = 0;
+          //   stable_face_count          = 0;
+          //   ESP_LOGI(TAG, "Enroll completed.");
+          // }
         }
         else
         {
-          // draw_fixed_eye_box((uint16_t *)fb->buf, fb->height,
-          // fb->width);
-          // dl::image::draw_filled_rectangle((uint16_t *)fb->buf,
-          //                                  fb->height,
-          //                                  fb->width,
-          //                                  0,
-          //                                  220,
-          //                                  340,
-          //                                  240,
-          //                                  RGB565_MASK_WHITE);
-          // rgb_printf(fb, 20, 234, RGB565_MASK_BLACK, "Keep your eyes in
-          // the box");
-
           std::list<dl::detect::result_t> &detect_candidates
-              = self->detector.infer(
-                  (uint16_t *)fb->buf,
-                  { (int)fb->height, (int)fb->width, 3 });
-          detect_results = self->detector2.infer(
-              (uint16_t *)fb->buf,
-              { (int)fb->height, (int)fb->width, 3 },
-              detect_candidates);
+              = self->detector.infer((uint16_t *)fb->buf,
+                                     { (int)fb->height, (int)fb->width, 3 });
+          detect_results
+              = self->detector2.infer((uint16_t *)fb->buf,
+                                      { (int)fb->height, (int)fb->width, 3 },
+                                      detect_candidates);
 
+          xQueueSend(*self->p_camera_recognition_queue, &fb, 0);
+          
           if (detect_results.size())
           {
-            // draw_detection((uint16_t *)fb->buf, fb->height,
-            // fb->width, detect_results, s_app_handle_camera.left_eye_x,
-            // s_app_handle_camera.left_eye_y, s_app_handle_camera.right_eye_x,
-            // s_app_handle_camera.right_eye_y,
-            // s_app_handle_camera.left_mouth_x,
-            // s_app_handle_camera.left_mouth_y,
-            // s_app_handle_camera.right_mouth_x,
-            // s_app_handle_camera.right_mouth_y, s_app_handle_camera.nose_x,
-            // s_app_handle_camera.nose_y);
-            if (check_eyes_in_box(s_app_handle_camera.left_eye_x,
-                                  s_app_handle_camera.left_eye_y,
-                                  s_app_handle_camera.right_eye_x,
-                                  s_app_handle_camera.right_eye_y,
+            uint16_t i = 0;
+            for (std::list<dl::detect::result_t>::iterator prediction
+                 = detect_results.begin();
+                 prediction != detect_results.end();
+                 prediction++, i++)
+            {
+              if (prediction->keypoint.size() == 10)
+              {
+                s_data_result_recognition.s_coord_box_face.x1
+                    = DL_MAX(prediction->box[0], 0);
+                s_data_result_recognition.s_coord_box_face.y1
+                    = DL_MAX(prediction->box[1], 0);
+                s_data_result_recognition.s_coord_box_face.x2
+                    = DL_MAX(prediction->box[2], 0);
+                s_data_result_recognition.s_coord_box_face.y2
+                    = DL_MAX(prediction->box[3], 0);
+
+                s_data_result_recognition.s_left_eye.x
+                    = DL_MAX(prediction->keypoint[0], 0);
+                s_data_result_recognition.s_left_eye.y
+                    = DL_MAX(prediction->keypoint[1], 0);
+
+                s_data_result_recognition.s_left_mouth.x
+                    = DL_MAX(prediction->keypoint[2], 0);
+                s_data_result_recognition.s_left_mouth.y
+                    = DL_MAX(prediction->keypoint[3], 0);
+
+                s_data_result_recognition.s_nose.x
+                    = DL_MAX(prediction->keypoint[4], 0);
+                s_data_result_recognition.s_nose.y
+                    = DL_MAX(prediction->keypoint[5], 0);
+
+                s_data_result_recognition.s_right_eye.x
+                    = DL_MAX(prediction->keypoint[6], 0);
+                s_data_result_recognition.s_right_eye.y
+                    = DL_MAX(prediction->keypoint[7], 0);
+
+                s_data_result_recognition.s_right_mouth.x
+                    = DL_MAX(prediction->keypoint[8], 0);
+                s_data_result_recognition.s_right_mouth.y
+                    = DL_MAX(prediction->keypoint[9], 0);
+              }
+            }
+
+            if (check_eyes_in_box(s_data_result_recognition.s_left_eye.x,
+                                  s_data_result_recognition.s_left_eye.y,
+                                  s_data_result_recognition.s_right_eye.x,
+                                  s_data_result_recognition.s_right_eye.y,
                                   110,
                                   80,
                                   210,
                                   120))
             {
-              self->u8_stable_face_count++;
-              ESP_LOGI(TAG, "stable_face_count: %d", self->u8_stable_face_count);
+              xQueueSend(*self->p_result_recognition_queue,
+                         &s_data_result_recognition,
+                         0);
+              stable_face_count++;
+              ESP_LOGI(TAG, "stable_face_count: %d", stable_face_count);
             }
           }
         }
@@ -227,7 +242,6 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
       if ((uxBits & DELETE_FACE_ID_BIT) != 0)
       {
       }
-      xQueueSend(*self->p_camera_recognition_queue, &fb, 0);
     }
   }
 }
@@ -236,56 +250,21 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
  *  PRIVATE FUNCTION
  *****************************************************************************/
 
-static void
-print_detection_result (std::list<dl::detect::result_t> &results)
-{
-  int i = 0;
-  for (std::list<dl::detect::result_t>::iterator prediction = results.begin();
-       prediction != results.end();
-       prediction++, i++)
-  {
-    ESP_LOGI("detection_result",
-             "[%2d]: (%3d, %3d, %3d, %3d)",
-             i,
-             prediction->box[0],
-             prediction->box[1],
-             prediction->box[2],
-             prediction->box[3]);
-
-    if (prediction->keypoint.size() == 10)
-    {
-      ESP_LOGI("detection_result",
-               "      left eye: (%3d, %3d), right eye: (%3d, %3d), nose: (%3d, "
-               "%3d), mouth left: (%3d, %3d), mouth right: (%3d, %3d)",
-               prediction->keypoint[0],
-               prediction->keypoint[1], // left eye
-               prediction->keypoint[6],
-               prediction->keypoint[7], // right eye
-               prediction->keypoint[4],
-               prediction->keypoint[5], // nose
-               prediction->keypoint[2],
-               prediction->keypoint[3], // mouth left corner
-               prediction->keypoint[8],
-               prediction->keypoint[9]); // mouth right corner
-    }
-  }
-}
-
 static bool
-check_face_in_box (int left_eye_x,
-                   int left_eye_y,
-                   int right_eye_x,
-                   int right_eye_y,
-                   int nose_x,
-                   int nose_y,
-                   int mouth_left_x,
-                   int mouth_left_y,
-                   int mouth_right_x,
-                   int mouth_right_y,
-                   int x_min,
-                   int y_min,
-                   int x_max,
-                   int y_max)
+check_face_in_box (uint16_t left_eye_x,
+                   uint16_t left_eye_y,
+                   uint16_t right_eye_x,
+                   uint16_t right_eye_y,
+                   uint16_t nose_x,
+                   uint16_t nose_y,
+                   uint16_t mouth_left_x,
+                   uint16_t mouth_left_y,
+                   uint16_t mouth_right_x,
+                   uint16_t mouth_right_y,
+                   uint16_t x_min,
+                   uint16_t y_min,
+                   uint16_t x_max,
+                   uint16_t y_max)
 {
   if (left_eye_x > x_min && left_eye_x < x_max && left_eye_y > y_min
       && left_eye_y < y_max && right_eye_x > x_min && right_eye_x < x_max
@@ -294,6 +273,25 @@ check_face_in_box (int left_eye_x,
       && mouth_left_x > x_min && mouth_left_x < x_max && mouth_left_y > y_min
       && mouth_left_y < y_max && mouth_right_x > x_min && mouth_right_x < x_max
       && mouth_right_y > y_min && mouth_right_y < y_max)
+  {
+    return true;
+  }
+  return false;
+}
+
+bool
+check_eyes_in_box (uint16_t left_eye_x,
+                   uint16_t left_eye_y,
+                   uint16_t right_eye_x,
+                   uint16_t right_eye_y,
+                   uint16_t x_min,
+                   uint16_t y_min,
+                   uint16_t x_max,
+                   uint16_t y_max)
+{
+  if (left_eye_x > x_min && left_eye_x < x_max && left_eye_y > y_min
+      && left_eye_y < y_max && right_eye_x > x_min && right_eye_x < x_max
+      && right_eye_y > y_min && right_eye_y < y_max)
   {
     return true;
   }

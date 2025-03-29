@@ -77,17 +77,6 @@ void ui_FingerEnroll_screen_init(void);
 extern lv_obj_t * ui_FingerEnroll;
 // CUSTOM VARIABLES
 
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-extern lv_obj_t * ui_Screen1;
-extern lv_obj_t * ui_Container1;
-extern lv_obj_t * ui_Container2;
-extern lv_obj_t * ui_Container3;
-extern lv_obj_t * ui_Container4;
-extern lv_obj_t * ui_Container5;
-extern lv_obj_t * ui_Container6;
-// CUSTOM VARIABLES
-
 // EVENTS
 
 extern lv_obj_t * ui____initial_actions0;

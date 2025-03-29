@@ -30,14 +30,19 @@ static void APP_Enroll_Task(void *arg);
 static bool b_is_initialize = false;
 
 static lv_obj_t          *camera_canvas = NULL;
-static lv_draw_rect_dsc_t rect_dsc;
+static lv_draw_rect_dsc_t rectangle_face;
+static lv_draw_rect_dsc_t rectangle_left_eye;
+static lv_draw_rect_dsc_t rectangle_right_eye;
+static lv_draw_rect_dsc_t rectangle_left_mouth;
+static lv_draw_rect_dsc_t rectangle_right_mouth;
+static lv_draw_rect_dsc_t rectangle_nouse;
 
 static QueueHandle_t      *p_camera_recognition_queue;
 static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
 
-static camera_fb_t             *fb = NULL;
-static coord_data_recognition_t s_coord_data_recognition;
+static camera_fb_t              *fb = NULL;
+static data_result_recognition_t s_data_result_recognition;
 
 static TaskHandle_t s_enroll_task;
 
@@ -56,12 +61,38 @@ EVENT_Enroll_Before (lv_event_t *e)
 
     camera_canvas = lv_canvas_create(ui_Enroll);
 
-    lv_draw_rect_dsc_init(&rect_dsc);
-    rect_dsc.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rect_dsc.border_width = 2;
-    rect_dsc.border_color = lv_color_make(0, 255, 0);
+    lv_draw_rect_dsc_init(&rectangle_face);
+    rectangle_face.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_face.border_width = 2;
+    rectangle_face.border_color = lv_color_make(0, 255, 0);
 
-    xTaskCreate(APP_Enroll_Task, "enroll task", 1024, NULL, 7, &s_enroll_task);
+    lv_draw_rect_dsc_init(&rectangle_left_eye);
+    rectangle_left_eye.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_left_eye.border_width = 2;
+    rectangle_left_eye.border_color = lv_color_make(0, 255, 0);
+
+    lv_draw_rect_dsc_init(&rectangle_right_eye);
+    rectangle_right_eye.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_right_eye.border_width = 2;
+    rectangle_right_eye.border_color = lv_color_make(0, 255, 0);
+
+    lv_draw_rect_dsc_init(&rectangle_left_mouth);
+    rectangle_left_mouth.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_left_mouth.border_width = 2;
+    rectangle_left_mouth.border_color = lv_color_make(0, 255, 0);
+
+    lv_draw_rect_dsc_init(&rectangle_right_mouth);
+    rectangle_right_mouth.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_right_mouth.border_width = 2;
+    rectangle_right_mouth.border_color = lv_color_make(0, 255, 0);
+
+    lv_draw_rect_dsc_init(&rectangle_nouse);
+    rectangle_nouse.bg_opa       = LV_OPA_TRANSP; // transparent fill
+    rectangle_nouse.border_width = 2;
+    rectangle_nouse.border_color = lv_color_make(0, 255, 0);
+
+    xTaskCreate(
+        APP_Enroll_Task, "enroll task", 1024 * 4, NULL, 7, &s_enroll_task);
 
     b_is_initialize = true;
   }
@@ -92,12 +123,7 @@ APP_Enroll_Task (void *arg)
 {
   while (1)
   {
-    if (xQueueReceive(*p_result_recognition_queue, &s_coord_data_recognition, 1)
-        == pdPASS)
-    {
-    }
-
-    if (xQueueReceive(*p_camera_recognition_queue, &fb, 1) == pdPASS)
+    if (xQueueReceive(*p_camera_recognition_queue, &fb, 10) == pdPASS)
     {
 
       if (!fb)
@@ -108,13 +134,58 @@ APP_Enroll_Task (void *arg)
       lv_canvas_set_buffer(
           camera_canvas, fb->buf, fb->width, fb->height, LV_IMG_CF_TRUE_COLOR);
 
-      // lv_canvas_draw_rect(
-      //     camera_canvas, , &rect_dsc);
-
-      lv_obj_invalidate(camera_canvas);
       esp_camera_fb_return(fb);
     }
 
-    vTaskDelay(pdMS_TO_TICKS(20));
+    if (xQueueReceive(
+            *p_result_recognition_queue, &s_data_result_recognition, 1)
+        == pdPASS)
+    {
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_coord_box_face.x1,
+                          s_data_result_recognition.s_coord_box_face.y1,
+                          s_data_result_recognition.s_coord_box_face.x2
+                              - s_data_result_recognition.s_coord_box_face.x1,
+                          s_data_result_recognition.s_coord_box_face.y2
+                              - s_data_result_recognition.s_coord_box_face.y1,
+                          &rectangle_face);
+
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_left_eye.x,
+                          s_data_result_recognition.s_left_eye.y,
+                          2,
+                          2,
+                          &rectangle_left_eye);
+
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_right_eye.x,
+                          s_data_result_recognition.s_right_eye.y,
+                          2,
+                          2,
+                          &rectangle_right_eye);
+
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_left_mouth.x,
+                          s_data_result_recognition.s_left_mouth.y,
+                          2,
+                          2,
+                          &rectangle_left_mouth);
+
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_right_mouth.x,
+                          s_data_result_recognition.s_right_mouth.y,
+                          2,
+                          2,
+                          &rectangle_right_mouth);
+
+      lv_canvas_draw_rect(camera_canvas,
+                          s_data_result_recognition.s_nose.x,
+                          s_data_result_recognition.s_nose.y,
+                          2,
+                          2,
+                          &rectangle_nouse);
+    }
+
+    lv_obj_invalidate(camera_canvas);
   }
 }

@@ -25,24 +25,57 @@ extern "C"
 #define DELETE_FINGERPRINT_BIT BIT4
 #define AUTHENTICATION_BIT     BIT5
 
+  typedef enum
+  {
+    NOTIFICATION_NONE = 0,
+    NOTIFICATION_ENROLL_1, // "Keep your eyes in the box"
+    NOTIFICATION_ENROLL_2, // "Enroll success"
+  } notification_recognition_t;
+
   typedef struct
   {
-    struct coord_face
+    struct coord_box_face
     {
       uint16_t x1;
       uint16_t x2;
       uint16_t y1;
       uint16_t y2;
-    } s_coord_face;
-    struct coord_eye
+    } s_coord_box_face;
+    struct coord_box_eye
     {
       uint16_t x1;
       uint16_t x2;
       uint16_t y1;
       uint16_t y2;
-    } s_coord_eye;
-    int ID;
-  } coord_data_recognition_t;
+    } s_coord_box_eye;
+    struct left_eye
+    {
+      uint16_t x;
+      uint16_t y;
+    } s_left_eye;
+    struct right_eye
+    {
+      uint16_t x;
+      uint16_t y;
+    } s_right_eye;
+    struct left_mouth
+    {
+      uint16_t x;
+      uint16_t y;
+    } s_left_mouth;
+    struct right_mouth
+    {
+      uint16_t x;
+      uint16_t y;
+    } s_right_mouth;
+    struct nose
+    {
+      uint16_t x;
+      uint16_t y;
+    } s_nose;
+    int                        ID;
+    notification_recognition_t e_notification_recognition;
+  } data_result_recognition_t;
 
   /**
    * @brief Data structure holding data of system

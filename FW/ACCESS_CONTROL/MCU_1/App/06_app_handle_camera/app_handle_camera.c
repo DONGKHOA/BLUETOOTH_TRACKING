@@ -38,6 +38,7 @@ static void APP_HANDLE_CAMERA_task(void *arg);
  *****************************************************************************/
 
 static app_handle_camera_t s_app_handle_camera;
+uint8_t                    *psram_array;
 
 static camera_config_t camera_config = {
   .pin_pwdn     = CAM_PIN_PWDN,
@@ -98,6 +99,14 @@ APP_HANDLE_CAMERA_Init (void)
   if (err != ESP_OK)
   {
     ESP_LOGE(TAG, "Camera Init Failed");
+  }
+  psram_array = (uint8_t *)heap_caps_malloc(153600 * sizeof(uint8_t),
+                                            MALLOC_CAP_SPIRAM);
+
+  if (psram_array == NULL)
+  {
+    printf("Failed to allocate memory in PSRAM\r\n");
+    return;
   }
 }
 

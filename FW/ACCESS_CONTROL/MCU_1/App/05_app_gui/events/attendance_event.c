@@ -31,7 +31,7 @@ static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
 
 static camera_fb_t             *fb = NULL;
-static coord_data_recognition_t s_coord_data_recognition;
+static data_result_recognition_t s_data_result_recognition;
 
 static TaskHandle_t s_attendance_task;
 
@@ -89,7 +89,7 @@ APP_Attendance_Task (void *arg)
 {
   while (1)
   {
-    if (xQueueReceive(*p_result_recognition_queue, &s_coord_data_recognition, 1)
+    if (xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1)
         == pdPASS)
     {
     }

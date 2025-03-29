@@ -222,9 +222,9 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_receive_data_queue   = xQueueCreate(8, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_camera_recognition_queue
-      = xQueueCreate(2, sizeof(camera_fb_t *));
+      = xQueueCreate(8, sizeof(camera_fb_t *));
   s_data_system.s_result_recognition_queue
-      = xQueueCreate(2, sizeof(coord_data_recognition_t));
+      = xQueueCreate(8, sizeof(data_result_recognition_t));
 
   s_data_system.s_display_event = xEventGroupCreate();
 }

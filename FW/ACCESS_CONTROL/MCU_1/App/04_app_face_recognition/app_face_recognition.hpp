@@ -27,8 +27,6 @@ class Face
   FaceRecognition112V1S8 *recognizer;
   face_info_t             recognize_result;
 
-  uint8_t u8_stable_face_count;
-
   static void APP_FACE_RECOGNITION_Task(void *pvParameters);
 
   public:
