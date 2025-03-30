@@ -33,7 +33,7 @@
  */
 typedef struct ble_ibeacon_data
 {
-  QueueHandle_t      *p_display_data_queue;
+  QueueHandle_t *p_display_data_queue;
 } data_receive_data_t;
 
 /******************************************************************************
@@ -61,7 +61,8 @@ APP_DATA_RECEIVE_CreateTask (void)
 void
 APP_DATA_RECEIVE_Init (void)
 {
-  s_data_receive_data.p_display_data_queue = &s_data_system.s_display_data_queue;
+  s_data_receive_data.p_display_data_queue
+      = &s_data_system.s_display_data_queue;
 }
 
 /******************************************************************************
@@ -75,9 +76,35 @@ APP_DATA_RECEIVE_Task (void *arg)
   while (1)
   {
     BSP_canReceive(&s_receive_message, pdMS_TO_TICKS(50));
-    for (uint16_t i = 0; i < s_receive_message.data_length_code; i++)
+
+    switch (s_receive_message.data[0])
     {
-      
+      case DATA_SYNC_RESPONSE_ENROLL_FACE:
+
+        break;
+
+      case DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT:
+
+        break;
+
+      case DATA_SYNC_RESPONSE_AUTHENTICATION:
+
+        break;
+
+      case DATA_SYNC_STATE_CONNECTION:
+
+        break;
+
+      case DATA_SYNC_RESPONSE_ATTENDANCE:
+
+        break;
+
+      default:
+        break;
+    }
+
+    for (uint16_t i = 1; i < s_receive_message.data_length_code; i++)
+    {
     }
   }
 }
