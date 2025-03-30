@@ -18,9 +18,19 @@ extern "C"
    ***************************************************************************/
 
 // Data Start Frame
-#define DATA_SYNC_DETECT_FACE        (uint8_t)0x00
-#define DATA_SYNC_DETECT_BUTTON_USER (uint8_t)0x01
-#define DATA_SYNC_DETECT_FINGERPRINT (uint8_t)0x02
+#define DATA_SYNC_ENROLL_FACE                 (uint8_t)0x01
+#define DATA_SYNC_ENROLL_FINGERPRINT          (uint8_t)0x02
+#define DATA_SYNC_RESPONSE_ENROLL_FACE        (uint8_t)0x03
+#define DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT (uint8_t)0x04
+#define DATA_SYNC_REQUEST_USER_DATA           (uint8_t)0x05
+#define DATA_SYNC_NUMBER_OF_USER_DATA         (uint8_t)0x06
+#define DATA_SYNC_DETAIL_OF_USER_DATA         (uint8_t)0x07
+#define DATA_SYNC_REQUEST_AUTHENTICATION      (uint8_t)0x08
+#define DATA_SYNC_RESPONSE_AUTHENTICATION     (uint8_t)0x09
+#define DATA_SYNC_TIME                        (uint8_t)0x0A
+#define DATA_SYNC_STATE_CONNECTION            (uint8_t)0x0B
+#define DATA_SYNC_REQUEST_ATTENDANCE          (uint8_t)0x0C
+#define DATA_SYNC_RESPONE_ATTENDANCE          (uint8_t)0x0D
 
 // Data Stop Frame
 #define DATA_STOP_FRAME (uint8_t)0xFF
@@ -38,7 +48,7 @@ extern "C"
     uint8_t u8_data_start;
     uint8_t u8_data_length;
     uint8_t u8_data_stop;
-  }__attribute__((packed)) DATA_SYNC_t;
+  } __attribute__((packed)) DATA_SYNC_t;
 
 #ifdef __cplusplus
 }
