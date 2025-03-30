@@ -10,8 +10,6 @@
 
 /*** freeRTOS ****************************************************************/
 
- 
-
 /*** esp - idf ***************************************************************/
 
 #include "driver/spi_master.h"
@@ -35,7 +33,7 @@
 #include "app_data.h"
 #include "app_display.h"
 #include "app_data_transmit.h"
-// #include "app_data_receive.h"
+#include "app_data_receive.h"
 #include "app_handle_camera.h"
 #include "app_face_recognition.hpp"
 
@@ -101,7 +99,7 @@
 ili9341_handle_t s_ili9341_0;
 xpt2046_handle_t s_xpt2046_0;
 
-Face *p_face;
+// Face *p_face;
 
 /******************************************************************************
  *    PRIVATE VARIABLES
@@ -138,18 +136,19 @@ app_main (void)
 
   // App Initialization
 
-  APP_DISPLAY_Init();
-  APP_HANDLE_CAMERA_Init();
-  p_face = new Face();
+  // APP_DISPLAY_Init();
+  // APP_HANDLE_CAMERA_Init();
+  // p_face = new Face();
   // APP_DATA_TRANSMIT_Init();
-  // APP_DATA_RECEIVE_Init();
+  APP_DATA_RECEIVE_Init();
 
   // App Create Task
 
-  APP_DISPLAY_CreateTask();
-  APP_HANDLE_CAMERA_CreateTask();
-  p_face->CreateTask();
+  // APP_DISPLAY_CreateTask();
+  // APP_HANDLE_CAMERA_CreateTask();
+  // p_face->CreateTask();
   // APP_DATA_TRANSMIT_CreateTask();
+  APP_DATA_RECEIVE_CreateTask();
 }
 
 /******************************************************************************
@@ -219,7 +218,7 @@ APP_MAIN_InitDataSystem (void)
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
 
   s_data_system.s_send_data_queue      = xQueueCreate(8, sizeof(DATA_SYNC_t));
-  s_data_system.s_receive_data_queue   = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_display_data_queue   = xQueueCreate(1, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_camera_recognition_queue
       = xQueueCreate(2, sizeof(camera_capture_t));

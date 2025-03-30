@@ -32,7 +32,7 @@ typedef struct
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_HANDLE_CAMERA_task(void *arg);
+static void APP_HANDLE_CAMERA_Task(void *arg);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -86,7 +86,7 @@ void
 APP_HANDLE_CAMERA_CreateTask (void)
 {
   xTaskCreate(
-      APP_HANDLE_CAMERA_task, "camera task", 1024 * 4, NULL, 6, NULL);
+      APP_HANDLE_CAMERA_Task, "camera task", 1024 * 4, NULL, 6, NULL);
 }
 void
 APP_HANDLE_CAMERA_Init (void)
@@ -121,7 +121,7 @@ APP_HANDLE_CAMERA_Init (void)
  *****************************************************************************/
 
 static void
-APP_HANDLE_CAMERA_task (void *arg)
+APP_HANDLE_CAMERA_Task (void *arg)
 {
   EventBits_t  uxBits;
   camera_fb_t *fb = NULL;

@@ -35,6 +35,10 @@ extern "C"
 // Data Stop Frame
 #define DATA_STOP_FRAME (uint8_t)0xFF
 
+// Data Response
+#define DATA_SYNC_SUCCESS (uint8_t)0x00
+#define DATA_SYNC_FAIL    (uint8_t)0x01
+
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/

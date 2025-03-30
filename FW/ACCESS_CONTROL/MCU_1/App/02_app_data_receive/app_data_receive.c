@@ -5,13 +5,14 @@
 #include <string.h>
 #include <stdio.h>
 
- 
-
 #include "app_data_receive.h"
 #include "app_data.h"
 
+#include "environment.h"
+
 #include "can.h"
 #include "sn65hvd230dr.h"
+#include "esp_log.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -32,17 +33,20 @@
  */
 typedef struct ble_ibeacon_data
 {
+  QueueHandle_t      *p_display_data_queue;
 } data_receive_data_t;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_DATA_RECEIVE_task(void *arg);
+static void APP_DATA_RECEIVE_Task(void *arg);
 
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
+
+static data_receive_data_t s_data_receive_data;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -52,11 +56,12 @@ void
 APP_DATA_RECEIVE_CreateTask (void)
 {
   xTaskCreate(
-    APP_DATA_RECEIVE_task, "data receive task", 1024 * 2, NULL, 13, NULL);
+      APP_DATA_RECEIVE_Task, "data receive task", 1024 * 2, NULL, 13, NULL);
 }
 void
 APP_DATA_RECEIVE_Init (void)
 {
+  s_data_receive_data.p_display_data_queue = &s_data_system.s_display_data_queue;
 }
 
 /******************************************************************************
@@ -64,9 +69,15 @@ APP_DATA_RECEIVE_Init (void)
  *****************************************************************************/
 
 static void
-APP_DATA_RECEIVE_task (void *arg)
+APP_DATA_RECEIVE_Task (void *arg)
 {
+  twai_message_t s_receive_message;
   while (1)
   {
+    BSP_canReceive(&s_receive_message, pdMS_TO_TICKS(50));
+    for (uint16_t i = 0; i < s_receive_message.data_length_code; i++)
+    {
+      
+    }
   }
 }

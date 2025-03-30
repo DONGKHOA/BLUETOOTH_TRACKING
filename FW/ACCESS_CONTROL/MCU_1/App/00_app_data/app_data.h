@@ -96,7 +96,7 @@ extern "C"
     QueueHandle_t      s_camera_recognition_queue;
     QueueHandle_t      s_result_recognition_queue;
     QueueHandle_t      s_send_data_queue;
-    QueueHandle_t      s_receive_data_queue;
+    QueueHandle_t      s_display_data_queue;
     EventGroupHandle_t s_display_event;
   } DATA_System_t;
 
