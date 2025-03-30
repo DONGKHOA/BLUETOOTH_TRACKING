@@ -1,5 +1,8 @@
 let selectedSSID = "";
 
+document.getElementById("mac").textContent = sessionStorage.getItem("connectedMac");
+document.getElementById("name").textContent = sessionStorage.getItem("connectedName");
+
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -53,8 +56,9 @@ function highlightSelectedWifi(selectedElement) {
 
 async function sendWifi() {
   const password = document.getElementById("wifiPassword").value;
-  if (!selectedSSID || !password) {
-    alert("Please select a WiFi and enter a password.");
+  const mac = sessionStorage.getItem("connectedMac");
+  if (!selectedSSID || !password || !mac) {
+    alert("Please select a WiFi, enter a password, and ensure MAC is available.");
     return;
   }
 
@@ -62,7 +66,7 @@ async function sendWifi() {
     const res = await fetch("/send_wifi", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ssid: selectedSSID, password })
+      body: JSON.stringify({ ssid: selectedSSID, password, mac })
     });
 
     const data = await res.json();
@@ -88,3 +92,49 @@ function closeWifiModal() {
   document.getElementById("wifiPassword").value = "";
   selectedSSID = "";
 }
+
+function logout() {
+  fetch("/disconnect")
+    .then(res => res.json())
+    .then(data => {
+      console.log("Disconnected from ESP32:", data);
+      // Clear session data (if you're storing MAC/name)
+      sessionStorage.clear();
+      // Redirect to home/login page
+      window.location.href = "/";
+    })
+    .catch(err => {
+      console.error("Failed to disconnect:", err);
+      window.location.href = "/";
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const mac = sessionStorage.getItem("connectedMac");
+  const name = sessionStorage.getItem("connectedName");
+
+  if (mac) document.getElementById("mac").textContent = mac;
+  if (name) document.getElementById("name").textContent = name;
+
+  try {
+    const res = await fetch(`/get_wifi_config/${encodeURIComponent(mac)}`);
+    const data = await res.json();
+
+    // Set current SSID to display in Network tab
+    const ssidSpan = document.getElementById("currentSSID");
+    if (ssidSpan && data.ssid) {
+      ssidSpan.textContent = data.ssid;
+      selectedSSID = data.ssid; // preload for modal reuse
+    }
+
+    // Optional: preload password into modal field
+    const modalPassInput = document.getElementById("wifiPassword");
+    if (modalPassInput && data.password) {
+      modalPassInput.value = data.password;
+    }
+
+  } catch (err) {
+    console.error("Failed to load previous WiFi config:", err);
+  }
+});
+

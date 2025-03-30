@@ -40,6 +40,10 @@ async function scanDevices() {
 
       if (connectData.connected) {
         alert(`Connected to ${dev.name} (${dev.address})`);
+
+        sessionStorage.setItem("connectedMac", dev.address);
+        sessionStorage.setItem("connectedName", dev.name);
+        
         // Optional: navigate to a device page
         window.location.href = `/manage_device/${encodeURIComponent(dev.address)}`;
       } else {
