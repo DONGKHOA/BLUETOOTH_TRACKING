@@ -82,8 +82,26 @@ APP_HANDLE_WIFI_task (void *arg)
       ESP_LOGI(TAG, "WiFi Connect OK!");
 
       // Notify the state of connection to transmit task via queue
-      xQueueSend(*s_handle_wifi.p_send_data_queue, s_handle_wifi.u8_buffer, 0);
+      xQueueSend(*s_handle_wifi.p_send_data_queue, , 0);
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
+}
+
+static void
+APP_HANLDE_WIFI_Combine_data (uint8_t *p_data, uint8_t u8_len)
+{
+  uint8_t u8_index = 0;
+  uint8_t u8_count = 0;
+
+  // Combine data to send to MCU1
+  s_handle_wifi.u8_buffer[u8_index++] = ;
+  s_handle_wifi.u8_buffer[u8_index++] = u8_len;
+
+  for (u8_count = 0; u8_count < u8_len; u8_count++)
+  {
+    s_handle_wifi.u8_buffer[u8_index++] = p_data[u8_count];
+  }
+
+  s_handle_wifi.u8_buffer[u8_index++] = DATA_STOP_FRAME;
 }

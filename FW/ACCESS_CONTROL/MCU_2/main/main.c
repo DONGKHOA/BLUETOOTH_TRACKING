@@ -128,8 +128,8 @@ APP_MAIN_InitUart (void)
   BSP_uartDriverInit(UART_NUM);
 }
 
-static inline void  
+static inline void
 APP_MAIN_InitDataSystem (void)
 {
-  
+  s_data_system.s_send_data_queue = xQueueCreate(8, sizeof(DATA_SYNC_t));
 }
