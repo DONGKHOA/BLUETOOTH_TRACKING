@@ -72,16 +72,12 @@ APP_DATA_RECEIVE_task (void *arg)
   twai_status_info_t status;
   while (1)
   {
-    BSP_canGetStatus(&status);
-    if (status.msgs_to_rx > 0)
+    BSP_canReceive(&receive_message, portMAX_DELAY);
+    if (!(receive_message.rtr))
     {
-      BSP_canReceive(&receive_message, portMAX_DELAY);
-      if (!(receive_message.rtr))
+      for (int i = 0; i < receive_message.data_length_code; i++)
       {
-        for (int i = 0; i < receive_message.data_length_code; i++)
-        {
-          ESP_LOGI("CAN", "Data byte %d = %X", i, receive_message.data[i]);
-        }
+        ESP_LOGI("CAN", "Data byte %d = %X", i, receive_message.data[i]);
       }
     }
   }

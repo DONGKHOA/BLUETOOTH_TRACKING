@@ -13,15 +13,15 @@
         <li><a href="#" onclick="showTab('info')">Information</a></li>
         <li><a href="#" onclick="showTab('network')">Network</a></li>
         <li><a href="#" onclick="showTab('report')">Report</a></li>
-        <li><a href="#">Logout</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
     </nav>
   
     <div class="container">
       <div id="info" class="tab-content active">
         <h2>Device Information</h2>
-        <div class="info-row"><strong>MAC:</strong> <span id="mac">24:58:7C:E2:C3:A6</span></div>
-        <div class="info-row"><strong>Name:</strong> <span id="name">ESP_GATTS_DEMO</span></div>
+        <div class="info-row"><strong>MAC:</strong> <span id="mac"></span></div>
+        <div class="info-row"><strong>Name:</strong> <span id="name"></span></div>
       </div>
   
       <div id="network" class="tab-content">
@@ -35,7 +35,6 @@
         <h2>Report Configuration</h2>
         <div class="info-row"><strong>MQTT Server:</strong> <span>192.168.1.11:1883</span></div>
         <div class="info-row"><strong>Topic:</strong> <span>GL-IoT/dataTopic/E465B840814E</span></div>
-        <div class="info-row"><strong>Interval:</strong> <span>1s</span></div>
       </div>
     </div>
 
