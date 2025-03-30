@@ -48,14 +48,10 @@
 #define CAN_MODE          TWAI_MODE_NORMAL
 #define CAN_TXD_PIN       GPIO_NUM_21
 #define CAN_RXD_PIN       GPIO_NUM_14
-#define CAN_TXD_QUEUE_LEN 1024
-#define CAN_RXD_QUEUE_LEN 1024
+#define CAN_TXD_QUEUE_LEN 8
+#define CAN_RXD_QUEUE_LEN 8
 #define CAN_INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
 #define CAN_BITRATE       CAN_500KBITS
-
-#define CAN_ID   0x123
-#define CAN_EXTD 0
-#define CAN_RTR  0
 
 /*** SPI2 peripheral *********************************************************/
 
@@ -217,7 +213,7 @@ APP_MAIN_InitDataSystem (void)
   s_xpt2046_0.p_spi_Handle = &spi_xpt2046_handle;
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
 
-  s_data_system.s_send_data_queue      = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_send_data_queue      = xQueueCreate(4, sizeof(DATA_SYNC_t));
   s_data_system.s_display_data_queue   = xQueueCreate(1, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_camera_recognition_queue
