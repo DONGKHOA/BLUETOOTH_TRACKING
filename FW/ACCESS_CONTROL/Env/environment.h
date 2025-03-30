@@ -30,7 +30,7 @@ extern "C"
 #define DATA_SYNC_TIME                        (uint8_t)0x0A
 #define DATA_SYNC_STATE_CONNECTION            (uint8_t)0x0B
 #define DATA_SYNC_REQUEST_ATTENDANCE          (uint8_t)0x0C
-#define DATA_SYNC_RESPONE_ATTENDANCE          (uint8_t)0x0D
+#define DATA_SYNC_RESPONSE_ATTENDANCE         (uint8_t)0x0D
 
 // Data Stop Frame
 #define DATA_STOP_FRAME (uint8_t)0xFF
