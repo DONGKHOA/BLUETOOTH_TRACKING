@@ -128,9 +128,8 @@ APP_MAIN_InitUart (void)
   BSP_uartDriverInit(UART_NUM);
 }
 
-static inline void
+static inline void  
 APP_MAIN_InitDataSystem (void)
 {
-  s_data_system.s_data_mqtt_queue
-      = xQueueCreate(16, sizeof(location_infor_tag_t));
+  
 }
