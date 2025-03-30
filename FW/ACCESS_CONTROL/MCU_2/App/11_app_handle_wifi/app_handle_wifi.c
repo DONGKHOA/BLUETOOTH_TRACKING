@@ -6,6 +6,7 @@
 
 #include "app_handle_wifi.h"
 #include "app_data.h"
+#include "environment.h"
 
 #include "wifi_helper.h"
 
@@ -23,10 +24,11 @@
 
 typedef struct
 {
-  uint8_t       *p_ssid;
-  uint8_t       *p_pass;
-  uint8_t       u8_buffer[64];
-  QueueHandle_t *p_send_data_queue;
+  uint8_t            *p_ssid;
+  uint8_t            *p_pass;
+  uint8_t             u8_buffer[64];
+  QueueHandle_t      *p_send_data_queue;
+  EventGroupHandle_t *p_flag_time_event;
 } handle_wifi_t;
 
 /******************************************************************************
@@ -38,7 +40,6 @@ static void APP_HANDLE_WIFI_task(void *arg);
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-
 static handle_wifi_t s_handle_wifi;
 static char          s_ssid[1024];
 
@@ -56,6 +57,7 @@ void
 APP_HANDLE_WIFI_Init (void)
 {
   s_handle_wifi.p_send_data_queue = &s_data_system.s_send_data_queue;
+  s_handle_wifi.p_flag_time_event = &s_data_system.s_flag_time_event;
   s_handle_wifi.p_ssid            = s_data_system.u8_ssid;
   s_handle_wifi.p_pass            = s_data_system.u8_pass;
 
@@ -75,33 +77,21 @@ APP_HANDLE_WIFI_task (void *arg)
   WIFI_Scan(s_ssid);
   WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
 
+  DATA_SYNC_t s_data_sync;
+
   while (1)
   {
     if (WIFI_state_connect() == CONNECT_OK)
     {
       ESP_LOGI(TAG, "WiFi Connect OK!");
-
+      s_data_sync.u8_data_start     = DATA_SYNC_STATE_CONNECTION;
+      s_data_sync.u8_data_packet[0] = DATA_SYNC_STATE_CONNECT;
+      s_data_sync.u8_data_length    = 1;
+      s_data_sync.u8_data_stop      = DATA_STOP_FRAME;
       // Notify the state of connection to transmit task via queue
-      xQueueSend(*s_handle_wifi.p_send_data_queue, , 0);
+      xQueueSend(*s_handle_wifi.p_send_data_queue, &s_data_sync, 0);
+
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
-}
-
-static void
-APP_HANLDE_WIFI_Combine_data (uint8_t *p_data, uint8_t u8_len)
-{
-  uint8_t u8_index = 0;
-  uint8_t u8_count = 0;
-
-  // Combine data to send to MCU1
-  s_handle_wifi.u8_buffer[u8_index++] = ;
-  s_handle_wifi.u8_buffer[u8_index++] = u8_len;
-
-  for (u8_count = 0; u8_count < u8_len; u8_count++)
-  {
-    s_handle_wifi.u8_buffer[u8_index++] = p_data[u8_count];
-  }
-
-  s_handle_wifi.u8_buffer[u8_index++] = DATA_STOP_FRAME;
 }

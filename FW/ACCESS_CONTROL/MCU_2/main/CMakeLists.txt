@@ -17,6 +17,7 @@ set (requires 00_app_security
               12_app_handle_modbusRTU
               13_app_mqtt_client
               14_app_led_status
+              15_app_timestamp
               16_app_data
               driver
               SN65HVD230DR

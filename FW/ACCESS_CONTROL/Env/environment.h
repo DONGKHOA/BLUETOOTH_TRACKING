@@ -39,6 +39,10 @@ extern "C"
 #define DATA_SYNC_SUCCESS (uint8_t)0x00
 #define DATA_SYNC_FAIL    (uint8_t)0x01
 
+// Data Response
+#define DATA_SYNC_STATE_CONNECT     (uint8_t)0x00
+#define DATA_SYNC_STATE_NOT_CONNECT (uint8_t)0x01
+
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/

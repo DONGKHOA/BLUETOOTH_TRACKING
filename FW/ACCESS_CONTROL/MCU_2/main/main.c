@@ -13,6 +13,7 @@
 #include "can.h"
 #include "spi.h"
 #include "gpio.h"
+#include "i2c.h"
 #include "nvs_rw.h"
 #include "uart.h"
 
@@ -23,7 +24,13 @@
 #include "app_data.h"
 #include "app_mqtt_client.h"
 #include "app_data_receive.h"
+#include "app_data_transmit.h"
+#include "app_handle_wifi.h"
 #include "app_fingerprint.h"
+#include "app_timestamp.h"
+#include "app_rtc.h"
+
+#include "environment.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -34,14 +41,19 @@
 #define CAN_MODE          TWAI_MODE_NORMAL
 #define CAN_TXD_PIN       GPIO_NUM_42
 #define CAN_RXD_PIN       GPIO_NUM_41
-#define CAN_TXD_QUEUE_LEN 1024
-#define CAN_RXD_QUEUE_LEN 1024
+#define CAN_TXD_QUEUE_LEN 8
+#define CAN_RXD_QUEUE_LEN 8
 #define CAN_INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
 #define CAN_BITRATE       5
 
-#define CAN_ID   0x123
-#define CAN_EXTD 0
-#define CAN_RTR  0
+/*** I2C peripheral **********************************************************/
+#define I2C_NUM        0
+#define I2C_MODE       I2C_MODE_MASTER
+#define I2C_SDA        GPIO_NUM_39
+#define I2C_SCL        GPIO_NUM_40
+#define I2C_SDA_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_CLK_SPEED  100000
 
 /******************************************************************************
  *    PRIVATE PROTOTYPE FUNCTION
@@ -49,6 +61,7 @@
 
 static inline void APP_MAIN_InitGPIO(void);
 static inline void APP_MAIN_InitCan(void);
+static inline void APP_MAIN_InitI2C(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitUart(void);
 static inline void APP_MAIN_InitDataSystem(void);
@@ -68,6 +81,7 @@ app_main (void)
   APP_MAIN_InitCan();
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();
+  APP_MAIN_InitI2C();
 
   // Main Initialization data system
 
@@ -75,11 +89,19 @@ app_main (void)
 
   // App Initialization
 
-  APP_FINGERPRINT_Init();
+  // APP_FINGERPRINT_Init();
+  // APP_DATA_TRANSMIT_Init();
+  APP_HANDLE_WIFI_Init();
+  APP_TIMESTAMP_Init();
+  APP_RTC_Init();
 
   // App Create Task
 
-  APP_FINGERPRINT_CreateTask();
+  // APP_FINGERPRINT_CreateTask();
+  // APP_DATA_TRANSMIT_CreateTask();
+  APP_HANDLE_WIFI_CreateTask();
+  APP_TIMESTAMP_CreateTask();
+  APP_RTC_CreateTask();
 }
 
 /******************************************************************************
@@ -129,7 +151,18 @@ APP_MAIN_InitUart (void)
 }
 
 static inline void
+APP_MAIN_InitI2C (void)
+{
+  BSP_i2cConfigMode(I2C_NUM, I2C_MODE);
+  BSP_i2cConfigSDA(I2C_NUM, I2C_SDA, I2C_SDA_PULLUP);
+  BSP_i2cConfigSCL(I2C_NUM, I2C_SCL, I2C_SCL_PULLUP);
+  BSP_i2cConfigClockSpeed(I2C_NUM, I2C_CLK_SPEED);
+  BSP_i2cDriverInit(I2C_NUM);
+}
+
+static inline void
 APP_MAIN_InitDataSystem (void)
 {
   s_data_system.s_send_data_queue = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_flag_time_event = xEventGroupCreate();
 }
