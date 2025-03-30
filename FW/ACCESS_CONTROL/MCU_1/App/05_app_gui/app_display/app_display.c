@@ -39,6 +39,9 @@ extern ili9341_handle_t s_ili9341_0;
 extern xpt2046_handle_t s_xpt2046_0;
 extern lv_obj_t        *ui_Time;
 
+// static lv_color_t         buf1[DISP_BUF_SIZE];
+static lv_disp_draw_buf_t draw_buf;
+
 /******************************************************************************
  *   PUBLIC FUNCTION
  *****************************************************************************/
@@ -47,7 +50,7 @@ void
 APP_DISPLAY_CreateTask (void)
 {
   // Create task
-  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 40, NULL, 5, NULL);
+  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 4, NULL, 5, NULL);
 }
 
 void
@@ -58,9 +61,13 @@ APP_DISPLAY_Init (void)
 
   // Initialize display driver
   lvgl_driver_init();
+  lv_color_t *buf1 = heap_caps_malloc(sizeof(lv_color_t) * DISP_BUF_SIZE, MALLOC_CAP_DMA);
 
-  static lv_color_t         buf1[DISP_BUF_SIZE];
-  static lv_disp_draw_buf_t draw_buf;
+  if (buf1 == NULL) {
+    ESP_LOGE(TAG, "Failed to allocate LVGL draw buffer!");
+    return; // Or handle error gracefully
+}
+
   lv_disp_draw_buf_init(&draw_buf, buf1, NULL, DISP_BUF_SIZE);
 
   // Configure display driver

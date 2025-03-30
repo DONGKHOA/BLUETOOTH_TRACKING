@@ -60,11 +60,12 @@ Face::Face ()
     , // score_threshold, nms_threshold, top_k, resize_scale
     detector2(0.4F, 0.3F, 10) // score_threshold, nms_threshold, top_k
 {
-  this->p_camera_capture_queue     = &s_data_system.s_camera_capture_queue;
   this->p_camera_recognition_queue = &s_data_system.s_camera_recognition_queue;
   this->p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
-  this->p_display_event            = &s_data_system.s_display_event;
-  this->recognizer                 = new FaceRecognition112V1S8();
+
+  this->p_display_event = &s_data_system.s_display_event;
+
+  this->recognizer = new FaceRecognition112V1S8();
 }
 
 Face::~Face () // Added destructor implementation
@@ -76,10 +77,10 @@ void
 Face::CreateTask ()
 {
   xTaskCreate(&Face::APP_FACE_RECOGNITION_Task,
-              "face recognition task",
+              "face task",
               1024 * 4,
               this, // Pass the Face instance as a void*
-              13,
+              7,
               NULL);
 }
 
@@ -87,7 +88,7 @@ void
 Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 {
   Face        *self = static_cast<Face *>(pvParameters);
-  camera_fb_t *fb   = nullptr;
+  static camera_capture_t s_camera_capture;
   EventBits_t  uxBits;
 
   uint8_t u8_post_enroll_frame_count = 0;
@@ -98,7 +99,6 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
   data_result_recognition_t s_data_result_recognition
       = { .s_coord_box_face           = { 0, 0, 0, 0 },
-          .s_coord_box_eye            = { 0, 0, 0, 0 },
           .s_left_eye                 = { 0, 0 },
           .s_right_eye                = { 0, 0 },
           .s_left_mouth               = { 0, 0 },
@@ -114,7 +114,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
   while (1)
   {
-    if (xQueueReceive(*self->p_camera_capture_queue, &fb, portMAX_DELAY)
+    if (xQueueReceive(*self->p_camera_recognition_queue, &s_camera_capture, portMAX_DELAY)
         == pdPASS)
     {
       uxBits = xEventGroupWaitBits(*self->p_display_event,
@@ -130,7 +130,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
       if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
       {
-        if (stable_face_count > 255)
+        if (stable_face_count >= 255)
         {
           //   dl::image::draw_filled_rectangle((uint16_t *)fb->buf,
           //                                    fb->height,
@@ -165,17 +165,16 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
         else
         {
           std::list<dl::detect::result_t> &detect_candidates
-              = self->detector.infer((uint16_t *)fb->buf,
-                                     { (int)fb->height, (int)fb->width, 3 });
+              = self->detector.infer((uint16_t *)s_camera_capture.u8_buff,
+                                     { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 });
           detect_results
-              = self->detector2.infer((uint16_t *)fb->buf,
-                                      { (int)fb->height, (int)fb->width, 3 },
+              = self->detector2.infer((uint16_t *)s_camera_capture.u8_buff,
+                                      { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
                                       detect_candidates);
 
-          xQueueSend(*self->p_camera_recognition_queue, &fb, 0);
-          
           if (detect_results.size())
           {
+            vTaskDelay(pdMS_TO_TICKS(1));
             uint16_t i = 0;
             for (std::list<dl::detect::result_t>::iterator prediction
                  = detect_results.begin();
@@ -229,12 +228,30 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
                                   210,
                                   120))
             {
-              xQueueSend(*self->p_result_recognition_queue,
-                         &s_data_result_recognition,
-                         0);
               stable_face_count++;
               ESP_LOGI(TAG, "stable_face_count: %d", stable_face_count);
             }
+            else
+            {
+              s_data_result_recognition.s_coord_box_face.x1 = 0;
+              s_data_result_recognition.s_coord_box_face.y1 = 0;
+              s_data_result_recognition.s_coord_box_face.x2 = 0;
+              s_data_result_recognition.s_coord_box_face.y2 = 0;
+              s_data_result_recognition.s_left_eye.x        = 0;
+              s_data_result_recognition.s_left_eye.y        = 0;
+              s_data_result_recognition.s_right_eye.x       = 0;
+              s_data_result_recognition.s_right_eye.y       = 0;
+              s_data_result_recognition.s_left_mouth.x      = 0;
+              s_data_result_recognition.s_left_mouth.y      = 0;
+              s_data_result_recognition.s_right_mouth.x     = 0;
+              s_data_result_recognition.s_right_mouth.y     = 0;
+              s_data_result_recognition.s_nose.x            = 0;
+              s_data_result_recognition.s_nose.y            = 0;
+            }
+            xQueueSend(*self->p_result_recognition_queue,
+                       &s_data_result_recognition,
+                       0);
+            
           }
         }
       }

@@ -41,13 +41,6 @@ extern "C"
       uint16_t y1;
       uint16_t y2;
     } s_coord_box_face;
-    struct coord_box_eye
-    {
-      uint16_t x1;
-      uint16_t x2;
-      uint16_t y1;
-      uint16_t y2;
-    } s_coord_box_eye;
     struct left_eye
     {
       uint16_t x;
@@ -76,6 +69,13 @@ extern "C"
     int                        ID;
     notification_recognition_t e_notification_recognition;
   } data_result_recognition_t;
+
+  typedef struct 
+  {
+    uint8_t * u8_buff;
+    size_t width;
+    size_t height; 
+  } camera_capture_t;
 
   /**
    * @brief Data structure holding data of system

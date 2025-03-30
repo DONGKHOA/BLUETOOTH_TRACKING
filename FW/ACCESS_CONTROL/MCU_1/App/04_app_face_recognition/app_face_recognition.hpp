@@ -18,7 +18,6 @@
 class Face
 {
   private:
-  QueueHandle_t          *p_camera_capture_queue;
   QueueHandle_t          *p_camera_recognition_queue;
   QueueHandle_t          *p_result_recognition_queue;
   EventGroupHandle_t     *p_display_event;

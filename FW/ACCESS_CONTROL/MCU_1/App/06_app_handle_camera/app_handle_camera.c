@@ -24,6 +24,7 @@
 typedef struct
 {
   QueueHandle_t      *p_camera_capture_queue;
+  QueueHandle_t      *p_camera_recognition_queue;
   EventGroupHandle_t *p_display_event;
 } app_handle_camera_t;
 
@@ -38,7 +39,8 @@ static void APP_HANDLE_CAMERA_task(void *arg);
  *****************************************************************************/
 
 static app_handle_camera_t s_app_handle_camera;
-uint8_t                    *psram_array;
+static camera_capture_t    s_camera_capture;
+uint8_t                   *psram_array;
 
 static camera_config_t camera_config = {
   .pin_pwdn     = CAM_PIN_PWDN,
@@ -84,13 +86,16 @@ void
 APP_HANDLE_CAMERA_CreateTask (void)
 {
   xTaskCreate(
-      APP_HANDLE_CAMERA_task, "handle camera task", 1024 * 4, NULL, 6, NULL);
+      APP_HANDLE_CAMERA_task, "camera task", 1024 * 4, NULL, 6, NULL);
 }
 void
 APP_HANDLE_CAMERA_Init (void)
 {
   s_app_handle_camera.p_camera_capture_queue
       = &s_data_system.s_camera_capture_queue;
+
+  s_app_handle_camera.p_camera_recognition_queue
+      = &s_data_system.s_camera_recognition_queue;
 
   s_app_handle_camera.p_display_event = &s_data_system.s_display_event;
 
@@ -108,6 +113,7 @@ APP_HANDLE_CAMERA_Init (void)
     printf("Failed to allocate memory in PSRAM\r\n");
     return;
   }
+  s_camera_capture.u8_buff = psram_array;
 }
 
 /******************************************************************************
@@ -141,8 +147,15 @@ APP_HANDLE_CAMERA_task (void *arg)
       continue;
     }
 
+    memcpy(psram_array, fb->buf, fb->len);
+    s_camera_capture.width = fb->width;
+    s_camera_capture.height = fb->height;
+
+    xQueueSend(
+        *s_app_handle_camera.p_camera_recognition_queue, &s_camera_capture, 0);
+
     xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
 
-    vTaskDelay(pdMS_TO_TICKS(10));
+    vTaskDelay(pdMS_TO_TICKS(30));
   }
 }
