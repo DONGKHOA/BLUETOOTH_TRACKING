@@ -20,7 +20,7 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define CAN_MODE      TWAI_MODE_NORMAL
+#define CAN_MODE      TWAI_MODE_NO_ACK
 #define TXD_PIN       GPIO_NUM_42
 #define RXD_PIN       GPIO_NUM_41
 #define TXD_QUEUE_LEN 1024

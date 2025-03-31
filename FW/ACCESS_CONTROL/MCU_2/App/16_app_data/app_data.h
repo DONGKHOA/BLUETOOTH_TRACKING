@@ -1,5 +1,5 @@
-#ifndef DATA_APP_DATA_ESP32_H_
-#define DATA_APP_DATA_ESP32_H_
+#ifndef DATA_APP_DATA_H_
+#define DATA_APP_DATA_H_
 
 /******************************************************************************
  *      INCLUDES
@@ -11,6 +11,7 @@
 #include "freertos/queue.h"
 #include "freertos/event_groups.h"
 #include "freertos/timers.h"
+#include "freertos/semphr.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -18,15 +19,15 @@ extern "C"
 #endif
 
   /****************************************************************************
-   *   PUBLIC TYPEDEFS
+   *   PUBLIC DEFINES
    ***************************************************************************/
 
-  typedef enum
-  {
-    TAG_INDOOR,
-    TAG_OUTDOOR,
-    TAG_UNKNOWN
-  } location_tag_t;
+#define TIME_SOURCE_SNTP_READY BIT0
+#define TIME_SOURCE_RTC_READY  BIT1
+
+  /****************************************************************************
+   *   PUBLIC TYPEDEFS
+   ***************************************************************************/
 
   /**
    * @brief Data structure holding data of system
@@ -39,19 +40,13 @@ extern "C"
 
   typedef struct _DATA_System_t
   {
-    QueueHandle_t           s_data_mqtt_queue;
+    QueueHandle_t      s_data_mqtt_queue;
+    QueueHandle_t      s_send_data_queue;
+    QueueHandle_t      s_receive_data_queue;
+    EventGroupHandle_t s_flag_time_event;
+    uint8_t            u8_ssid[32];
+    uint8_t            u8_pass[32];
   } DATA_System_t;
-
-  /**
-   * @brief Structure defining the data sync between the app_ble_tracking and
-   * app_data_transmit.
-   */
-  typedef struct
-  {
-    char          p_name[16];
-    location_tag_t e_location_tag;
-    int8_t         i8_filtered_rssi;
-  } location_infor_tag_t;
 
   /****************************************************************************
    *   PUBLIC DATA
@@ -63,4 +58,4 @@ extern "C"
 }
 #endif
 
-#endif /* DATA_APP_DATA_ESP32_H_ */
+#endif /* DATA_APP_DATA_H_ */

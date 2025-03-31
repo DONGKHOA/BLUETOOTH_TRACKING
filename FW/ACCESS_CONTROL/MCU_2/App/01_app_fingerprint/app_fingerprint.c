@@ -58,9 +58,6 @@ APP_FINGERPRINT_CreateTask (void)
 void
 APP_FINGERPRINT_Init (void)
 {
-  static int b;
-  const int a = 0;
-  a = 1;
   s_fingerprint_data.buffer1 = 0x01;
   // Specify the start page for the search
 

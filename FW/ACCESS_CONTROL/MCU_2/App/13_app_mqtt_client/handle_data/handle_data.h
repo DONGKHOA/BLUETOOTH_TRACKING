@@ -1,9 +1,11 @@
-#ifndef APP_DATA_TRANSMIT_H_
-#define APP_DATA_TRANSMIT_H_
+#ifndef HANDLE_DATA_H_
+#define HANDLE_DATA_H_
 
 /******************************************************************************
  *      INCLUDES
  *****************************************************************************/
+
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -14,11 +16,8 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void APP_DATA_TRANSMIT_CreateTask(void);
-  void APP_DATA_TRANSMIT_Init(void);
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* APP_DATA_TRANSMIT_H_ */
+#endif /* HANDLE_DATA_H_ */

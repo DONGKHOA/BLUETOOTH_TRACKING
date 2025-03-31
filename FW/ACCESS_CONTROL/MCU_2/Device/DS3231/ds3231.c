@@ -67,7 +67,7 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
   {
     printf("RTC is running. Reading current data...\n");
 
-    // Đọc thời gian hiện tại từ DS3231
+    // Read the current time of DS3231
     DEV_DS3231_Register_Read(p_ds3231_data, e_i2c_port);
   }
 }

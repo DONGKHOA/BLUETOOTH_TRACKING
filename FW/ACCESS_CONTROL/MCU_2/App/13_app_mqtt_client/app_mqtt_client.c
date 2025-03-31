@@ -16,6 +16,8 @@
 
 #define URL "mqtt://broker.emqx.io"
 
+#define MQTT_CONNECTED BIT0
+
 /******************************************************************************
  *    PRIVATE TYPEDEFS
  *****************************************************************************/
@@ -23,6 +25,8 @@
 typedef struct mqtt_client_data
 {
   QueueHandle_t           *p_data_mqtt_queue;
+  QueueHandle_t            s_data_subscribe_queue;
+  EventGroupHandle_t       s_mqtt_event;
   esp_mqtt_client_handle_t s_MQTT_Client;
 } mqtt_client_data_t;
 
@@ -41,6 +45,7 @@ static void mqtt_event_handler(void            *handler_args,
  *****************************************************************************/
 
 static mqtt_client_data_t s_mqtt_client_data;
+static char               data[1024 * 10];
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -56,6 +61,9 @@ void
 APP_MQTT_CLIENT_Init (void)
 {
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
+  s_mqtt_client_data.s_mqtt_event      = xEventGroupCreate();
+  s_mqtt_client_data.s_data_subscribe_queue
+      = xQueueCreate(2, sizeof(char) * 1024 * 10);
 
   esp_mqtt_client_config_t mqtt_cfg = {
     .broker.address.uri = URL,
@@ -79,8 +87,19 @@ APP_MQTT_CLIENT_Init (void)
 static void
 APP_MQTT_CLIENT_task (void *arg)
 {
+  EventBits_t bits;
   while (1)
   {
+    bits = xEventGroupWaitBits(
+        s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED, pdFALSE, pdFALSE, 0);
+    if ((bits & MQTT_CONNECTED) == 0)
+    {
+      continue;
+    }
+
+    esp_mqtt_client_subscribe_single(s_mqtt_client_data.s_MQTT_Client, "", 0);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
@@ -98,19 +117,31 @@ mqtt_event_handler (void            *handler_args,
   switch ((esp_mqtt_event_id_t)event_id)
   {
     case MQTT_EVENT_CONNECTED:
+
       ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+      xEventGroupSetBits(s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED);
+
       break;
     case MQTT_EVENT_SUBSCRIBED:
+
       ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED");
+
       break;
     case MQTT_EVENT_PUBLISHED:
+
       ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED");
+
       break;
     case MQTT_EVENT_DATA:
+
       ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+
       break;
     case MQTT_EVENT_DISCONNECTED:
+
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
+      xEventGroupClearBits(s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED);
+
       break;
     default:
       ESP_LOGI(TAG, "Other event");
