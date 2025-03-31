@@ -4,14 +4,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "sdkconfig.h"
 
 #include "sn65hvd230dr.h"
 
-#include "can.h"
-
-/******************************************************************************
+/*****************************************************************************
  *      PUBLIC FUNCTION
  *****************************************************************************/
 
@@ -27,6 +26,7 @@ DEV_CAN_SendMessage (uint32_t u32_id,
   transmit_message.extd             = u32_extd;
   transmit_message.rtr              = u32_rtr;
   transmit_message.data_length_code = u8_len;
+  transmit_message.ss               = 0x01;
 
   memcpy(transmit_message.data, p_data, u8_len);
 
@@ -41,3 +41,7 @@ DEV_CAN_SendMessage (uint32_t u32_id,
     return 0;
   }
 }
+
+/*****************************************************************************
+ *      PRIVATE FUNCTION
+ *****************************************************************************/
