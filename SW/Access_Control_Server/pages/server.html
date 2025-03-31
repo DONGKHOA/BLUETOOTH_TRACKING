@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Data Entry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .action-btn { width: 35px; }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ACCESS CONTROL SERVER</a>
+            <div class="navbar-nav">
+                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('index') }}">User Data</a>
+                <a class="nav-link {% if request.path == '/attendance' %}active{% endif %}" href="{{ url_for('show_attendance') }}">Attendance</a>
+            </div>
+        </div>
+    </nav>
+
+    <h4>USER DATA LISTS</h4>
+
+    <form method="post" action="{{ url_for('append_blank') }}">
+        <div class="mb-2 text-end">
+            <button type="submit" class="btn btn-success">+ Add User</button>
+        </div>
+    </form>
+
+    <form method="post" action="{{ url_for('update_users') }}">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Employee ID</th>
+                    <th>Role</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <!-- Each row is an independent form -->
+                    <form method="post">
+                        <input type="hidden" name="id" value="{{ user.id }}">
+                        <td>{{ user.id }}</td>
+                        <td><input type="text" class="form-control" name="name" value="{{ user.name }}"></td>
+                        <td><input type="text" class="form-control" name="employee_id" value="{{ user.employee_id }}"></td>
+                        <td>
+                            <select class="form-select" name="role">
+                                <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
+                                <option value="User" {% if user.role == 'User' %}selected{% endif %}>User</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" formaction="{{ url_for('update_users') }}" class="btn btn-success action-btn">+</button>
+                        </td>
+                        <td>
+                            <button type="submit" formaction="{{ url_for('delete_user', index=loop.index0) }}" class="btn btn-danger action-btn">-</button>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>
