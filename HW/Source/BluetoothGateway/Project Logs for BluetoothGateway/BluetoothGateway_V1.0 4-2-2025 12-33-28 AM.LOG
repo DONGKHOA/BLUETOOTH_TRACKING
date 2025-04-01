@@ -1,0 +1,7 @@
+Removed Member From Class: ClassName=MCU Member=J2
+Removed Member From Class: ClassName=Power_Supply Member=U3
+Removed Member From Class: ClassName=Power_Supply Member=U4
+Change Net Color : Old Net Color=Red New Net Color=RGB(74, 134, 232)
+Added Member To Class: ClassName=MCU Member=Component J1 FLASH
+Added Member To Class: ClassName=Power_Supply Member=Component U1 MP1584EN-LF-Z
+Added Member To Class: ClassName=Power_Supply Member=Component U2 AMS1117-3.3
