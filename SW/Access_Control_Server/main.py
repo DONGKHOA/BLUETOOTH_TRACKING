@@ -2,21 +2,19 @@ import json
 import asyncio
 import paho.mqtt.client as mqtt
 import handle_data
-
-# import threading
-# from ui import app 
+import redis
 
 # MQTT broker details
 BROKER = "broker.emqx.io"
 PORT = 1883
-REQUEST_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Request'
-RESPONSE_SERVER_TOPIC = 'ACCESS_CONTROL/Server/Response'
 
 REQUEST_SERVER_TOPIC = 'ACCESS_CONTROL/Server/Request'
+RESPONSE_SERVER_TOPIC = 'ACCESS_CONTROL/Server/Response'
+
+REQUEST_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Request'
 RESPONSE_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Response'
 
-queue = asyncio.Queue()
-event_loop = asyncio.get_event_loop()
+redis_client = redis.Redis(host="127.0.0.1", port=6379, db=0)
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -30,22 +28,22 @@ def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     print(f"Received message on {msg.topic}: {payload}")
 
-    # Notify the request handler via async queue
-    asyncio.run_coroutine_threadsafe(queue.put(payload), event_loop)
-
-def enqueue_internal_command(command_dict):
-    print("[enqueue] sending to queue:", command_dict)
-    asyncio.run_coroutine_threadsafe(queue.put(command_dict), event_loop)
+    # Notify the request handler via redis queue
+    redis_client.rpush("mqtt_queue", payload)
 
 async def process_request():
+    loop = asyncio.get_event_loop()
     while True:
         # Wait for a message from the MQTT broker
-        payload = await queue.get()
-        print(f"Processing payload: {payload}")
+        _, raw_payload = await loop.run_in_executor(None, redis_client.blpop, "mqtt_queue")
+        payload_str = raw_payload.decode()  # convert from bytes to string
 
-        data = json.loads(payload)
-        command = data.get("command")
-        print(f"Processing command: {command}")
+        try:
+            data = json.loads(payload_str)
+            command = data.get("command")
+            print(f"Processing command: {command}")
+        except Exception as e:
+            print(f"Error while parsing JSON: {e}")
 
         # Process the request
         match command:
@@ -78,26 +76,20 @@ async def process_request():
                 mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
                 print("Sent response:", json_data)
 
-            # case "DELETE_USER_DATA":
-            #     print("Deleting user data")
-            #     user_id = data.get("id")
-            #     json_data = json.dumps({
-            #         "command": "DELETE_USER_DATA",
-            #         "id": user_id
-            #     })
-            #     mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
-            #     print("Sent response:", json_data)
+            case "DELETE_USER_DATA":
+                print("Deleting user data")
+                user_id = data.get("id")
+                json_data = json.dumps({
+                    "command": "DELETE_USER_DATA",
+                    "id": user_id
+                })
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                print("Sent response:", json_data)
 
 
 async def main():
-    global event_loop
-    event_loop = asyncio.get_running_loop()
-
     mqtt_client.loop_start()
     await process_request()
-
-# def run_flask():
-#     app.run(host="0.0.0.0", port=9000, debug=True, use_reloader=False)
 
 # Setup MQTT client
 mqtt_client = mqtt.Client()
@@ -106,8 +98,5 @@ mqtt_client.on_message = on_message
 mqtt_client.connect(BROKER, PORT, 60)
 
 if __name__ == "__main__":
-    # flask_thread = threading.Thread(target=run_flask)
-    # flask_thread.start()
-
     asyncio.run(main())
 

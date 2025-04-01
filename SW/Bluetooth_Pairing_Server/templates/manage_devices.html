@@ -33,8 +33,12 @@
   
       <div id="report" class="tab-content">
         <h2>Report Configuration</h2>
-        <div class="info-row"><strong>MQTT Server:</strong> <span>192.168.1.11:1883</span></div>
-        <div class="info-row"><strong>Topic:</strong> <span>GL-IoT/dataTopic/E465B840814E</span></div>
+        <div class="info-row clickable" onclick="openMQTTServerModal()">
+          <strong>MQTT Server:</strong> <span id="mqttServerDisplay"></span>
+        </div>
+        <div class="info-row clickable" onclick="openMQTTTopicModal()">
+          <strong>Topic:</strong> <span id="mqttTopicDisplay"></span>
+        </div>
       </div>
     </div>
 
@@ -52,6 +56,41 @@
         </div>
       </div>
     </div>
+
+    <!-- MQTT Server Modal -->
+    <div id="mqttServerModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeMQTTServerModal()">&times;</button>
+        <h3>Set MQTT Server</h3>
+        <label for="mqttServerInput">MQTT Server (e.g., 192.168.1.11:1883):</label>
+        <input type="text" id="mqttServerInput" />
+        <button onclick="applyMQTTServer()">Apply</button>
+      </div>
+    </div>
+
+    <!-- MQTT Topic Modal -->
+    <div id="mqttTopicModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeMQTTTopicModal()">&times;</button>
+        <h3>Set MQTT Topic</h3>
+        <label for="mqttTopicInput">Topic (e.g., GL-IoT/dataTopic/...):</label>
+        <input type="text" id="mqttTopicInput" />
+        <button onclick="applyMQTTTopic()">Apply</button>
+      </div>
+    </div>
+
+    <script>
+      const mac = "{{ mac }}";
+      sessionStorage.setItem("connectedMac", mac);
+      document.getElementById("mac").textContent = mac;
+
+      // Optional: get name from query param or leave empty
+      const name = "{{ request.args.get('name', '') }}";
+      if (name) {
+        sessionStorage.setItem("connectedName", name);
+        document.getElementById("name").textContent = name;
+      }
+    </script>
 
     <script src="/static/js/manage_devices.js"></script>
 
