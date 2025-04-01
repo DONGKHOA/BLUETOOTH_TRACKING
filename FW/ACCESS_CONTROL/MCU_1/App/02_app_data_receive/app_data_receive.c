@@ -31,7 +31,7 @@
 /**
  * @brief Structure defining the data of app_data_receive.
  */
-typedef struct ble_ibeacon_data
+typedef struct
 {
   QueueHandle_t *p_display_data_queue;
 } data_receive_data_t;

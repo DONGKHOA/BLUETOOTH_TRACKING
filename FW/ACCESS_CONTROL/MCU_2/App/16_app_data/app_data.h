@@ -42,7 +42,6 @@ extern "C"
   {
     QueueHandle_t      s_data_mqtt_queue;
     QueueHandle_t      s_send_data_queue;
-    QueueHandle_t      s_receive_data_queue;
     EventGroupHandle_t s_flag_time_event;
     uint8_t            u8_ssid[32];
     uint8_t            u8_pass[32];
