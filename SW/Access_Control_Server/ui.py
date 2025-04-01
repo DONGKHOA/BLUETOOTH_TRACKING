@@ -4,6 +4,9 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 import json
 import os
+import redis
+
+redis_client = redis.Redis(host="127.0.0.1", port=6379, db=0)
 
 app = Flask(__name__, template_folder='pages')
 
@@ -89,10 +92,11 @@ def delete_user(index):
         if user_id:
             # Send a DELETE_USER_DATA command to the queue
             print(f"Deleting user data for ID: {user_id}")
-            enqueue_internal_command({
+
+            redis_client.rpush("mqtt_queue", json.dumps({
                 "command": "DELETE_USER_DATA",
                 "id": user_id
-            })
+            }))
 
     return redirect(url_for('index'))
 

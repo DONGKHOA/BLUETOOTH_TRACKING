@@ -133,8 +133,79 @@ document.addEventListener("DOMContentLoaded", async () => {
       modalPassInput.value = data.password;
     }
 
+    // Load MQTT config
+    const mqttRes = await fetch(`/get_mqtt_config/${encodeURIComponent(mac)}`);
+    const mqttData = await mqttRes.json();
+
+    const mqttServerSpan = document.getElementById("mqttServerDisplay");
+    if (mqttServerSpan && mqttData.mqtt_server) {
+      mqttServerSpan.textContent = mqttData.mqtt_server;
+    }
+
+    const mqttTopicSpan = document.getElementById("mqttTopicDisplay");
+    if (mqttTopicSpan && mqttData.topic) {
+      mqttTopicSpan.textContent = mqttData.topic;
+    }
+
   } catch (err) {
     console.error("Failed to load previous WiFi config:", err);
   }
 });
 
+function openMQTTServerModal() {
+  document.getElementById("mqttServerModal").style.display = "block";
+  document.getElementById("mqttServerInput").value = document.getElementById("mqttServerDisplay").textContent;
+}
+
+function closeMQTTServerModal() {
+  document.getElementById("mqttServerModal").style.display = "none";
+}
+
+function applyMQTTServer() {
+  const server = document.getElementById("mqttServerInput").value;
+  const mac = sessionStorage.getItem("connectedMac");
+  fetch("/send_mqtt_server", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ server, mac })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.saved) {
+      document.getElementById("mqttServerDisplay").textContent = server;
+      alert("MQTT server updated!");
+    } else {
+      alert("Error: " + JSON.stringify(data));
+    }
+    closeMQTTServerModal();
+  });
+}
+
+function openMQTTTopicModal() {
+  document.getElementById("mqttTopicModal").style.display = "block";
+  document.getElementById("mqttTopicInput").value = document.getElementById("mqttTopicDisplay").textContent;
+}
+
+function closeMQTTTopicModal() {
+  document.getElementById("mqttTopicModal").style.display = "none";
+}
+
+function applyMQTTTopic() {
+  const topic = document.getElementById("mqttTopicInput").value;
+  const mac = sessionStorage.getItem("connectedMac");
+  fetch("/send_mqtt_topic", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ topic, mac })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.saved) {
+      document.getElementById("mqttTopicDisplay").textContent = topic;
+      alert("MQTT topic updated!");
+    } else {
+      alert("Error: " + JSON.stringify(data));
+    }
+    closeMQTTTopicModal();
+  });
+}
