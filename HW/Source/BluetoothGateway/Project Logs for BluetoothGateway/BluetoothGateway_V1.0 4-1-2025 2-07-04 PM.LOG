@@ -1,0 +1,36 @@
+Added Component: Designator=J1(HANRUN_HR911105A)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://core-electronics.com.au/attachments/localcontent/cc11be56d66bb63d5f1eeb85492439c0_335950a6d06.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "HR911105A C?ng RJ45 Cái Có LED Hanrun"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/hr911105a-cong-rj45-cai-co-led-hanrun"; VariantName = "[No Variations]"
+Added Component: Designator=U1(XCVR_ESP32-WROVER-IE-N4R8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.espressif.com/sites/default/files/documentation/esp32-wrover-e_esp32-wrover-ie_datasheet_en.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "ESP32-WROVER-IE-N4R8 Module WiFi Bluetooth 4MB Flash, 8MB PSRAM, 2.4GHz"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/esp32-wrover-ie-n4r8-module-wifi-bluetooth-4mb-flash-8mb-psram-2-4ghz"; VariantName = "[No Variations]"
+Added Component: Designator=U2(QFN-EP-24)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://ww1.microchip.com/downloads/en/devicedoc/00002165b.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "LAN8720A IC Truy?n Nh?n Ethernet 24-QFN"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/lan8720a-ic-truyen-nhan-ethernet-24-qfn"; VariantName = "[No Variations]"
+Added Component: Designator=Y1(Crystal_SMD_3225_4P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Th?ch Anh 25MHz 3225 4 Chân SMD"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/thach-anh-25mhz-3225-4-chan-smd"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U1-1
+Added Pin To Net: NetName=GND Pin=U1-15
+Added Pin To Net: NetName=GND Pin=U1-38
+Added Pin To Net: NetName=GND Pin=U1-39_1
+Added Pin To Net: NetName=GND Pin=U1-39_2
+Added Pin To Net: NetName=GND Pin=U1-39_3
+Added Pin To Net: NetName=GND Pin=U1-39_4
+Added Pin To Net: NetName=GND Pin=U1-39_5
+Added Pin To Net: NetName=GND Pin=U1-39_6
+Added Pin To Net: NetName=GND Pin=U1-39_7
+Added Pin To Net: NetName=GND Pin=U1-39_8
+Added Pin To Net: NetName=GND Pin=U1-39_9
+Added Net: Name=GND
+Added Class: Name=Ethernet
+Added Class: Name=MCU
+Added Rule: Name=Schematic Supply Nets
