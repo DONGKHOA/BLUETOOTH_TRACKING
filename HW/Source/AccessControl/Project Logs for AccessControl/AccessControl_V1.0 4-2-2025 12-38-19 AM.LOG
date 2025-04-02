@@ -1,0 +1,730 @@
+Removed Pin From Net: NetName=GND Pin=C22-1
+Removed Pin From Net: NetName=5V Pin=C22-2
+Removed Pin From Net: NetName=GND Pin=C23-1
+Removed Pin From Net: NetName=5V Pin=C23-2
+Removed Pin From Net: NetName=GND Pin=C26-2
+Removed Pin From Net: NetName=GND Pin=C62-2
+Removed Pin From Net: NetName=NetC68_2 Pin=C68-2
+Removed Pin From Net: NetName=GND Pin=C91-1
+Removed Pin From Net: NetName=5V Pin=C91-2
+Removed Pin From Net: NetName=GND Pin=C92-1
+Removed Pin From Net: NetName=5V Pin=C92-2
+Removed Pin From Net: NetName=GND Pin=C93-1
+Removed Pin From Net: NetName=GND Pin=C94-2
+Removed Pin From Net: NetName=GND Pin=C95-1
+Removed Pin From Net: NetName=5V Pin=C95-2
+Removed Pin From Net: NetName=GND Pin=C96-1
+Removed Pin From Net: NetName=5V Pin=C96-2
+Removed Pin From Net: NetName=GND Pin=C97-1
+Removed Pin From Net: NetName=GND Pin=C98-2
+Removed Pin From Net: NetName=12V Pin=D4-A
+Removed Pin From Net: NetName=GND Pin=D5-A
+Removed Pin From Net: NetName=GND Pin=D26-C
+Removed Pin From Net: NetName=NetC29_2 Pin=D27-2
+Removed Pin From Net: NetName=GND Pin=D28-C
+Removed Pin From Net: NetName=NetC33_2 Pin=D29-2
+Removed Pin From Net: NetName=GND Pin=FB12-2
+Removed Pin From Net: NetName=GND Pin=FB13-2
+Removed Pin From Net: NetName=GND Pin=FB14-2
+Removed Pin From Net: NetName=GND Pin=FB15-2
+Removed Pin From Net: NetName=5V Pin=L3-2
+Removed Pin From Net: NetName=GND Pin=P3-1
+Removed Pin From Net: NetName=NetC30_2 Pin=Q6-3
+Removed Pin From Net: NetName=NetC34_2 Pin=Q8-3
+Removed Pin From Net: NetName=12V Pin=R11-2
+Removed Pin From Net: NetName=5V Pin=R13-1
+Removed Pin From Net: NetName=GND Pin=R14-1
+Removed Pin From Net: NetName=GND Pin=R19-2
+Removed Pin From Net: NetName=3V3 Pin=R27-2
+Removed Pin From Net: NetName=GND Pin=R30-1
+Removed Pin From Net: NetName=GND Pin=R62-2
+Removed Pin From Net: NetName=GND Pin=R63-2
+Removed Pin From Net: NetName=GND Pin=R66-1
+Removed Pin From Net: NetName=GND Pin=R67-1
+Removed Pin From Net: NetName=Vref_0.75V Pin=R68-1
+Removed Pin From Net: NetName=NetC68_2 Pin=R69-2
+Removed Pin From Net: NetName=3V3 Pin=R104-2
+Removed Pin From Net: NetName=3V3 Pin=R105-2
+Removed Pin From Net: NetName=GND Pin=R111-1
+Removed Pin From Net: NetName=GND Pin=R112-1
+Removed Pin From Net: NetName=GND Pin=R114-2
+Removed Pin From Net: NetName=3V3 Pin=R117-2
+Removed Pin From Net: NetName=3V3 Pin=R118-2
+Removed Pin From Net: NetName=GND Pin=R125-1
+Removed Pin From Net: NetName=GND Pin=R126-1
+Removed Pin From Net: NetName=GND Pin=R128-2
+Removed Pin From Net: NetName=GND Pin=U3-2
+Removed Pin From Net: NetName=12V Pin=U3-5
+Removed Pin From Net: NetName=GND Pin=U6-41_10
+Removed Pin From Net: NetName=GND Pin=U6-41_11
+Removed Pin From Net: NetName=GND Pin=U6-41_12
+Removed Pin From Net: NetName=GND Pin=U6-41_13
+Removed Pin From Net: NetName=GND Pin=U6-41_14
+Removed Pin From Net: NetName=GND Pin=U6-41_15
+Removed Pin From Net: NetName=GND Pin=U6-41_16
+Removed Pin From Net: NetName=GND Pin=U6-41_17
+Removed Pin From Net: NetName=GND Pin=U6-41_18
+Removed Pin From Net: NetName=GND Pin=U6-41_19
+Removed Pin From Net: NetName=GND Pin=U6-41_20
+Removed Pin From Net: NetName=GND Pin=U6-41_21
+Removed Pin From Net: NetName=NetQ1_1 Pin=U7-13
+Removed Pin From Net: NetName=GND Pin=U7-41_10
+Removed Pin From Net: NetName=GND Pin=U7-41_11
+Removed Pin From Net: NetName=GND Pin=U7-41_12
+Removed Pin From Net: NetName=GND Pin=U7-41_13
+Removed Pin From Net: NetName=GND Pin=U7-41_14
+Removed Pin From Net: NetName=GND Pin=U7-41_15
+Removed Pin From Net: NetName=GND Pin=U7-41_16
+Removed Pin From Net: NetName=GND Pin=U7-41_17
+Removed Pin From Net: NetName=GND Pin=U7-41_18
+Removed Pin From Net: NetName=GND Pin=U7-41_19
+Removed Pin From Net: NetName=GND Pin=U7-41_20
+Removed Pin From Net: NetName=GND Pin=U7-41_21
+Removed Pin From Net: NetName=GND Pin=U10-4
+Removed Pin From Net: NetName=GND Pin=U11-4
+Removed Pin From Net: NetName=GND Pin=U12-4
+Removed Pin From Net: NetName=GND Pin=U13-4
+Removed Pin From Net: NetName=GND Pin=U14-4
+Removed Pin From Net: NetName=GND Pin=U22-3
+Removed Pin From Net: NetName=5V Pin=U22-7
+Removed Pin From Net: NetName=GND Pin=U22-11
+Removed Pin From Net: NetName=GND Pin=U23-2
+Removed Pin From Net: NetName=5V Pin=U23-5
+Removed Pin From Net: NetName=GND Pin=U24-3
+Removed Pin From Net: NetName=5V Pin=U24-7
+Removed Pin From Net: NetName=GND Pin=U24-11
+Removed Pin From Net: NetName=GND Pin=U25-2
+Removed Pin From Net: NetName=5V Pin=U25-5
+Removed Member From Class: ClassName=Designator Member=C91
+Removed Member From Class: ClassName=Designator Member=C93
+Removed Member From Class: ClassName=Designator Member=C94
+Removed Member From Class: ClassName=Designator Member=C96
+Removed Member From Class: ClassName=Designator Member=C97
+Removed Member From Class: ClassName=Designator Member=C99
+Removed Member From Class: ClassName=Designator Member=C101
+Removed Member From Class: ClassName=Designator Member=C102
+Removed Member From Class: ClassName=Designator Member=D11
+Removed Member From Class: ClassName=Designator Member=D29
+Removed Member From Class: ClassName=Designator Member=R31
+Removed Member From Class: ClassName=Designator Member=R43
+Removed Member From Class: ClassName=Designator Member=R52
+Removed Member From Class: ClassName=Designator Member=R55
+Removed Member From Class: ClassName=Designator Member=R59
+Removed Member From Class: ClassName=Designator Member=R88
+Removed Member From Class: ClassName=Designator Member=R104
+Removed Member From Class: ClassName=Designator Member=R106
+Removed Member From Class: ClassName=Designator Member=R118
+Removed Member From Class: ClassName=Designator Member=R120
+Removed Member From Class: ClassName=Designator Member=TP10
+Removed Member From Class: ClassName=Designator Member=U12
+Removed Member From Class: ClassName=Designator Member=U22
+Removed Member From Class: ClassName=Designator Member=U23
+Change Component Footprint: Designator=C26 Old Footprint=CAP_0402 New Footprint=CAP_1206
+Change Component Footprint: Designator=C13 Old Footprint=CAP_0603 New Footprint=CAP_0805
+Change Component Footprint: Designator=C24 Old Footprint=CAP_0805 New Footprint=CAP_1206
+Change Component Footprint: Designator=C25 Old Footprint=CAP_0805 New Footprint=CAP_1206
+Change Component Footprint: Designator=D4 Old Footprint=SOD-123 New Footprint=LED_0603Y
+Change Component Comment : Designator=R4 Old Comment=4.7K/1%/1_10W New Comment=13K/1%/1_10W
+Change Component Comment : Designator=C24 Old Comment=10uF/50V New Comment=10uF/35V
+Change Component Comment : Designator=R64 Old Comment=53.6K/1%/1_10W New Comment=100K/1%/1_10W
+Change Component Comment : Designator=R62 Old Comment=56K/1%/1_10W New Comment=100K/1%/1_10W
+Change Component Comment : Designator=R1 Old Comment=68K/1%/1_10W New Comment=180K/1%/1_10W
+Change Component Comment : Designator=R63 Old Comment=100K/1%/1_10W New Comment=150R/1%/1_10W
+Change Component Comment : Designator=D4 Old Comment=MBR0520T1G New Comment=-12V
+Change Component Comment : Designator=Q2 Old Comment=SI2308 New Comment=MMBT2222A
+Change Component Designator: OldDesignator=0_10_ADC NewDesignator=TP16
+Change Component Designator: OldDesignator=0_10V_DAC NewDesignator=TP17
+Change Component Designator: OldDesignator=0_10V_IN NewDesignator=TP15
+Change Component Designator: OldDesignator=0_10V_OUT NewDesignator=TP18
+Change Component Designator: OldDesignator=4_20ma_ADC NewDesignator=TP14
+Change Component Designator: OldDesignator=4_20ma_DAC NewDesignator=TP12
+Change Component Designator: OldDesignator=4_20ma_IN NewDesignator=TP13
+Change Component Designator: OldDesignator=C14 NewDesignator=C16
+Change Component Designator: OldDesignator=C15 NewDesignator=C17
+Change Component Designator: OldDesignator=C16 NewDesignator=C18
+Change Component Designator: OldDesignator=C17 NewDesignator=C19
+Change Component Designator: OldDesignator=C18 NewDesignator=C20
+Change Component Designator: OldDesignator=C19 NewDesignator=C21
+Change Component Designator: OldDesignator=C20 NewDesignator=C22
+Change Component Designator: OldDesignator=C21 NewDesignator=C23
+Change Component Designator: OldDesignator=C27 NewDesignator=C30
+Change Component Designator: OldDesignator=C28 NewDesignator=C31
+Change Component Designator: OldDesignator=C29 NewDesignator=C32
+Change Component Designator: OldDesignator=C30 NewDesignator=C33
+Change Component Designator: OldDesignator=C31 NewDesignator=C34
+Change Component Designator: OldDesignator=C32 NewDesignator=C35
+Change Component Designator: OldDesignator=C33 NewDesignator=C36
+Change Component Designator: OldDesignator=C34 NewDesignator=C37
+Change Component Designator: OldDesignator=C35 NewDesignator=C38
+Change Component Designator: OldDesignator=C36 NewDesignator=C39
+Change Component Designator: OldDesignator=C37 NewDesignator=C40
+Change Component Designator: OldDesignator=C38 NewDesignator=C41
+Change Component Designator: OldDesignator=C39 NewDesignator=C42
+Change Component Designator: OldDesignator=C40 NewDesignator=C43
+Change Component Designator: OldDesignator=C41 NewDesignator=C44
+Change Component Designator: OldDesignator=C42 NewDesignator=C45
+Change Component Designator: OldDesignator=C43 NewDesignator=C46
+Change Component Designator: OldDesignator=C44 NewDesignator=C47
+Change Component Designator: OldDesignator=C45 NewDesignator=C48
+Change Component Designator: OldDesignator=C46 NewDesignator=C49
+Change Component Designator: OldDesignator=C47 NewDesignator=C50
+Change Component Designator: OldDesignator=C48 NewDesignator=C51
+Change Component Designator: OldDesignator=C49 NewDesignator=C52
+Change Component Designator: OldDesignator=C50 NewDesignator=C53
+Change Component Designator: OldDesignator=C51 NewDesignator=C54
+Change Component Designator: OldDesignator=C52 NewDesignator=C55
+Change Component Designator: OldDesignator=C53 NewDesignator=C56
+Change Component Designator: OldDesignator=C54 NewDesignator=C57
+Change Component Designator: OldDesignator=C55 NewDesignator=C58
+Change Component Designator: OldDesignator=C56 NewDesignator=C59
+Change Component Designator: OldDesignator=C57 NewDesignator=C60
+Change Component Designator: OldDesignator=C58 NewDesignator=C61
+Change Component Designator: OldDesignator=C59 NewDesignator=C62
+Change Component Designator: OldDesignator=C60 NewDesignator=C63
+Change Component Designator: OldDesignator=C61 NewDesignator=C64
+Change Component Designator: OldDesignator=C63 NewDesignator=C65
+Change Component Designator: OldDesignator=C64 NewDesignator=C66
+Change Component Designator: OldDesignator=C65 NewDesignator=C67
+Change Component Designator: OldDesignator=C66 NewDesignator=C68
+Change Component Designator: OldDesignator=C67 NewDesignator=C69
+Change Component Designator: OldDesignator=C69 NewDesignator=C70
+Change Component Designator: OldDesignator=C70 NewDesignator=C71
+Change Component Designator: OldDesignator=C71 NewDesignator=C72
+Change Component Designator: OldDesignator=C72 NewDesignator=C73
+Change Component Designator: OldDesignator=C73 NewDesignator=C74
+Change Component Designator: OldDesignator=C74 NewDesignator=C75
+Change Component Designator: OldDesignator=C75 NewDesignator=C76
+Change Component Designator: OldDesignator=C76 NewDesignator=C77
+Change Component Designator: OldDesignator=C77 NewDesignator=C78
+Change Component Designator: OldDesignator=C78 NewDesignator=C79
+Change Component Designator: OldDesignator=C79 NewDesignator=C80
+Change Component Designator: OldDesignator=C80 NewDesignator=C81
+Change Component Designator: OldDesignator=C81 NewDesignator=C82
+Change Component Designator: OldDesignator=C82 NewDesignator=C83
+Change Component Designator: OldDesignator=C83 NewDesignator=C84
+Change Component Designator: OldDesignator=C84 NewDesignator=C85
+Change Component Designator: OldDesignator=C85 NewDesignator=C86
+Change Component Designator: OldDesignator=C86 NewDesignator=C87
+Change Component Designator: OldDesignator=C87 NewDesignator=C88
+Change Component Designator: OldDesignator=C88 NewDesignator=C89
+Change Component Designator: OldDesignator=C89 NewDesignator=C90
+Change Component Designator: OldDesignator=C90 NewDesignator=C91
+Change Component Designator: OldDesignator=C99 NewDesignator=C92
+Change Component Designator: OldDesignator=C100 NewDesignator=C93
+Change Component Designator: OldDesignator=C101 NewDesignator=C94
+Change Component Designator: OldDesignator=C102 NewDesignator=C95
+Change Component Designator: OldDesignator=D6 NewDesignator=D5
+Change Component Designator: OldDesignator=D7 NewDesignator=D6
+Change Component Designator: OldDesignator=D8 NewDesignator=D7
+Change Component Designator: OldDesignator=D9 NewDesignator=D8
+Change Component Designator: OldDesignator=D10 NewDesignator=D9
+Change Component Designator: OldDesignator=D11 NewDesignator=D10
+Change Component Designator: OldDesignator=D12 NewDesignator=D11
+Change Component Designator: OldDesignator=D13 NewDesignator=D12
+Change Component Designator: OldDesignator=D14 NewDesignator=D13
+Change Component Designator: OldDesignator=D15 NewDesignator=D14
+Change Component Designator: OldDesignator=D16 NewDesignator=D15
+Change Component Designator: OldDesignator=D17 NewDesignator=D16
+Change Component Designator: OldDesignator=D18 NewDesignator=D17
+Change Component Designator: OldDesignator=D19 NewDesignator=D18
+Change Component Designator: OldDesignator=D20 NewDesignator=D19
+Change Component Designator: OldDesignator=D21 NewDesignator=D20
+Change Component Designator: OldDesignator=D22 NewDesignator=D21
+Change Component Designator: OldDesignator=D23 NewDesignator=D22
+Change Component Designator: OldDesignator=D24 NewDesignator=D23
+Change Component Designator: OldDesignator=D25 NewDesignator=D24
+Change Component Designator: OldDesignator=GND NewDesignator=TP1
+Change Component Designator: OldDesignator=GND NewDesignator=TP2
+Change Component Designator: OldDesignator=GND NewDesignator=TP3
+Change Component Designator: OldDesignator=GND NewDesignator=TP4
+Change Component Designator: OldDesignator=J1 NewDesignator=J3
+Change Component Designator: OldDesignator=J2 NewDesignator=J4
+Change Component Designator: OldDesignator=J3 NewDesignator=J5
+Change Component Designator: OldDesignator=J4 NewDesignator=J6
+Change Component Designator: OldDesignator=R15 NewDesignator=R11
+Change Component Designator: OldDesignator=R16 NewDesignator=R12
+Change Component Designator: OldDesignator=R17 NewDesignator=R13
+Change Component Designator: OldDesignator=R18 NewDesignator=R14
+Change Component Designator: OldDesignator=R20 NewDesignator=R19
+Change Component Designator: OldDesignator=R21 NewDesignator=R20
+Change Component Designator: OldDesignator=R22 NewDesignator=R21
+Change Component Designator: OldDesignator=R23 NewDesignator=R24
+Change Component Designator: OldDesignator=R24 NewDesignator=R25
+Change Component Designator: OldDesignator=R25 NewDesignator=R26
+Change Component Designator: OldDesignator=R26 NewDesignator=R27
+Change Component Designator: OldDesignator=R31 NewDesignator=R30
+Change Component Designator: OldDesignator=R32 NewDesignator=R31
+Change Component Designator: OldDesignator=R33 NewDesignator=R32
+Change Component Designator: OldDesignator=R34 NewDesignator=R33
+Change Component Designator: OldDesignator=R35 NewDesignator=R34
+Change Component Designator: OldDesignator=R36 NewDesignator=R35
+Change Component Designator: OldDesignator=R37 NewDesignator=R36
+Change Component Designator: OldDesignator=R38 NewDesignator=R37
+Change Component Designator: OldDesignator=R39 NewDesignator=R38
+Change Component Designator: OldDesignator=R40 NewDesignator=R39
+Change Component Designator: OldDesignator=R41 NewDesignator=R40
+Change Component Designator: OldDesignator=R42 NewDesignator=R41
+Change Component Designator: OldDesignator=R43 NewDesignator=R42
+Change Component Designator: OldDesignator=R44 NewDesignator=R43
+Change Component Designator: OldDesignator=R45 NewDesignator=R44
+Change Component Designator: OldDesignator=R46 NewDesignator=R45
+Change Component Designator: OldDesignator=R47 NewDesignator=R46
+Change Component Designator: OldDesignator=R48 NewDesignator=R47
+Change Component Designator: OldDesignator=R49 NewDesignator=R48
+Change Component Designator: OldDesignator=R50 NewDesignator=R49
+Change Component Designator: OldDesignator=R51 NewDesignator=R50
+Change Component Designator: OldDesignator=R52 NewDesignator=R51
+Change Component Designator: OldDesignator=R53 NewDesignator=R52
+Change Component Designator: OldDesignator=R54 NewDesignator=R53
+Change Component Designator: OldDesignator=R55 NewDesignator=R54
+Change Component Designator: OldDesignator=R56 NewDesignator=R55
+Change Component Designator: OldDesignator=R57 NewDesignator=R56
+Change Component Designator: OldDesignator=R58 NewDesignator=R57
+Change Component Designator: OldDesignator=R59 NewDesignator=R58
+Change Component Designator: OldDesignator=R60 NewDesignator=R59
+Change Component Designator: OldDesignator=R61 NewDesignator=R60
+Change Component Designator: OldDesignator=R71 NewDesignator=R66
+Change Component Designator: OldDesignator=R72 NewDesignator=R67
+Change Component Designator: OldDesignator=R73 NewDesignator=R68
+Change Component Designator: OldDesignator=R74 NewDesignator=R69
+Change Component Designator: OldDesignator=R75 NewDesignator=R70
+Change Component Designator: OldDesignator=R76 NewDesignator=R71
+Change Component Designator: OldDesignator=R77 NewDesignator=R72
+Change Component Designator: OldDesignator=R78 NewDesignator=R73
+Change Component Designator: OldDesignator=R79 NewDesignator=R74
+Change Component Designator: OldDesignator=R80 NewDesignator=R75
+Change Component Designator: OldDesignator=R81 NewDesignator=R76
+Change Component Designator: OldDesignator=R82 NewDesignator=R77
+Change Component Designator: OldDesignator=R83 NewDesignator=R78
+Change Component Designator: OldDesignator=R84 NewDesignator=R79
+Change Component Designator: OldDesignator=R85 NewDesignator=R80
+Change Component Designator: OldDesignator=R86 NewDesignator=R81
+Change Component Designator: OldDesignator=R87 NewDesignator=R82
+Change Component Designator: OldDesignator=R88 NewDesignator=R83
+Change Component Designator: OldDesignator=R89 NewDesignator=R84
+Change Component Designator: OldDesignator=R90 NewDesignator=R85
+Change Component Designator: OldDesignator=R91 NewDesignator=R86
+Change Component Designator: OldDesignator=R92 NewDesignator=R87
+Change Component Designator: OldDesignator=R93 NewDesignator=R88
+Change Component Designator: OldDesignator=R94 NewDesignator=R89
+Change Component Designator: OldDesignator=R95 NewDesignator=R90
+Change Component Designator: OldDesignator=R96 NewDesignator=R91
+Change Component Designator: OldDesignator=R97 NewDesignator=R92
+Change Component Designator: OldDesignator=R98 NewDesignator=R93
+Change Component Designator: OldDesignator=R99 NewDesignator=R94
+Change Component Designator: OldDesignator=R100 NewDesignator=R95
+Change Component Designator: OldDesignator=R101 NewDesignator=R96
+Change Component Designator: OldDesignator=R102 NewDesignator=R97
+Change Component Designator: OldDesignator=R131 NewDesignator=R98
+Change Component Designator: OldDesignator=R132 NewDesignator=R99
+Change Component Designator: OldDesignator=R133 NewDesignator=R100
+Change Component Designator: OldDesignator=R134 NewDesignator=R101
+Change Component Designator: OldDesignator=R135 NewDesignator=R102
+Change Component Designator: OldDesignator=R136 NewDesignator=R103
+Change Component Designator: OldDesignator=R137 NewDesignator=R104
+Change Component Designator: OldDesignator=R138 NewDesignator=R105
+Change Component Designator: OldDesignator=R139 NewDesignator=R106
+Change Component Designator: OldDesignator=TP9 NewDesignator=TP10
+Change Component Designator: OldDesignator=TP10 NewDesignator=TP11
+Change Component Designator: OldDesignator=U4 NewDesignator=U3
+Change Component Designator: OldDesignator=U5 NewDesignator=U4
+Change Component Designator: OldDesignator=U6 NewDesignator=U7
+Change Component Designator: OldDesignator=U7 NewDesignator=U8
+Change Component Designator: OldDesignator=U8 NewDesignator=U9
+Change Component Designator: OldDesignator=U9 NewDesignator=U10
+Change Component Designator: OldDesignator=U10 NewDesignator=U11
+Change Component Designator: OldDesignator=U11 NewDesignator=U12
+Change Component Designator: OldDesignator=U12 NewDesignator=U13
+Change Component Designator: OldDesignator=U13 NewDesignator=U14
+Change Component Designator: OldDesignator=U14 NewDesignator=U15
+Change Component Designator: OldDesignator=U15 NewDesignator=U16
+Change Component Designator: OldDesignator=U16 NewDesignator=U17
+Change Component Designator: OldDesignator=U17 NewDesignator=U18
+Change Component Designator: OldDesignator=U18 NewDesignator=U19
+Change Component Designator: OldDesignator=U19 NewDesignator=U20
+Change Component Designator: OldDesignator=U20 NewDesignator=U21
+Change Component Designator: OldDesignator=U21 NewDesignator=U22
+Change Component Designator: OldDesignator=U26 NewDesignator=U23
+Change Component Designator: OldDesignator=U27 NewDesignator=U24
+Change component parameters: Designator = "C13" ("C13"); Footprint = "CAP_0603"; UniqueID = "\XLUAPMEB\HLNCMUDB" ("\XLUAPMEB\HLNCMUDB")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0805 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0805-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C24" ("C24"); Footprint = "CAP_0805"; UniqueID = "\XLUAPMEB\ELUFQANI" ("\XLUAPMEB\ELUFQANI")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 1206 10uF 35V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-1206-10uf-35v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C25" ("C25"); Footprint = "CAP_0805"; UniqueID = "\XLUAPMEB\NEAELSGE" ("\XLUAPMEB\NEAELSGE")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 1206 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-1206-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "C26" ("C26"); Footprint = "CAP_0402"; UniqueID = "\XLUAPMEB\ALCHSIKX" ("\XLUAPMEB\ALCHSIKX")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 1206 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-1206-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Change component parameters: Designator = "D4" ("D4"); Footprint = "SOD-123"; UniqueID = "\XLUAPMEB\ZBNBFQIB" ("\XLUAPMEB\ZBNBFQIB")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "LED Vàng 0603 Dán SMD Trong Su?t Harvatek"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/led-vang-0603-dan-smd-trong-suot-harvatek"; VariantName = "[No Variations]"
+Change component parameters: Designator = "Q2" ("Q2"); Footprint = "SOT-23"; UniqueID = "\PRZWLLOA\OGUPJNUH" ("\PRZWLLOA\OGUPJNUH")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = "https://www.thegioiic.com/upload/documents/1734592311_MMBT2222A.pdf"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "MMBT2222A 1P Transistor NPN 40V 0.6A 3 Chân SOT-23"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/mmbt2222a-1p-transistor-npn-40v-0-6a-3-chan-sot-23"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R1" ("R1"); Footprint = "Resistor_0603"; UniqueID = "\XLUAPMEB\ADAYBUKI" ("\XLUAPMEB\ADAYBUKI")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 180 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-180-kohm-0603-1-"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R4" ("R4"); Footprint = "Resistor_0603"; UniqueID = "\XLUAPMEB\PQAEEAUV" ("\XLUAPMEB\PQAEEAUV")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 13 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-13-kohm-0603-1-"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R62" ("R62"); Footprint = "Resistor_0603"; UniqueID = "\PRZWLLOA\DFYLPHBX" ("\PRZWLLOA\DFYLPHBX")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 100 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-100-kohm-0603-1-"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R63" ("R63"); Footprint = "Resistor_0603"; UniqueID = "\PRZWLLOA\IGYHCRIN" ("\PRZWLLOA\IGYHCRIN")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 150 Ohm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-150-ohm-0603-1-"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R64" ("R64"); Footprint = "Resistor_0603"; UniqueID = "\PRZWLLOA\DHMYIJNP" ("\PRZWLLOA\DHMYIJNP")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 100 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-100-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=C14(CAP_0805)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0805 10uF 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0805-10uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=C15(TanTa_Cap_A)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "1206 AVX"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "AVX"; VariantName = "[No Variations]"
+Added Component: Designator=C27(CAP_1206)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 1206 10uF 35V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-1206-10uf-35v"; VariantName = "[No Variations]"
+Added Component: Designator=C28(TanTa_Cap_A)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "1206 AVX"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "AVX"; VariantName = "[No Variations]"
+Added Component: Designator=C29(CAP_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "T? G?m 0603 100nF (0.1uF) 50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-50v"; VariantName = "[No Variations]"
+Added Component: Designator=J1(Header_2.54mm_3P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Hàng Rào Ð?c Ðon 2.54mm 40 Chân 1 Hàng Cao 11.2mm Xuyên L?"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/hang-rao-duc-don-2-54mm-40-chan-1-hang-cao-11-2mm-xuyen-lo"; VariantName = "[No Variations]"
+Added Component: Designator=J2(Header_2.54mm_3P)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Hàng Rào Ð?c Ðon 2.54mm 40 Chân 1 Hàng Cao 11.2mm Xuyên L?"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/hang-rao-duc-don-2-54mm-40-chan-1-hang-cao-11-2mm-xuyen-lo"; VariantName = "[No Variations]"
+Added Component: Designator=R15(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 4.7 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-4-7-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R16(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R17(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R18(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R22(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R23(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R61(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 100 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-100-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=TP9(TestPoint_Pad_3.0x3.0mm)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U5(SOIC-8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.analog.com/media/en/technical-documentation/data-sheets/icl7662-si7661.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Chipn24"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "IC Dán ICL7662"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://chipn24.com/sop-ic-dan-icl7662-sop-8-smd-icl7662cba-id9015.html"; VariantName = "[No Variations]"
+Added Component: Designator=U6(SOT-223)
+Add component (AddParameter): Name = "Datasheet"; Value = "http://www.advanced-monolithic.com/pdf/ds1117.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "AMS1117-5.0"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "http://tme.vn/Product.aspx?id=437#page=pro_info"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=C13-1
+Added Pin To Net: NetName=12V Pin=C13-2
+Added Pin To Net: NetName=GND Pin=C14-1
+Added Pin To Net: NetName=12V Pin=C14-2
+Added Pin To Net: NetName=GND Pin=C26-1
+Added Pin To Net: NetName=5V Pin=C26-2
+Added Pin To Net: NetName=GND Pin=C27-1
+Added Pin To Net: NetName=5V Pin=C27-2
+Added Pin To Net: NetName=GND Pin=C28-1
+Added Pin To Net: NetName=GND Pin=C29-1
+Added Pin To Net: NetName=GND Pin=J1-3
+Added Pin To Net: NetName=GND Pin=J2-3
+Added Pin To Net: NetName=GND Pin=R15-2
+Added Pin To Net: NetName=GND Pin=R16-1
+Added Pin To Net: NetName=3V3 Pin=R17-2
+Added Pin To Net: NetName=3V3 Pin=R18-2
+Added Pin To Net: NetName=3V3 Pin=R22-2
+Added Pin To Net: NetName=3V3 Pin=R23-2
+Added Pin To Net: NetName=GND Pin=R61-2
+Added Pin To Net: NetName=GND Pin=U5-3
+Added Pin To Net: NetName=GND Pin=U5-6
+Added Pin To Net: NetName=12V Pin=U5-8
+Added Pin To Net: NetName=GND Pin=U6-1
+Added Pin To Net: NetName=5V Pin=U6-2
+Added Pin To Net: NetName=12V Pin=U6-3
+Added Pin To Net: NetName=5V Pin=U6-4
+Added Pin To Net: NetName=NetQ1_1 Pin=U7-13
+Added Pin To Net: NetName=NetC68_2 Pin=U13-6
+Change Net Name : Old Net Name=NetC27_2 New Net Name=NetC30_2
+Change Net Name : Old Net Name=NetC29_2 New Net Name=BLE_FLASH
+Change Net Name : Old Net Name=NetC30_2 New Net Name=BLE_EN
+Change Net Name : Old Net Name=NetC31_2 New Net Name=NetC34_2
+Change Net Name : Old Net Name=NetC33_2 New Net Name=WF_FLASH
+Change Net Name : Old Net Name=NetC34_2 New Net Name=WF_EN
+Change Net Name : Old Net Name=NetC45_1 New Net Name=NetC48_1
+Change Net Name : Old Net Name=NetC54_1 New Net Name=NetC57_1
+Change Net Name : Old Net Name=NetC54_2 New Net Name=NetC57_2
+Change Net Name : Old Net Name=NetC55_2 New Net Name=NetC58_2
+Change Net Name : Old Net Name=NetC60_1 New Net Name=NetC63_1
+Change Net Name : Old Net Name=NetC60_2 New Net Name=NetC63_2
+Change Net Name : Old Net Name=NetC68_2 New Net Name=NetD11_A
+Change Net Name : Old Net Name=NetC69_1 New Net Name=NetC70_1
+Change Net Name : Old Net Name=NetC74_1 New Net Name=NetC75_1
+Change Net Name : Old Net Name=NetC74_2 New Net Name=NetC75_2
+Change Net Name : Old Net Name=NetC75_1 New Net Name=NetC76_1
+Change Net Name : Old Net Name=NetC80_1 New Net Name=NetC81_1
+Change Net Name : Old Net Name=NetC80_2 New Net Name=NetC81_2
+Change Net Name : Old Net Name=NetC81_2 New Net Name=NetC82_2
+Change Net Name : Old Net Name=NetC83_2 New Net Name=NetC84_2
+Change Net Name : Old Net Name=NetD6_A New Net Name=NetD5_A
+Change Net Name : Old Net Name=NetD7_A New Net Name=NetD6_A
+Change Net Name : Old Net Name=NetD8_A New Net Name=NetD7_A
+Change Net Name : Old Net Name=NetD9_A New Net Name=NetD8_A
+Change Net Name : Old Net Name=NetD10_A New Net Name=NetD9_A
+Change Net Name : Old Net Name=NetD11_A New Net Name=NetD10_A
+Change Net Name : Old Net Name=NetD14_A New Net Name=NetD13_A
+Change Net Name : Old Net Name=NetD18_2 New Net Name=NetD17_2
+Change Net Name : Old Net Name=NetD19_A New Net Name=NetD18_A
+Change Net Name : Old Net Name=NetD19_C New Net Name=NetD18_C
+Change Net Name : Old Net Name=NetD20_A New Net Name=NetD19_A
+Change Net Name : Old Net Name=NetD20_C New Net Name=NetD19_C
+Change Net Name : Old Net Name=NetD21_A New Net Name=NetD20_A
+Change Net Name : Old Net Name=NetD21_C New Net Name=NetD20_C
+Change Net Name : Old Net Name=NetD22_2 New Net Name=NetD21_2
+Change Net Name : Old Net Name=NetD23_A New Net Name=NetD22_A
+Change Net Name : Old Net Name=NetD23_C New Net Name=NetD22_C
+Change Net Name : Old Net Name=NetD24_C New Net Name=NetD23_C
+Change Net Name : Old Net Name=NetD25_A New Net Name=NetD24_A
+Change Net Name : Old Net Name=NetJ1_3 New Net Name=NetJ3_3
+Change Net Name : Old Net Name=NetJ1_5 New Net Name=NetJ3_5
+Change Net Name : Old Net Name=NetJ1_7 New Net Name=NetJ3_7
+Change Net Name : Old Net Name=NetJ1_9 New Net Name=NetJ3_9
+Change Net Name : Old Net Name=NetJ1_12 New Net Name=NetJ3_12
+Change Net Name : Old Net Name=NetJ1_13 New Net Name=NetJ3_13
+Change Net Name : Old Net Name=NetJ1_14 New Net Name=NetJ3_14
+Change Net Name : Old Net Name=NetJ1_16 New Net Name=NetJ3_16
+Change Net Name : Old Net Name=NetJ1_17 New Net Name=NetJ3_17
+Change Net Name : Old Net Name=NetJ1_18 New Net Name=NetJ3_18
+Change Net Name : Old Net Name=NetJ1_19 New Net Name=NetJ3_19
+Change Net Name : Old Net Name=NetJ1_20 New Net Name=NetJ3_20
+Change Net Name : Old Net Name=NetJ1_21 New Net Name=NetJ3_21
+Change Net Name : Old Net Name=NetJ1_22 New Net Name=NetJ3_22
+Change Net Name : Old Net Name=NetJ2_2 New Net Name=NetJ4_2
+Change Net Name : Old Net Name=NetJ2_3 New Net Name=NetJ4_3
+Change Net Name : Old Net Name=NetJ3_2 New Net Name=NetJ5_2
+Change Net Name : Old Net Name=NetR33_1 New Net Name=NetR32_1
+Change Net Name : Old Net Name=NetR34_1 New Net Name=NetR33_1
+Change Net Name : Old Net Name=NetR36_1 New Net Name=NetR35_1
+Change Net Name : Old Net Name=NetR41_1 New Net Name=NetR40_1
+Change Net Name : Old Net Name=NetR42_1 New Net Name=NetR41_1
+Change Net Name : Old Net Name=NetR44_1 New Net Name=NetR43_1
+Change Net Name : Old Net Name=NetR44_2 New Net Name=NetR43_2
+Change Net Name : Old Net Name=NetR45_1 New Net Name=NetR44_1
+Change Net Name : Old Net Name=NetR45_2 New Net Name=NetR44_2
+Change Net Name : Old Net Name=NetR47_1 New Net Name=NetR46_1
+Change Net Name : Old Net Name=NetR47_2 New Net Name=NetR46_2
+Change Net Name : Old Net Name=NetR48_1 New Net Name=NetR47_1
+Change Net Name : Old Net Name=NetR48_2 New Net Name=NetR47_2
+Change Net Name : Old Net Name=NetR54_1 New Net Name=NetR53_1
+Change Net Name : Old Net Name=NetR54_2 New Net Name=NetR53_2
+Change Net Name : Old Net Name=NetR58_1 New Net Name=NetR57_1
+Change Net Name : Old Net Name=NetR58_2 New Net Name=NetR57_2
+Change Net Name : Old Net Name=NetR60_1 New Net Name=NetR59_1
+Change Net Name : Old Net Name=NetR76_1 New Net Name=NetR71_1
+Change Net Name : Old Net Name=NetR79_1 New Net Name=NetR74_1
+Change Net Name : Old Net Name=NetR80_1 New Net Name=NetR75_1
+Change Net Name : Old Net Name=NetR81_1 New Net Name=NetR76_1
+Change Net Name : Old Net Name=NetR82_2 New Net Name=NetR77_2
+Change Net Name : Old Net Name=NetR84_1 New Net Name=NetR79_1
+Change Net Name : Old Net Name=NetR84_2 New Net Name=NetR79_2
+Change Net Name : Old Net Name=NetR86_2 New Net Name=NetR81_2
+Change Net Name : Old Net Name=NetR90_2 New Net Name=NetR85_2
+Change Net Name : Old Net Name=NetR93_1 New Net Name=NetR88_1
+Change Net Name : Old Net Name=NetR93_2 New Net Name=NetR88_2
+Change Net Name : Old Net Name=NetR98_1 New Net Name=NetR93_1
+Change Net Name : Old Net Name=NetR99_1 New Net Name=NetR94_1
+Change Net Name : Old Net Name=NetR132_1 New Net Name=NetR99_1
+Change Net Name : Old Net Name=NetR133_1 New Net Name=NetR100_1
+Change Net Name : Old Net Name=NetR136_1 New Net Name=NetR103_1
+Change Net Name : Old Net Name=NetR137_1 New Net Name=NetR104_1
+Change Net Name : Old Net Name=NetR138_1 New Net Name=NetR105_1
+Change Net Name : Old Net Name=NetR139_1 New Net Name=NetR106_1
+Added Pin To Net: NetName=-12V Pin=C28-2
+Added Pin To Net: NetName=-12V Pin=D4-C
+Added Pin To Net: NetName=-12V Pin=TP9-1
+Added Pin To Net: NetName=-12V Pin=U5-5
+Added Pin To Net: NetName=-12V Pin=U11-4
+Added Pin To Net: NetName=-12V Pin=U12-4
+Added Pin To Net: NetName=-12V Pin=U13-4
+Added Pin To Net: NetName=-12V Pin=U14-4
+Added Pin To Net: NetName=-12V Pin=U15-4
+Added Net: Name=-12V
+Added Pin To Net: NetName=4_20mA_IN_N Pin=P3-1
+Added Pin To Net: NetName=4_20mA_IN_N Pin=R63-1
+Added Pin To Net: NetName=4_20mA_IN_N Pin=R64-1
+Added Net: Name=4_20mA_IN_N
+Added Pin To Net: NetName=4_20mA_IN_P Pin=P3-2
+Added Pin To Net: NetName=4_20mA_IN_P Pin=R62-1
+Added Pin To Net: NetName=4_20mA_IN_P Pin=R63-2
+Added Pin To Net: NetName=4_20mA_IN_P Pin=TP13-1
+Added Net: Name=4_20mA_IN_P
+Added Pin To Net: NetName=BLE_RXD Pin=J1-1
+Added Pin To Net: NetName=BLE_RXD Pin=R17-1
+Added Pin To Net: NetName=BLE_RXD Pin=U7-36
+Added Net: Name=BLE_RXD
+Added Pin To Net: NetName=BLE_TXD Pin=J1-2
+Added Pin To Net: NetName=BLE_TXD Pin=R18-1
+Added Pin To Net: NetName=BLE_TXD Pin=U7-37
+Added Net: Name=BLE_TXD
+Added Pin To Net: NetName=NetC15_1 Pin=C15-1
+Added Pin To Net: NetName=NetC15_1 Pin=U5-2
+Added Net: Name=NetC15_1
+Added Pin To Net: NetName=NetC15_2 Pin=C15-2
+Added Pin To Net: NetName=NetC15_2 Pin=U5-4
+Added Net: Name=NetC15_2
+Added Pin To Net: NetName=NetC29_2 Pin=C29-2
+Added Pin To Net: NetName=NetC29_2 Pin=FB1-1
+Added Pin To Net: NetName=NetC29_2 Pin=R16-2
+Added Pin To Net: NetName=NetC29_2 Pin=SW1-SH
+Added Pin To Net: NetName=NetC29_2 Pin=SW1-SH
+Added Net: Name=NetC29_2
+Added Pin To Net: NetName=NetC64_1 Pin=C64-1
+Added Pin To Net: NetName=NetC64_1 Pin=R61-1
+Added Pin To Net: NetName=NetC64_1 Pin=R62-2
+Added Pin To Net: NetName=NetC64_1 Pin=U13-3
+Added Net: Name=NetC64_1
+Added Pin To Net: NetName=NetC69_1 Pin=C69-1
+Added Pin To Net: NetName=NetC69_1 Pin=R64-2
+Added Pin To Net: NetName=NetC69_1 Pin=R65-1
+Added Pin To Net: NetName=NetC69_1 Pin=U13-2
+Added Net: Name=NetC69_1
+Added Pin To Net: NetName=NetC69_2 Pin=C69-2
+Added Pin To Net: NetName=NetC69_2 Pin=R65-2
+Added Pin To Net: NetName=NetC69_2 Pin=U13-1
+Added Pin To Net: NetName=NetC69_2 Pin=U13-5
+Added Net: Name=NetC69_2
+Added Pin To Net: NetName=NetD4_A Pin=D4-A
+Added Pin To Net: NetName=NetD4_A Pin=R15-1
+Added Net: Name=NetD4_A
+Added Pin To Net: NetName=WF_RXD Pin=J2-2
+Added Pin To Net: NetName=WF_RXD Pin=R23-1
+Added Pin To Net: NetName=WF_RXD Pin=U8-37
+Added Net: Name=WF_RXD
+Added Pin To Net: NetName=WF_TXD Pin=J2-1
+Added Pin To Net: NetName=WF_TXD Pin=R22-1
+Added Pin To Net: NetName=WF_TXD Pin=U8-36
+Added Net: Name=WF_TXD
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Member To Class: ClassName=Designator Member=Component C1 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C2 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C5 47uF/16V
+Added Member To Class: ClassName=Designator Member=Component C6 47uF/16V
+Added Member To Class: ClassName=Designator Member=Component C8 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C10 47uF/16V
+Added Member To Class: ClassName=Designator Member=Component C11 47uF/16V
+Added Member To Class: ClassName=Designator Member=Component C12 150pF/50V
+Added Member To Class: ClassName=Designator Member=Component C15 10uF/16V
+Added Member To Class: ClassName=Designator Member=Component C17 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C18 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C19 10uF/6.3V
+Added Member To Class: ClassName=Designator Member=Component C21 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C22 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C23 10uF/6.3V
+Added Member To Class: ClassName=Designator Member=Component C24 10uF/35V
+Added Member To Class: ClassName=Designator Member=Component C25 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C26 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component C28 10uF/16V
+Added Member To Class: ClassName=Designator Member=Component C29 100nF/50V
+Added Member To Class: ClassName=Designator Member=Component D2 SS54
+Added Member To Class: ClassName=Designator Member=Component D3 SS54
+Added Member To Class: ClassName=Designator Member=Component D7 5V
+Added Member To Class: ClassName=Designator Member=Component D8 3V3
+Added Member To Class: ClassName=Designator Member=Component H2 Mounting Hole without connection
+Added Member To Class: ClassName=Designator Member=Component H4 Mounting Hole without connection
+Added Member To Class: ClassName=Designator Member=Component L1 10uH, 4A
+Added Member To Class: ClassName=Designator Member=Component R2 75K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R6 10.2K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R7 100K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R8 100K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R9 100K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R10 100K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R12 4.7K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R14 4.7K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component R16 10K/1%/1_10W
+Added Member To Class: ClassName=Designator Member=Component TP1 GND
+Added Member To Class: ClassName=Designator Member=Component TP3 GND2
+Added Member To Class: ClassName=Designator Member=Component TP4 GND3
+Added Member To Class: ClassName=Designator Member=Component TP6 12V
+Added Member To Class: ClassName=Designator Member=Component TP7 5V
+Added Member To Class: ClassName=Designator Member=Component U2 MP1584EN-LF-Z
+Added Member To Class: ClassName=Designator Member=Component U3 XC6206P282MR
+Added Member To Class: ClassName=Designator Member=Component U4 XC6206P122MR
+Added Member To Class: ClassName=Designator Member=Component U5 ICL7662CBA
+Added Rule: Name=Schematic Supply Nets_8

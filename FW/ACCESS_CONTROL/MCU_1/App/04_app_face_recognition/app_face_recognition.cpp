@@ -51,6 +51,12 @@ static bool check_eyes_in_box(uint16_t left_eye_x,
  *****************************************************************************/
 
 /******************************************************************************
+ *    EXTERN DATA
+ *****************************************************************************/
+
+extern uint16_t user_id;
+
+/******************************************************************************
  *   METHOD
  *****************************************************************************/
 
@@ -87,13 +93,11 @@ Face::CreateTask ()
 void
 Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 {
-  Face        *self = static_cast<Face *>(pvParameters);
+  Face                   *self = static_cast<Face *>(pvParameters);
   static camera_capture_t s_camera_capture;
-  EventBits_t  uxBits;
-
-  uint8_t u8_post_enroll_frame_count = 0;
-  uint8_t stable_face_count          = 0;
-  bool    is_face_enrolled           = false;
+  EventBits_t             uxBits;
+  uint8_t                 stable_face_count            = 0;
+  uint8_t                 stable_face_count_attendance = 0;
 
   std::list<dl::detect::result_t> detect_results;
 
@@ -114,7 +118,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
   while (1)
   {
-    if (xQueueReceive(*self->p_camera_recognition_queue, &s_camera_capture, portMAX_DELAY)
+    if (xQueueReceive(
+            *self->p_camera_recognition_queue, &s_camera_capture, portMAX_DELAY)
         == pdPASS)
     {
       uxBits = xEventGroupWaitBits(*self->p_display_event,
@@ -126,51 +131,157 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
       if ((uxBits & ATTENDANCE_BIT) != 0)
       {
-      }
-
-      if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
-      {
-        if (stable_face_count >= 255)
+        if (stable_face_count_attendance >= 10)
         {
-          //   dl::image::draw_filled_rectangle((uint16_t *)fb->buf,
-          //                                    fb->height,
-          //                                    fb->width,
-          //                                    0,
-          //                                    220,
-          //                                    340,
-          //                                    240,
-          //                                    RGB565_MASK_WHITE);
-          // rgb_printf(fb, 80, 234, RGB565_MASK_GREEN, "Enroll success");
-          // if (is_face_enrolled == false)
+          // if (is_face_recognized == false)
           // {
-          //   self->recognizer->enroll_id((uint16_t *)fb->buf,
-          //                               { (int)fb->height, (int)fb->width, 3
-          //                               }, detect_results.front().keypoint,
-          //                               "0",
-          //                               true);
-          //   ESP_LOGI(TAG,
-          //            "Enroll ID %d",
-          //            self->recognizer->get_enrolled_ids().back().id);
-          //   is_face_enrolled = true;
+          //     if (detect_results.size() == 1)
+          //     {
+          //         self->recognize_result =
+          //         self->recognizer->recognize((uint16_t *)frame->buf,
+          //         {(int)frame->height, (int)frame->width, 3},
+          //         detect_results.front().keypoint);
+
+          //         ESP_LOGI(TAG, "Similarity: %f",
+          //         self->recognize_result.similarity);
+
+          //         const char *name_c_str =
+          //         self->recognize_result.name.c_str();
+
+          //         if (name_c_str != nullptr && name_c_str[0] != '\0')
+          //         {
+          //             userid = atoi(name_c_str);
+          //         }
+
+          //         ESP_LOGI(TAG, "Match ID: %d ", userid);
+          //         is_face_recognized = true;
+          //     }
           // }
 
-          // u8_post_enroll_frame_count++;
-          // if (u8_post_enroll_frame_count >= 10)
+          // if (userid > 0)
           // {
-          //   u8_post_enroll_frame_count = 0;
-          //   stable_face_count          = 0;
-          //   ESP_LOGI(TAG, "Enroll completed.");
+          //     char text[60] = {0};
+          //     snprintf(text, sizeof(text), "ID-%d  %s", users[userid - 1].id,
+          //     users[userid - 1].name);
+          //     dl::image::draw_filled_rectangle((uint16_t *)frame->buf,
+          //     frame->height, frame->width, 0, 200, 340, 240,
+          //     RGB565_MASK_RED); rgb_printf(frame, 10, 224, RGB565_MASK_WHITE,
+          //     text); is_attend_success = true; ESP_LOGI(TAG, "Attend success
+          //     | Face");
+          // }
+          // else
+          // {
+          //     dl::image::draw_filled_rectangle((uint16_t *)frame->buf,
+          //     frame->height, frame->width, 0, 200, 340, 240,
+          //     RGB565_MASK_GREEN); rgb_printf(frame, 80, 224,
+          //     RGB565_MASK_WHITE, "Attend failed"); is_attend_success = false;
+          //     ESP_LOGI(TAG, "Attend failed | Face");
+          // }
+          // post_attend_frame_count++;
+          // if (post_attend_frame_count >= 15)
+          // {
+          //     post_attend_frame_count = 0;
+          //     stable_face_count_attendance = 0;
+          //     is_face_recognized = false;
+          //     ESP_LOGI(TAG, "Attend completed.");
+          //     if (is_attend_success == true)
+          //     {
+          //         // write to database
+          //         ESP_LOGI(TAG, "Write to database");
+          //         update_attendance_to_db(users[userid - 1].id, (const char
+          //         *)users[userid - 1].name, (const char *)ntp_date, (const
+          //         char *)ntp_time);
+          //     }
+          //     userid = -1;
           // }
         }
         else
         {
           std::list<dl::detect::result_t> &detect_candidates
               = self->detector.infer((uint16_t *)s_camera_capture.u8_buff,
-                                     { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 });
-          detect_results
-              = self->detector2.infer((uint16_t *)s_camera_capture.u8_buff,
-                                      { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
-                                      detect_candidates);
+                                     { (int)s_camera_capture.height,
+                                       (int)s_camera_capture.width,
+                                       3 });
+          detect_results = self->detector2.infer(
+              (uint16_t *)s_camera_capture.u8_buff,
+              { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
+              detect_candidates);
+
+          if (detect_results.size())
+          {
+            if (check_face_in_box(s_data_result_recognition.s_left_eye.x,
+                                  s_data_result_recognition.s_left_eye.y,
+                                  s_data_result_recognition.s_right_eye.x,
+                                  s_data_result_recognition.s_right_eye.y,
+                                  s_data_result_recognition.s_nose.x,
+                                  s_data_result_recognition.s_nose.y,
+                                  s_data_result_recognition.s_left_mouth.x,
+                                  s_data_result_recognition.s_left_mouth.y,
+                                  s_data_result_recognition.s_right_mouth.x,
+                                  s_data_result_recognition.s_right_mouth.y,
+                                  100,
+                                  20,
+                                  230,
+                                  200)
+                == true)
+            {
+              stable_face_count_attendance++;
+              ESP_LOGI(TAG,
+                       "stable_face_count_attendance: %d",
+                       stable_face_count_attendance);
+            }
+            else
+            {
+              s_data_result_recognition.s_coord_box_face.x1 = 0;
+              s_data_result_recognition.s_coord_box_face.y1 = 0;
+              s_data_result_recognition.s_coord_box_face.x2 = 0;
+              s_data_result_recognition.s_coord_box_face.y2 = 0;
+              s_data_result_recognition.s_left_eye.x        = 0;
+              s_data_result_recognition.s_left_eye.y        = 0;
+              s_data_result_recognition.s_right_eye.x       = 0;
+              s_data_result_recognition.s_right_eye.y       = 0;
+              s_data_result_recognition.s_left_mouth.x      = 0;
+              s_data_result_recognition.s_left_mouth.y      = 0;
+              s_data_result_recognition.s_right_mouth.x     = 0;
+              s_data_result_recognition.s_right_mouth.y     = 0;
+              s_data_result_recognition.s_nose.x            = 0;
+              s_data_result_recognition.s_nose.y            = 0;
+            }
+            xQueueSend(*self->p_result_recognition_queue,
+                       &s_data_result_recognition,
+                       0);
+          }
+        }
+      }
+
+      if ((uxBits & ENROLL_FACE_ID_BIT) != 0)
+      {
+        if (stable_face_count >= 10)
+        {
+          std::string text_id = std::to_string(user_id);
+
+          self->recognizer->enroll_id(
+              (uint16_t *)s_camera_capture.u8_buff,
+              { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
+              detect_results.front().keypoint,
+              text_id,
+              true);
+
+          ESP_LOGI(TAG,
+                   "Enroll ID %d",
+                   self->recognizer->get_enrolled_ids().back().id);
+        }
+        else
+        {
+          std::list<dl::detect::result_t> &detect_candidates
+              = self->detector.infer((uint16_t *)s_camera_capture.u8_buff,
+                                     { (int)s_camera_capture.height,
+                                       (int)s_camera_capture.width,
+                                       3 });
+          detect_results = self->detector2.infer(
+              (uint16_t *)s_camera_capture.u8_buff,
+              { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
+              detect_candidates);
 
           if (detect_results.size())
           {
@@ -251,7 +362,6 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             xQueueSend(*self->p_result_recognition_queue,
                        &s_data_result_recognition,
                        0);
-            
           }
         }
       }
