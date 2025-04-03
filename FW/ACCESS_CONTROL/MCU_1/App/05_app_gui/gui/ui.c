@@ -17,6 +17,8 @@ lv_obj_t * ui_POPUPHomePanel;
 lv_obj_t * ui_Time;
 lv_obj_t * ui_Day;
 lv_obj_t * ui_Date;
+void ui_event_Image6(lv_event_t * e);
+lv_obj_t * ui_Image6;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -31,14 +33,18 @@ lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
 lv_obj_t * ui_DataButton;
 lv_obj_t * ui_Label2;
-void ui_event_Button1(lv_event_t * e);
-lv_obj_t * ui_Button1;
+void ui_event_Image2(lv_event_t * e);
+lv_obj_t * ui_Image2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
 void ui_event_Attendance(lv_event_t * e);
 lv_obj_t * ui_Attendance;
+void ui_event_POPUPMenuPanel3(lv_event_t * e);
+lv_obj_t * ui_POPUPMenuPanel3;
+lv_obj_t * ui_PopupSuccess;
+lv_obj_t * ui_CheckinTime;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_UserData
@@ -93,6 +99,15 @@ void ui_event_Home(lv_event_t * e)
     }
 }
 
+void ui_event_Image6(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Menu_screen_init);
+    }
+}
+
 void ui_event_Menu(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -124,15 +139,12 @@ void ui_event_DataButton(lv_event_t * e)
     }
 }
 
-void ui_event_Button1(lv_event_t * e)
+void ui_event_Image2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Enroll_Before(e);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
+        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
     }
 }
 
@@ -145,6 +157,15 @@ void ui_event_Attendance(lv_event_t * e)
     }
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_Attendance_After(e);
+    }
+}
+
+void ui_event_POPUPMenuPanel3(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_KEY) {
+        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
     }
 }
 

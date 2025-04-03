@@ -10,6 +10,7 @@ SET(SOURCES components/ui_comp_popupmenupanel.c
     screens/ui_FingerEnroll.c
     ui.c
     components/ui_comp_hook.c
-    ui_helpers.c)
+    ui_helpers.c
+    images/ui_img_621954408.c)
 
 add_library(ui ${SOURCES})
