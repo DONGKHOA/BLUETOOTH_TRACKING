@@ -1,0 +1,58 @@
+Added Component: Designator=U8(XCVR_ESP32-S3-WROOM-1U-N16R8)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "ESP32-S3-WROOM-1U-N8R2 Module WiFi Bluetooth 8MB Flash, 2MB SRAM 2.4GHz"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/esp32-s3-wroom-1u-n8r2-module-wifi-bluetooth-8mb-flash-2mb-sram-2-4ghz"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U8-1
+Added Pin To Net: NetName=NetC34_2 Pin=U8-2
+Added Pin To Net: NetName=WF_EN Pin=U8-3
+Added Pin To Net: NetName=NetR92_1 Pin=U8-4
+Added Pin To Net: NetName=NetR83_1 Pin=U8-5
+Added Pin To Net: NetName=NetR85_2 Pin=U8-6
+Added Pin To Net: NetName=NetR89_2 Pin=U8-7
+Added Pin To Net: NetName=NetR45_1 Pin=U8-8
+Added Pin To Net: NetName=NetR44_1 Pin=U8-9
+Added Pin To Net: NetName=NetR51_1 Pin=U8-10
+Added Pin To Net: NetName=NetR47_1 Pin=U8-11
+Added Pin To Net: NetName=WF_SW_STATUS Pin=U8-14
+Added Pin To Net: NetName=NetR26_2 Pin=U8-16
+Added Pin To Net: NetName=NetJ5_2 Pin=U8-17
+Added Pin To Net: NetName=NetR80_1 Pin=U8-18
+Added Pin To Net: NetName=NetLCD1_17 Pin=U8-19
+Added Pin To Net: NetName=NetR39_1 Pin=U8-20
+Added Pin To Net: NetName=NetLCD1_16 Pin=U8-21
+Added Pin To Net: NetName=NetR79_1 Pin=U8-22
+Added Pin To Net: NetName=NetR50_1 Pin=U8-23
+Added Pin To Net: NetName=NetR48_1 Pin=U8-24
+Added Pin To Net: NetName=NetLCD1_15 Pin=U8-25
+Added Pin To Net: NetName=NetR27_2 Pin=U8-26
+Added Pin To Net: NetName=WF_FLASH Pin=U8-27
+Added Pin To Net: NetName=NetR78_1 Pin=U8-31
+Added Pin To Net: NetName=NetR98_1 Pin=U8-32
+Added Pin To Net: NetName=NetR97_1 Pin=U8-33
+Added Pin To Net: NetName=NetJ7_2 Pin=U8-34
+Added Pin To Net: NetName=NetJ8_2 Pin=U8-35
+Added Pin To Net: NetName=WF_TXD Pin=U8-36
+Added Pin To Net: NetName=WF_RXD Pin=U8-37
+Added Pin To Net: NetName=WF_LED_STATUS Pin=U8-39
+Added Pin To Net: NetName=GND Pin=U8-40
+Added Pin To Net: NetName=GND Pin=U8-41_1
+Added Pin To Net: NetName=GND Pin=U8-41_2
+Added Pin To Net: NetName=GND Pin=U8-41_3
+Added Pin To Net: NetName=GND Pin=U8-41_4
+Added Pin To Net: NetName=GND Pin=U8-41_5
+Added Pin To Net: NetName=GND Pin=U8-41_6
+Added Pin To Net: NetName=GND Pin=U8-41_7
+Added Pin To Net: NetName=GND Pin=U8-41_8
+Added Pin To Net: NetName=GND Pin=U8-41_9
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
