@@ -4,5 +4,11 @@
     "password": "123",
     "mqtt_server": "192.168.1.21:1883",
     "topic": "Bluetooth/dataTopic/010123304"
+  },
+  "B8:D6:1A:6A:3D:0E": {
+    "ssid": "Tiger",
+    "password": "123",
+    "mqtt_server": "192.168.1.211:1883",
+    "topic": "Bluetooth/dataTopic/010123304"
   }
 }

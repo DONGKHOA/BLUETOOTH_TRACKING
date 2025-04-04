@@ -256,7 +256,7 @@ void
 APP_CONFIGURATION_CreateTask (void)
 {
   xTaskCreate(
-      APP_CONFIGURATION_Task, "configuration task", 1024, NULL, 15, NULL);
+      APP_CONFIGURATION_Task, "configuration task", 1024*5, NULL, 15, NULL);
 }
 
 void
@@ -296,14 +296,14 @@ APP_CONFIGURATION_ProcessData (
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTSERVER",
-                  sizeof("WIFI") - 1)
+                  sizeof("MQTTSERVER") - 1)
            == 0)
   {
     printf("MQTTSERVER\n\r");
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTTOPIC",
-                  sizeof("WIFI") - 1)
+                  sizeof("MQTTTOPIC") - 1)
            == 0)
   {
     printf("MQTTTOPIC\n\r");
@@ -488,6 +488,7 @@ APP_CONFIGURATION_gatts_profile_a_event_handler (
     esp_gatt_if_t             gatts_if,
     esp_ble_gatts_cb_param_t *param)
 {
+  configuration_data_event_t s_configuration_data_event;
   switch (event)
   {
     case ESP_GATTS_REG_EVT:
@@ -557,8 +558,17 @@ APP_CONFIGURATION_gatts_profile_a_event_handler (
                param->write.handle);
       if (!param->write.is_prep)
       {
-        ESP_LOGI(TAG, "value len %d, value ", param->write.len);
-        ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
+        // ESP_LOGI(TAG, "value len %d, value ", param->write.len);
+        // ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
+
+        s_configuration_data_event.u8_len = param->write.len;
+        memcpy(s_configuration_data_event.u8_data,
+               param->write.value,
+               param->write.len);
+        xQueueSend(s_configuration_data.s_configuration_data_queue,
+                   &s_configuration_data_event,
+                   0);
+
         if (gl_profile_tab[PROFILE_A_APP_ID].descr_handle == param->write.handle
             && param->write.len == 2)
         {
