@@ -15,8 +15,53 @@ extern "C"
 #endif
 
   /****************************************************************************
-   *   PUBLIC TYPEDEFS
+   *    PUBLIC DEFINES
    ***************************************************************************/
+
+  /*** CAN peripheral ********************************************************/
+
+#define CAN_MODE          TWAI_MODE_NORMAL
+#define CAN_TXD_PIN       GPIO_NUM_21
+#define CAN_RXD_PIN       GPIO_NUM_14
+#define CAN_TXD_QUEUE_LEN 8
+#define CAN_RXD_QUEUE_LEN 8
+#define CAN_INTR_FLAG     ESP_INTR_FLAG_LEVEL3 // lowest priority
+#define CAN_BITRATE       CAN_500KBITS
+
+  /*** SPI2 peripheral *******************************************************/
+
+#define SPI2_MISO_PIN GPIO_NUM_NC
+#define SPI2_MOSI_PIN GPIO_NUM_47
+#define SPI2_SCLK_PIN GPIO_NUM_48
+#define SPI2_CS_PIN   GPIO_NUM_46
+
+#define SPI2_CLOCK_SPEED_HZ          SPI_CLOCK_40MHz
+#define SPI2_SPI_BUS_MAX_TRANSFER_SZ (DISP_BUF_SIZE * 2)
+#define SPI2_DMA_CHANNEL             SPI_DMA_CH_AUTO
+#define SPI2_SPI_MODE                0
+#define SPI2_QUEUE_SIZE              50
+
+  /*** SPI3 peripheral *******************************************************/
+
+#define SPI3_MISO_PIN GPIO_NUM_40
+#define SPI3_MOSI_PIN GPIO_NUM_38
+#define SPI3_SCLK_PIN GPIO_NUM_45
+#define SPI3_CS_PIN   GPIO_NUM_41
+
+#define SPI3_CLOCK_SPEED_HZ          SPI_CLOCK_100KHz
+#define SPI3_SPI_BUS_MAX_TRANSFER_SZ 0
+#define SPI3_DMA_CHANNEL             SPI_DMA_CH_AUTO
+#define SPI3_SPI_MODE                0
+#define SPI3_QUEUE_SIZE              1
+
+  /*** ILI9341 device ********************************************************/
+
+#define ILI9341_DC_PIN  GPIO_NUM_39
+#define ILI9341_RST_PIN GPIO_NUM_5
+
+  /*** XPT2046 device *********************************************************/
+
+#define XPT2046_IRQ_PIN GPIO_NUM_42
 
 #define ATTENDANCE_BIT         BIT0
 #define ENROLL_FACE_ID_BIT     BIT1
@@ -25,6 +70,10 @@ extern "C"
 #define DELETE_FINGERPRINT_BIT BIT4
 #define AUTHENTICATION_BIT     BIT5
 #define DATA_LIST_BIT          BIT6
+
+  /****************************************************************************
+   *   PUBLIC TYPEDEFS
+   ***************************************************************************/
 
   typedef enum
   {
