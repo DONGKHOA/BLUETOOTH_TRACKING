@@ -72,7 +72,7 @@ static void
 APP_DATA_TRANSMIT_task (void *arg)
 {
   uint8_t  p_text[1024];
-  uint16_t index = 0;
+  uint16_t index;
   while (1)
   {
     if (xQueueReceive(*s_data_transmit_data.p_send_data_queue,

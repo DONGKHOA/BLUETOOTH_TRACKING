@@ -95,7 +95,7 @@
 ili9341_handle_t s_ili9341_0;
 xpt2046_handle_t s_xpt2046_0;
 
-// Face *p_face;
+Face *p_face;
 
 /******************************************************************************
  *    PRIVATE VARIABLES
@@ -135,7 +135,7 @@ app_main (void)
   APP_DISPLAY_Init();
   // APP_HANDLE_CAMERA_Init();
   // p_face = new Face();
-  // APP_DATA_TRANSMIT_Init();
+  APP_DATA_TRANSMIT_Init();
   APP_DATA_RECEIVE_Init();
 
   // App Create Task
@@ -143,7 +143,7 @@ app_main (void)
   APP_DISPLAY_CreateTask();
   // APP_HANDLE_CAMERA_CreateTask();
   // p_face->CreateTask();
-  // APP_DATA_TRANSMIT_CreateTask();
+  APP_DATA_TRANSMIT_CreateTask();
   APP_DATA_RECEIVE_CreateTask();
 }
 

@@ -5,8 +5,6 @@
 #include <string.h>
 #include <stdio.h>
 
- 
-
 #include "app_data_transmit.h"
 #include "app_data.h"
 
@@ -21,7 +19,7 @@
 
 #define TAG "APP_DATA_TRANSMIT"
 
-#define CAN_ID   0x123
+#define CAN_ID   0x0A1
 #define CAN_EXTD 0
 #define CAN_RTR  0
 
@@ -34,7 +32,7 @@
  */
 typedef struct data_transmit_data
 {
-  DATA_SYNC_t    s_data_trans;
+  DATA_SYNC_t    s_data_sync;
   QueueHandle_t *p_send_data_queue;
 } data_transmit_data_t;
 
@@ -48,7 +46,7 @@ static void APP_DATA_TRANSMIT_task(void *arg);
  *    PRIVATE DATA
  *****************************************************************************/
 
-static data_transmit_data_t data_transmit_data;
+static data_transmit_data_t s_data_transmit_data;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -63,7 +61,7 @@ APP_DATA_TRANSMIT_CreateTask (void)
 void
 APP_DATA_TRANSMIT_Init (void)
 {
-  data_transmit_data.p_send_data_queue = &s_data_system.s_send_data_queue;
+  s_data_transmit_data.p_send_data_queue = &s_data_system.s_send_data_queue;
 }
 
 /******************************************************************************
@@ -73,7 +71,32 @@ APP_DATA_TRANSMIT_Init (void)
 static void
 APP_DATA_TRANSMIT_task (void *arg)
 {
+  uint8_t  p_text[1024];
+  uint16_t index = 0;
   while (1)
   {
+    if (xQueueReceive(*s_data_transmit_data.p_send_data_queue,
+                      &s_data_transmit_data.s_data_sync,
+                      portMAX_DELAY)
+        == pdTRUE)
+    {
+      index     = 0;
+      p_text[0] = s_data_transmit_data.s_data_sync.u8_data_start;
+      for (uint16_t i = 1; i <= s_data_transmit_data.s_data_sync.u8_data_length;
+           i++)
+      {
+        p_text[i] = s_data_transmit_data.s_data_sync.u8_data_packet[i];
+        index++;
+      }
+
+      p_text[index]     = s_data_transmit_data.s_data_sync.u8_data_length;
+      p_text[index + 1] = s_data_transmit_data.s_data_sync.u8_data_stop;
+
+      DEV_CAN_SendMessage(CAN_ID,
+                          CAN_EXTD,
+                          CAN_RTR,
+                          (uint8_t *)p_text,
+                          s_data_transmit_data.s_data_sync.u8_data_length + 3);
+    }
   }
 }

@@ -24,6 +24,7 @@ extern "C"
 #define DELETE_FACE_ID_BIT     BIT3
 #define DELETE_FINGERPRINT_BIT BIT4
 #define AUTHENTICATION_BIT     BIT5
+#define DATA_LIST_BIT          BIT6
 
   typedef enum
   {
@@ -70,11 +71,11 @@ extern "C"
     notification_recognition_t e_notification_recognition;
   } data_result_recognition_t;
 
-  typedef struct 
+  typedef struct
   {
-    uint8_t * u8_buff;
-    size_t width;
-    size_t height; 
+    uint8_t *u8_buff;
+    size_t   width;
+    size_t   height;
   } camera_capture_t;
 
   /**

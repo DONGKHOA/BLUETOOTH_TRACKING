@@ -16,5 +16,5 @@ set (includes   "gui"
 
 idf_component_register(SRCS ${sources} ${gui_sources}
                            INCLUDE_DIRS ${includes}
-                           REQUIRES lvgl driver ILI9341 XPT2046 00_app_data
+                           REQUIRES lvgl driver ILI9341 XPT2046 00_app_data Env
                            PRIV_REQUIRES espressif__esp32-camera "freertos")

@@ -88,68 +88,16 @@ APP_DATA_RECEIVE_task (void *arg)
 
     switch (s_receive_message.data[0])
     {
-      case DATA_SYNC_RESPONSE_ENROLL_FACE:
+      case DATA_SYNC_REQUEST_USER_DATA:
+      case DATA_SYNC_ENROLL_FACE:
+      case DATA_SYNC_ENROLL_FINGERPRINT:
+      case DATA_SYNC_REQUEST_AUTHENTICATION:
+      case DATA_SYNC_REQUEST_ATTENDANCE:
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-
-        break;
-
-      case DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT:
-
-        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-
-        break;
-
-      case DATA_SYNC_RESPONSE_AUTHENTICATION:
-
-        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-
-        break;
-
-      case DATA_SYNC_STATE_CONNECTION:
-
-        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-
-        break;
-
-      case DATA_SYNC_RESPONSE_ATTENDANCE:
-
-        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-
-        break;
-
-      case DATA_SYNC_NUMBER_OF_USER_DATA:
-
-        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[3];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
-
-
-        break;
-
-      case DATA_SYNC_DETAIL_OF_USER_DATA:
-
-        for (int i = 0; i < s_receive_message.data_length_code; i++)
-        {
-          ESP_LOGI("CAN", "Data byte %d = %X", i, s_receive_message.data[i]);
-        }
 
         break;
 
@@ -157,5 +105,7 @@ APP_DATA_RECEIVE_task (void *arg)
         printf("Other state\r\n");
         break;
     }
+
+    xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
   }
 }
