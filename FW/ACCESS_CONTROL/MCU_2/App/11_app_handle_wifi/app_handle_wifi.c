@@ -59,8 +59,8 @@ APP_HANDLE_WIFI_Init (void)
   s_handle_wifi.p_ssid            = s_data_system.u8_ssid;
   s_handle_wifi.p_pass            = s_data_system.u8_pass;
 
-  memcpy(s_handle_wifi.p_ssid, "Thuc Coffee", sizeof("Thuc Coffee"));
-  memcpy(s_handle_wifi.p_pass, "18006230", sizeof("18006230"));
+  memcpy(s_handle_wifi.p_ssid, "Thang", sizeof("Thang"));
+  memcpy(s_handle_wifi.p_pass, "17122003", sizeof("17122003"));
 
   WIFI_StaInit();
 }

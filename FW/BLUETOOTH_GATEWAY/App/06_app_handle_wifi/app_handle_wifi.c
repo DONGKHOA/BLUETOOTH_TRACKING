@@ -38,7 +38,7 @@ static void APP_HANDLE_WIFI_task(void *arg);
  *****************************************************************************/
 
 static handle_wifi_t s_handle_wifi;
-static char          s_ssid[1024];
+// static char          s_ssid[1024];
 
 /******************************************************************************
  *      PUBLIC FUNCTION
@@ -56,10 +56,12 @@ APP_HANDLE_WIFI_Init (void)
   s_handle_wifi.p_ssid           = s_data_system.u8_ssid;
   s_handle_wifi.p_pass           = s_data_system.u8_pass;
 
-  memcpy(s_handle_wifi.p_ssid, "Thuc Coffee", sizeof("Thuc Coffee"));
-  memcpy(s_handle_wifi.p_pass, "18006230", sizeof("18006230"));
+  memcpy(s_handle_wifi.p_ssid, "47.47", sizeof("47.47"));
+  memcpy(s_handle_wifi.p_pass, "0902900086", sizeof("0902900086"));
 
   WIFI_StaInit();
+
+  WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
 }
 
 /******************************************************************************
@@ -69,15 +71,15 @@ APP_HANDLE_WIFI_Init (void)
 static void
 APP_HANDLE_WIFI_task (void *arg)
 {
-  WIFI_Scan(s_ssid);
-  WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
+  // WIFI_Scan(s_ssid);
+  // WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
 
-  while (1)
-  {
-    // if (WIFI_state_connect() == CONNECT_OK)
-    // {
-    //   ESP_LOGI(TAG, "WiFi Connect OK!");
-    // }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-  }
+  // while (1)
+  // {
+  //   // if (WIFI_state_connect() == CONNECT_OK)
+  //   // {
+  //   //   ESP_LOGI(TAG, "WiFi Connect OK!");
+  //   // }
+  //   vTaskDelay(1000 / portTICK_PERIOD_MS);
+  // }
 }

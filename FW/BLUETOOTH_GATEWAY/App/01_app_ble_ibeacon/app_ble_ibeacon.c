@@ -121,8 +121,6 @@ APP_BLE_IBEACON_CreateTask (void)
 void
 APP_BLE_IBEACON_Init (void)
 {
-  esp_err_t status;
-
   s_ble_ibeacon_data.p_rssi_ibeacon_queue = &s_data_system.s_rssi_ibeacon_queue;
 
   s_ble_ibeacon_data.s_timeout_delete_node
@@ -144,12 +142,7 @@ APP_BLE_IBEACON_Init (void)
   esp_bluedroid_enable();
 
   /*<! register the scan callback function to the gap module */
-  if ((status = esp_ble_gap_register_callback(APP_BLE_IBEACON_GAP_Callback))
-      != ESP_OK)
-  {
-    ESP_LOGE(TAG, "gap register error: %s", esp_err_to_name(status));
-    return;
-  }
+  esp_ble_gap_register_callback(APP_BLE_IBEACON_GAP_Callback);
 
   /*<! set scan parameters */
   esp_ble_gap_set_scan_params(&ble_scan_params);

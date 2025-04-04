@@ -1,0 +1,6 @@
+Added Component: Designator=LCD1(LCD_TFT_ILI9341_3.2)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "LCD 3.2inch 320x240 TFT ILI9341 C?m ?ng Ði?n Tr? SPI"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/lcd-3-2inch-320x240-tft-ili9341-cam-ung-dien-tro-spi"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Display Member=Component LCD1 ILI9341

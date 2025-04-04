@@ -11,6 +11,7 @@
 /*** bsp *********************************************************************/
 
 #include "gpio.h"
+#include "exti.h"
 #include "nvs_rw.h"
 
 /*** device ******************************************************************/
@@ -24,10 +25,17 @@
 #include "app_handle_wifi.h"
 #include "app_led_status.h"
 #include "app_timestamp.h"
+#include "app_configuration.h"
+#include "app_user_button.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
+
+/*** GPIO peripheral *********************************************************/
+
+#define BUTTON_USER_PIN GPIO_NUM_12
+#define LED_STATUS_PIN  GPIO_NUM_5
 
 /******************************************************************************
  *   PUBLIC DATA
@@ -42,6 +50,7 @@
  *****************************************************************************/
 
 static inline void APP_MAIN_InitGPIO(void);
+static inline void APP_MAIN_InitEXTI(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
 
@@ -55,6 +64,7 @@ app_main (void)
   // BSP Initialization
 
   APP_MAIN_InitGPIO();
+  APP_MAIN_InitEXTI();
   APP_MAIN_InitNVS();
 
   // Main Initialization data system
@@ -63,19 +73,21 @@ app_main (void)
 
   // App Initialization
 
-  APP_BLE_IBEACON_Init();
-  APP_BLE_TRACKING_Init();
-  APP_HANDLE_WIFI_Init();
-  // APP_TIMESTAMP_Init();
-  APP_MQTT_CLIENT_Init();
+  APP_USER_BUTTON_Init();
+  APP_CONFIGURATION_Init();
+  // APP_BLE_IBEACON_Init();
+  // APP_BLE_TRACKING_Init();
+  // APP_HANDLE_WIFI_Init();
+  // // APP_TIMESTAMP_Init();
+  // APP_MQTT_CLIENT_Init();
 
   // App Create Task
 
-  APP_BLE_IBEACON_CreateTask();
-  APP_BLE_TRACKING_CreateTask();
-  APP_HANDLE_WIFI_CreateTask();
-  // APP_TIMESTAMP_CreateTask();
-  APP_MQTT_CLIENT_CreateTask();
+  // APP_BLE_IBEACON_CreateTask();
+  // APP_BLE_TRACKING_CreateTask();
+  // // APP_HANDLE_WIFI_CreateTask();
+  // // APP_TIMESTAMP_CreateTask();
+  // APP_MQTT_CLIENT_CreateTask();
 }
 
 /******************************************************************************
@@ -85,7 +97,13 @@ app_main (void)
 static inline void
 APP_MAIN_InitGPIO (void)
 {
-  BSP_gpioSetDirection(GPIO_NUM_2, GPIO_MODE_OUTPUT, GPIO_NO_PULL); // LED
+  BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
+}
+
+static inline void
+APP_MAIN_InitEXTI (void)
+{
+  BSP_EXIT_Init(BUTTON_USER_PIN, EXTI_EDGE_ALL, GPIO_PULL_UP);
 }
 
 static inline void
@@ -99,7 +117,9 @@ APP_MAIN_InitDataSystem (void)
 {
   memset(s_data_system.u8_ssid, 0, sizeof(s_data_system.u8_ssid));
   memset(s_data_system.u8_pass, 0, sizeof(s_data_system.u8_pass));
-  
+
+  s_data_system.s_configuration_event = xEventGroupCreate();
+
   s_data_system.s_rssi_ibeacon_queue
       = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
   s_data_system.s_location_tag_queue

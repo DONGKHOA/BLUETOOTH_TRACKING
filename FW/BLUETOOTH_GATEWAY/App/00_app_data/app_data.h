@@ -9,12 +9,19 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
-#include "freertos/semphr.h"
+#include "freertos/event_groups.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+  /****************************************************************************
+   *    PUBLIC DEFINES
+   ***************************************************************************/
+
+#define APP_CONFIGURATION_ENABLE  BIT0
+#define APP_CONFIGURATION_DISABLE BIT1
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS
@@ -33,10 +40,11 @@ extern "C"
    */
   typedef struct _DATA_System_t
   {
-    QueueHandle_t     s_rssi_ibeacon_queue;
-    QueueHandle_t     s_location_tag_queue;
-    uint8_t           u8_ssid[32];
-    uint8_t           u8_pass[32];
+    EventGroupHandle_t s_configuration_event;
+    QueueHandle_t      s_rssi_ibeacon_queue;
+    QueueHandle_t      s_location_tag_queue;
+    uint8_t            u8_ssid[32];
+    uint8_t            u8_pass[32];
   } DATA_System_t;
 
   /**
