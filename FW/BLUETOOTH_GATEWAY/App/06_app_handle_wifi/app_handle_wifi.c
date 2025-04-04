@@ -31,7 +31,8 @@ typedef struct
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_HANDLE_WIFI_task(void *arg);
+static void   APP_HANDLE_WIFI_Task(void *arg);
+static int8_t matchingWIFIScan(char *data, uint8_t *ssid, uint8_t *pass);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -48,9 +49,9 @@ static char          s_ssid[1024];
 void
 APP_HANDLE_WIFI_CreateTask (void)
 {
-  xTaskCreate(APP_HANDLE_WIFI_task,
+  xTaskCreate(APP_HANDLE_WIFI_Task,
               "wifi task",
-              1024 * 10,
+              1024 * 30,
               NULL,
               13,
               &s_handle_wifi_task);
@@ -59,9 +60,6 @@ APP_HANDLE_WIFI_CreateTask (void)
 void
 APP_HANDLE_WIFI_Init (void)
 {
-  memcpy(s_handle_wifi.u8_ssid, "Van Son", sizeof("Van Son"));
-  memcpy(s_handle_wifi.u8_pass, "26061975", sizeof("26061975"));
-
   WIFI_StaInit();
 }
 
@@ -70,18 +68,49 @@ APP_HANDLE_WIFI_Init (void)
  *****************************************************************************/
 
 static void
-APP_HANDLE_WIFI_task (void *arg)
+APP_HANDLE_WIFI_Task (void *arg)
 {
   WIFI_Scan(s_ssid);
-  WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
 
-  while (1)
+  uint8_t num_wifi = WIFI_GetNumSSID();
+
+  if (num_wifi != 0)
   {
-    if (WIFI_state_connect() == CONNECT_OK)
+    WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1, 32);
+    WIFI_ScanPass(s_handle_wifi.u8_pass, 1, 32);
+    if (matchingWIFIScan(s_ssid, s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass)
+        != -1)
     {
-      ESP_LOGI(TAG, "Connected to %s", s_handle_wifi.u8_ssid);
-      vTaskSuspend(s_handle_wifi_task);
+      WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
     }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
+  vTaskDelete(s_handle_wifi_task);
+}
+
+static int8_t
+matchingWIFIScan (char *data, uint8_t *ssid, uint8_t *pass)
+{
+  char *arg_list[50];
+  char  buffer[1024];
+  memcpy(buffer, data, strlen((char *)data));
+  uint8_t arg_position = 0;
+
+  // cut string
+  char *temp_token = strtok(buffer, "\r");
+  while (temp_token != NULL)
+  {
+    arg_list[arg_position] = temp_token;
+    arg_position++;
+    temp_token = strtok(NULL, "\r");
+  }
+
+  // check matching ssid in NVS
+  for (uint8_t i = 0; i < arg_position; i++)
+  {
+    if (memcmp((uint8_t *)arg_list[i], ssid, strlen((char *)ssid) + 1) == 0)
+    {
+      return 1;
+    }
+  }
+  return -1;
 }
