@@ -48,6 +48,7 @@ static void mqtt_event_handler(void            *handler_args,
  *****************************************************************************/
 
 static mqtt_client_data_t s_mqtt_client_data;
+static char               command[32];
 static char               data[1024 * 10];
 static int                user_id[512];
 static char               user_name[512][32];
@@ -70,13 +71,13 @@ APP_MQTT_CLIENT_CreateTask (void)
 void
 APP_MQTT_CLIENT_Init (void)
 {
-  s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
-  s_mqtt_client_data.s_mqtt_event      = xEventGroupCreate
+  s_mqtt_client_data.p_data_mqtt_queue    = &s_data_system.s_data_mqtt_queue;
+  s_mqtt_client_data.s_mqtt_event         = xEventGroupCreate();
+  s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
 
-      esp_mqtt_client_config_t mqtt_cfg
-      = {
-          .broker.address.uri = URL,
-        };
+  esp_mqtt_client_config_t mqtt_cfg = {
+    .broker.address.uri = URL,
+  };
 
   s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
@@ -107,7 +108,7 @@ APP_MQTT_CLIENT_task (void *arg)
     }
 
     if (xQueueReceive(
-            *s_mqtt_client_data.p_data_mqtt_queue, &s_DATA_SYNC, portMAX_DELAY)
+            *s_mqtt_client_data.p_data_mqtt_queue, &s_DATA_SYNC, 100 / portTICK_PERIOD_MS)
         == pdPASS)
     {
       switch (s_DATA_SYNC.u8_data_start)
@@ -173,9 +174,14 @@ APP_MQTT_CLIENT_task (void *arg)
                        100 / portTICK_PERIOD_MS)
         == pdTRUE)
     {
+      printf("1111111111111111111\r\n");
       printf("%s\r\n", data);
-      DECODE_User_Data(data, user_id, user_name, user_len);
-      printf("%s\r\n", user_name[0]);
+
+      // DECODE_Command(data, command);
+
+      printf("Command: %s\r\n", command);
+      // DECODE_User_Data(data, user_id, user_name, user_len);
+      // printf("%s\r\n", user_name[0]);
     }
   }
 }
@@ -221,6 +227,7 @@ mqtt_event_handler (void            *handler_args,
 
       ESP_LOGI(TAG, "MQTT_EVENT_DATA");
       sprintf(data, "%.*s", event->data_len, event->data);
+      printf("%s\r\n", data);
       xSemaphoreGive(s_mqtt_client_data.s_data_subscribe_sem);
 
       break;

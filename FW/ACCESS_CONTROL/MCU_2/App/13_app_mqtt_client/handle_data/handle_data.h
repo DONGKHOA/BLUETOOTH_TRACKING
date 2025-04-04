@@ -16,8 +16,11 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void DECODE_User_Data(char *json_str, int *user_id, char **user_name, int user_len);
-
+  void DECODE_User_Data(char  *json_str,
+                        int   *user_id,
+                        char **user_name,
+                        int    user_len);
+  void DECODE_Command(char *json_string, char *command);
 #ifdef __cplusplus
 }
 #endif
