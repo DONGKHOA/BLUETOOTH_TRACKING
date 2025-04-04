@@ -49,13 +49,13 @@ static void mqtt_event_handler(void            *handler_args,
 
 static mqtt_client_data_t s_mqtt_client_data;
 static char               data[1024 * 10];
-static int user_id[512];
-static char user_name[512][32];
-static int user_len;
-static char              *p_topic_request_server  = "ACCESS_CONTROL/Server/Request";
-static char              *p_topic_request_client = "ACCESS_CONTROL/Client/Request";
-static char              *p_topic_response_server = "ACCESS_CONTROL/Server/Response";
-static char              *p_topic_response_client = "ACCESS_CONTROL/Client/Response";
+static int                user_id[512];
+static char               user_name[512][32];
+static int                user_len;
+static char *p_topic_request_server  = "ACCESS_CONTROL/Server/Request";
+static char *p_topic_request_client  = "ACCESS_CONTROL/Client/Request";
+static char *p_topic_response_server = "ACCESS_CONTROL/Server/Response";
+static char *p_topic_response_client = "ACCESS_CONTROL/Client/Response";
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -70,12 +70,13 @@ APP_MQTT_CLIENT_CreateTask (void)
 void
 APP_MQTT_CLIENT_Init (void)
 {
-  s_mqtt_client_data.p_data_mqtt_queue    = &s_data_system.s_data_mqtt_queue;
-  s_mqtt_client_data.s_mqtt_event         = xEventGroupCreate
+  s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
+  s_mqtt_client_data.s_mqtt_event      = xEventGroupCreate
 
-  esp_mqtt_client_config_t mqtt_cfg = {
-    .broker.address.uri = URL,
-  };
+      esp_mqtt_client_config_t mqtt_cfg
+      = {
+          .broker.address.uri = URL,
+        };
 
   s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
@@ -109,50 +110,62 @@ APP_MQTT_CLIENT_task (void *arg)
             *s_mqtt_client_data.p_data_mqtt_queue, &s_DATA_SYNC, portMAX_DELAY)
         == pdPASS)
     {
-      if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_USER_DATA)
+      switch (s_DATA_SYNC.u8_data_start)
       {
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                "{\"command\" : \"USER_DATA\"}",
-                                0,
-                                0,
-                                0);
-      }
-      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_ENROLL_FACE)
-      {
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                "{\"command\" : \"ENROLL_FACE\"}",
-                                0,
-                                0,
-                                0);
-      }
-      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_ENROLL_FINGERPRINT)
-      {
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                "{\"command\" : \"ENROLL_FINGERPRINT\"}",
-                                0,
-                                0,
-                                0);
-      }
-      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_AUTHENTICATION)
-      {
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                "{\"command\" : \"AUTHENTICATION\"}",
-                                0,
-                                0,
-                                0);
-      }
-      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_ATTENDANCE)
-      {
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                "{\"command\" : \"ATTENDANCE\"}",
-                                0,
-                                0,
-                                0);
+        case DATA_SYNC_REQUEST_USER_DATA:
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  "{\"command\" : \"USER_DATA\"}",
+                                  0,
+                                  0,
+                                  0);
+
+          break;
+        case DATA_SYNC_ENROLL_FACE:
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  "{\"command\" : \"ENROLL_FACE\"}",
+                                  0,
+                                  0,
+                                  0);
+
+          break;
+        case DATA_SYNC_ENROLL_FINGERPRINT:
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  "{\"command\" : \"ENROLL_FINGERPRINT\"}",
+                                  0,
+                                  0,
+                                  0);
+
+          break;
+
+        case DATA_SYNC_REQUEST_AUTHENTICATION:
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  "{\"command\" : \"AUTHENTICATION\"}",
+                                  0,
+                                  0,
+                                  0);
+
+          break;
+
+        case DATA_SYNC_REQUEST_ATTENDANCE:
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  "{\"command\" : \"ATTENDANCE\"}",
+                                  0,
+                                  0,
+                                  0);
+
+          break;
+        default:
+          break;
       }
     }
 
