@@ -90,7 +90,6 @@ APP_DATA_RECEIVE_task (void *arg)
     {
       case DATA_SYNC_REQUEST_USER_DATA:
       case DATA_SYNC_ENROLL_FACE:
-      case DATA_SYNC_ENROLL_FINGERPRINT:
       case DATA_SYNC_REQUEST_AUTHENTICATION:
       case DATA_SYNC_REQUEST_ATTENDANCE:
 
@@ -99,13 +98,17 @@ APP_DATA_RECEIVE_task (void *arg)
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
+        xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
+        break;
+
+      case DATA_SYNC_ENROLL_FINGERPRINT:
+
         break;
 
       default:
         printf("Other state\r\n");
         break;
     }
-
-    xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
   }
 }
