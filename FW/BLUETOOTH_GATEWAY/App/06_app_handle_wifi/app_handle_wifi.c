@@ -23,8 +23,8 @@
 
 typedef struct
 {
-  uint8_t           *p_ssid;
-  uint8_t           *p_pass;
+  uint8_t u8_ssid[32];
+  uint8_t u8_pass[32];
 } handle_wifi_t;
 
 /******************************************************************************
@@ -38,7 +38,8 @@ static void APP_HANDLE_WIFI_task(void *arg);
  *****************************************************************************/
 
 static handle_wifi_t s_handle_wifi;
-// static char          s_ssid[1024];
+static TaskHandle_t  s_handle_wifi_task;
+static char          s_ssid[1024];
 
 /******************************************************************************
  *      PUBLIC FUNCTION
@@ -47,21 +48,21 @@ static handle_wifi_t s_handle_wifi;
 void
 APP_HANDLE_WIFI_CreateTask (void)
 {
-  xTaskCreate(APP_HANDLE_WIFI_task, "wifi task", 1024 * 10, NULL, 13, NULL);
+  xTaskCreate(APP_HANDLE_WIFI_task,
+              "wifi task",
+              1024 * 10,
+              NULL,
+              13,
+              &s_handle_wifi_task);
 }
 
 void
 APP_HANDLE_WIFI_Init (void)
 {
-  s_handle_wifi.p_ssid           = s_data_system.u8_ssid;
-  s_handle_wifi.p_pass           = s_data_system.u8_pass;
-
-  memcpy(s_handle_wifi.p_ssid, "47.47", sizeof("47.47"));
-  memcpy(s_handle_wifi.p_pass, "0902900086", sizeof("0902900086"));
+  memcpy(s_handle_wifi.u8_ssid, "Van Son", sizeof("Van Son"));
+  memcpy(s_handle_wifi.u8_pass, "26061975", sizeof("26061975"));
 
   WIFI_StaInit();
-
-  WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
 }
 
 /******************************************************************************
@@ -71,15 +72,16 @@ APP_HANDLE_WIFI_Init (void)
 static void
 APP_HANDLE_WIFI_task (void *arg)
 {
-  // WIFI_Scan(s_ssid);
-  // WIFI_Connect(s_handle_wifi.p_ssid, s_handle_wifi.p_pass);
+  WIFI_Scan(s_ssid);
+  WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
 
-  // while (1)
-  // {
-  //   // if (WIFI_state_connect() == CONNECT_OK)
-  //   // {
-  //   //   ESP_LOGI(TAG, "WiFi Connect OK!");
-  //   // }
-  //   vTaskDelay(1000 / portTICK_PERIOD_MS);
-  // }
+  while (1)
+  {
+    if (WIFI_state_connect() == CONNECT_OK)
+    {
+      ESP_LOGI(TAG, "Connected to %s", s_handle_wifi.u8_ssid);
+      vTaskSuspend(s_handle_wifi_task);
+    }
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
 }

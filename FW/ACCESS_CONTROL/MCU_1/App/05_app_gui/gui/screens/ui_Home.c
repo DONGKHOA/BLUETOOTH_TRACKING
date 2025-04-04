@@ -55,6 +55,17 @@ void ui_Home_screen_init(void)
     lv_obj_set_align(ui_Date, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Date, "Monday");
 
+    ui_Image6 = lv_img_create(ui_Home);
+    lv_img_set_src(ui_Image6, &ui_img_621954408);
+    lv_obj_set_width(ui_Image6, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Image6, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Image6, 150);
+    lv_obj_set_y(ui_Image6, 0);
+    lv_obj_set_align(ui_Image6, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image6, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image6, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    lv_obj_add_event_cb(ui_Image6, ui_event_Image6, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Home, ui_event_Home, LV_EVENT_ALL, NULL);
 
 }

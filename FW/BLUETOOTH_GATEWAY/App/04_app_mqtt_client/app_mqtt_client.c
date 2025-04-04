@@ -92,7 +92,6 @@ APP_MQTT_CLIENT_Init (void)
                                  MQTT_EVENT_ANY,
                                  mqtt_event_handler,
                                  NULL);
-  esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
 }
 
 /******************************************************************************
@@ -103,8 +102,20 @@ static void
 APP_MQTT_CLIENT_Task (void *arg)
 {
   tracking_infor_tag_t tracking_infor_tag;
+  uint8_t is_init = 0;
+
   while (1)
   {
+    if (WIFI_state_connect() == CONNECT_OK)
+    {
+      if (is_init == 0)
+      {
+        is_init = 1;
+        esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
+      }
+      
+    }
+    
     if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
                       &tracking_infor_tag,
                       1000)
@@ -120,7 +131,6 @@ APP_MQTT_CLIENT_Task (void *arg)
       s_mqtt_client_data.u8_num_dev++;
       
       char c_gateway_id[9];
-      ESP_LOGI(TAG, "MQTT Before Publish");
 
       snprintf(c_gateway_id,
                sizeof(c_gateway_id),
@@ -150,7 +160,7 @@ APP_MQTT_CLIENT_Task (void *arg)
                               s_mqtt_client_data.c_topic_pub,
                               (const char *)&s_mqtt_client_data.c_data_pub,
                               0,
-                              0,
+                              1,
                               0);
 
       s_mqtt_client_data.u8_num_dev = 0;

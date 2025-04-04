@@ -41,8 +41,8 @@
 
 #define PREPARE_BUF_MAX_SIZE 1024
 
-#define adv_config_flag      (1 << 0)
-#define scan_rsp_config_flag (1 << 1)
+#define adv_config_flag      BIT0
+#define scan_rsp_config_flag BIT1
 
 #define PROFILE_NUM      2
 #define PROFILE_A_APP_ID 0
@@ -74,16 +74,32 @@ typedef struct
   int      prepare_len;
 } prepare_type_env_t;
 
-typedef struct 
-{
-  
-}configuration_data_t;
+// Proccess data from Web APP to Gateway
 
+typedef enum
+{
+  DATA_WIFI,
+  DATA_MQTT_SERVER,
+  DATA_MQTT_TOPIC
+} configuration_data_event_type_t;
+
+typedef struct
+{
+  uint8_t u8_data[256];
+  uint8_t u8_len;
+} __attribute__((packed)) configuration_data_event_t;
+
+typedef struct
+{
+  QueueHandle_t s_configuration_data_queue;
+} configuration_data_t;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
+static void APP_CONFIGURATION_ProcessData(
+    configuration_data_event_t *s_configuration_data_event);
 static void APP_CONFIGURATION_Task(void *arg);
 void        APP_CONFIGURATION_exec_write_event_env(
            prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param);
@@ -230,6 +246,8 @@ static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
 static prepare_type_env_t a_prepare_write_env;
 static prepare_type_env_t b_prepare_write_env;
 
+static configuration_data_t s_configuration_data;
+
 /******************************************************************************
  *   PUBLIC FUNCTION
  *****************************************************************************/
@@ -244,6 +262,9 @@ APP_CONFIGURATION_CreateTask (void)
 void
 APP_CONFIGURATION_Init (void)
 {
+  s_configuration_data.s_configuration_data_queue
+      = xQueueCreate(2, sizeof(configuration_data_event_t));
+
   ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
   esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
@@ -253,7 +274,6 @@ APP_CONFIGURATION_Init (void)
   esp_bluedroid_init();
   esp_bluedroid_enable();
 
-  // Note: Avoid performing time-consuming operations within callback functions.
   esp_ble_gap_register_callback(APP_CONFIGURATION_gap_event_handler);
   esp_ble_gatts_register_callback(APP_CONFIGURATION_gatts_event_handler);
   esp_ble_gatts_app_register(PROFILE_A_APP_ID);
@@ -266,11 +286,50 @@ APP_CONFIGURATION_Init (void)
  *****************************************************************************/
 
 static void
+APP_CONFIGURATION_ProcessData (
+    configuration_data_event_t *s_configuration_data_event)
+{
+  if (memcmp(s_configuration_data_event->u8_data, "WIFI", sizeof("WIFI") - 1)
+      == 0)
+  {
+    printf("WIFI\n\r");
+  }
+  else if (memcmp(s_configuration_data_event->u8_data,
+                  "MQTTSERVER",
+                  sizeof("WIFI") - 1)
+           == 0)
+  {
+    printf("MQTTSERVER\n\r");
+  }
+  else if (memcmp(s_configuration_data_event->u8_data,
+                  "MQTTTOPIC",
+                  sizeof("WIFI") - 1)
+           == 0)
+  {
+    printf("MQTTTOPIC\n\r");
+  }
+}
+
+static void
 APP_CONFIGURATION_Task (void *arg)
 {
+  configuration_data_event_t s_configuration_data_event = { .u8_len = 0 };
   while (1)
   {
-    
+    if (xQueueReceive(s_configuration_data.s_configuration_data_queue,
+                      &s_configuration_data_event,
+                      portMAX_DELAY))
+    {
+      ESP_LOGI(TAG,
+               "Configuration data event: %d",
+               s_configuration_data_event.u8_len);
+
+      ESP_LOG_BUFFER_HEX(TAG,
+                         s_configuration_data_event.u8_data,
+                         s_configuration_data_event.u8_len);
+
+      APP_CONFIGURATION_ProcessData(&s_configuration_data_event);
+    }
   }
 }
 
@@ -443,8 +502,7 @@ APP_CONFIGURATION_gatts_profile_a_event_handler (
       gl_profile_tab[PROFILE_A_APP_ID].service_id.id.uuid.uuid.uuid16
           = GATTS_SERVICE_UUID_TEST_A;
 
-      esp_err_t set_dev_name_ret
-          = esp_ble_gap_set_device_name(c_device_name);
+      esp_err_t set_dev_name_ret = esp_ble_gap_set_device_name(c_device_name);
       if (set_dev_name_ret)
       {
         ESP_LOGE(
@@ -712,6 +770,7 @@ APP_CONFIGURATION_gatts_profile_b_event_handler (
     esp_gatt_if_t             gatts_if,
     esp_ble_gatts_cb_param_t *param)
 {
+  configuration_data_event_t s_configuration_data_event;
   switch (event)
   {
     case ESP_GATTS_REG_EVT:
@@ -761,8 +820,16 @@ APP_CONFIGURATION_gatts_profile_b_event_handler (
                param->write.handle);
       if (!param->write.is_prep)
       {
-        ESP_LOGI(TAG, "value len %d, value ", param->write.len);
-        ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
+        // ESP_LOGI(TAG, "value len %d, value ", param->write.len);
+        // ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
+
+        s_configuration_data_event.u8_len = param->write.len;
+        memcpy(s_configuration_data_event.u8_data,
+               param->write.value,
+               param->write.len);
+        xQueueSend(s_configuration_data.s_configuration_data_queue,
+                   &s_configuration_data_event,
+                   0);
 
         if (gl_profile_tab[PROFILE_B_APP_ID].descr_handle == param->write.handle
             && param->write.len == 2)

@@ -1,0 +1,21 @@
+Removed Pin From Net: NetName=GND Pin=R26-1
+Removed Pin From Net: NetName=WF_SW_STATUS Pin=U8-14
+Added Component: Designator=R?(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=R?-1
+Added Pin To Net: NetName=WF_LED_STATUS Pin=R?-2
+Added Pin To Net: NetName=WF_LED_STATUS Pin=U8-16
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

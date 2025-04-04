@@ -27,6 +27,8 @@ extern lv_obj_t * ui_POPUPHomePanel;
 extern lv_obj_t * ui_Time;
 extern lv_obj_t * ui_Day;
 extern lv_obj_t * ui_Date;
+void ui_event_Image6(lv_event_t * e);
+extern lv_obj_t * ui_Image6;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -41,14 +43,18 @@ extern lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
 extern lv_obj_t * ui_DataButton;
 extern lv_obj_t * ui_Label2;
-void ui_event_Button1(lv_event_t * e);
-extern lv_obj_t * ui_Button1;
+void ui_event_Image2(lv_event_t * e);
+extern lv_obj_t * ui_Image2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
 void ui_event_Attendance(lv_event_t * e);
 extern lv_obj_t * ui_Attendance;
+void ui_event_POPUPMenuPanel3(lv_event_t * e);
+extern lv_obj_t * ui_POPUPMenuPanel3;
+extern lv_obj_t * ui_PopupSuccess;
+extern lv_obj_t * ui_CheckinTime;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_UserData
@@ -80,6 +86,9 @@ extern lv_obj_t * ui_FingerEnroll;
 // EVENTS
 
 extern lv_obj_t * ui____initial_actions0;
+
+// IMAGES AND IMAGE SETS
+LV_IMG_DECLARE(ui_img_621954408);    // assets/toppng.com-right-arrow-comments-slider-arrow-icons-554x980 (2).png
 
 // UI INIT
 void ui_init(void);

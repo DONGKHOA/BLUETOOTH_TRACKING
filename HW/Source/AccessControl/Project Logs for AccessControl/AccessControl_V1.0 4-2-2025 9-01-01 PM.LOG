@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=WF_LED_STATUS Pin=U8-16
+Removed Pin From Net: NetName=NetR27_2 Pin=U8-26
+Added Pin To Net: NetName=NetR27_2 Pin=U8-16
+Added Pin To Net: NetName=WF_LED_STATUS Pin=U8-26
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

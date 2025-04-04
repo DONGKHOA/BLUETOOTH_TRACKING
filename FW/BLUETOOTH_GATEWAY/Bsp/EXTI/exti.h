@@ -17,7 +17,7 @@ extern "C"
    *   PUBLIC TYPEDEFS
    *****************************************************************************/
 
-  typedef void (*EXIT_CALLBACK_FUNCTION_t)(uint32_t gpio_pin);
+  typedef void (*EXIT_CALLBACK_FUNCTION_t)(gpio_num_t gpio_pin);
 
   typedef enum
   {

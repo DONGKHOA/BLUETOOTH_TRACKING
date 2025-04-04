@@ -71,8 +71,7 @@ void
 APP_MQTT_CLIENT_Init (void)
 {
   s_mqtt_client_data.p_data_mqtt_queue    = &s_data_system.s_data_mqtt_queue;
-  s_mqtt_client_data.s_mqtt_event         = xEventGroupCreate();
-  s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
+  s_mqtt_client_data.s_mqtt_event         = xEventGroupCreate
 
   esp_mqtt_client_config_t mqtt_cfg = {
     .broker.address.uri = URL,
@@ -106,17 +105,56 @@ APP_MQTT_CLIENT_task (void *arg)
       continue;
     }
 
-    // if (xQueueReceive(
-    //         *s_mqtt_client_data.p_data_mqtt_queue, &s_DATA_SYNC, portMAX_DELAY)
-    //     == pdPASS)
-    // {
-      esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                              p_topic_request_server,
-                              "{\"command\" : \"USER_DATA\"}",
-                              0,
-                              0,
-                              0);
-    // }
+    if (xQueueReceive(
+            *s_mqtt_client_data.p_data_mqtt_queue, &s_DATA_SYNC, portMAX_DELAY)
+        == pdPASS)
+    {
+      if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_USER_DATA)
+      {
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"USER_DATA\"}",
+                                0,
+                                0,
+                                0);
+      }
+      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_ENROLL_FACE)
+      {
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"ENROLL_FACE\"}",
+                                0,
+                                0,
+                                0);
+      }
+      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_ENROLL_FINGERPRINT)
+      {
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"ENROLL_FINGERPRINT\"}",
+                                0,
+                                0,
+                                0);
+      }
+      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_AUTHENTICATION)
+      {
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"AUTHENTICATION\"}",
+                                0,
+                                0,
+                                0);
+      }
+      else if (s_DATA_SYNC.u8_data_start == DATA_SYNC_REQUEST_ATTENDANCE)
+      {
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"ATTENDANCE\"}",
+                                0,
+                                0,
+                                0);
+      }
+    }
 
     if (xSemaphoreTake(s_mqtt_client_data.s_data_subscribe_sem,
                        100 / portTICK_PERIOD_MS)

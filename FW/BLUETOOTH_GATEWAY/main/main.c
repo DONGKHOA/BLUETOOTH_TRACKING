@@ -32,14 +32,14 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-/*** GPIO peripheral *********************************************************/
-
-#define BUTTON_USER_PIN GPIO_NUM_12
-#define LED_STATUS_PIN  GPIO_NUM_5
+#define TAG             "APP_MAIN"
+#define LOADING_TIMEOUT 3000 // ms
 
 /******************************************************************************
  *   PUBLIC DATA
  *****************************************************************************/
+
+static TimerHandle_t s_loading_timer;
 
 /******************************************************************************
  *    PRIVATE VARIABLES
@@ -53,6 +53,7 @@ static inline void APP_MAIN_InitGPIO(void);
 static inline void APP_MAIN_InitEXTI(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
+static void        APP_MAIN_Loading_Callback(TimerHandle_t xTimer);
 
 /******************************************************************************
  *       MAIN FUNCTION
@@ -73,21 +74,37 @@ app_main (void)
 
   // App Initialization
 
-  APP_USER_BUTTON_Init();
-  APP_CONFIGURATION_Init();
-  // APP_BLE_IBEACON_Init();
-  // APP_BLE_TRACKING_Init();
-  // APP_HANDLE_WIFI_Init();
-  // // APP_TIMESTAMP_Init();
-  // APP_MQTT_CLIENT_Init();
+  xTimerStart(s_loading_timer, 0);
 
-  // App Create Task
+  while (1)
+  {
+    EventBits_t uxBits = xEventGroupWaitBits(
+        s_data_system.s_configuration_event,
+        APP_CONFIGURATION_ENABLE | APP_CONFIGURATION_DISABLE,
+        pdTRUE,
+        pdFALSE,
+        portMAX_DELAY);
+    if (uxBits & APP_CONFIGURATION_ENABLE)
+    {
+      APP_CONFIGURATION_Init();
 
-  // APP_BLE_IBEACON_CreateTask();
-  // APP_BLE_TRACKING_CreateTask();
-  // // APP_HANDLE_WIFI_CreateTask();
-  // // APP_TIMESTAMP_CreateTask();
-  // APP_MQTT_CLIENT_CreateTask();
+      APP_CONFIGURATION_CreateTask();
+      break;
+    }
+    else if (uxBits & APP_CONFIGURATION_DISABLE)
+    {
+      APP_BLE_IBEACON_Init();
+      APP_BLE_TRACKING_Init();
+      APP_HANDLE_WIFI_Init();
+      APP_MQTT_CLIENT_Init();
+
+      APP_BLE_IBEACON_CreateTask();
+      APP_BLE_TRACKING_CreateTask();
+      // APP_HANDLE_WIFI_CreateTask();
+      APP_MQTT_CLIENT_CreateTask();
+      break;
+    }
+  }
 }
 
 /******************************************************************************
@@ -115,13 +132,32 @@ APP_MAIN_InitNVS (void)
 static inline void
 APP_MAIN_InitDataSystem (void)
 {
-  memset(s_data_system.u8_ssid, 0, sizeof(s_data_system.u8_ssid));
-  memset(s_data_system.u8_pass, 0, sizeof(s_data_system.u8_pass));
-
   s_data_system.s_configuration_event = xEventGroupCreate();
+
+  s_loading_timer = xTimerCreate("loading_timer",
+                                 LOADING_TIMEOUT / portTICK_PERIOD_MS,
+                                 pdFALSE,
+                                 (void *)0,
+                                 APP_MAIN_Loading_Callback);
 
   s_data_system.s_rssi_ibeacon_queue
       = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
   s_data_system.s_location_tag_queue
       = xQueueCreate(16, sizeof(tracking_infor_tag_t));
+}
+
+static void
+APP_MAIN_Loading_Callback (TimerHandle_t xTimer)
+{
+  xTimerStop(s_loading_timer, 0);
+  if (BSP_gpioGetState(BUTTON_USER_PIN) == 1)
+  {
+    xEventGroupSetBits(s_data_system.s_configuration_event,
+                       APP_CONFIGURATION_DISABLE);
+  }
+  else
+  {
+    xEventGroupSetBits(s_data_system.s_configuration_event,
+                       APP_CONFIGURATION_ENABLE);
+  }
 }

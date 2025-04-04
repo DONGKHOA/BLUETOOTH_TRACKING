@@ -1,7 +1,7 @@
 {
   "B8:D6:1A:68:BB:BA": {
-    "ssid": "Thuc Coffee",
-    "password": "18006230",
+    "ssid": "Vu Phu",
+    "password": "123",
     "mqtt_server": "192.168.1.21:1883",
     "topic": "Bluetooth/dataTopic/010123304"
   }

@@ -20,8 +20,14 @@ extern "C"
    *    PUBLIC DEFINES
    ***************************************************************************/
 
-#define APP_CONFIGURATION_ENABLE  BIT0
-#define APP_CONFIGURATION_DISABLE BIT1
+#define APP_CONFIGURATION_ENABLE  BIT2
+#define APP_CONFIGURATION_DISABLE BIT3
+
+  /*** GPIO peripheral
+   * *********************************************************/
+
+#define BUTTON_USER_PIN GPIO_NUM_12
+#define LED_STATUS_PIN  GPIO_NUM_5
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS
@@ -40,11 +46,9 @@ extern "C"
    */
   typedef struct _DATA_System_t
   {
-    EventGroupHandle_t s_configuration_event;
     QueueHandle_t      s_rssi_ibeacon_queue;
     QueueHandle_t      s_location_tag_queue;
-    uint8_t            u8_ssid[32];
-    uint8_t            u8_pass[32];
+    EventGroupHandle_t s_configuration_event;
   } DATA_System_t;
 
   /**
