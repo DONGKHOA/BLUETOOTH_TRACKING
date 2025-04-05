@@ -104,7 +104,7 @@ APP_MQTT_CLIENT_Init (void)
   }
 
   if (NVS_ReadString(
-          MQTTSERVER_NVS, "MQTTTOPIC_NVS", s_mqtt_client_data.c_topic_pub)
+          MQTTTOPIC_NVS, "MQTTTOPIC_NVS", s_mqtt_client_data.c_topic_pub)
       != ESP_OK)
   {
     strcpy(s_mqtt_client_data.c_topic_pub, TOPIC_DEFAULT);
