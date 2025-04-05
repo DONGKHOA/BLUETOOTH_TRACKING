@@ -327,6 +327,8 @@ APP_CONFIGURATION_ProcessData (
            == 0)
   {
     printf("MQTTSERVER\n\r");
+    printf("%s\n\r",
+           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
     NVS_WriteString(
         MQTTSERVER_NVS,
         "MQTTSERVER_NVS",
