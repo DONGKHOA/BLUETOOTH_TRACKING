@@ -8,7 +8,7 @@
   "B8:D6:1A:6A:3D:0E": {
     "ssid": "Thuc Coffee",
     "password": "18006230",
-    "mqtt_server": "192.168.1.103:1883",
+    "mqtt_server": "broker.emqx.io:1883",
     "topic": "bluetooth/GW1/data"
   }
 }
