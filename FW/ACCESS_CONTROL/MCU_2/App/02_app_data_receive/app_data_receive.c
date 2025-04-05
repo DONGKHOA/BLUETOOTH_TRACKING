@@ -94,7 +94,7 @@ APP_DATA_RECEIVE_task (void *arg)
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
-        
+
       case DATA_SYNC_REQUEST_USER_DATA:
       case DATA_SYNC_ENROLL_FACE:
       case DATA_SYNC_REQUEST_AUTHENTICATION:

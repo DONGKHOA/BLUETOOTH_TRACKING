@@ -132,6 +132,7 @@ APP_MQTT_CLIENT_Task (void *arg)
     {
       if (is_init == 0)
       {
+        printf("1111111111111111111111111\r\n");
         is_init = 1;
         esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
       }

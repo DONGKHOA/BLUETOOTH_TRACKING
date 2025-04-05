@@ -73,7 +73,7 @@ app_main (void)
   // App Initialization
 
   // APP_FINGERPRINT_Init();
-  // APP_DATA_TRANSMIT_Init();
+  APP_DATA_TRANSMIT_Init();
   APP_HANDLE_WIFI_Init();
   // APP_TIMESTAMP_Init();
   // APP_RTC_Init();
@@ -82,7 +82,7 @@ app_main (void)
   // App Create Task
 
   // APP_FINGERPRINT_CreateTask();
-  // APP_DATA_TRANSMIT_CreateTask();
+  APP_DATA_TRANSMIT_CreateTask();
   APP_HANDLE_WIFI_CreateTask();
   // APP_TIMESTAMP_CreateTask();
   APP_MQTT_CLIENT_CreateTask();
@@ -148,7 +148,7 @@ APP_MAIN_InitI2C (void)
 static inline void
 APP_MAIN_InitDataSystem (void)
 {
-  s_data_system.s_send_data_queue = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_send_data_queue = xQueueCreate(64, sizeof(DATA_SYNC_t));
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_flag_time_event = xEventGroupCreate();
 }

@@ -59,8 +59,8 @@ APP_HANDLE_WIFI_Init (void)
   s_handle_wifi.p_ssid            = s_data_system.u8_ssid;
   s_handle_wifi.p_pass            = s_data_system.u8_pass;
 
-  memcpy(s_handle_wifi.p_ssid, "Thang", sizeof("Thang"));
-  memcpy(s_handle_wifi.p_pass, "17122003", sizeof("17122003"));
+  memcpy(s_handle_wifi.p_ssid, "Thuc Coffee", sizeof("Thuc Coffee"));
+  memcpy(s_handle_wifi.p_pass, "18006230", sizeof("18006230"));
 
   WIFI_StaInit();
 }
@@ -86,7 +86,7 @@ APP_HANDLE_WIFI_task (void *arg)
       s_data_sync.u8_data_length    = 1;
       s_data_sync.u8_data_stop      = DATA_STOP_FRAME;
       // Notify the state of connection to transmit task via queue
-      xQueueSend(*s_handle_wifi.p_send_data_queue, &s_data_sync, 0);
+      // xQueueSend(*s_handle_wifi.p_send_data_queue, &s_data_sync, 0);
 
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
