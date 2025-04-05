@@ -1,0 +1,13 @@
+Change Component Designator: OldDesignator=D6 NewDesignator=D7
+Added Component: Designator=D6(D_SMA)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.thegioiic.com/upload/documents/dc8a63b3eda4738bc390d9dc570a4e18.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "SS54 SMA Diode Shotky 5A 40V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/ss54-sma-diode-shotky-5a-40v"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=D6-2
+Change Net Name : Old Net Name=NetD6_A New Net Name=NetD7_A
+Added Pin To Net: NetName=NetD6_1 Pin=D6-1
+Added Pin To Net: NetName=NetD6_1 Pin=F1-1
+Added Pin To Net: NetName=NetD6_1 Pin=P1-1
+Added Net: Name=NetD6_1
+Added Member To Class: ClassName=Power_Supply Member=Component D6 SS54

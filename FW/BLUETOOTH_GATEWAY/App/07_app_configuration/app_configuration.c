@@ -318,8 +318,8 @@ APP_CONFIGURATION_ProcessData (
                 ->u8_data[sizeof("WIFI") + strlen((char *)u8_wifi) + 1 + i];
     }
     u8_pass[i] = '\0';
-
-    WIFI_StoreNVS(u8_wifi, u8_pass);
+    WIFI_SetSSID(u8_wifi, 1);
+    WIFI_SetPass(u8_pass, 1);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTSERVER",
