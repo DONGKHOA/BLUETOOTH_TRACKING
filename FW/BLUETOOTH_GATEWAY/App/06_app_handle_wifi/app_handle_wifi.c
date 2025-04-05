@@ -51,7 +51,7 @@ APP_HANDLE_WIFI_CreateTask (void)
 {
   xTaskCreate(APP_HANDLE_WIFI_Task,
               "wifi task",
-              1024 * 30,
+              1024 * 20,
               NULL,
               13,
               &s_handle_wifi_task);
@@ -74,14 +74,9 @@ APP_HANDLE_WIFI_Task (void *arg)
 
   if (num_wifi != 0)
   {
-    WIFI_Scan(s_ssid);
     WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1);
     WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
-    if (matchingWIFIScan(s_ssid, s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass)
-        != -1)
-    {
-      WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
-    }
+    WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
   }
   vTaskDelete(s_handle_wifi_task);
 }
