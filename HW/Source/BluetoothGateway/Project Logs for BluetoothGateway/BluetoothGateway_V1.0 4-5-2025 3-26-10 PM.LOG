@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=VCC Pin=D2-1
+Removed Pin From Net: NetName=GND Pin=D2-2
+Removed Member From Class: ClassName=Power_Supply Member=D6
+Change Component Designator: OldDesignator=D3 NewDesignator=D2
+Change Component Designator: OldDesignator=D4 NewDesignator=D3
+Change Component Designator: OldDesignator=D5 NewDesignator=D4
+Change Component Designator: OldDesignator=D6 NewDesignator=D5
+Change Component Designator: OldDesignator=D7 NewDesignator=D6
+Change Net Name : Old Net Name=NetD3_A New Net Name=NetD2_A
+Change Net Name : Old Net Name=NetD4_A New Net Name=NetD3_A
+Change Net Name : Old Net Name=NetD5_A New Net Name=NetD4_A
+Change Net Name : Old Net Name=NetD6_1 New Net Name=NetD5_1
+Change Net Name : Old Net Name=NetD7_A New Net Name=NetD6_A
