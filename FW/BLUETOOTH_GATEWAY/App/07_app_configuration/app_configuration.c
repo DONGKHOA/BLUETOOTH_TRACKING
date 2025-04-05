@@ -326,6 +326,9 @@ APP_CONFIGURATION_ProcessData (
                   sizeof("MQTTSERVER") - 1)
            == 0)
   {
+    printf("MQTTSERVER\n\r");
+    printf("%s\n\r",
+           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
     NVS_WriteString(
         MQTTSERVER_NVS,
         "MQTTSERVER_NVS",
@@ -336,6 +339,9 @@ APP_CONFIGURATION_ProcessData (
                   sizeof("MQTTTOPIC") - 1)
            == 0)
   {
+    printf("MQTTTOPIC\n\r");
+    printf("%s\n\r",
+           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
     NVS_WriteString(
         MQTTTOPIC_NVS,
         "MQTTTOPIC_NVS",
