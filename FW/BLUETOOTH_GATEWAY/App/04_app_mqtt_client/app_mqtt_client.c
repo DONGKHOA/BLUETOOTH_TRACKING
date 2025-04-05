@@ -88,6 +88,8 @@ APP_MQTT_CLIENT_Init (void)
 
   if (NVS_ReadString(MQTTSERVER_NVS, "MQTTSERVER_NVS", mqtt_server) == ESP_OK)
   {
+    memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
+    memcpy(mqtt_server, "mqtt://", 7);
     esp_mqtt_client_config_t mqtt_cfg = {
       .broker.address.uri = mqtt_server,
     };
