@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=NetD6_1 Pin=P1-1
+Removed Pin From Net: NetName=GND Pin=P1-2
+Removed Pin From Net: NetName=NetF1_2 Pin=SW1-1
+Added Pin To Net: NetName=GND Pin=P1-1
+Added Pin To Net: NetName=NetD6_1 Pin=P1-2
+Added Pin To Net: NetName=NetF1_2 Pin=SW1-3
+Added Member To Class: ClassName=Interface Member=Component C34 100nF/50V
+Added Member To Class: ClassName=Interface Member=Component R36 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R38 10K/1%/1_10W

@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=GND Pin=U2-4
+Added Pin To Net: NetName=3V3 Pin=U2-4
+Added Member To Class: ClassName=Power_Supply Member=Component D2 VCC
+Added Member To Class: ClassName=Power_Supply Member=Component D4 3V3
+Added Member To Class: ClassName=Power_Supply Member=Component D5 SS54
