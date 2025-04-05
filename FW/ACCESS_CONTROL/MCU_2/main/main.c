@@ -73,7 +73,7 @@ app_main (void)
   // App Initialization
 
   // APP_FINGERPRINT_Init();
-  // APP_DATA_TRANSMIT_Init();
+  APP_DATA_TRANSMIT_Init();
   APP_HANDLE_WIFI_Init();
   // APP_TIMESTAMP_Init();
   // APP_RTC_Init();
@@ -82,7 +82,7 @@ app_main (void)
   // App Create Task
 
   // APP_FINGERPRINT_CreateTask();
-  // APP_DATA_TRANSMIT_CreateTask();
+  APP_DATA_TRANSMIT_CreateTask();
   APP_HANDLE_WIFI_CreateTask();
   // APP_TIMESTAMP_CreateTask();
   APP_MQTT_CLIENT_CreateTask();

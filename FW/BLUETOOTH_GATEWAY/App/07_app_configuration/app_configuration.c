@@ -19,6 +19,8 @@
 #include "app_data.h"
 #include "app_configuration.h"
 
+#include "wifi_helper.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
@@ -256,7 +258,7 @@ void
 APP_CONFIGURATION_CreateTask (void)
 {
   xTaskCreate(
-      APP_CONFIGURATION_Task, "configuration task", 1024*5, NULL, 15, NULL);
+      APP_CONFIGURATION_Task, "configuration task", 1024 * 5, NULL, 14, NULL);
 }
 
 void
@@ -293,6 +295,31 @@ APP_CONFIGURATION_ProcessData (
       == 0)
   {
     printf("WIFI\n\r");
+
+    uint8_t u8_wifi[32];
+    uint8_t u8_pass[32];
+    uint8_t i;
+
+    for (i = 0; s_configuration_data_event->u8_data[sizeof("WIFI") + i] != '|';
+         i++)
+    {
+      u8_wifi[i] = s_configuration_data_event->u8_data[sizeof("WIFI") + i];
+    }
+
+    u8_wifi[i] = '\0';
+
+    for (i = 0; s_configuration_data_event
+                    ->u8_data[sizeof("WIFI") + strlen((char *)u8_wifi) + 1 + i]
+                != '\0';
+         i++)
+    {
+      u8_pass[i]
+          = s_configuration_data_event
+                ->u8_data[sizeof("WIFI") + strlen((char *)u8_wifi) + 1 + i];
+    }
+    u8_pass[i] = '\0';
+
+    WIFI_StoreNVS(u8_wifi, u8_pass);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTSERVER",
@@ -558,9 +585,6 @@ APP_CONFIGURATION_gatts_profile_a_event_handler (
                param->write.handle);
       if (!param->write.is_prep)
       {
-        // ESP_LOGI(TAG, "value len %d, value ", param->write.len);
-        // ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
-
         s_configuration_data_event.u8_len = param->write.len;
         memcpy(s_configuration_data_event.u8_data,
                param->write.value,
@@ -830,9 +854,6 @@ APP_CONFIGURATION_gatts_profile_b_event_handler (
                param->write.handle);
       if (!param->write.is_prep)
       {
-        // ESP_LOGI(TAG, "value len %d, value ", param->write.len);
-        // ESP_LOG_BUFFER_HEX(TAG, param->write.value, param->write.len);
-
         s_configuration_data_event.u8_len = param->write.len;
         memcpy(s_configuration_data_event.u8_data,
                param->write.value,

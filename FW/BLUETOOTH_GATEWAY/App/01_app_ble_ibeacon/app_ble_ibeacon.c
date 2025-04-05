@@ -115,7 +115,7 @@ void
 APP_BLE_IBEACON_CreateTask (void)
 {
   xTaskCreate(
-      APP_BLE_IBEACON_Task, "ble ibeacon task", 1024 * 20, NULL, 15, NULL);
+      APP_BLE_IBEACON_Task, "ble ibeacon task", 1024 * 20, NULL, 12, NULL);
 }
 
 void

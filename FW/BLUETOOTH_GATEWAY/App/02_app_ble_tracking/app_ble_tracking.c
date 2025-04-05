@@ -35,7 +35,7 @@ typedef struct ble_ibeacon_data
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_BLE_TRACKING_task(void *arg);
+static void APP_BLE_TRACKING_Task(void *arg);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -51,7 +51,7 @@ void
 APP_BLE_TRACKING_CreateTask (void)
 {
   xTaskCreate(
-      APP_BLE_TRACKING_task, "ble tracking task", 1024 * 2, NULL, 14, NULL);
+      APP_BLE_TRACKING_Task, "ble tracking task", 1024 * 2, NULL, 11, NULL);
 }
 
 void
@@ -69,7 +69,7 @@ APP_BLE_TRACKING_Init (void)
  *****************************************************************************/
 
 static void
-APP_BLE_TRACKING_task (void *arg)
+APP_BLE_TRACKING_Task (void *arg)
 {
   ibeacon_infor_tag_t  s_beacon_infor_tag;
   tracking_infor_tag_t tracking_infor_tag;

@@ -7,7 +7,7 @@
   },
   "B8:D6:1A:6A:3D:0E": {
     "ssid": "Tiger",
-    "password": "123",
+    "password": "thanhTRI1972",
     "mqtt_server": "192.168.1.211:1883",
     "topic": "Bluetooth/dataTopic/010123304"
   }

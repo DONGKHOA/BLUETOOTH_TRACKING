@@ -64,7 +64,7 @@ static bool               b_mqtt_client_connected = false; //
 void
 APP_MQTT_CLIENT_CreateTask (void)
 {
-  xTaskCreate(APP_MQTT_CLIENT_Task, "mqtt task", 1024 * 2, NULL, 12, NULL);
+  xTaskCreate(APP_MQTT_CLIENT_Task, "mqtt task", 1024 * 2, NULL, 10, NULL);
 }
 
 void
