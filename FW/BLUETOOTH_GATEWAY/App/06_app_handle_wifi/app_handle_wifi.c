@@ -32,7 +32,6 @@ typedef struct
  *****************************************************************************/
 
 static void   APP_HANDLE_WIFI_Task(void *arg);
-static int8_t matchingWIFIScan(char *data, uint8_t *ssid, uint8_t *pass);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -40,7 +39,6 @@ static int8_t matchingWIFIScan(char *data, uint8_t *ssid, uint8_t *pass);
 
 static handle_wifi_t s_handle_wifi;
 static TaskHandle_t  s_handle_wifi_task;
-static char          s_ssid[1024];
 
 /******************************************************************************
  *      PUBLIC FUNCTION
@@ -79,32 +77,4 @@ APP_HANDLE_WIFI_Task (void *arg)
     WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
   }
   vTaskDelete(s_handle_wifi_task);
-}
-
-static int8_t
-matchingWIFIScan (char *data, uint8_t *ssid, uint8_t *pass)
-{
-  char *arg_list[50];
-  char  buffer[1024];
-  memcpy(buffer, data, strlen((char *)data));
-  uint8_t arg_position = 0;
-
-  // cut string
-  char *temp_token = strtok(buffer, "\r");
-  while (temp_token != NULL)
-  {
-    arg_list[arg_position] = temp_token;
-    arg_position++;
-    temp_token = strtok(NULL, "\r");
-  }
-
-  // check matching ssid in NVS
-  for (uint8_t i = 0; i < arg_position; i++)
-  {
-    if (memcmp((uint8_t *)arg_list[i], ssid, strlen((char *)ssid) + 1) == 0)
-    {
-      return 1;
-    }
-  }
-  return -1;
 }
