@@ -31,7 +31,7 @@ typedef struct
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void   APP_HANDLE_WIFI_Task(void *arg);
+static void APP_HANDLE_WIFI_Task(void *arg);
 
 /******************************************************************************
  *    PRIVATE DATA
