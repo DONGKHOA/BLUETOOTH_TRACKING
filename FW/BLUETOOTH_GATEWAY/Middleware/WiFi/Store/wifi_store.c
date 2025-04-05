@@ -45,10 +45,10 @@ WIFI_ScanNVS (uint8_t *ssid, uint8_t *pass)
 
   for (i = 1; i <= num_wifi; i++)
   {
-    WIFI_ScanSSID(ssid_temp, i, 32);
+    WIFI_ScanSSID(ssid_temp, i);
     if (memcmp(ssid_temp, ssid, strlen((char *)ssid)) == 0)
     {
-      WIFI_ScanPass(pass, i, 32);
+      WIFI_ScanPass(pass, i);
       return i;
     }
   }
@@ -93,19 +93,19 @@ WIFI_SetNumSSID (uint8_t num)
 }
 
 esp_err_t
-WIFI_ScanSSID (uint8_t *ssid, uint8_t id, uint8_t len)
+WIFI_ScanSSID (uint8_t *ssid, uint8_t id)
 {
   char ssid_key[32];
   sprintf(ssid_key, "%d ssid", id);
-  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid, 32);
+  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid);
 }
 
 esp_err_t
-WIFI_ScanPass (uint8_t *pass, uint8_t id, uint8_t len)
+WIFI_ScanPass (uint8_t *pass, uint8_t id)
 {
   char pass_key[32];
   sprintf(pass_key, "%d pass", id);
-  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass, 32);
+  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass);
 }
 
 esp_err_t

@@ -23,8 +23,10 @@ extern "C"
 #define APP_CONFIGURATION_ENABLE  BIT2
 #define APP_CONFIGURATION_DISABLE BIT3
 
-  /*** GPIO peripheral
-   * *********************************************************/
+#define MQTTSERVER_NVS    "MQTTSERVER_NVS"
+#define MQTTTOPIC_NVS     "MQTTTOPIC_NVS"
+
+  /*** GPIO peripheral *******************************************************/
 
 #define BUTTON_USER_PIN GPIO_NUM_12
 #define LED_STATUS_PIN  GPIO_NUM_5

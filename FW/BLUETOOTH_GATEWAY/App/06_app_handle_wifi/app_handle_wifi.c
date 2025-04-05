@@ -76,8 +76,8 @@ APP_HANDLE_WIFI_Task (void *arg)
 
   if (num_wifi != 0)
   {
-    WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1, 32);
-    WIFI_ScanPass(s_handle_wifi.u8_pass, 1, 32);
+    WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1);
+    WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
     if (matchingWIFIScan(s_ssid, s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass)
         != -1)
     {
