@@ -49,11 +49,10 @@ static void mqtt_event_handler(void            *handler_args,
  *****************************************************************************/
 
 static mqtt_client_data_t s_mqtt_client_data;
-static char               command[32];
 static char               data[1024 * 10];
 static int                user_id[512];
 static char               user_name[512][32];
-static int                user_len;
+static uint16_t           user_len;
 static int                status;
 static int                user_id_delete;
 static char *p_topic_request_server  = "ACCESS_CONTROL/Server/Request";
@@ -185,6 +184,59 @@ APP_MQTT_CLIENT_task (void *arg)
           // Decode the user data from the server response
           DECODE_User_Data(data, user_id, user_name, &user_len);
 
+          // Send user len to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_NUMBER_OF_USER_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = (user_len >> 8) & 0xFF; // High Byte
+          s_DATA_SYNC.u8_data_packet[1] = user_len & 0xFF;        // Low Byte
+          s_DATA_SYNC.u8_data_length    = 2;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          if (xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0)
+              != pdTRUE)
+          {
+            ESP_LOGE(TAG, "Failed to send user len to queue");
+            break;
+          }
+
+          // Send detail of user data to the queue for transmission to MCU1
+          for (int i = 0; i < user_len; i++)
+          {
+            // Send ID packet
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
+            s_DATA_SYNC.u8_data_packet[0] = (uint8_t)user_id[i];
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+            xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
+            // Parse the username and send each part
+            char *token = strtok(user_name[i], " ");
+            while (token != NULL)
+            {
+
+              s_DATA_SYNC.u8_data_start = DATA_SYNC_DETAIL_OF_USER_DATA;
+              memcpy(s_DATA_SYNC.u8_data_packet, token, strlen(token));
+              s_DATA_SYNC.u8_data_length = strlen(token);
+              s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
+
+              xQueueSend(
+                  *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
+              token = strtok(NULL, " ");
+            }
+
+            // If this is not the last user, send \n\n separator
+            if (i < user_len - 1)
+            {
+              s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
+              s_DATA_SYNC.u8_data_packet[0] = '\n';
+              s_DATA_SYNC.u8_data_packet[1] = '\n';
+              s_DATA_SYNC.u8_data_length    = 2;
+              s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+              xQueueSend(
+                  *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+            }
+          }
+
           break;
 
         case AUTHENTICATE_CMD:
@@ -202,7 +254,7 @@ APP_MQTT_CLIENT_task (void *arg)
           {
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
           }
-          
+
           // Notify the status of response to transmit task via queue
           xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
@@ -271,14 +323,14 @@ APP_MQTT_CLIENT_task (void *arg)
         case DELETE_USER_DATA_CMD:
           DECODE_User_ID(data, &user_id_delete);
 
-          // // Send data to the queue for transmission to MCU1
-          // s_DATA_SYNC.u8_data_start  = ;
-          // s_DATA_SYNC.u8_data_packet[0] = user_id_delete;
-          // s_DATA_SYNC.u8_data_length = 1;
-          // s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
-          
-          // // Notify the status of response to transmit task via queue
-          // xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_DELETE_USER_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = user_id_delete;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 

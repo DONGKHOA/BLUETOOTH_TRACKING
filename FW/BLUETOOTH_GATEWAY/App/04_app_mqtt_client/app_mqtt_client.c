@@ -86,7 +86,7 @@ APP_MQTT_CLIENT_Init (void)
 
   char mqtt_server[64];
 
-  if (NVS_ReadString(MQTTSERVER_NVS, "MQTTSERVER_NVS", mqtt_server) == ESP_OK)
+  if (NVS_ReadString("MQTT", MQTTSERVER_NVS, mqtt_server) == ESP_OK)
   {
     memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
     memcpy(mqtt_server, "mqtt://", 7);
@@ -104,7 +104,7 @@ APP_MQTT_CLIENT_Init (void)
   }
 
   if (NVS_ReadString(
-          MQTTTOPIC_NVS, "MQTTTOPIC_NVS", s_mqtt_client_data.c_topic_pub)
+          "MQTT", MQTTTOPIC_NVS, s_mqtt_client_data.c_topic_pub)
       != ESP_OK)
   {
     strcpy(s_mqtt_client_data.c_topic_pub, TOPIC_DEFAULT);
@@ -132,6 +132,7 @@ APP_MQTT_CLIENT_Task (void *arg)
     {
       if (is_init == 0)
       {
+        printf("1111111111111111111111111\r\n");
         is_init = 1;
         esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
       }

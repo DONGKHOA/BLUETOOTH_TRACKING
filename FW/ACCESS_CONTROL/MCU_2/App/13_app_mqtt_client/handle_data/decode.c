@@ -51,10 +51,10 @@ DECODE_Command (char *json_string)
 }
 
 void
-DECODE_User_Data (char *json_str,
-                  int  *user_id,
-                  char  user_name[][32],
-                  int  *user_len)
+DECODE_User_Data (char     *json_str,
+                  int      *user_id,
+                  char      user_name[][32],
+                  uint16_t *user_len)
 {
   cJSON *root = cJSON_Parse(json_str);
 
@@ -72,7 +72,7 @@ DECODE_User_Data (char *json_str,
     cJSON_Delete(root);
     return;
   }
-  *user_len = user_len_item->valueint;
+  *user_len = (uint16_t)user_len_item->valueint;
 
   // Get "user_data" array
   cJSON *user_data = cJSON_GetObjectItemCaseSensitive(root, "user_data");

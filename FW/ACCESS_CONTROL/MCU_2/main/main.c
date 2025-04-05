@@ -148,7 +148,7 @@ APP_MAIN_InitI2C (void)
 static inline void
 APP_MAIN_InitDataSystem (void)
 {
-  s_data_system.s_send_data_queue = xQueueCreate(8, sizeof(DATA_SYNC_t));
+  s_data_system.s_send_data_queue = xQueueCreate(64, sizeof(DATA_SYNC_t));
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_flag_time_event = xEventGroupCreate();
 }

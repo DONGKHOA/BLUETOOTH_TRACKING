@@ -30,10 +30,10 @@ extern "C"
    ***************************************************************************/
 
   CommandType DECODE_Command(char *json_string);
-  void        DECODE_User_Data(char *json_str,
-                               int  *user_id,
-                               char  user_name[][32],
-                               int  *user_len);
+  void        DECODE_User_Data(char     *json_str,
+                               int      *user_id,
+                               char      user_name[][32],
+                               uint16_t *user_len);
   void        DECODE_Status(char *json_str, int *status);
   void        DECODE_User_ID(char *json_str, int *user_id);
 #ifdef __cplusplus

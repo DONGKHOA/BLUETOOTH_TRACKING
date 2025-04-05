@@ -332,8 +332,8 @@ APP_CONFIGURATION_ProcessData (
     printf("%s\n\r",
            (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
     NVS_WriteString(
+        "MQTT",
         MQTTSERVER_NVS,
-        "MQTTSERVER_NVS",
         (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
@@ -345,8 +345,8 @@ APP_CONFIGURATION_ProcessData (
     printf("%s\n\r",
            (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
     NVS_WriteString(
+        "MQTT",
         MQTTTOPIC_NVS,
-        "MQTTTOPIC_NVS",
         (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
   }
 }

@@ -94,14 +94,6 @@ APP_DATA_TRANSMIT_task (void *arg)
       p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_length;
       p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_stop;
 
-      // Debug print
-      ESP_LOGI(TAG, "p_text contents (len=%d):", index);
-      for (int i = 0; i < index; i++)
-      {
-        printf("%02X ", p_text[i]);
-      }
-      printf("\n");
-
       // Transmit over CAN
       DEV_CAN_SendMessage(CAN_ID,
                           CAN_EXTD,

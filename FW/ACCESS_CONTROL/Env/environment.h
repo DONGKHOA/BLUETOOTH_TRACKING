@@ -31,6 +31,7 @@ extern "C"
 #define DATA_SYNC_STATE_CONNECTION            (uint8_t)0x0B
 #define DATA_SYNC_REQUEST_ATTENDANCE          (uint8_t)0x0C
 #define DATA_SYNC_RESPONSE_ATTENDANCE         (uint8_t)0x0D
+#define DATA_SYNC_REQUEST_DELETE_USER_DATA    (uint8_t)0x0E
 
 // Data Stop Frame
 #define DATA_STOP_FRAME (uint8_t)0xFF
@@ -43,7 +44,7 @@ extern "C"
 #define DATA_SYNC_STATE_CONNECT     (uint8_t)0x00
 #define DATA_SYNC_STATE_NOT_CONNECT (uint8_t)0x01
 
-#define DATA_SYNC_DUMMY  (uint8_t)0x00
+#define DATA_SYNC_DUMMY (uint8_t)0x00
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS
