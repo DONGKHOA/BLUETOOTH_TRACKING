@@ -70,12 +70,11 @@ APP_HANDLE_WIFI_Init (void)
 static void
 APP_HANDLE_WIFI_Task (void *arg)
 {
-  WIFI_Scan(s_ssid);
-
   uint8_t num_wifi = WIFI_GetNumSSID();
 
   if (num_wifi != 0)
   {
+    WIFI_Scan(s_ssid);
     WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1);
     WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
     if (matchingWIFIScan(s_ssid, s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass)

@@ -23,13 +23,21 @@ extern "C"
 #define APP_CONFIGURATION_ENABLE  BIT2
 #define APP_CONFIGURATION_DISABLE BIT3
 
-#define MQTTSERVER_NVS    "MQTTSERVER_NVS"
-#define MQTTTOPIC_NVS     "MQTTTOPIC_NVS"
+#define MQTTSERVER_NVS "MQTTSERVER_NVS"
+#define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
 
   /*** GPIO peripheral *******************************************************/
 
 #define BUTTON_USER_PIN GPIO_NUM_12
 #define LED_STATUS_PIN  GPIO_NUM_5
+
+  /*** state system **********************************************************/
+
+#define STATUS_WIFI_CONNECTED    BIT0
+#define STATUS_WIFI_DISCONNECTED BIT1
+#define STATUS_MQTT_CONNECTED    BIT2
+#define STATUS_MQTT_DISCONNECTED BIT3
+#define STATUS_BLE_CONFIGURATION BIT4
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS

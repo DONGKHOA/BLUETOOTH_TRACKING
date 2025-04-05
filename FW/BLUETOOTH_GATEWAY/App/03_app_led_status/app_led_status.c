@@ -9,6 +9,8 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
+#define TAG "APP_STATUS_LED"
+
 /******************************************************************************
  *    PRIVATE TYPEDEFS
  *****************************************************************************/
@@ -18,19 +20,19 @@
  *****************************************************************************/
 
 /******************************************************************************
- *  PRIVATE PROTOTYPE FUNCTION
+ *    PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
 static void APP_STATUS_LED_Task(void *arg);
 
 /******************************************************************************
- *   PUBLIC FUNCTION
+ *    PUBLIC FUNCTION
  *****************************************************************************/
 
 void
 APP_STATUS_LED_CreateTask (void)
 {
-  xTaskCreate(APP_STATUS_LED_Task, "led status task", 1024, NULL, 5, NULL);
+  xTaskCreate(APP_STATUS_LED_Task, "led status", 1024, NULL, 9, NULL);
 }
 
 void
@@ -45,4 +47,8 @@ APP_STATUS_LED_Init (void)
 static void
 APP_STATUS_LED_Task (void *arg)
 {
+  while (1)
+  {
+    
+  }
 }
