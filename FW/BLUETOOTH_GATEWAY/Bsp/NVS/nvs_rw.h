@@ -22,10 +22,7 @@ extern "C"
                             const char *key,
                             const char *stringVal);
 
-  esp_err_t NVS_ReadString(const char *name,
-                           const char *key,
-                           char       *savedData,
-                           uint8_t     len);
+  esp_err_t NVS_ReadString(const char *name, const char *key, char *savedData);
 
 #ifdef __cplusplus
 }

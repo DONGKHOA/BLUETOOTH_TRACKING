@@ -28,10 +28,12 @@
  * function is returning `ESP_OK` if the initialization of the NVS (Non-Volatile
  * Storage) is successful.
  */
-esp_err_t NVS_Init(void)
-{ 
+esp_err_t
+NVS_Init (void)
+{
   esp_err_t retVal = nvs_flash_init();
-  if (retVal == ESP_ERR_NVS_NO_FREE_PAGES || retVal == ESP_ERR_NVS_NEW_VERSION_FOUND)
+  if (retVal == ESP_ERR_NVS_NO_FREE_PAGES
+      || retVal == ESP_ERR_NVS_NEW_VERSION_FOUND)
   {
     // NVS partition was truncated and needs to be erased
     // Retry nvs_flash_init
@@ -60,7 +62,8 @@ esp_err_t NVS_Init(void)
  * @return The function `NVS_WriteString` is returning an `esp_err_t` type,
  * which is the error code indicating the success or failure of the operation.
  */
-esp_err_t NVS_WriteString(const char *name, const char *key, const char *stringVal)
+esp_err_t
+NVS_WriteString (const char *name, const char *key, const char *stringVal)
 {
   nvs_handle_t nvsHandle;
   esp_err_t    retVal;
@@ -68,7 +71,10 @@ esp_err_t NVS_WriteString(const char *name, const char *key, const char *stringV
   retVal = nvs_open(name, NVS_READWRITE, &nvsHandle);
   if (retVal != ESP_OK)
   {
-    ESP_LOGE("NVS", "Error (%s) opening NVS handle for Write", esp_err_to_name(retVal));
+    ESP_LOGE(TAG,
+             "Error (%s) opening NVS handle for Write",
+             esp_err_to_name(retVal));
+    goto exit_write;
   }
   else
   {
@@ -76,20 +82,27 @@ esp_err_t NVS_WriteString(const char *name, const char *key, const char *stringV
     retVal = nvs_set_str(nvsHandle, key, stringVal);
     if (retVal != ESP_OK)
     {
-      ESP_LOGE("NVS", "Error (%s) Can not write/set value: %s",
-               esp_err_to_name(retVal), stringVal);
+      ESP_LOGE(TAG,
+               "Error (%s) Can not write/set value: %s",
+               esp_err_to_name(retVal),
+               stringVal);
+      goto exit_write;
     }
 
     retVal = nvs_commit(nvsHandle);
     if (retVal != ESP_OK)
     {
-      ESP_LOGE("NVS", "Error (%s) Can not commit - write", esp_err_to_name(retVal));
+      ESP_LOGE(
+          TAG, "Error (%s) Can not commit - write", esp_err_to_name(retVal));
+      goto exit_write;
     }
     else
     {
-      ESP_LOGI("NVS", "Write Commit Done!");
+      ESP_LOGI(TAG, "Write Commit Done!");
     }
   }
+
+exit_write:
 
   nvs_close(nvsHandle);
   return retVal;
@@ -111,25 +124,26 @@ esp_err_t NVS_WriteString(const char *name, const char *key, const char *stringV
  * is a pointer to a character array where the retrieved string data will be
  * stored. The function will read a string value associated with the provided
  * `key` from the Non-Volatile Storage (NVS) and store it in the
- * @param len The `len` parameter in the `NVS_ReadString` function represents
- * the length of the `savedData` buffer that is passed as an argument. This
- * parameter specifies the maximum number of characters that can be stored in
- * the `savedData` buffer when reading a string value from the Non-Volatile
  *
  * @return The function `NVS_ReadString` returns an `esp_err_t` value, which is
  * the error code indicating the success or failure of the operation.
  */
-esp_err_t NVS_ReadString(const char *name, const char *key, char *savedData, uint8_t len)
+esp_err_t
+NVS_ReadString (const char *name, const char *key, char *savedData)
 {
   nvs_handle_t nvsHandle;
   esp_err_t    retVal;
+  uint8_t      len;
 
-  ESP_LOGW("NVS", "Show Value-> name: %s, key: %s, len: %d", name, key, len);
+  ESP_LOGW(TAG, "Show Value-> name: %s, key: %s, len: %d", name, key, len);
 
   retVal = nvs_open(name, NVS_READWRITE, &nvsHandle);
   if (retVal != ESP_OK)
   {
-    ESP_LOGE("NVS", "Error (%s) opening NVS handle for Write", esp_err_to_name(retVal));
+    ESP_LOGE(TAG,
+             "Error (%s) opening NVS handle for Write",
+             esp_err_to_name(retVal));
+    goto exit_read;
   }
   else
   {
@@ -137,24 +151,34 @@ esp_err_t NVS_ReadString(const char *name, const char *key, char *savedData, uin
     retVal = nvs_get_str(nvsHandle, key, savedData, (size_t *)&len);
     if (retVal == ESP_OK)
     {
-      ESP_LOGW("NVS", "*****(%s) Can read/get value: %s", esp_err_to_name(retVal), savedData);
+      ESP_LOGW(TAG,
+               "*****(%s) Can read/get value: %s",
+               esp_err_to_name(retVal),
+               savedData);
     }
     else
     {
-      ESP_LOGE("NVS", "Error (%s) Can not read/get value: %s",
-               esp_err_to_name(retVal), savedData);
+      ESP_LOGE(TAG,
+               "Error (%s) Can not read/get value: %s",
+               esp_err_to_name(retVal),
+               savedData);
+      goto exit_read;
     }
 
     retVal = nvs_commit(nvsHandle);
     if (retVal != ESP_OK)
     {
-      ESP_LOGE("NVS", "Error (%s) Can not commit - read", esp_err_to_name(retVal));
+      ESP_LOGE(
+          TAG, "Error (%s) Can not commit - read", esp_err_to_name(retVal));
+      goto exit_read;
     }
     else
     {
-      ESP_LOGI("NVS", "Read Commit Done!");
+      ESP_LOGI(TAG, "Read Commit Done!");
     }
   }
+
+exit_read:
 
   nvs_close(nvsHandle);
   return retVal;

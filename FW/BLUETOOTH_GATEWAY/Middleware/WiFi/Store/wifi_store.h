@@ -48,8 +48,8 @@ extern "C"
 
   uint8_t   WIFI_GetNumSSID(void);
   void      WIFI_SetNumSSID(uint8_t num);
-  esp_err_t WIFI_ScanSSID(uint8_t *ssid, uint8_t id, uint8_t len);
-  esp_err_t WIFI_ScanPass(uint8_t *pass, uint8_t id, uint8_t len);
+  esp_err_t WIFI_ScanSSID(uint8_t *ssid, uint8_t id);
+  esp_err_t WIFI_ScanPass(uint8_t *pass, uint8_t id);
   esp_err_t WIFI_SetSSID(uint8_t *ssid, uint8_t id);
   esp_err_t WIFI_SetPass(uint8_t *pass, uint8_t id);
 

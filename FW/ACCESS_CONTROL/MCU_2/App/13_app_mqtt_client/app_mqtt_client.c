@@ -270,6 +270,22 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case DELETE_USER_DATA_CMD:
           DECODE_User_ID(data, &user_id_delete);
+
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ATTENDANCE;
+          s_DATA_SYNC.u8_data_length = 1;
+          s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
+          if (status == 1)
+          {
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+          }
+          else
+          {
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+          }
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
           break;
 
         default:

@@ -21,6 +21,8 @@
 
 #include "wifi_helper.h"
 
+#include "nvs_rw.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
@@ -294,8 +296,6 @@ APP_CONFIGURATION_ProcessData (
   if (memcmp(s_configuration_data_event->u8_data, "WIFI", sizeof("WIFI") - 1)
       == 0)
   {
-    printf("WIFI\n\r");
-
     uint8_t u8_wifi[32];
     uint8_t u8_pass[32];
     uint8_t i;
@@ -327,6 +327,10 @@ APP_CONFIGURATION_ProcessData (
            == 0)
   {
     printf("MQTTSERVER\n\r");
+    NVS_WriteString(
+        MQTTSERVER_NVS,
+        "MQTTSERVER_NVS",
+        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTTOPIC",
@@ -334,6 +338,10 @@ APP_CONFIGURATION_ProcessData (
            == 0)
   {
     printf("MQTTTOPIC\n\r");
+    NVS_WriteString(
+        MQTTTOPIC_NVS,
+        "MQTTTOPIC_NVS",
+        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
   }
 }
 

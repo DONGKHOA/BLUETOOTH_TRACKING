@@ -16,12 +16,15 @@
 
 #include "wifi_helper.h"
 
+#include "nvs_rw.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define TAG "APP_MQTT_CLIENT"
-#define URL "mqtt://broker.emqx.io"
+#define TAG           "APP_MQTT_CLIENT"
+#define URL_DEFAULT   "mqtt://broker.emqx.io"
+#define TOPIC_DEFAULT "01020304/data"
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -42,7 +45,6 @@ typedef struct mqtt_client_data
  *****************************************************************************/
 
 static void        APP_MQTT_CLIENT_Task(void *arg);
-static inline void APP_MQTT_CLIENT_GenerateTopic(char *mac);
 static inline void APP_MQTT_CLIENT_UpdateDataDev(
     tracking_infor_tag_t *p_tracking_infor_tag);
 static void mqtt_event_handler(void            *handler_args,
@@ -82,11 +84,29 @@ APP_MQTT_CLIENT_Init (void)
 
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_location_tag_queue;
 
-  esp_mqtt_client_config_t mqtt_cfg = {
-    .broker.address.uri = URL,
-  };
+  char mqtt_server[64];
 
-  s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  if (NVS_ReadString(MQTTSERVER_NVS, "MQTTSERVER_NVS", mqtt_server) == ESP_OK)
+  {
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = mqtt_server,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
+  else
+  {
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = URL_DEFAULT,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
+
+  if (NVS_ReadString(
+          MQTTSERVER_NVS, "MQTTTOPIC_NVS", s_mqtt_client_data.c_topic_pub)
+      != ESP_OK)
+  {
+    strcpy(s_mqtt_client_data.c_topic_pub, TOPIC_DEFAULT);
+  }
 
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
                                  MQTT_EVENT_ANY,
@@ -102,7 +122,7 @@ static void
 APP_MQTT_CLIENT_Task (void *arg)
 {
   tracking_infor_tag_t tracking_infor_tag;
-  uint8_t is_init = 0;
+  uint8_t              is_init = 0;
 
   while (1)
   {
@@ -113,31 +133,27 @@ APP_MQTT_CLIENT_Task (void *arg)
         is_init = 1;
         esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
       }
-      
     }
-    
-    if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
-                      &tracking_infor_tag,
-                      1000)
+
+    if (xQueueReceive(
+            *s_mqtt_client_data.p_data_mqtt_queue, &tracking_infor_tag, 1000)
         == pdPASS)
     {
-      
+
       if (!b_mqtt_client_connected)
       {
         continue;
       }
-      
+
       APP_MQTT_CLIENT_UpdateDataDev(&tracking_infor_tag);
       s_mqtt_client_data.u8_num_dev++;
-      
+
       char c_gateway_id[9];
 
       snprintf(c_gateway_id,
                sizeof(c_gateway_id),
                "%08" PRIx32,
                tracking_infor_tag.u32_gateway_ID);
-
-      APP_MQTT_CLIENT_GenerateTopic(c_gateway_id);
 
       char *generated_str
           = create_device_json(c_gateway_id,
@@ -169,16 +185,6 @@ APP_MQTT_CLIENT_Task (void *arg)
              sizeof(s_mqtt_client_data.c_data_pub));
     }
   }
-}
-
-static inline void
-APP_MQTT_CLIENT_GenerateTopic (char *mac)
-{
-  snprintf(s_mqtt_client_data.c_topic_pub,
-           sizeof(s_mqtt_client_data
-                      .c_topic_pub), // Automatically determine buffer size
-           "%s/data",
-           mac);
 }
 
 static inline void
