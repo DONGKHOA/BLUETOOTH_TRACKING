@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=3V3 Pin=R26-2
+Removed Pin From Net: NetName=3V3 Pin=R27-2
+Removed Member From Class: ClassName=UART_RS485 Member=R29
+Removed Member From Class: ClassName=Display Member=R32
+Removed Member From Class: ClassName=Interface Member=R34
+Added Pin To Net: NetName=3V3-FILTER Pin=R26-2
+Added Pin To Net: NetName=3V3-FILTER Pin=R27-2
+Added Member To Class: ClassName=Ethernet Member=Component R27 330/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R28 330/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R31 120R/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R32 10K/1%/1_10W
+Added Member To Class: ClassName=Display Member=Component R33 4.7K/1%/1_10W
+Added Member To Class: ClassName=Display Member=Component R34 4.7K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R36 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R38 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R40 1K/1%/1_10W

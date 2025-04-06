@@ -1,0 +1,77 @@
+Removed Pin From Net: NetName=GND Pin=D4-C
+Removed Pin From Net: NetName=GND Pin=D6-C
+Removed Pin From Net: NetName=3V3 Pin=R9-2
+Removed Member From Class: ClassName=Power_Supply Member=D5
+Removed Member From Class: ClassName=MCU Member=D6
+Removed Member From Class: ClassName=Power_Supply Member=R10
+Removed Member From Class: ClassName=MCU Member=R16
+Change Component Designator: OldDesignator=D5 NewDesignator=D4
+Change Component Designator: OldDesignator=R10 NewDesignator=R9
+Change Component Designator: OldDesignator=R11 NewDesignator=R10
+Change Component Designator: OldDesignator=R12 NewDesignator=R11
+Change Component Designator: OldDesignator=R13 NewDesignator=R12
+Change Component Designator: OldDesignator=R14 NewDesignator=R13
+Change Component Designator: OldDesignator=R15 NewDesignator=R14
+Change Component Designator: OldDesignator=R17 NewDesignator=R15
+Change Component Designator: OldDesignator=R18 NewDesignator=R16
+Change Component Designator: OldDesignator=R19 NewDesignator=R17
+Change Component Designator: OldDesignator=R20 NewDesignator=R18
+Change Component Designator: OldDesignator=R21 NewDesignator=R19
+Change Component Designator: OldDesignator=R22 NewDesignator=R20
+Change Component Designator: OldDesignator=R23 NewDesignator=R21
+Change Component Designator: OldDesignator=R24 NewDesignator=R22
+Change Component Designator: OldDesignator=R25 NewDesignator=R23
+Change Component Designator: OldDesignator=R26 NewDesignator=R24
+Change Component Designator: OldDesignator=R27 NewDesignator=R25
+Change Component Designator: OldDesignator=R28 NewDesignator=R26
+Change Component Designator: OldDesignator=R29 NewDesignator=R27
+Change Component Designator: OldDesignator=R30 NewDesignator=R28
+Change Component Designator: OldDesignator=R31 NewDesignator=R29
+Change Component Designator: OldDesignator=R32 NewDesignator=R30
+Change Component Designator: OldDesignator=R33 NewDesignator=R31
+Change Component Designator: OldDesignator=R34 NewDesignator=R32
+Change Component Designator: OldDesignator=R35 NewDesignator=R33
+Change Component Designator: OldDesignator=R36 NewDesignator=R34
+Change Component Designator: OldDesignator=R37 NewDesignator=R35
+Change Component Designator: OldDesignator=R38 NewDesignator=R36
+Added Component: Designator=D5(LTL42D1NMHDP1)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "B? Ch? Th? 2 LED Xanh lá-Ð? 3mm Ð? Nh?a Hàn PCB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/bo-chi-thi-2-led-xanh-la-do-3mm-de-nhua-han-pcb"; VariantName = "[No Variations]"
+Added Component: Designator=R37(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 1 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-1-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Component: Designator=R38(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 1 KOhm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-1-kohm-0603-1-"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=D5-1
+Added Pin To Net: NetName=GND Pin=D5-3
+Added Pin To Net: NetName=3V3 Pin=R37-1
+Change Net Name : Old Net Name=NetD5_1 New Net Name=NetD4_1
+Change Net Name : Old Net Name=NetR17_1 New Net Name=NetR15_1
+Change Net Name : Old Net Name=NetR18_1 New Net Name=NetR16_1
+Change Net Name : Old Net Name=NetR19_1 New Net Name=NetR17_1
+Change Net Name : Old Net Name=NetR20_1 New Net Name=NetR18_1
+Change Net Name : Old Net Name=NetR22_2 New Net Name=NetR20_2
+Change Net Name : Old Net Name=NetR23_2 New Net Name=NetR21_2
+Change Net Name : Old Net Name=NetR35_1 New Net Name=NetR33_1
+Added Pin To Net: NetName=IO2 Pin=R10-2
+Added Pin To Net: NetName=IO2 Pin=U3-24
+Added Net: Name=IO2
+Added Pin To Net: NetName=NetD5_2 Pin=D5-2
+Added Pin To Net: NetName=NetD5_2 Pin=R37-2
+Added Net: Name=NetD5_2
+Added Pin To Net: NetName=NetD5_4 Pin=D5-4
+Added Pin To Net: NetName=NetD5_4 Pin=R38-2
+Added Net: Name=NetD5_4
+Added Pin To Net: NetName=NetR38_1 Pin=R38-1
+Added Pin To Net: NetName=NetR38_1 Pin=U3-30
+Added Net: Name=NetR38_1
+Added Member To Class: ClassName=Interface Member=Component D5 LTL-42D1NMHDP1
+Added Member To Class: ClassName=Interface Member=Component R37 1K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R38 1K/1%/1_10W

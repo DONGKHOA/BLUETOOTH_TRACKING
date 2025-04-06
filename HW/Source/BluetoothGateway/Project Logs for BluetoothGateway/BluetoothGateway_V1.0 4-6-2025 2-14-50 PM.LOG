@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=LED2 Pin=J2-10
+Removed Pin From Net: NetName=3V3-FILTER Pin=R27-2
+Added Pin To Net: NetName=3V3-FILTER Pin=J2-9
+Added Pin To Net: NetName=LED2 Pin=R27-2
+Added Pin To Net: NetName=NetJ2_10 Pin=J2-10
+Added Pin To Net: NetName=NetJ2_10 Pin=R27-1
+Added Net: Name=NetJ2_10
