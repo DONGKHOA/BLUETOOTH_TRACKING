@@ -2,12 +2,12 @@ set (includes ".")
 
 set (sources "main.c")
 
-set (requires 00_app_security
+set (requires 16_app_security
               01_app_fingerprint
               02_app_data_receive 
               03_app_data_transmit 
               04_app_spi_gate_keeper
-              05_app_sd_card
+              05_app_local_database
               06_app_analog_output
               07_app_i2c_gate_keeper
               08_app_rtc
@@ -18,7 +18,8 @@ set (requires 00_app_security
               13_app_mqtt_client
               14_app_led_status
               15_app_timestamp
-              16_app_data
+              00_app_data
+              17_app_configuration
               driver
               SN65HVD230DR
               AS608

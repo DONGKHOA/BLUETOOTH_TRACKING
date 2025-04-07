@@ -4,11 +4,11 @@
 
 #include <string.h>
 
-#include "wifi_helper.h"
-
 #include "nvs_rw.h"
 #include "nvs.h"
 #include "nvs_flash.h"
+
+#include "wifi_helper.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -20,17 +20,6 @@
 #define NUM_WIFI_KEY "Num_ssid_key"
 #define SSID_NVS     "ssid_nvs"
 #define PASS_NVS     "pass_nvs"
-
-/******************************************************************************
- *  PRIVATE PROTOTYPE FUNCTION
- *****************************************************************************/
-
-static uint8_t   WIFI_GetNumSSID(void);
-static void      WIFI_SetNumSSID(uint8_t num);
-static esp_err_t WIFI_ScanSSID(uint8_t *ssid, uint8_t id, uint8_t len);
-static esp_err_t WIFI_ScanPass(uint8_t *pass, uint8_t id, uint8_t len);
-static esp_err_t WIFI_SetSSID(uint8_t *ssid, uint8_t id);
-static esp_err_t WIFI_SetPass(uint8_t *pass, uint8_t id);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -45,42 +34,38 @@ static uint8_t volatile num_wifi = 0;
 int8_t
 WIFI_ScanNVS (uint8_t *ssid, uint8_t *pass)
 {
-  int8_t i;
+  int8_t  i;
   uint8_t ssid_temp[32];
 
   num_wifi = WIFI_GetNumSSID();
   if (num_wifi == 0)
   {
-      return -1;
+    return -1;
   }
 
   for (i = 1; i <= num_wifi; i++)
   {
-      WIFI_ScanSSID(ssid_temp, i, 32);
-      if (memcmp(ssid_temp, ssid, strlen((char *)ssid)) == 0)
-      {
-          WIFI_ScanPass(pass, i, 32);
-          return i;
-      }
+    WIFI_ScanSSID(ssid_temp, i);
+    if (memcmp(ssid_temp, ssid, strlen((char *)ssid)) == 0)
+    {
+      WIFI_ScanPass(pass, i);
+      return i;
+    }
   }
   return -1;
 }
 
-void WIFI_StoreNVS(uint8_t *ssid, uint8_t *password)
+void
+WIFI_StoreNVS (uint8_t *ssid, uint8_t *password)
 {
-    num_wifi = WIFI_GetNumSSID();
-    num_wifi++;
-    WIFI_SetNumSSID(num_wifi);
-    WIFI_SetSSID(ssid, num_wifi);
-    WIFI_SetPass(password, num_wifi);
+  num_wifi = WIFI_GetNumSSID();
+  num_wifi++;
+  WIFI_SetNumSSID(num_wifi);
+  WIFI_SetSSID(ssid, num_wifi);
+  WIFI_SetPass(password, num_wifi);
 }
 
-
-/******************************************************************************
- *  PRIVATE FUNCTION
- *****************************************************************************/
-
-static uint8_t
+uint8_t
 WIFI_GetNumSSID (void)
 {
   uint8_t      num;
@@ -99,7 +84,7 @@ WIFI_GetNumSSID (void)
   }
 }
 
-static void
+void
 WIFI_SetNumSSID (uint8_t num)
 {
   nvs_handle_t nvsHandle;
@@ -107,23 +92,23 @@ WIFI_SetNumSSID (uint8_t num)
   nvs_set_u8(nvsHandle, NUM_WIFI_KEY, num);
 }
 
-static esp_err_t
-WIFI_ScanSSID (uint8_t *ssid, uint8_t id, uint8_t len)
+esp_err_t
+WIFI_ScanSSID (uint8_t *ssid, uint8_t id)
 {
   char ssid_key[32];
   sprintf(ssid_key, "%d ssid", id);
-  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid, 32);
+  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid);
 }
 
-static esp_err_t
-WIFI_ScanPass (uint8_t *pass, uint8_t id, uint8_t len)
+esp_err_t
+WIFI_ScanPass (uint8_t *pass, uint8_t id)
 {
   char pass_key[32];
   sprintf(pass_key, "%d pass", id);
-  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass, 32);
+  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass);
 }
 
-static esp_err_t
+esp_err_t
 WIFI_SetSSID (uint8_t *ssid, uint8_t id)
 {
   char ssid_key[32];
@@ -131,7 +116,7 @@ WIFI_SetSSID (uint8_t *ssid, uint8_t id)
   return NVS_WriteString(SSID_NVS, (const char *)ssid_key, (const char *)ssid);
 }
 
-static esp_err_t
+esp_err_t
 WIFI_SetPass (uint8_t *pass, uint8_t id)
 {
   char pass_key[32];

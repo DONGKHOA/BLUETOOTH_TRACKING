@@ -18,7 +18,6 @@ extern "C"
   typedef enum
   {
     USER_DATA_CMD,
-    AUTHENTICATE_CMD,
     ENROLL_FACE_CMD,
     ENROLL_FINGER_CMD,
     ATTENDANCE_CMD,

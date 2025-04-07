@@ -6,6 +6,7 @@
 #include "wifi_ap.h"
 #include "wifi_sta.h"
 #include "wifi_smart_config.h"
+#include "wifi_store.h"
 
 #ifdef __cplusplus
 extern "C"

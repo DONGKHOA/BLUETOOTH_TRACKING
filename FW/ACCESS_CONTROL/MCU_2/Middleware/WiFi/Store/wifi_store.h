@@ -5,6 +5,7 @@
  *      INCLUDES
  *****************************************************************************/
 
+#include "esp_err.h"
 #include <stdio.h>
 #include <stdint.h>
 
@@ -44,6 +45,13 @@ extern "C"
    * store a password for a Wi-Fi network.
    */
   void WIFI_StoreNVS(uint8_t *ssid, uint8_t *password);
+
+  uint8_t   WIFI_GetNumSSID(void);
+  void      WIFI_SetNumSSID(uint8_t num);
+  esp_err_t WIFI_ScanSSID(uint8_t *ssid, uint8_t id);
+  esp_err_t WIFI_ScanPass(uint8_t *pass, uint8_t id);
+  esp_err_t WIFI_SetSSID(uint8_t *ssid, uint8_t id);
+  esp_err_t WIFI_SetPass(uint8_t *pass, uint8_t id);
 
 #ifdef __cplusplus
 }

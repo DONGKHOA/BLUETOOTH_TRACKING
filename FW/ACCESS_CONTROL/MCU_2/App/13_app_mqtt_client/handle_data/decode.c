@@ -23,10 +23,6 @@ DECODE_Command (char *json_string)
     {
       return USER_DATA_CMD;
     }
-    if (strcmp(cmd_item->valuestring, "AUTHENTICATE") == 0)
-    {
-      return AUTHENTICATE_CMD;
-    }
     if (strcmp(cmd_item->valuestring, "ENROLL_FACE") == 0)
     {
       return ENROLL_FACE_CMD;
