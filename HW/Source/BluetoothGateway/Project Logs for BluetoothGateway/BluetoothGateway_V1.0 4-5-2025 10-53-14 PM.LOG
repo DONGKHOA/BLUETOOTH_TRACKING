@@ -1,0 +1,22 @@
+Removed Pin From Net: NetName=GND Pin=J2-8
+Removed Pin From Net: NetName=GND Pin=J2-15
+Removed Pin From Net: NetName=GND Pin=J2-16
+Removed Pin From Net: NetName=GND Pin=R27-2
+Removed Pin From Net: NetName=GND Pin=R28-1
+Removed Member From Class: ClassName=Ethernet Member=R30
+Removed Member From Class: ClassName=UART_RS485 Member=R32
+Removed Member From Class: ClassName=Display Member=R35
+Added Pin To Net: NetName=EGND Pin=J2-8
+Added Pin To Net: NetName=EGND Pin=J2-15
+Added Pin To Net: NetName=EGND Pin=J2-16
+Added Pin To Net: NetName=EGND Pin=R27-2
+Added Pin To Net: NetName=EGND Pin=R28-1
+Added Net: Name=EGND
+Added Member To Class: ClassName=Ethernet Member=Component R28 0R/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R29 10K/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R31 10K/1%/1_10W
+Added Member To Class: ClassName=Display Member=Component R33 4.7K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R34 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R36 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R37 10K/1%/1_10W
+Added Rule: Name=Schematic Supply Nets

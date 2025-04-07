@@ -1,0 +1,37 @@
+Removed Pin From Net: NetName=3V3 Pin=C28-2
+Removed Pin From Net: NetName=3V3 Pin=R27-2
+Removed Member From Class: ClassName=Ethernet Member=R34
+Removed Member From Class: ClassName=UART_RS485 Member=R34
+Removed Member From Class: ClassName=Display Member=R39
+Removed Member From Class: ClassName=Ethernet Member=R39
+Removed Member From Class: ClassName=UART_RS485 Member=R39
+Change Component Designator: OldDesignator=R28 NewDesignator=R27
+Change Component Designator: OldDesignator=R29 NewDesignator=R28
+Change Component Designator: OldDesignator=R30 NewDesignator=R29
+Change Component Designator: OldDesignator=R31 NewDesignator=R30
+Change Component Designator: OldDesignator=R32 NewDesignator=R31
+Change Component Designator: OldDesignator=R33 NewDesignator=R32
+Change Component Designator: OldDesignator=R34 NewDesignator=R33
+Change Component Designator: OldDesignator=R35 NewDesignator=R34
+Change Component Designator: OldDesignator=R36 NewDesignator=R35
+Change Component Designator: OldDesignator=R37 NewDesignator=R36
+Change Component Designator: OldDesignator=R38 NewDesignator=R37
+Change Component Designator: OldDesignator=R39 NewDesignator=R38
+Change Component Designator: OldDesignator=R40 NewDesignator=R39
+Change Component Designator: OldDesignator=R41 NewDesignator=R40
+Change Net Name : Old Net Name=NetR36_1 New Net Name=NetR35_1
+Change Net Name : Old Net Name=NetR41_1 New Net Name=NetR40_1
+Added Pin To Net: NetName=NetC28_2 Pin=C28-2
+Added Pin To Net: NetName=NetC28_2 Pin=J2-4
+Added Pin To Net: NetName=NetC28_2 Pin=J2-5
+Added Pin To Net: NetName=NetC28_2 Pin=R26-1
+Added Net: Name=NetC28_2
+Added Member To Class: ClassName=Ethernet Member=Component R26 0R/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R27 330/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R30 10K/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R31 120R/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R32 10K/1%/1_10W
+Added Member To Class: ClassName=Display Member=Component R34 4.7K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R35 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R36 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R37 10K/1%/1_10W

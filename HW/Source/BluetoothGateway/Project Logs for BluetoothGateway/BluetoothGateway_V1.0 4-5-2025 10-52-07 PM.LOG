@@ -1,0 +1,33 @@
+Removed Member From Class: ClassName=Interface Member=R31
+Change Component Designator: OldDesignator=R28 NewDesignator=R29
+Change Component Designator: OldDesignator=R29 NewDesignator=R30
+Change Component Designator: OldDesignator=R30 NewDesignator=R31
+Change Component Designator: OldDesignator=R31 NewDesignator=R32
+Change Component Designator: OldDesignator=R32 NewDesignator=R33
+Change Component Designator: OldDesignator=R33 NewDesignator=R34
+Change Component Designator: OldDesignator=R34 NewDesignator=R35
+Change Component Designator: OldDesignator=R35 NewDesignator=R36
+Change Component Designator: OldDesignator=R36 NewDesignator=R37
+Change Component Designator: OldDesignator=R37 NewDesignator=R38
+Change Component Designator: OldDesignator=R38 NewDesignator=R39
+Added Component: Designator=R28(Resistor_0603)
+Add component (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 0 Ohm 0603 1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-0-ohm-0603-1-"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=R28-1
+Added Pin To Net: NetName=GND Pin=R28-2
+Change Net Name : Old Net Name=NetR33_1 New Net Name=NetR34_1
+Change Net Name : Old Net Name=NetR38_1 New Net Name=NetR39_1
+Added Member To Class: ClassName=Power_Supply Member=Component D4 SS54
+Added Member To Class: ClassName=Interface Member=Component D5 LTL-42D1NMHDP1
+Added Member To Class: ClassName=Power_Supply Member=Component R9 10K/1%/1_10W
+Added Member To Class: ClassName=MCU Member=Component R10 10K/1%/1_10W
+Added Member To Class: ClassName=MCU Member=Component R12 10K/1%/1_10W
+Added Member To Class: ClassName=MCU Member=Component R14 10K/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R16 10K/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R26 330/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R28 0R/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R37 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R38 1K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R39 1K/1%/1_10W
