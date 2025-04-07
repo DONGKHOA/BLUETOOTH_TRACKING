@@ -58,3 +58,55 @@ def UserIDToEnroll(event_struct):
 def Update_UserIDToEnroll(event_struct):
     return
 
+
+def EVENT_Enroll(event_struct):
+    return
+
+
+def EVENT_Enroll_Button1(event_struct):
+    return
+
+
+def EVENT_Enroll_Button2(event_struct):
+    return
+
+
+def EVENT_Enroll_Button3(event_struct):
+    return
+
+
+def EVENT_Enroll_Button4(event_struct):
+    return
+
+
+def EVENT_Enroll_Button5(event_struct):
+    return
+
+
+def EVENT_Enroll_Button6(event_struct):
+    return
+
+
+def EVENT_Enroll_Button7(event_struct):
+    return
+
+
+def EVENT_Enroll_Button8(event_struct):
+    return
+
+
+def EVENT_Enroll_Button9(event_struct):
+    return
+
+
+def EVENT_Enroll_Button0(event_struct):
+    return
+
+
+def EVENT_Enroll_EnterButton(event_struct):
+    return
+
+
+def EVENT_Enroll_DelButton(event_struct):
+    return
+
