@@ -1,0 +1,25 @@
+Removed Pin From Net: NetName=EGND Pin=R30-2
+Removed Member From Class: ClassName=Ethernet Member=R35
+Removed Member From Class: ClassName=UART_RS485 Member=R35
+Removed Member From Class: ClassName=Display Member=R42
+Removed Member From Class: ClassName=Ethernet Member=R42
+Removed Member From Class: ClassName=UART_RS485 Member=R42
+Added Pin To Net: NetName=GND Pin=R30-2
+Added Member To Class: ClassName=Ethernet Member=Component R20 33/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R21 33/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R22 12.1K/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R23 10K/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R24 49.9R/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R25 49.9R/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R26 49.9R/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R28 0R/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R29 330/1%/1_10W
+Added Member To Class: ClassName=Ethernet Member=Component R31 0R/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R32 10K/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R33 120R/1%/1_10W
+Added Member To Class: ClassName=UART_RS485 Member=Component R34 10K/1%/1_10W
+Added Member To Class: ClassName=Display Member=Component R36 4.7K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R37 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R38 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R39 10K/1%/1_10W
+Added Member To Class: ClassName=Interface Member=Component R40 10K/1%/1_10W
