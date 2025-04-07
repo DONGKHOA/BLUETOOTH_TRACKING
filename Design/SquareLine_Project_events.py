@@ -110,3 +110,7 @@ def EVENT_Enroll_EnterButton(event_struct):
 def EVENT_Enroll_DelButton(event_struct):
     return
 
+
+def EVENT_Enroll_ReceiveID(event_struct):
+    return
+
