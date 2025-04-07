@@ -11,9 +11,20 @@ extern "C" {
 #endif
 
 void EVENT_Attendance_Before(lv_event_t * e);
-void EVENT_Data_List(lv_event_t * e);
 void EVENT_Attendance_After(lv_event_t * e);
-void UserIDToEnroll(lv_event_t * e);
+void EVENT_Enroll_ReceiveID(lv_event_t * e);
+void EVENT_Enroll_Button1(lv_event_t * e);
+void EVENT_Enroll_Button2(lv_event_t * e);
+void EVENT_Enroll_Button5(lv_event_t * e);
+void EVENT_Enroll_Button8(lv_event_t * e);
+void EVENT_Enroll_Button4(lv_event_t * e);
+void EVENT_Enroll_Button7(lv_event_t * e);
+void EVENT_Enroll_Button3(lv_event_t * e);
+void EVENT_Enroll_Button6(lv_event_t * e);
+void EVENT_Enroll_Button9(lv_event_t * e);
+void EVENT_Enroll_DelButton(lv_event_t * e);
+void EVENT_Enroll_EnterButton(lv_event_t * e);
+void EVENT_Enroll_Button0(lv_event_t * e);
 void EVENT_Enroll_After(lv_event_t * e);
 void EVENT_Enroll_Finger_Before(lv_event_t * e);
 void EVENT_Enroll_FaceID_Before(lv_event_t * e);

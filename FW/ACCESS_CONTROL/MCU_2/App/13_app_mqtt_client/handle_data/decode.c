@@ -9,7 +9,18 @@
 
 #include "handle_data.h"
 
-#define TAG "DECODE"
+#include "app_data.h"
+
+/******************************************************************************
+ *    PRIVATE DEFINES
+ *****************************************************************************/
+
+#define TAG          "DECODE"
+#define MAX_NAME_LEN 32
+
+/******************************************************************************
+ *   PUBLIC FUNCTION
+ *****************************************************************************/
 
 CommandType
 DECODE_Command (char *json_string)
@@ -49,7 +60,7 @@ DECODE_Command (char *json_string)
 void
 DECODE_User_Data (char     *json_str,
                   int      *user_id,
-                  char      user_name[][32],
+                  char    **user_name,
                   uint16_t *user_len)
 {
   cJSON *root = cJSON_Parse(json_str);
@@ -68,10 +79,17 @@ DECODE_User_Data (char     *json_str,
     cJSON_Delete(root);
     return;
   }
+
   *user_len = (uint16_t)user_len_item->valueint;
 
   // Get "user_data" array
   cJSON *user_data = cJSON_GetObjectItemCaseSensitive(root, "user_data");
+  if (!cJSON_IsArray(user_data))
+  {
+    ESP_LOGE(TAG, "user_data is missing or not an array");
+    cJSON_Delete(root);
+    return;
+  }
 
   for (int i = 0; i < *user_len; i++)
   {
@@ -95,9 +113,19 @@ DECODE_User_Data (char     *json_str,
       continue;
     }
 
+    // Copy user ID
     user_id[i] = id_item->valueint;
-    strncpy(user_name[i], name_item->valuestring, 31);
-    user_name[i][31] = '\0'; // Ensure null-termination
+
+    // Allocate memory and copy user name
+    user_name[i] = (char *)heap_caps_malloc(MAX_NAME_LEN, MALLOC_CAP_SPIRAM);
+    if (user_name[i] == NULL)
+    {
+      ESP_LOGE(TAG, "Memory allocation failed for user_name[%d]", i);
+      continue;
+    }
+
+    strncpy(user_name[i], name_item->valuestring, MAX_NAME_LEN - 1);
+    user_name[i][MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
   }
 
   cJSON_Delete(root);

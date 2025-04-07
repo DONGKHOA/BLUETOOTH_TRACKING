@@ -18,18 +18,22 @@ lv_obj_t * ui_HomeDay;
 lv_obj_t * ui_HomeDate;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 lv_obj_t * ui_ButtonHomeToMenu;
+lv_obj_t * ui_ImageWifi;
+lv_obj_t * ui_ImageBluetooth;
+lv_obj_t * ui_ImageSDCard;
+lv_obj_t * ui_ImageWifiDisconnect;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
 void ui_Menu_screen_init(void);
 lv_obj_t * ui_Menu;
-lv_obj_t * ui_Menu1;
-lv_obj_t * ui_POPUPMenuPanel1;
+lv_obj_t * ui_MenuText;
+lv_obj_t * ui_POPUPMenuPanel;
 void ui_event_AttendanceButton(lv_event_t * e);
 lv_obj_t * ui_AttendanceButton;
 lv_obj_t * ui_Label1;
-void ui_event_DataButton(lv_event_t * e);
-lv_obj_t * ui_DataButton;
+void ui_event_EnrollButton(lv_event_t * e);
+lv_obj_t * ui_EnrollButton;
 lv_obj_t * ui_Label2;
 lv_obj_t * ui_MenuTime;
 void ui_event_ButtonMenuToHome(lv_event_t * e);
@@ -42,50 +46,6 @@ void ui_event_Attendance(lv_event_t * e);
 lv_obj_t * ui_Attendance;
 // CUSTOM VARIABLES
 
-// SCREEN: ui_UserData
-void ui_UserData_screen_init(void);
-lv_obj_t * ui_UserData;
-lv_obj_t * ui_Panel4;
-void ui_event_UserID1(lv_event_t * e);
-lv_obj_t * ui_UserID1;
-lv_obj_t * ui_ID1;
-lv_obj_t * ui_Name1;
-void ui_event_UserID2(lv_event_t * e);
-lv_obj_t * ui_UserID2;
-lv_obj_t * ui_ID2;
-lv_obj_t * ui_Name2;
-void ui_event_UserID3(lv_event_t * e);
-lv_obj_t * ui_UserID3;
-lv_obj_t * ui_ID3;
-lv_obj_t * ui_Name3;
-void ui_event_UserID4(lv_event_t * e);
-lv_obj_t * ui_UserID4;
-lv_obj_t * ui_ID4;
-lv_obj_t * ui_Name4;
-void ui_event_UserID5(lv_event_t * e);
-lv_obj_t * ui_UserID5;
-lv_obj_t * ui_ID5;
-lv_obj_t * ui_Name5;
-void ui_event_UserID6(lv_event_t * e);
-lv_obj_t * ui_UserID6;
-lv_obj_t * ui_ID6;
-lv_obj_t * ui_Name6;
-void ui_event_UserID7(lv_event_t * e);
-lv_obj_t * ui_UserID7;
-lv_obj_t * ui_ID7;
-lv_obj_t * ui_Name7;
-void ui_event_UserID8(lv_event_t * e);
-lv_obj_t * ui_UserID8;
-lv_obj_t * ui_ID8;
-lv_obj_t * ui_Name8;
-lv_obj_t * ui_Panel5;
-lv_obj_t * ui_IDTextUserData;
-lv_obj_t * ui_NameTextUserData;
-void ui_event_ESCButton1(lv_event_t * e);
-lv_obj_t * ui_ESCButton1;
-lv_obj_t * ui_ESCText2;
-// CUSTOM VARIABLES
-
 // SCREEN: ui_Authenticate
 void ui_Authenticate_screen_init(void);
 lv_obj_t * ui_Authenticate;
@@ -93,8 +53,61 @@ lv_obj_t * ui_Authenticate;
 
 // SCREEN: ui_Enroll
 void ui_Enroll_screen_init(void);
-void ui_event_Enroll(lv_event_t * e);
 lv_obj_t * ui_Enroll;
+void ui_event_ESCEnrollButton(lv_event_t * e);
+lv_obj_t * ui_ESCEnrollButton;
+lv_obj_t * ui_ESCEnrollText;
+void ui_event_HomeEnrollButton(lv_event_t * e);
+lv_obj_t * ui_HomeEnrollButton;
+lv_obj_t * ui_HomeEnrollText;
+void ui_event_IDEnrollPane(lv_event_t * e);
+lv_obj_t * ui_IDEnrollPane;
+lv_obj_t * ui_NumberUserID;
+lv_obj_t * ui_EnrollText;
+lv_obj_t * ui_EnrollTime;
+lv_obj_t * ui_KeyboardPanel;
+void ui_event_Button1(lv_event_t * e);
+lv_obj_t * ui_Button1;
+lv_obj_t * ui_Number1;
+void ui_event_Button2(lv_event_t * e);
+lv_obj_t * ui_Button2;
+lv_obj_t * ui_Number2;
+void ui_event_Button5(lv_event_t * e);
+lv_obj_t * ui_Button5;
+lv_obj_t * ui_Number5;
+void ui_event_Button8(lv_event_t * e);
+lv_obj_t * ui_Button8;
+lv_obj_t * ui_Number8;
+void ui_event_Button4(lv_event_t * e);
+lv_obj_t * ui_Button4;
+lv_obj_t * ui_Number4;
+void ui_event_Button7(lv_event_t * e);
+lv_obj_t * ui_Button7;
+lv_obj_t * ui_Number7;
+void ui_event_Button3(lv_event_t * e);
+lv_obj_t * ui_Button3;
+lv_obj_t * ui_Number3;
+void ui_event_Button6(lv_event_t * e);
+lv_obj_t * ui_Button6;
+lv_obj_t * ui_Number6;
+void ui_event_Button9(lv_event_t * e);
+lv_obj_t * ui_Button9;
+lv_obj_t * ui_Number9;
+void ui_event_DelButton(lv_event_t * e);
+lv_obj_t * ui_DelButton;
+lv_obj_t * ui_Image2;
+void ui_event_EnterButton(lv_event_t * e);
+lv_obj_t * ui_EnterButton;
+lv_obj_t * ui_Image3;
+void ui_event_Button0(lv_event_t * e);
+lv_obj_t * ui_Button0;
+lv_obj_t * ui_Number0;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_UserInfo
+void ui_UserInfo_screen_init(void);
+void ui_event_UserInfo(lv_event_t * e);
+lv_obj_t * ui_UserInfo;
 lv_obj_t * ui_POPUPMenuPanel3;
 lv_obj_t * ui_IDTextEnroll;
 lv_obj_t * ui_NumberID;
@@ -111,8 +124,8 @@ lv_obj_t * ui_Label4;
 void ui_event_EnrollFaceIDButton(lv_event_t * e);
 lv_obj_t * ui_EnrollFaceIDButton;
 lv_obj_t * ui_Label5;
-lv_obj_t * ui_UserInfo;
-lv_obj_t * ui_EnrollTime;
+lv_obj_t * ui_UserInfoText;
+lv_obj_t * ui_UserInfoTime;
 void ui_event_ESCButton(lv_event_t * e);
 lv_obj_t * ui_ESCButton;
 lv_obj_t * ui_ESCText;
@@ -133,12 +146,14 @@ lv_obj_t * ui_FingerEnroll;
 lv_obj_t * ui_MenuTime2;
 lv_obj_t * ui_FP_Enroll;
 lv_obj_t * ui_POPUPMenuPanel4;
-void ui_event_ESCButton3(lv_event_t * e);
-lv_obj_t * ui_ESCButton3;
-lv_obj_t * ui_ESCText3;
 lv_obj_t * ui_IDTextEnroll3;
 lv_obj_t * ui_IDTextEnroll4;
 lv_obj_t * ui_IDTextEnroll5;
+lv_obj_t * ui_FingerStatus1;
+lv_obj_t * ui_FingerStatus2;
+void ui_event_ESCButton3(lv_event_t * e);
+lv_obj_t * ui_ESCButton3;
+lv_obj_t * ui_ESCText3;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -178,16 +193,13 @@ void ui_event_AttendanceButton(lv_event_t * e)
     }
 }
 
-void ui_event_DataButton(lv_event_t * e)
+void ui_event_EnrollButton(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Data_List(e);
+        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
     }
-    // if(event_code == LV_EVENT_CLICKED) {
-    //     _ui_screen_change(&ui_UserData, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_UserData_screen_init);
-    // }
 }
 
 void ui_event_ButtonMenuToHome(lv_event_t * e)
@@ -211,103 +223,7 @@ void ui_event_Attendance(lv_event_t * e)
     }
 }
 
-void ui_event_UserID1(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID2(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID3(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID4(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID5(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID6(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID7(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_UserID8(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
-    }
-    if(event_code == LV_EVENT_CLICKED) {
-        UserIDToEnroll(e);
-    }
-}
-
-void ui_event_ESCButton1(lv_event_t * e)
+void ui_event_ESCEnrollButton(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -316,13 +232,136 @@ void ui_event_ESCButton1(lv_event_t * e)
     }
 }
 
-void ui_event_Enroll(lv_event_t * e)
+void ui_event_HomeEnrollButton(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
     }
+}
+
+void ui_event_IDEnrollPane(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_ReceiveID(e);
+    }
+}
+
+void ui_event_Button1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button1(e);
+    }
+}
+
+void ui_event_Button2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button2(e);
+    }
+}
+
+void ui_event_Button5(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button5(e);
+    }
+}
+
+void ui_event_Button8(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button8(e);
+    }
+}
+
+void ui_event_Button4(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button4(e);
+    }
+}
+
+void ui_event_Button7(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button7(e);
+    }
+}
+
+void ui_event_Button3(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button3(e);
+    }
+}
+
+void ui_event_Button6(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button6(e);
+    }
+}
+
+void ui_event_Button9(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button9(e);
+    }
+}
+
+void ui_event_DelButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_DelButton(e);
+    }
+}
+
+void ui_event_EnterButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_EnterButton(e);
+    }
+}
+
+void ui_event_Button0(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Enroll_Button0(e);
+    }
+}
+
+void ui_event_UserInfo(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_Enroll_After(e);
     }
@@ -357,7 +396,7 @@ void ui_event_ESCButton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        // _ui_screen_change(&ui_UserData, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_UserData_screen_init);
+        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
     }
 }
 
@@ -375,7 +414,7 @@ void ui_event_FaceIDEnroll(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
+        _ui_screen_change(&ui_UserInfo, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_UserInfo_screen_init);
     }
 }
 
@@ -384,7 +423,7 @@ void ui_event_ESCButton3(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
+        _ui_screen_change(&ui_UserInfo, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_UserInfo_screen_init);
     }
 }
 
@@ -401,9 +440,9 @@ void ui_init(void)
     ui_Home_screen_init();
     ui_Menu_screen_init();
     ui_Attendance_screen_init();
-    ui_UserData_screen_init();
     ui_Authenticate_screen_init();
     ui_Enroll_screen_init();
+    ui_UserInfo_screen_init();
     ui_FaceIDEnroll_screen_init();
     ui_FingerEnroll_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);

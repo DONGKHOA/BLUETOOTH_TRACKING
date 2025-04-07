@@ -82,6 +82,46 @@ void ui_Home_screen_init(void)
     lv_obj_set_style_shadow_ofs_x(ui_ButtonHomeToMenu, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_ButtonHomeToMenu, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_ImageWifi = lv_img_create(ui_Home);
+    lv_img_set_src(ui_ImageWifi, &ui_img_1052123464);
+    lv_obj_set_width(ui_ImageWifi, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ImageWifi, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ImageWifi, -23);
+    lv_obj_set_y(ui_ImageWifi, -105);
+    lv_obj_set_align(ui_ImageWifi, LV_ALIGN_RIGHT_MID);
+    lv_obj_add_flag(ui_ImageWifi, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_ImageWifi, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ImageBluetooth = lv_img_create(ui_Home);
+    lv_img_set_src(ui_ImageBluetooth, &ui_img_694049672);
+    lv_obj_set_width(ui_ImageBluetooth, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ImageBluetooth, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ImageBluetooth, 99);
+    lv_obj_set_y(ui_ImageBluetooth, -105);
+    lv_obj_set_align(ui_ImageBluetooth, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_ImageBluetooth, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_ImageBluetooth, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ImageSDCard = lv_img_create(ui_Home);
+    lv_img_set_src(ui_ImageSDCard, &ui_img_988180266);
+    lv_obj_set_width(ui_ImageSDCard, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ImageSDCard, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ImageSDCard, 70);
+    lv_obj_set_y(ui_ImageSDCard, -105);
+    lv_obj_set_align(ui_ImageSDCard, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_ImageSDCard, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_ImageSDCard, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ImageWifiDisconnect = lv_img_create(ui_Home);
+    lv_img_set_src(ui_ImageWifiDisconnect, &ui_img_1985633929);
+    lv_obj_set_width(ui_ImageWifiDisconnect, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ImageWifiDisconnect, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ImageWifiDisconnect, 43);
+    lv_obj_set_y(ui_ImageWifiDisconnect, -105);
+    lv_obj_set_align(ui_ImageWifiDisconnect, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_ImageWifiDisconnect, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_ImageWifiDisconnect, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
     lv_obj_add_event_cb(ui_ButtonHomeToMenu, ui_event_ButtonHomeToMenu, LV_EVENT_ALL, NULL);
 
 }

@@ -28,18 +28,22 @@ extern lv_obj_t * ui_HomeDay;
 extern lv_obj_t * ui_HomeDate;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 extern lv_obj_t * ui_ButtonHomeToMenu;
+extern lv_obj_t * ui_ImageWifi;
+extern lv_obj_t * ui_ImageBluetooth;
+extern lv_obj_t * ui_ImageSDCard;
+extern lv_obj_t * ui_ImageWifiDisconnect;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
 void ui_Menu_screen_init(void);
 extern lv_obj_t * ui_Menu;
-extern lv_obj_t * ui_Menu1;
-extern lv_obj_t * ui_POPUPMenuPanel1;
+extern lv_obj_t * ui_MenuText;
+extern lv_obj_t * ui_POPUPMenuPanel;
 void ui_event_AttendanceButton(lv_event_t * e);
 extern lv_obj_t * ui_AttendanceButton;
 extern lv_obj_t * ui_Label1;
-void ui_event_DataButton(lv_event_t * e);
-extern lv_obj_t * ui_DataButton;
+void ui_event_EnrollButton(lv_event_t * e);
+extern lv_obj_t * ui_EnrollButton;
 extern lv_obj_t * ui_Label2;
 extern lv_obj_t * ui_MenuTime;
 void ui_event_ButtonMenuToHome(lv_event_t * e);
@@ -52,50 +56,6 @@ void ui_event_Attendance(lv_event_t * e);
 extern lv_obj_t * ui_Attendance;
 // CUSTOM VARIABLES
 
-// SCREEN: ui_UserData
-void ui_UserData_screen_init(void);
-extern lv_obj_t * ui_UserData;
-extern lv_obj_t * ui_Panel4;
-void ui_event_UserID1(lv_event_t * e);
-extern lv_obj_t * ui_UserID1;
-extern lv_obj_t * ui_ID1;
-extern lv_obj_t * ui_Name1;
-void ui_event_UserID2(lv_event_t * e);
-extern lv_obj_t * ui_UserID2;
-extern lv_obj_t * ui_ID2;
-extern lv_obj_t * ui_Name2;
-void ui_event_UserID3(lv_event_t * e);
-extern lv_obj_t * ui_UserID3;
-extern lv_obj_t * ui_ID3;
-extern lv_obj_t * ui_Name3;
-void ui_event_UserID4(lv_event_t * e);
-extern lv_obj_t * ui_UserID4;
-extern lv_obj_t * ui_ID4;
-extern lv_obj_t * ui_Name4;
-void ui_event_UserID5(lv_event_t * e);
-extern lv_obj_t * ui_UserID5;
-extern lv_obj_t * ui_ID5;
-extern lv_obj_t * ui_Name5;
-void ui_event_UserID6(lv_event_t * e);
-extern lv_obj_t * ui_UserID6;
-extern lv_obj_t * ui_ID6;
-extern lv_obj_t * ui_Name6;
-void ui_event_UserID7(lv_event_t * e);
-extern lv_obj_t * ui_UserID7;
-extern lv_obj_t * ui_ID7;
-extern lv_obj_t * ui_Name7;
-void ui_event_UserID8(lv_event_t * e);
-extern lv_obj_t * ui_UserID8;
-extern lv_obj_t * ui_ID8;
-extern lv_obj_t * ui_Name8;
-extern lv_obj_t * ui_Panel5;
-extern lv_obj_t * ui_IDTextUserData;
-extern lv_obj_t * ui_NameTextUserData;
-void ui_event_ESCButton1(lv_event_t * e);
-extern lv_obj_t * ui_ESCButton1;
-extern lv_obj_t * ui_ESCText2;
-// CUSTOM VARIABLES
-
 // SCREEN: ui_Authenticate
 void ui_Authenticate_screen_init(void);
 extern lv_obj_t * ui_Authenticate;
@@ -103,8 +63,61 @@ extern lv_obj_t * ui_Authenticate;
 
 // SCREEN: ui_Enroll
 void ui_Enroll_screen_init(void);
-void ui_event_Enroll(lv_event_t * e);
 extern lv_obj_t * ui_Enroll;
+void ui_event_ESCEnrollButton(lv_event_t * e);
+extern lv_obj_t * ui_ESCEnrollButton;
+extern lv_obj_t * ui_ESCEnrollText;
+void ui_event_HomeEnrollButton(lv_event_t * e);
+extern lv_obj_t * ui_HomeEnrollButton;
+extern lv_obj_t * ui_HomeEnrollText;
+void ui_event_IDEnrollPane(lv_event_t * e);
+extern lv_obj_t * ui_IDEnrollPane;
+extern lv_obj_t * ui_NumberUserID;
+extern lv_obj_t * ui_EnrollText;
+extern lv_obj_t * ui_EnrollTime;
+extern lv_obj_t * ui_KeyboardPanel;
+void ui_event_Button1(lv_event_t * e);
+extern lv_obj_t * ui_Button1;
+extern lv_obj_t * ui_Number1;
+void ui_event_Button2(lv_event_t * e);
+extern lv_obj_t * ui_Button2;
+extern lv_obj_t * ui_Number2;
+void ui_event_Button5(lv_event_t * e);
+extern lv_obj_t * ui_Button5;
+extern lv_obj_t * ui_Number5;
+void ui_event_Button8(lv_event_t * e);
+extern lv_obj_t * ui_Button8;
+extern lv_obj_t * ui_Number8;
+void ui_event_Button4(lv_event_t * e);
+extern lv_obj_t * ui_Button4;
+extern lv_obj_t * ui_Number4;
+void ui_event_Button7(lv_event_t * e);
+extern lv_obj_t * ui_Button7;
+extern lv_obj_t * ui_Number7;
+void ui_event_Button3(lv_event_t * e);
+extern lv_obj_t * ui_Button3;
+extern lv_obj_t * ui_Number3;
+void ui_event_Button6(lv_event_t * e);
+extern lv_obj_t * ui_Button6;
+extern lv_obj_t * ui_Number6;
+void ui_event_Button9(lv_event_t * e);
+extern lv_obj_t * ui_Button9;
+extern lv_obj_t * ui_Number9;
+void ui_event_DelButton(lv_event_t * e);
+extern lv_obj_t * ui_DelButton;
+extern lv_obj_t * ui_Image2;
+void ui_event_EnterButton(lv_event_t * e);
+extern lv_obj_t * ui_EnterButton;
+extern lv_obj_t * ui_Image3;
+void ui_event_Button0(lv_event_t * e);
+extern lv_obj_t * ui_Button0;
+extern lv_obj_t * ui_Number0;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_UserInfo
+void ui_UserInfo_screen_init(void);
+void ui_event_UserInfo(lv_event_t * e);
+extern lv_obj_t * ui_UserInfo;
 extern lv_obj_t * ui_POPUPMenuPanel3;
 extern lv_obj_t * ui_IDTextEnroll;
 extern lv_obj_t * ui_NumberID;
@@ -121,8 +134,8 @@ extern lv_obj_t * ui_Label4;
 void ui_event_EnrollFaceIDButton(lv_event_t * e);
 extern lv_obj_t * ui_EnrollFaceIDButton;
 extern lv_obj_t * ui_Label5;
-extern lv_obj_t * ui_UserInfo;
-extern lv_obj_t * ui_EnrollTime;
+extern lv_obj_t * ui_UserInfoText;
+extern lv_obj_t * ui_UserInfoTime;
 void ui_event_ESCButton(lv_event_t * e);
 extern lv_obj_t * ui_ESCButton;
 extern lv_obj_t * ui_ESCText;
@@ -143,12 +156,14 @@ extern lv_obj_t * ui_FingerEnroll;
 extern lv_obj_t * ui_MenuTime2;
 extern lv_obj_t * ui_FP_Enroll;
 extern lv_obj_t * ui_POPUPMenuPanel4;
-void ui_event_ESCButton3(lv_event_t * e);
-extern lv_obj_t * ui_ESCButton3;
-extern lv_obj_t * ui_ESCText3;
 extern lv_obj_t * ui_IDTextEnroll3;
 extern lv_obj_t * ui_IDTextEnroll4;
 extern lv_obj_t * ui_IDTextEnroll5;
+extern lv_obj_t * ui_FingerStatus1;
+extern lv_obj_t * ui_FingerStatus2;
+void ui_event_ESCButton3(lv_event_t * e);
+extern lv_obj_t * ui_ESCButton3;
+extern lv_obj_t * ui_ESCText3;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -157,7 +172,13 @@ extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_1101766569);    // assets/right-arrow.png
+LV_IMG_DECLARE(ui_img_1052123464);    // assets/wi-fi-resize.png
+LV_IMG_DECLARE(ui_img_694049672);    // assets/bluetooth-resize.png
+LV_IMG_DECLARE(ui_img_988180266);    // assets/sd-card-resize.png
+LV_IMG_DECLARE(ui_img_1985633929);    // assets/wi-fi-discon-resize.png
 LV_IMG_DECLARE(ui_img_388382192);    // assets/left-arrow.png
+LV_IMG_DECLARE(ui_img_1048813395);    // assets/x-icon-resize1.png
+LV_IMG_DECLARE(ui_img_1406808990);    // assets/tick-icon-resize1.png
 
 // UI INIT
 void ui_init(void);

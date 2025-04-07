@@ -19,9 +19,10 @@
 
 typedef struct
 {
-  QueueHandle_t *p_data_mqtt_queue;
-  QueueHandle_t *p_send_data_queue;
-  QueueHandle_t *p_data_local_database_queue;
+  QueueHandle_t     *p_data_mqtt_queue;
+  QueueHandle_t     *p_send_data_queue;
+  QueueHandle_t     *p_data_local_database_queue;
+  SemaphoreHandle_t *p_spi_mutex;
 } local_database_t;
 
 /******************************************************************************
@@ -53,6 +54,7 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_send_data_queue = &s_data_system.s_send_data_queue;
   s_local_database.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
+  s_local_database.p_spi_mutex = &s_data_system.s_spi_mutex;
 }
 
 /******************************************************************************
@@ -83,13 +85,48 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case LOCAL_DATABASE_RESPONSE_ENROLL_FACE:
 
+          // Update data local database
+
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ENROLL_FACE;
+
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
           break;
 
         case LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT:
 
+          // Update data local database
+
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
           break;
 
         case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
+
+          taskENTER_CRITICAL(&spi_mux);
+
+          // Update data local database
+
+          taskEXIT_CRITICAL(&spi_mux);
+
+          break;
+
+        case LOCAL_DATABASE_USER_DATA:
+
+          user_len = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                     | s_DATA_SYNC.u8_data_packet[1];
+
+          taskENTER_CRITICAL(&spi_mux);
+
+          // Update data local database
+
+          taskEXIT_CRITICAL(&spi_mux);
 
           break;
 

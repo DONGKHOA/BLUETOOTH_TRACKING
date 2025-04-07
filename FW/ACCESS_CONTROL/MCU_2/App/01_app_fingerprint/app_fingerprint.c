@@ -96,7 +96,7 @@ APP_FINGERPRINT_task (void *arg)
   {
     // Get fingerprint image with retry if error code is 0x02
     confirmation_code
-        = DEV_AS608_GenImg(UART_NUM, s_fingerprint_data.u8_default_address);
+        = DEV_AS608_GenImg(UART_FINGERPRINT_NUM, s_fingerprint_data.u8_default_address);
     if (confirmation_code == 0xFF)
     {
       printf("Error: Timeout\n");
@@ -105,14 +105,14 @@ APP_FINGERPRINT_task (void *arg)
     if (confirmation_code == 0x00)
     {
       confirmation_code
-          = DEV_AS608_Img2Tz(UART_NUM,
+          = DEV_AS608_Img2Tz(UART_FINGERPRINT_NUM,
                              s_fingerprint_data.u8_default_address,
                              (uint8_t *)&s_fingerprint_data.buffer1);
       if (confirmation_code == 0x00)
       {
         // Search in the database
         confirmation_code
-            = DEV_AS608_Search(UART_NUM,
+            = DEV_AS608_Search(UART_FINGERPRINT_NUM,
                                s_fingerprint_data.u8_default_address,
                                (uint8_t *)&s_fingerprint_data.buffer1,
                                s_fingerprint_data.u8_start_page,
