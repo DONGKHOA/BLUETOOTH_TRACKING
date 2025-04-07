@@ -12,6 +12,7 @@
 #include "sn65hvd230dr.h"
 
 #include "environment.h"
+#include "esp_log.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -19,7 +20,7 @@
 
 #define TAG "APP_DATA_TRANSMIT"
 
-#define CAN_ID   0x0A1
+#define CAN_ID   0x123
 #define CAN_EXTD 0
 #define CAN_RTR  0
 
@@ -56,7 +57,7 @@ void
 APP_DATA_TRANSMIT_CreateTask (void)
 {
   xTaskCreate(
-      APP_DATA_TRANSMIT_task, "data transmit task", 1024 * 2, NULL, 13, NULL);
+      APP_DATA_TRANSMIT_task, "data transmit task", 1024 * 5, NULL, 13, NULL);
 }
 void
 APP_DATA_TRANSMIT_Init (void)
@@ -80,18 +81,19 @@ APP_DATA_TRANSMIT_task (void *arg)
                       portMAX_DELAY)
         == pdTRUE)
     {
-      index     = 0;
-      p_text[0] = s_data_transmit_data.s_data_sync.u8_data_start;
-      for (uint16_t i = 1; i <= s_data_transmit_data.s_data_sync.u8_data_length;
+      index = 0;
+
+      p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_start;
+      for (uint16_t i = 0; i < s_data_transmit_data.s_data_sync.u8_data_length;
            i++)
       {
-        p_text[i] = s_data_transmit_data.s_data_sync.u8_data_packet[i];
-        index++;
+        p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_packet[i];
       }
 
-      p_text[index]     = s_data_transmit_data.s_data_sync.u8_data_length;
-      p_text[index + 1] = s_data_transmit_data.s_data_sync.u8_data_stop;
+      p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_length;
+      p_text[index++] = s_data_transmit_data.s_data_sync.u8_data_stop;
 
+      // Transmit over CAN
       DEV_CAN_SendMessage(CAN_ID,
                           CAN_EXTD,
                           CAN_RTR,

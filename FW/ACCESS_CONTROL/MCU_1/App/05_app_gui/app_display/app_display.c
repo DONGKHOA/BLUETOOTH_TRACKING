@@ -2,9 +2,9 @@
  *      INCLUDES
  ******************************************************************************/
 
- #include "freertos/FreeRTOS.h"
- #include "freertos/queue.h"
- #include "freertos/event_groups.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#include "freertos/event_groups.h"
 
 #include "ili9341.h"
 #include "xpt2046.h"
@@ -16,6 +16,8 @@
 #include "ui.h"
 #include "app_display.h"
 #include "app_data.h"
+
+#include "environment.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -50,7 +52,7 @@ void
 APP_DISPLAY_CreateTask (void)
 {
   // Create task
-  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 4, NULL, 5, NULL);
+  xTaskCreate(APP_DISPLAY_Task, "APP_DISPLAY_Task", 1024 * 10, NULL, 5, NULL);
 }
 
 void
@@ -61,12 +63,14 @@ APP_DISPLAY_Init (void)
 
   // Initialize display driver
   lvgl_driver_init();
-  lv_color_t *buf1 = heap_caps_malloc(sizeof(lv_color_t) * DISP_BUF_SIZE, MALLOC_CAP_DMA);
+  lv_color_t *buf1
+      = heap_caps_malloc(sizeof(lv_color_t) * DISP_BUF_SIZE, MALLOC_CAP_DMA);
 
-  if (buf1 == NULL) {
+  if (buf1 == NULL)
+  {
     ESP_LOGE(TAG, "Failed to allocate LVGL draw buffer!");
     return; // Or handle error gracefully
-}
+  }
 
   lv_disp_draw_buf_init(&draw_buf, buf1, NULL, DISP_BUF_SIZE);
 
@@ -124,7 +128,7 @@ APP_DISPLAY_Task (void *arg)
 {
   while (1)
   {
-    lv_timer_handler();            // Handle events and draw GUI
+    lv_timer_handler(); // Handle events and draw GUI
     vTaskDelay(pdMS_TO_TICKS(10)); // Yield CPU
   }
 }

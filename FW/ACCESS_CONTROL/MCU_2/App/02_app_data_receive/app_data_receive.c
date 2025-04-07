@@ -34,6 +34,7 @@
 typedef struct ble_ibeacon_data
 {
   QueueHandle_t *p_data_mqtt_queue;
+  QueueHandle_t *p_data_local_database_queue;
 } data_receive_data_t;
 
 /******************************************************************************
@@ -56,12 +57,14 @@ void
 APP_DATA_RECEIVE_CreateTask (void)
 {
   xTaskCreate(
-      APP_DATA_RECEIVE_task, "APP_DATA_RECEIVE_task", 1024 * 2, NULL, 5, NULL);
+      APP_DATA_RECEIVE_task, "APP_DATA_RECEIVE_task", 1024 * 4, NULL, 13, NULL);
 }
 void
 APP_DATA_RECEIVE_Init (void)
 {
   s_data_receive_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
+  s_data_receive_data.p_data_local_database_queue
+      = &s_data_system.s_data_local_database_queue;
 }
 
 /******************************************************************************
@@ -95,10 +98,27 @@ APP_DATA_RECEIVE_task (void *arg)
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
+        xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+        break;
+
       case DATA_SYNC_REQUEST_USER_DATA:
+
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
+
+        xQueueSend(
+            *s_data_receive_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+        break;
+
       case DATA_SYNC_ENROLL_FACE:
+        break;
       case DATA_SYNC_REQUEST_AUTHENTICATION:
+        break;
       case DATA_SYNC_REQUEST_ATTENDANCE:
+        break;
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
@@ -106,7 +126,6 @@ APP_DATA_RECEIVE_task (void *arg)
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
         xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
-
         break;
 
       default:

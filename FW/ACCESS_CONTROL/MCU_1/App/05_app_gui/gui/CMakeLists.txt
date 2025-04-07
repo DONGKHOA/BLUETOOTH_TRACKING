@@ -11,6 +11,7 @@ SET(SOURCES components/ui_comp_popupmenupanel.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c
-    images/ui_img_621954408.c)
+    images/ui_img_1101766569.c
+    images/ui_img_388382192.c)
 
 add_library(ui ${SOURCES})

@@ -134,6 +134,25 @@ EVENT_Enroll_After (lv_event_t *e)
                        ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
 }
 
+void
+EVENT_Enroll_Finger_Before (lv_event_t *e)
+{
+}
+
+void
+EVENT_Enroll_FaceID_Before (lv_event_t *e)
+{
+}
+void
+Update_UserIDToEnroll (lv_event_t *e)
+{
+}
+
+// void
+// UserIDToEnroll (lv_event_t *e)
+// {
+// }
+
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/

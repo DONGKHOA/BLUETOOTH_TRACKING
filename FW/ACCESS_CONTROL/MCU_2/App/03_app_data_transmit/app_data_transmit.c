@@ -21,7 +21,7 @@
 
 #define TAG "APP_DATA_TRANSMIT"
 
-#define CAN_ID   0x0A1
+#define CAN_ID   0x123
 #define CAN_EXTD 0
 #define CAN_RTR  0
 

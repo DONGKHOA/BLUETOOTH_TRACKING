@@ -860,7 +860,7 @@
               {
                 "nid": 10,
                 "strtype": "OBJECT/Name",
-                "strval": "Button2",
+                "strval": "ButtonHomeToMenu",
                 "InheritedType": 10
               },
               {
@@ -2713,7 +2713,7 @@
               {
                 "nid": 10,
                 "strtype": "OBJECT/Name",
-                "strval": "Button4",
+                "strval": "ButtonMenuToHome",
                 "InheritedType": 10
               },
               {
@@ -3967,7 +3967,7 @@
                           {
                             "nid": 1000580,
                             "strtype": "CALL FUNCTION/Function_name",
-                            "strval": "Update_UserIDToEnroll",
+                            "strval": "UserIDToEnroll",
                             "InheritedType": 10
                           },
                           {
@@ -5230,45 +5230,6 @@
                             "nid": 1000581,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "True",
-                            "InheritedType": 2
-                          }
-                        ],
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000582,
-                        "flags": 1048576,
-                        "strtype": "_event/action",
-                        "strval": "CALL FUNCTION",
-                        "childs": [
-                          {
-                            "nid": 1000583,
-                            "strtype": "CALL FUNCTION/Name",
-                            "strval": "CALL FUNCTION",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000584,
-                            "strtype": "CALL FUNCTION/Call",
-                            "strval": "<{Function_name}>( event_struct )",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000585,
-                            "strtype": "CALL FUNCTION/CallC",
-                            "strval": "<{Function_name}>( e );",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000586,
-                            "strtype": "CALL FUNCTION/Function_name",
-                            "strval": "",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000587,
-                            "strtype": "CALL FUNCTION/Dont_export_function",
-                            "strval": "False",
                             "InheritedType": 2
                           }
                         ],
@@ -7781,45 +7742,6 @@
                             "nid": 1000581,
                             "strtype": "CALL FUNCTION/Dont_export_function",
                             "strval": "True",
-                            "InheritedType": 2
-                          }
-                        ],
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000582,
-                        "flags": 1048576,
-                        "strtype": "_event/action",
-                        "strval": "CALL FUNCTION",
-                        "childs": [
-                          {
-                            "nid": 1000583,
-                            "strtype": "CALL FUNCTION/Name",
-                            "strval": "CALL FUNCTION",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000584,
-                            "strtype": "CALL FUNCTION/Call",
-                            "strval": "<{Function_name}>( event_struct )",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000585,
-                            "strtype": "CALL FUNCTION/CallC",
-                            "strval": "<{Function_name}>( e );",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000586,
-                            "strtype": "CALL FUNCTION/Function_name",
-                            "strval": "",
-                            "InheritedType": 10
-                          },
-                          {
-                            "nid": 1000587,
-                            "strtype": "CALL FUNCTION/Dont_export_function",
-                            "strval": "False",
                             "InheritedType": 2
                           }
                         ],
@@ -15418,7 +15340,7 @@
     "uiExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "projectExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 132,
+    "backup_cnt": 134,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",

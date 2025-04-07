@@ -34,7 +34,7 @@ static handle_rtc_t s_handle_rtc;
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_RTC_task(void *arg);
+static void APP_RTC_Task(void *arg);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -43,7 +43,7 @@ static void APP_RTC_task(void *arg);
 void
 APP_RTC_CreateTask (void)
 {
-  xTaskCreate(APP_RTC_task, "RTC task", 1024 * 4, NULL, 7, NULL);
+  xTaskCreate(APP_RTC_Task, "RTC task", 1024 * 4, NULL, 7, NULL);
 }
 
 void
@@ -61,6 +61,6 @@ APP_RTC_Init (void)
  *****************************************************************************/
 
 static void
-APP_RTC_task (void *arg)
+APP_RTC_Task (void *arg)
 {
 }

@@ -2,6 +2,11 @@
  *      INCLUDES
  *****************************************************************************/
 
+#include <string.h>
+#include <stdio.h>
+#include <inttypes.h>
+#include <stdbool.h>
+
 #include "app_mqtt_client.h"
 #include "app_data.h"
 #include "handle_data/handle_data.h"
@@ -11,14 +16,16 @@
 
 #include "environment.h"
 
+#include "wifi_helper.h"
+
+#include "nvs_rw.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define TAG "APP_MQTT_CLIENT"
-
-#define URL "mqtt://broker.emqx.io"
-
+#define TAG            "APP_MQTT_CLIENT"
+#define URL_DEFAULT    "mqtt://broker.emqx.io"
 #define MQTT_CONNECTED BIT0
 
 /******************************************************************************
@@ -29,8 +36,8 @@ typedef struct mqtt_client_data
 {
   QueueHandle_t           *p_data_mqtt_queue;
   QueueHandle_t           *p_send_data_queue;
+  QueueHandle_t           *p_data_local_database_queue;
   SemaphoreHandle_t        s_data_subscribe_sem;
-  EventGroupHandle_t       s_mqtt_event;
   esp_mqtt_client_handle_t s_MQTT_Client;
 } mqtt_client_data_t;
 
@@ -73,16 +80,31 @@ APP_MQTT_CLIENT_CreateTask (void)
 void
 APP_MQTT_CLIENT_Init (void)
 {
-  s_mqtt_client_data.p_data_mqtt_queue    = &s_data_system.s_data_mqtt_queue;
-  s_mqtt_client_data.p_send_data_queue    = &s_data_system.s_send_data_queue;
-  s_mqtt_client_data.s_mqtt_event         = xEventGroupCreate();
+  s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
+  s_mqtt_client_data.p_send_data_queue = &s_data_system.s_send_data_queue;
+  s_mqtt_client_data.p_data_local_database_queue
+      = &s_data_system.s_data_local_database_queue;
   s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
 
-  esp_mqtt_client_config_t mqtt_cfg = {
-    .broker.address.uri = URL,
-  };
+  char mqtt_server[64];
 
-  s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  if (NVS_ReadString("MQTT", MQTTSERVER_NVS, mqtt_server) == ESP_OK)
+  {
+    memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
+    memcpy(mqtt_server, "mqtt://", 7);
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = mqtt_server,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
+  else
+  {
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = URL_DEFAULT,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
+
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
                                  ESP_EVENT_ANY_ID,
                                  mqtt_event_handler,
@@ -97,17 +119,24 @@ APP_MQTT_CLIENT_Init (void)
 static void
 APP_MQTT_CLIENT_task (void *arg)
 {
-  EventBits_t bits;
   DATA_SYNC_t s_DATA_SYNC;
+  uint8_t     is_init = 0;
 
   while (1)
   {
-    bits = xEventGroupWaitBits(
-        s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED, pdFALSE, pdFALSE, 0);
-
-    if ((bits & MQTT_CONNECTED) == 0)
+    if (WIFI_state_connect() == CONNECT_OK)
     {
-      continue;
+      if (is_init == 0)
+      {
+        is_init = 1;
+        esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                "{\"command\" : \"USER_DATA\"}",
+                                0,
+                                1,
+                                0);
+      }
     }
 
     if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
@@ -117,23 +146,13 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
-        case DATA_SYNC_REQUEST_USER_DATA:
-
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  p_topic_request_server,
-                                  "{\"command\" : \"USER_DATA\"}",
-                                  0,
-                                  0,
-                                  0);
-
-          break;
         case DATA_SYNC_ENROLL_FACE:
 
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
                                   "{\"command\" : \"ENROLL_FACE\"}",
                                   0,
-                                  0,
+                                  1,
                                   0);
 
           break;
@@ -143,18 +162,7 @@ APP_MQTT_CLIENT_task (void *arg)
                                   p_topic_request_server,
                                   "{\"command\" : \"ENROLL_FINGERPRINT\"}",
                                   0,
-                                  0,
-                                  0);
-
-          break;
-
-        case DATA_SYNC_REQUEST_AUTHENTICATION:
-
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  p_topic_request_server,
-                                  "{\"command\" : \"AUTHENTICATION\"}",
-                                  0,
-                                  0,
+                                  1,
                                   0);
 
           break;
@@ -165,7 +173,7 @@ APP_MQTT_CLIENT_task (void *arg)
                                   p_topic_request_server,
                                   "{\"command\" : \"ATTENDANCE\"}",
                                   0,
-                                  0,
+                                  1,
                                   0);
 
           break;
@@ -185,13 +193,15 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_User_Data(data, user_id, user_name, &user_len);
 
           // Send user len to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_NUMBER_OF_USER_DATA;
+          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_NUMBER_OF_USER_DATA;
           s_DATA_SYNC.u8_data_packet[0] = (user_len >> 8) & 0xFF; // High Byte
           s_DATA_SYNC.u8_data_packet[1] = user_len & 0xFF;        // Low Byte
           s_DATA_SYNC.u8_data_length    = 2;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
-          if (xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0)
+          if (xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
+                         &s_DATA_SYNC,
+                         0)
               != pdTRUE)
           {
             ESP_LOGE(TAG, "Failed to send user len to queue");
@@ -202,61 +212,40 @@ APP_MQTT_CLIENT_task (void *arg)
           for (int i = 0; i < user_len; i++)
           {
             // Send ID packet
-            s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
+            s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
             s_DATA_SYNC.u8_data_packet[0] = (uint8_t)user_id[i];
             s_DATA_SYNC.u8_data_length    = 1;
             s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-            xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+            xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
+                       &s_DATA_SYNC,
+                       0);
 
             // Parse the username and send each part
             char *token = strtok(user_name[i], " ");
             while (token != NULL)
             {
 
-              s_DATA_SYNC.u8_data_start = DATA_SYNC_DETAIL_OF_USER_DATA;
+              s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
               memcpy(s_DATA_SYNC.u8_data_packet, token, strlen(token));
               s_DATA_SYNC.u8_data_length = strlen(token);
               s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
 
-              xQueueSend(
-                  *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+              xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
+                         &s_DATA_SYNC,
+                         0);
 
               token = strtok(NULL, " ");
             }
 
-            // If this is not the last user, send \n\n separator
-            if (i < user_len - 1)
-            {
-              s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
-              s_DATA_SYNC.u8_data_packet[0] = '\n';
-              s_DATA_SYNC.u8_data_packet[1] = '\n';
-              s_DATA_SYNC.u8_data_length    = 2;
-              s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-              xQueueSend(
-                  *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
-            }
+            s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
+            s_DATA_SYNC.u8_data_packet[0] = '\n';
+            s_DATA_SYNC.u8_data_packet[1] = '\n';
+            s_DATA_SYNC.u8_data_length    = 2;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+            xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
+                       &s_DATA_SYNC,
+                       0);
           }
-
-          break;
-
-        case AUTHENTICATE_CMD:
-          DECODE_Status(data, &status);
-
-          // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_AUTHENTICATION;
-          s_DATA_SYNC.u8_data_length = 1;
-          s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
-          if (status == 1)
-          {
-            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
-          }
-          else
-          {
-            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
-          }
-
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -264,7 +253,7 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ENROLL_FACE;
+          s_DATA_SYNC.u8_data_start  = LOCAL_DATABASE_RESPONSE_ENROLL_FACE;
           s_DATA_SYNC.u8_data_length = 1;
           s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
           if (status == 1)
@@ -275,8 +264,8 @@ APP_MQTT_CLIENT_task (void *arg)
           {
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
           }
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+          // Notify the status of response to local database task via queue
+          xQueueSend(*s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -284,7 +273,7 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+          s_DATA_SYNC.u8_data_start  = LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT;
           s_DATA_SYNC.u8_data_length = 1;
           s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
           if (status == 1)
@@ -295,8 +284,8 @@ APP_MQTT_CLIENT_task (void *arg)
           {
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
           }
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+          // Notify the status of response to local database task via queue
+          xQueueSend(*s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -324,13 +313,13 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_User_ID(data, &user_id_delete);
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_DELETE_USER_DATA;
+          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA;
           s_DATA_SYNC.u8_data_packet[0] = user_id_delete;
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+          // Notify the status of response to local database task via queue
+          xQueueSend(*s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -364,8 +353,6 @@ mqtt_event_handler (void            *handler_args,
       esp_mqtt_client_subscribe_single(
           s_mqtt_client_data.s_MQTT_Client, p_topic_request_client, 0);
 
-      xEventGroupSetBits(s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED);
-
       break;
     case MQTT_EVENT_SUBSCRIBED:
 
@@ -389,7 +376,6 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_DISCONNECTED:
 
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
-      xEventGroupClearBits(s_mqtt_client_data.s_mqtt_event, MQTT_CONNECTED);
 
       break;
     default:

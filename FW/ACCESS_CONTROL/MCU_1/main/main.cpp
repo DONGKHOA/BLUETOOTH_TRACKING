@@ -176,6 +176,7 @@ APP_MAIN_InitDataSystem (void)
       = xQueueCreate(2, sizeof(camera_capture_t));
   s_data_system.s_result_recognition_queue
       = xQueueCreate(2, sizeof(data_result_recognition_t));
-
+  s_data_system.s_receive_data_event_queue
+      = xQueueCreate(64, sizeof(DATA_SYNC_t));
   s_data_system.s_display_event = xEventGroupCreate();
 }

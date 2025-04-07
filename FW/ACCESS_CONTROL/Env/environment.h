@@ -23,8 +23,7 @@ extern "C"
 #define DATA_SYNC_RESPONSE_ENROLL_FACE        (uint8_t)0x03
 #define DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT (uint8_t)0x04
 #define DATA_SYNC_REQUEST_USER_DATA           (uint8_t)0x05
-#define DATA_SYNC_NUMBER_OF_USER_DATA         (uint8_t)0x06
-#define DATA_SYNC_DETAIL_OF_USER_DATA         (uint8_t)0x07
+#define DATA_SYNC_RESPONSE_USER_DATA          (uint8_t)0x06
 #define DATA_SYNC_REQUEST_AUTHENTICATION      (uint8_t)0x08
 #define DATA_SYNC_RESPONSE_AUTHENTICATION     (uint8_t)0x09
 #define DATA_SYNC_TIME                        (uint8_t)0x0A

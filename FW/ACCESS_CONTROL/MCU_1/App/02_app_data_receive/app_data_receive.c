@@ -20,7 +20,7 @@
 
 #define TAG "APP_DATA_RECEIVE"
 
-#define CAN_ID   0x0A1
+#define CAN_ID   0x123
 #define CAN_EXTD 0
 #define CAN_RTR  0
 
@@ -33,7 +33,7 @@
  */
 typedef struct
 {
-  QueueHandle_t *p_display_data_queue;
+  QueueHandle_t *p_receive_data_event_queue;
 } data_receive_data_t;
 
 /******************************************************************************
@@ -47,6 +47,7 @@ static void APP_DATA_RECEIVE_Task(void *arg);
  *****************************************************************************/
 
 static data_receive_data_t s_data_receive_data;
+static uint16_t            u16_user_len = 0;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -61,8 +62,8 @@ APP_DATA_RECEIVE_CreateTask (void)
 void
 APP_DATA_RECEIVE_Init (void)
 {
-  s_data_receive_data.p_display_data_queue
-      = &s_data_system.s_display_data_queue;
+  s_data_receive_data.p_receive_data_event_queue
+      = &s_data_system.s_receive_data_event_queue;
 }
 
 /******************************************************************************
@@ -91,32 +92,29 @@ APP_DATA_RECEIVE_Task (void *arg)
     {
       case DATA_SYNC_RESPONSE_ENROLL_FACE:
 
-      s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-      s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-      s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-      s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
-      xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
         break;
 
       case DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT:
 
-      s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-      s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-      s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-      s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
-      xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
         break;
 
       case DATA_SYNC_RESPONSE_AUTHENTICATION:
 
-      s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-      s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-      s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-      s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
-      xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
         break;
 
       case DATA_SYNC_STATE_CONNECTION:
@@ -126,7 +124,6 @@ APP_DATA_RECEIVE_Task (void *arg)
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
-        xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
         break;
 
       case DATA_SYNC_RESPONSE_ATTENDANCE:
@@ -136,29 +133,43 @@ APP_DATA_RECEIVE_Task (void *arg)
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
-        xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
         break;
 
-      case DATA_SYNC_NUMBER_OF_USER_DATA: 
+      case DATA_SYNC_NUMBER_OF_USER_DATA:
 
-      s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
-      s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-      s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
-      s_DATA_SYNC.u8_data_length    = s_receive_message.data[3];
-      s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
 
-      xQueueSend(*s_data_receive_data.p_display_data_queue, &s_DATA_SYNC, 0);
+        u16_user_len = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                       | s_DATA_SYNC.u8_data_packet[1];
 
-      break;
+        xQueueSend(
+            *s_data_receive_data.p_receive_data_event_queue, &s_DATA_SYNC, 0);
 
-      case DATA_SYNC_DETAIL_OF_USER_DATA: 
+        break;
 
-        for (int i = 0; i < s_receive_message.data_length_code; i++)
+      case DATA_SYNC_DETAIL_OF_USER_DATA:
+
+        memset(&s_DATA_SYNC, 0, sizeof(s_DATA_SYNC));
+
+        s_DATA_SYNC.u8_data_start = s_receive_message.data[0];
+
+        int payload_len = s_receive_message.data_length_code - 3;
+        for (int i = 0; i < payload_len; i++)
         {
-          ESP_LOGI("CAN", "Data byte %d = %X", i, s_receive_message.data[i]);
+          s_DATA_SYNC.u8_data_packet[i] = s_receive_message.data[i + 1];
         }
-        
-      break;
+
+        s_DATA_SYNC.u8_data_length = s_receive_message.data[payload_len + 1];
+        s_DATA_SYNC.u8_data_stop   = s_receive_message.data[payload_len + 2];
+
+        xQueueSend(
+            *s_data_receive_data.p_receive_data_event_queue, &s_DATA_SYNC, 0);
+
+        break;
 
       default:
         printf("Other state\r\n");
