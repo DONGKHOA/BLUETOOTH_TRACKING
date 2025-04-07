@@ -49,7 +49,7 @@ static char          s_ssid[1024];
 void
 APP_HANDLE_WIFI_CreateTask (void)
 {
-  xTaskCreate(APP_HANDLE_WIFI_task, "wifi task", 1024 * 10, NULL, 13, NULL);
+  xTaskCreate(APP_HANDLE_WIFI_task, "wifi task", 1024 * 10, NULL, 12, NULL);
 }
 
 void

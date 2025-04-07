@@ -11,38 +11,6 @@ void ui_Attendance_screen_init(void)
     lv_obj_add_state(ui_Attendance, LV_STATE_USER_1);       /// States
     lv_obj_clear_flag(ui_Attendance, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_POPUPMenuPanel3 = lv_obj_create(ui_Attendance);
-    lv_obj_set_width(ui_POPUPMenuPanel3, 280);
-    lv_obj_set_height(ui_POPUPMenuPanel3, 180);
-    lv_obj_set_align(ui_POPUPMenuPanel3, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_POPUPMenuPanel3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_shadow_color(ui_POPUPMenuPanel3, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_POPUPMenuPanel3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui_POPUPMenuPanel3, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_spread(ui_POPUPMenuPanel3, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_x(ui_POPUPMenuPanel3, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_y(ui_POPUPMenuPanel3, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_PopupSuccess = lv_label_create(ui_POPUPMenuPanel3);
-    lv_obj_set_width(ui_PopupSuccess, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_PopupSuccess, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_PopupSuccess, 0);
-    lv_obj_set_y(ui_PopupSuccess, -15);
-    lv_obj_set_align(ui_PopupSuccess, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_PopupSuccess, "Attendance Successfully");
-    lv_obj_set_style_text_color(ui_PopupSuccess, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_PopupSuccess, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_PopupSuccess, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_CheckinTime = lv_label_create(ui_POPUPMenuPanel3);
-    lv_obj_set_width(ui_CheckinTime, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_CheckinTime, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_CheckinTime, 0);
-    lv_obj_set_y(ui_CheckinTime, 15);
-    lv_obj_set_align(ui_CheckinTime, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_CheckinTime, "Time");
-
-    lv_obj_add_event_cb(ui_POPUPMenuPanel3, ui_event_POPUPMenuPanel3, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Attendance, ui_event_Attendance, LV_EVENT_ALL, NULL);
 
 }

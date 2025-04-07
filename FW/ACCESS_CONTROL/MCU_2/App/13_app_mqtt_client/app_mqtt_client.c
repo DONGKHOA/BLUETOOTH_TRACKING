@@ -118,7 +118,7 @@ APP_MQTT_CLIENT_task (void *arg)
       switch (s_DATA_SYNC.u8_data_start)
       {
         case DATA_SYNC_REQUEST_USER_DATA:
-
+          printf("Request user data\n");
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
                                   "{\"command\" : \"USER_DATA\"}",
@@ -224,17 +224,12 @@ APP_MQTT_CLIENT_task (void *arg)
               token = strtok(NULL, " ");
             }
 
-            // If this is not the last user, send \n\n separator
-            if (i < user_len - 1)
-            {
-              s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
-              s_DATA_SYNC.u8_data_packet[0] = '\n';
-              s_DATA_SYNC.u8_data_packet[1] = '\n';
-              s_DATA_SYNC.u8_data_length    = 2;
-              s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-              xQueueSend(
-                  *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
-            }
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_DETAIL_OF_USER_DATA;
+            s_DATA_SYNC.u8_data_packet[0] = '\n';
+            s_DATA_SYNC.u8_data_packet[1] = '\n';
+            s_DATA_SYNC.u8_data_length    = 2;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+            xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
           }
 
           break;

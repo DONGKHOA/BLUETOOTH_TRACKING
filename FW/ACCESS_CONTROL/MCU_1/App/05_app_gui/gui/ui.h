@@ -20,20 +20,18 @@ extern "C" {
 
 // SCREEN: ui_Home
 void ui_Home_screen_init(void);
-void ui_event_Home(lv_event_t * e);
 extern lv_obj_t * ui_Home;
 extern lv_obj_t * ui_HomeText;
 extern lv_obj_t * ui_POPUPHomePanel;
-extern lv_obj_t * ui_Time;
-extern lv_obj_t * ui_Day;
-extern lv_obj_t * ui_Date;
-void ui_event_Image6(lv_event_t * e);
-extern lv_obj_t * ui_Image6;
+extern lv_obj_t * ui_HomeTime;
+extern lv_obj_t * ui_HomeDay;
+extern lv_obj_t * ui_HomeDate;
+void ui_event_ButtonHomeToMenu(lv_event_t * e);
+extern lv_obj_t * ui_ButtonHomeToMenu;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
 void ui_Menu_screen_init(void);
-void ui_event_Menu(lv_event_t * e);
 extern lv_obj_t * ui_Menu;
 extern lv_obj_t * ui_Menu1;
 extern lv_obj_t * ui_POPUPMenuPanel1;
@@ -43,23 +41,59 @@ extern lv_obj_t * ui_Label1;
 void ui_event_DataButton(lv_event_t * e);
 extern lv_obj_t * ui_DataButton;
 extern lv_obj_t * ui_Label2;
-void ui_event_Image2(lv_event_t * e);
-extern lv_obj_t * ui_Image2;
+extern lv_obj_t * ui_MenuTime;
+void ui_event_ButtonMenuToHome(lv_event_t * e);
+extern lv_obj_t * ui_ButtonMenuToHome;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Attendance
 void ui_Attendance_screen_init(void);
 void ui_event_Attendance(lv_event_t * e);
 extern lv_obj_t * ui_Attendance;
-void ui_event_POPUPMenuPanel3(lv_event_t * e);
-extern lv_obj_t * ui_POPUPMenuPanel3;
-extern lv_obj_t * ui_PopupSuccess;
-extern lv_obj_t * ui_CheckinTime;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_UserData
 void ui_UserData_screen_init(void);
 extern lv_obj_t * ui_UserData;
+extern lv_obj_t * ui_Panel4;
+void ui_event_UserID1(lv_event_t * e);
+extern lv_obj_t * ui_UserID1;
+extern lv_obj_t * ui_ID1;
+extern lv_obj_t * ui_Name1;
+void ui_event_UserID2(lv_event_t * e);
+extern lv_obj_t * ui_UserID2;
+extern lv_obj_t * ui_ID2;
+extern lv_obj_t * ui_Name2;
+void ui_event_UserID3(lv_event_t * e);
+extern lv_obj_t * ui_UserID3;
+extern lv_obj_t * ui_ID3;
+extern lv_obj_t * ui_Name3;
+void ui_event_UserID4(lv_event_t * e);
+extern lv_obj_t * ui_UserID4;
+extern lv_obj_t * ui_ID4;
+extern lv_obj_t * ui_Name4;
+void ui_event_UserID5(lv_event_t * e);
+extern lv_obj_t * ui_UserID5;
+extern lv_obj_t * ui_ID5;
+extern lv_obj_t * ui_Name5;
+void ui_event_UserID6(lv_event_t * e);
+extern lv_obj_t * ui_UserID6;
+extern lv_obj_t * ui_ID6;
+extern lv_obj_t * ui_Name6;
+void ui_event_UserID7(lv_event_t * e);
+extern lv_obj_t * ui_UserID7;
+extern lv_obj_t * ui_ID7;
+extern lv_obj_t * ui_Name7;
+void ui_event_UserID8(lv_event_t * e);
+extern lv_obj_t * ui_UserID8;
+extern lv_obj_t * ui_ID8;
+extern lv_obj_t * ui_Name8;
+extern lv_obj_t * ui_Panel5;
+extern lv_obj_t * ui_IDTextUserData;
+extern lv_obj_t * ui_NameTextUserData;
+void ui_event_ESCButton1(lv_event_t * e);
+extern lv_obj_t * ui_ESCButton1;
+extern lv_obj_t * ui_ESCText2;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Authenticate
@@ -71,16 +105,50 @@ extern lv_obj_t * ui_Authenticate;
 void ui_Enroll_screen_init(void);
 void ui_event_Enroll(lv_event_t * e);
 extern lv_obj_t * ui_Enroll;
+extern lv_obj_t * ui_POPUPMenuPanel3;
+extern lv_obj_t * ui_IDTextEnroll;
+extern lv_obj_t * ui_NumberID;
+extern lv_obj_t * ui_IDTextEnroll2;
+extern lv_obj_t * ui_Panel1;
+extern lv_obj_t * ui_Panel3;
+extern lv_obj_t * ui_Finger;
+extern lv_obj_t * ui_FaceID;
+extern lv_obj_t * ui_FingerCheck;
+extern lv_obj_t * ui_FaceIDCheck;
+void ui_event_EnrollFingerButton(lv_event_t * e);
+extern lv_obj_t * ui_EnrollFingerButton;
+extern lv_obj_t * ui_Label4;
+void ui_event_EnrollFaceIDButton(lv_event_t * e);
+extern lv_obj_t * ui_EnrollFaceIDButton;
+extern lv_obj_t * ui_Label5;
+extern lv_obj_t * ui_UserInfo;
+extern lv_obj_t * ui_EnrollTime;
+void ui_event_ESCButton(lv_event_t * e);
+extern lv_obj_t * ui_ESCButton;
+extern lv_obj_t * ui_ESCText;
+void ui_event_HomeButton(lv_event_t * e);
+extern lv_obj_t * ui_HomeButton;
+extern lv_obj_t * ui_HomeText1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_FaceIDEnroll
 void ui_FaceIDEnroll_screen_init(void);
+void ui_event_FaceIDEnroll(lv_event_t * e);
 extern lv_obj_t * ui_FaceIDEnroll;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_FingerEnroll
 void ui_FingerEnroll_screen_init(void);
 extern lv_obj_t * ui_FingerEnroll;
+extern lv_obj_t * ui_MenuTime2;
+extern lv_obj_t * ui_FP_Enroll;
+extern lv_obj_t * ui_POPUPMenuPanel4;
+void ui_event_ESCButton3(lv_event_t * e);
+extern lv_obj_t * ui_ESCButton3;
+extern lv_obj_t * ui_ESCText3;
+extern lv_obj_t * ui_IDTextEnroll3;
+extern lv_obj_t * ui_IDTextEnroll4;
+extern lv_obj_t * ui_IDTextEnroll5;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -88,7 +156,8 @@ extern lv_obj_t * ui_FingerEnroll;
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
-LV_IMG_DECLARE(ui_img_621954408);    // assets/toppng.com-right-arrow-comments-slider-arrow-icons-554x980 (2).png
+LV_IMG_DECLARE(ui_img_1101766569);    // assets/right-arrow.png
+LV_IMG_DECLARE(ui_img_388382192);    // assets/left-arrow.png
 
 // UI INIT
 void ui_init(void);

@@ -10,4 +10,99 @@ void ui_FingerEnroll_screen_init(void)
     ui_FingerEnroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_FingerEnroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    ui_MenuTime2 = lv_label_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_MenuTime2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_MenuTime2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_MenuTime2, 23);
+    lv_obj_set_y(ui_MenuTime2, -105);
+    lv_obj_set_align(ui_MenuTime2, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_MenuTime2, "Time");
+    lv_obj_set_style_text_color(ui_MenuTime2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_MenuTime2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MenuTime2, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_FP_Enroll = lv_label_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_FP_Enroll, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_FP_Enroll, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_FP_Enroll, 0);
+    lv_obj_set_y(ui_FP_Enroll, -105);
+    lv_obj_set_align(ui_FP_Enroll, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_FP_Enroll, "FP Enroll");
+    lv_obj_set_style_text_color(ui_FP_Enroll, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_FP_Enroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_FP_Enroll, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_POPUPMenuPanel4 = lv_obj_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_POPUPMenuPanel4, 280);
+    lv_obj_set_height(ui_POPUPMenuPanel4, 180);
+    lv_obj_set_align(ui_POPUPMenuPanel4, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_POPUPMenuPanel4, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_shadow_color(ui_POPUPMenuPanel4, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_POPUPMenuPanel4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_POPUPMenuPanel4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_POPUPMenuPanel4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_POPUPMenuPanel4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_POPUPMenuPanel4, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ESCButton3 = lv_btn_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_ESCButton3, 50);
+    lv_obj_set_height(ui_ESCButton3, 20);
+    lv_obj_set_x(ui_ESCButton3, 23);
+    lv_obj_set_y(ui_ESCButton3, 106);
+    lv_obj_set_align(ui_ESCButton3, LV_ALIGN_LEFT_MID);
+    lv_obj_set_style_bg_color(ui_ESCButton3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ESCButton3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ESCButton3, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ESCButton3, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ESCText3 = lv_label_create(ui_ESCButton3);
+    lv_obj_set_width(ui_ESCText3, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ESCText3, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_ESCText3, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_ESCText3, "ESC");
+    lv_obj_set_style_text_color(ui_ESCText3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_ESCText3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ESCText3, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_IDTextEnroll3 = lv_label_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_IDTextEnroll3, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_IDTextEnroll3, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_IDTextEnroll3, 135);
+    lv_obj_set_y(ui_IDTextEnroll3, -30);
+    lv_obj_set_align(ui_IDTextEnroll3, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_IDTextEnroll3, "ID:");
+    lv_obj_set_style_text_color(ui_IDTextEnroll3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_IDTextEnroll3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDTextEnroll3, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_IDTextEnroll4 = lv_label_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_IDTextEnroll4, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_IDTextEnroll4, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_IDTextEnroll4, 170);
+    lv_obj_set_y(ui_IDTextEnroll4, -30);
+    lv_obj_set_align(ui_IDTextEnroll4, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_IDTextEnroll4, "1");
+    lv_obj_set_style_text_color(ui_IDTextEnroll4, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_IDTextEnroll4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDTextEnroll4, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_IDTextEnroll5 = lv_label_create(ui_FingerEnroll);
+    lv_obj_set_width(ui_IDTextEnroll5, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_IDTextEnroll5, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_IDTextEnroll5, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_IDTextEnroll5, "Please place your finger");
+    lv_obj_set_style_text_color(ui_IDTextEnroll5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_IDTextEnroll5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDTextEnroll5, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_ESCButton3, ui_event_ESCButton3, LV_EVENT_ALL, NULL);
+
 }
