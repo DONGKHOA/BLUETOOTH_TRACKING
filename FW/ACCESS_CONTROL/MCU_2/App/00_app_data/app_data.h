@@ -12,6 +12,8 @@
 #include "freertos/event_groups.h"
 #include "freertos/timers.h"
 #include "freertos/semphr.h"
+#include "freertos/task.h"
+#include "freertos/FreeRTOSConfig.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -27,6 +29,16 @@ extern "C"
 
 #define MQTTSERVER_NVS "MQTTSERVER_NVS"
 #define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
+
+#define TIME_SOURCE_SNTP_READY BIT0
+#define TIME_SOURCE_RTC_READY  BIT1
+
+#define LOCAL_DATABASE_USER_DATA                   0xFE
+#define LOCAL_DATABASE_RESPONSE_ENROLL_FACE        0xFD
+#define LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT 0xFC
+#define LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA   0xFB
+
+#define MAX_USER_DATA 10240 // Maximum user data size
 
   /*** CAN peripheral ********************************************************/
 
@@ -48,19 +60,39 @@ extern "C"
 #define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
 #define I2C_CLK_SPEED  100000
 
-#define TIME_SOURCE_SNTP_READY BIT0
-#define TIME_SOURCE_RTC_READY  BIT1
-
   /*** GPIO peripheral *******************************************************/
 
 #define BUTTON_USER_PIN GPIO_NUM_45
 #define LED_STATUS_PIN  GPIO_NUM_1
+#define DAC_RDY         GPIO_NUM_38
 
-#define LOCAL_DATABASE_NUMBER_OF_USER_DATA         0xFE
-#define LOCAL_DATABASE_DETAIL_OF_USER_DATA         0xFD
-#define LOCAL_DATABASE_RESPONSE_ENROLL_FACE        0xFC
-#define LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT 0xFB
-#define LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA   0xFA
+  /*** SPI2 peripheral *******************************************************/
+
+#define SPI3_MISO_PIN       GPIO_NUM_11
+#define SPI3_MOSI_PIN       GPIO_NUM_13
+#define SPI3_SCLK_PIN       GPIO_NUM_12
+#define SPI3_CS_SD_CARD_PIN GPIO_NUM_48
+#define SPI3_CS_DAC_PIN     GPIO_NUM_14
+
+#define SPI3_CLOCK_SPEED_HZ          SPI_CLOCK_400KHz
+#define SPI3_SPI_BUS_MAX_TRANSFER_SZ 0
+#define SPI3_DMA_CHANNEL             SPI_DMA_CH_AUTO
+#define SPI3_SPI_MODE                0
+#define SPI3_QUEUE_SIZE              1
+
+  /*** UART2 peripheral *******************************************************/
+
+#define UART_FINGERPRINT_TXD       GPIO_NUM_15
+#define UART_FINGERPRINT_RXD       GPIO_NUM_16
+#define UART_FINGERPRINT_NUM       UART_NUM_2
+#define UART_FINGERPRINT_BAUD_RATE 115200
+
+  /*** UART1 peripheral *******************************************************/
+
+#define UART_RS485_TXD       GPIO_NUM_17
+#define UART_RS485_RXD       GPIO_NUM_18
+#define UART_RS485_NUM       UART_NUM_1
+#define UART_RS485_BAUD_RATE 115200
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS
@@ -80,6 +112,8 @@ extern "C"
     QueueHandle_t      s_data_mqtt_queue;
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_data_local_database_queue;
+    SemaphoreHandle_t  s_spi_mutex;
+    SemaphoreHandle_t  s_i2c_mutex;
     EventGroupHandle_t s_flag_time_event;
     EventGroupHandle_t s_configuration_event;
   } DATA_System_t;
@@ -89,6 +123,11 @@ extern "C"
    ***************************************************************************/
 
   extern DATA_System_t s_data_system;
+
+  extern char       **user_name;
+  extern int         *user_id;
+  extern uint16_t     user_len;
+  extern portMUX_TYPE spi_mux;
 
 #ifdef __cplusplus
 }

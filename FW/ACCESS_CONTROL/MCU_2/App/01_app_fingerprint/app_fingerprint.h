@@ -11,12 +11,6 @@
 extern "C"
 {
 #endif
-/*** UART 2 peripheral *******************************************************/
-
-#define UART_TXD  GPIO_NUM_15
-#define UART_RXD  GPIO_NUM_17
-#define UART_NUM  UART_NUM_2
-#define BAUD_RATE 115200
 
   /****************************************************************************
    *   PUBLIC FUNCTION

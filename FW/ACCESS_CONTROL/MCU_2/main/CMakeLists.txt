@@ -6,10 +6,8 @@ set (requires 16_app_security
               01_app_fingerprint
               02_app_data_receive 
               03_app_data_transmit 
-              04_app_spi_gate_keeper
               05_app_local_database
               06_app_analog_output
-              07_app_i2c_gate_keeper
               08_app_rtc
               09_app_analog_input
               10_app_digital_in_out

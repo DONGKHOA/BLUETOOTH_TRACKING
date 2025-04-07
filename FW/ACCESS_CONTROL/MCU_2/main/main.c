@@ -40,6 +40,8 @@
 #define TAG             "APP_MAIN"
 #define LOADING_TIMEOUT 3000 // ms
 
+spi_device_handle_t spi_sdcard_handle;
+
 /******************************************************************************
  *   PRIVATE DATA
  *****************************************************************************/
@@ -52,6 +54,7 @@ static TimerHandle_t s_loading_timer;
 
 static inline void APP_MAIN_InitGPIO(void);
 static inline void APP_MAIN_InitCan(void);
+static inline void APP_MAIN_InitSPI(void);
 static inline void APP_MAIN_InitI2C(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitUart(void);
@@ -130,6 +133,10 @@ static inline void
 APP_MAIN_InitGPIO (void)
 {
   BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
+  BSP_gpioSetDirection(
+      SPI3_CS_SD_CARD_PIN, GPIO_MODE_OUTPUT, GPIO_PULLUP_ENABLE);
+  BSP_gpioSetDirection(SPI3_CS_DAC_PIN, GPIO_MODE_OUTPUT, GPIO_PULLUP_ENABLE);
+  BSP_gpioSetDirection(DAC_RDY, GPIO_MODE_INPUT, GPIO_NO_PULL);
   BSP_gpioSetDirection(BUTTON_USER_PIN, GPIO_MODE_INPUT, GPIO_PULLUP_ENABLE);
 }
 
@@ -160,14 +167,15 @@ APP_MAIN_InitNVS (void)
 static inline void
 APP_MAIN_InitUart (void)
 {
-  BSP_uartConfigIO(UART_NUM, UART_TXD, UART_RXD);
+  BSP_uartConfigIO(
+      UART_FINGERPRINT_NUM, UART_FINGERPRINT_TXD, UART_FINGERPRINT_RXD);
   BSP_uartConfigParity(UART_PARITY_DISABLE);
   BSP_uartConfigDataLen(UART_DATA_8_BITS);
   BSP_uartConfigStopBits(UART_STOP_BITS_1);
-  BSP_uartConfigBaudrate(BAUD_RATE);
+  BSP_uartConfigBaudrate(UART_FINGERPRINT_BAUD_RATE);
   BSP_uartConfigHWFlowCTRL(UART_HW_FLOWCTRL_DISABLE);
 
-  BSP_uartDriverInit(UART_NUM);
+  BSP_uartDriverInit(UART_FINGERPRINT_NUM);
 }
 
 static inline void
@@ -181,12 +189,32 @@ APP_MAIN_InitI2C (void)
 }
 
 static inline void
+APP_MAIN_InitSPI (void)
+{
+  BSP_spiConfigDefault();
+  BSP_spiConfigMode(SPI3_SPI_MODE);
+  BSP_spiConfigIO(SPI3_MISO_PIN, SPI3_MOSI_PIN, SPI3_SCLK_PIN);
+  BSP_spiMaxTransferSize(SPI3_SPI_BUS_MAX_TRANSFER_SZ);
+  BSP_spiClockSpeed(SPI3_CLOCK_SPEED_HZ);
+  BSP_spiTransactionQueueSize(SPI3_QUEUE_SIZE);
+
+  BSP_spiDMADriverInit(&spi_sdcard_handle, SPI3_HOST, SPI3_DMA_CHANNEL);
+}
+
+static inline void
 APP_MAIN_InitDataSystem (void)
 {
+  user_id
+      = (int *)heap_caps_malloc(MAX_USER_DATA * sizeof(int), MALLOC_CAP_SPIRAM);
+  user_name = (char **)heap_caps_malloc(MAX_USER_DATA * sizeof(uint8_t),
+                                        MALLOC_CAP_SPIRAM);
+
   s_data_system.s_send_data_queue = xQueueCreate(16, sizeof(DATA_SYNC_t));
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
+  s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_flag_time_event     = xEventGroupCreate();
   s_data_system.s_configuration_event = xEventGroupCreate();
 

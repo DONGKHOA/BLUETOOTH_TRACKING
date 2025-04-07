@@ -65,8 +65,8 @@ static spi_device_handle_t spi_xpt2046_handle;
  *****************************************************************************/
 
 static inline void APP_MAIN_InitGPIO(void);
-static inline void APP_MAIN_InitCan(void);
-static inline void APP_MAIN_InitSpi(void);
+static inline void APP_MAIN_InitCAN(void);
+static inline void APP_MAIN_InitSPI(void);
 static inline void APP_MAIN_InitDataSystem(void);
 
 /******************************************************************************
@@ -79,8 +79,8 @@ app_main (void)
   // BSP Initialization
 
   APP_MAIN_InitGPIO();
-  APP_MAIN_InitSpi();
-  APP_MAIN_InitCan();
+  APP_MAIN_InitSPI();
+  APP_MAIN_InitCAN();
 
   // Main Initialization data system
 
@@ -118,7 +118,7 @@ APP_MAIN_InitGPIO (void)
 }
 
 static inline void
-APP_MAIN_InitCan (void)
+APP_MAIN_InitCAN (void)
 {
   // Config parameter of CAN protocol
   BSP_canConfigDefault();
@@ -136,7 +136,7 @@ APP_MAIN_InitCan (void)
 }
 
 static inline void
-APP_MAIN_InitSpi (void)
+APP_MAIN_InitSPI (void)
 {
   BSP_spiConfigDefault();
   BSP_spiConfigMode(SPI2_SPI_MODE);
