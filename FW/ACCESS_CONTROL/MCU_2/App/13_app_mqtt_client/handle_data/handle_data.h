@@ -24,7 +24,7 @@ extern "C"
     DELETE_USER_DATA_CMD,
     SET_ROLE,
     DELETE_FINGER_USER,
-    DELETE_FACEID_USER
+    DELETE_FACEID_USER,
     UNKNOWN_CMD
   } CommandType;
   /****************************************************************************

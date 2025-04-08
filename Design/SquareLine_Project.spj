@@ -2931,7 +2931,7 @@
                           {
                             "nid": 1000774,
                             "strtype": "CALL FUNCTION/Function_name",
-                            "strval": "EVENT_Menu_To_Enroll",
+                            "strval": "EVENT_Menu_To_Authenticate",
                             "InheritedType": 10
                           },
                           {
@@ -2955,7 +2955,7 @@
                       {
                         "nid": 1000783,
                         "strtype": "_event/name",
-                        "strval": "MenuToEnroll",
+                        "strval": "MenuToAuthenticate",
                         "InheritedType": 10
                       },
                       {
@@ -2996,7 +2996,7 @@
                           {
                             "nid": 1000790,
                             "strtype": "CHANGE SCREEN/Screen_to",
-                            "strval": "GUID96881580-337714S629486",
+                            "strval": "GUID84210418-337716S782486",
                             "InheritedType": 9
                           },
                           {
@@ -4115,6 +4115,71 @@
             "strtype": "SCREEN/Style_scrollbar",
             "strval": "lv.PART.SCROLLBAR, Rectangle, Pad",
             "InheritedType": 11
+          },
+          {
+            "disabled": false,
+            "nid": 1000794,
+            "strtype": "_event/EventHandler",
+            "strval": "CLICKED",
+            "childs": [
+              {
+                "nid": 1000795,
+                "strtype": "_event/name",
+                "strval": "EVENTAuthenticate",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000796,
+                "strtype": "_event/condition_C",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000797,
+                "strtype": "_event/condition_P",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1000798,
+                "strtype": "_event/action",
+                "strval": "CALL FUNCTION",
+                "childs": [
+                  {
+                    "nid": 1000799,
+                    "strtype": "CALL FUNCTION/Name",
+                    "strval": "CALL FUNCTION",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000800,
+                    "strtype": "CALL FUNCTION/Call",
+                    "strval": "<{Function_name}>( event_struct )",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000801,
+                    "strtype": "CALL FUNCTION/CallC",
+                    "strval": "<{Function_name}>( e );",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000802,
+                    "strtype": "CALL FUNCTION/Function_name",
+                    "strval": "EVENT_Authenticate_To_Enroll",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000803,
+                    "strtype": "CALL FUNCTION/Dont_export_function",
+                    "strval": "True",
+                    "InheritedType": 2
+                  }
+                ],
+                "InheritedType": 10
+              }
+            ],
+            "InheritedType": 4
           }
         ],
         "saved_objtypeKey": "SCREEN"
@@ -16782,7 +16847,7 @@
     "uiExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "projectExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 160,
+    "backup_cnt": 185,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
@@ -16799,7 +16864,7 @@
     "drive_fatfs_path": "",
     "naming": "Name",
     "naming_force_lowercase": false,
-    "nidcnt": 1000794,
+    "nidcnt": 1000841,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }

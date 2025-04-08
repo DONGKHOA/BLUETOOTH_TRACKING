@@ -10,4 +10,6 @@ void ui_Authenticate_screen_init(void)
     ui_Authenticate = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Authenticate, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    lv_obj_add_event_cb(ui_Authenticate, ui_event_Authenticate, LV_EVENT_ALL, NULL);
+
 }

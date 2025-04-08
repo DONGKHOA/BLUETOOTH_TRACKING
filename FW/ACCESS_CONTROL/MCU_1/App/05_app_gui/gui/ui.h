@@ -58,6 +58,7 @@ extern lv_obj_t * ui_Attendance;
 
 // SCREEN: ui_Authenticate
 void ui_Authenticate_screen_init(void);
+void ui_event_Authenticate(lv_event_t * e);
 extern lv_obj_t * ui_Authenticate;
 // CUSTOM VARIABLES
 

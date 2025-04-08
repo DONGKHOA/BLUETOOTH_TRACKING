@@ -122,3 +122,23 @@ def EVENT_Menu_To_Authenticate(event_struct):
 def EVENT_Menu_To_Enroll(event_struct):
     return
 
+
+def EVENT_Authenticate_To_Enroll(event_struct):
+    return
+
+
+def EVENT_Authenticate_To_Enroll_Before(event_struct):
+    return
+
+
+def EVENT_Authenticate_To_Enroll_After(event_struct):
+    return
+
+
+def EVENT_Menu_To_Authenticate_After(event_struct):
+    return
+
+
+def EVENT_Menu_To_Authenticate_Before(event_struct):
+    return
+
