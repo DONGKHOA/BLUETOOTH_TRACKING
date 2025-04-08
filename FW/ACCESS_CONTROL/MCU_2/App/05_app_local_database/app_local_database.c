@@ -77,6 +77,33 @@ APP_LOCAL_DATABASE_Task (void *arg)
       {
         case DATA_SYNC_REQUEST_USER_DATA:
 
+        uint16_t u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8) | s_DATA_SYNC.u8_data_packet[1];
+        if (u16_id > user_len)
+        {
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          xQueueSend(
+              *s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+        }
+        else
+        {
+          uint8_t u8_state = 0;
+          if ((face[u16_id -  1] == 0) && (finger[u16_id -  1] == 0)) u8_state = 1;
+          if ((face[u16_id -  1] == 1) && (finger[u16_id -  1] == 1)) u8_state = 2;
+          if ((face[u16_id -  1] == 0) && (finger[u16_id -  1] == 0)) u8_state = 3;
+          if ((face[u16_id -  1] == 1) && (finger[u16_id -  1] == 1)) u8_state = 4;
+
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = u8_state;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          xQueueSend(
+              *s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+        }
+
+        
           break;
 
         case DATA_SYNC_REQUEST_AUTHENTICATION:
