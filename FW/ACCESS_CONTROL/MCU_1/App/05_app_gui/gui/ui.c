@@ -48,6 +48,7 @@ lv_obj_t * ui_Attendance;
 
 // SCREEN: ui_Authenticate
 void ui_Authenticate_screen_init(void);
+void ui_event_Authenticate(lv_event_t * e);
 lv_obj_t * ui_Authenticate;
 // CUSTOM VARIABLES
 
@@ -197,10 +198,10 @@ void ui_event_EnrollButton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Menu_To_Enroll(e);
+        EVENT_Menu_To_Authenticate(e);
     }
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
+        _ui_screen_change(&ui_Authenticate, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Authenticate_screen_init);
     }
 }
 
@@ -222,6 +223,15 @@ void ui_event_Attendance(lv_event_t * e)
     }
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
+    }
+}
+
+void ui_event_Authenticate(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Authenticate_To_Enroll(e);
     }
 }
 

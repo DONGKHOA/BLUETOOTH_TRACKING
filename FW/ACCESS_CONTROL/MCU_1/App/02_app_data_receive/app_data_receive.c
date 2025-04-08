@@ -47,7 +47,6 @@ static void APP_DATA_RECEIVE_Task(void *arg);
  *****************************************************************************/
 
 static data_receive_data_t s_data_receive_data;
-static uint16_t            u16_user_len = 0;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -115,6 +114,11 @@ APP_DATA_RECEIVE_Task (void *arg)
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
 
+        printf("Authentication response: %d\r\n", s_DATA_SYNC.u8_data_packet[0]);
+
+        xQueueSend(
+            *s_data_receive_data.p_receive_data_event_queue, &s_DATA_SYNC, 0);
+
         break;
 
       case DATA_SYNC_STATE_CONNECTION:
@@ -137,7 +141,6 @@ APP_DATA_RECEIVE_Task (void *arg)
 
       case DATA_SYNC_RESPONSE_USER_DATA:
 
-        printf("User data response\r\n");
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];

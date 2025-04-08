@@ -105,7 +105,7 @@ DEV_ILI9341_Init (ili9341_handle_t *p_ili9341_handle)
     cmd++;
   }
 
-  ili9341_set_orientation(2);
+  ili9341_set_orientation(3);
   ili9341_send_cmd(0x20);
 }
 
