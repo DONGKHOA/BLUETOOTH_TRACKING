@@ -60,6 +60,9 @@ DECODE_Command (char *json_string)
 void
 DECODE_User_Data (char     *json_str,
                   int      *user_id,
+                  int      *face,
+                  int      *finger,
+                  char    **role,
                   char    **user_name,
                   uint16_t *user_len)
 {
@@ -105,27 +108,24 @@ DECODE_User_Data (char     *json_str,
     cJSON *name_item   = cJSON_GetObjectItemCaseSensitive(user, "name");
     cJSON *face_item   = cJSON_GetObjectItemCaseSensitive(user, "face");
     cJSON *finger_item = cJSON_GetObjectItemCaseSensitive(user, "finger");
-
-    if (!cJSON_IsNumber(id_item) || !cJSON_IsString(name_item)
-        || !cJSON_IsNumber(face_item) || !cJSON_IsNumber(finger_item))
-    {
-      ESP_LOGE(TAG, "Invalid data types in user %d", i);
-      continue;
-    }
+    cJSON *role_item   = cJSON_GetObjectItemCaseSensitive(user, "role");
 
     // Copy user ID
     user_id[i] = id_item->valueint;
 
     // Allocate memory and copy user name
     user_name[i] = (char *)heap_caps_malloc(MAX_NAME_LEN, MALLOC_CAP_SPIRAM);
-    if (user_name[i] == NULL)
-    {
-      ESP_LOGE(TAG, "Memory allocation failed for user_name[%d]", i);
-      continue;
-    }
 
     strncpy(user_name[i], name_item->valuestring, MAX_NAME_LEN - 1);
     user_name[i][MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
+
+    face[i]   = face_item->valueint;
+    finger[i] = finger_item->valueint;
+
+    // Allocate memory and copy role
+    role[i] = (char *)heap_caps_malloc(6, MALLOC_CAP_SPIRAM);
+    strncpy(role[i], role_item->valuestring, 5);
+    role[i][5] = '\0'; // Ensure null-termination
   }
 
   cJSON_Delete(root);

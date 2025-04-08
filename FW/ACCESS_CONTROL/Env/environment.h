@@ -17,24 +17,6 @@ extern "C"
    *   PUBLIC DEFINES
    ***************************************************************************/
 
-// Data Start Frame
-#define DATA_SYNC_ENROLL_FACE                 (uint8_t)0x01
-#define DATA_SYNC_ENROLL_FINGERPRINT          (uint8_t)0x02
-#define DATA_SYNC_RESPONSE_ENROLL_FACE        (uint8_t)0x03
-#define DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT (uint8_t)0x04
-#define DATA_SYNC_REQUEST_USER_DATA           (uint8_t)0x05
-#define DATA_SYNC_RESPONSE_USER_DATA          (uint8_t)0x06
-#define DATA_SYNC_REQUEST_AUTHENTICATION      (uint8_t)0x08
-#define DATA_SYNC_RESPONSE_AUTHENTICATION     (uint8_t)0x09
-#define DATA_SYNC_TIME                        (uint8_t)0x0A
-#define DATA_SYNC_STATE_CONNECTION            (uint8_t)0x0B
-#define DATA_SYNC_REQUEST_ATTENDANCE          (uint8_t)0x0C
-#define DATA_SYNC_RESPONSE_ATTENDANCE         (uint8_t)0x0D
-#define DATA_SYNC_REQUEST_DELETE_USER_DATA    (uint8_t)0x0E
-
-// Data Stop Frame
-#define DATA_STOP_FRAME (uint8_t)0xFF
-
 // Data Response
 #define DATA_SYNC_SUCCESS (uint8_t)0x00
 #define DATA_SYNC_FAIL    (uint8_t)0x01
@@ -43,11 +25,31 @@ extern "C"
 #define DATA_SYNC_STATE_CONNECT     (uint8_t)0x00
 #define DATA_SYNC_STATE_NOT_CONNECT (uint8_t)0x01
 
-#define DATA_SYNC_DUMMY (uint8_t)0x00
-
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
+
+  typedef enum
+  {
+    DATA_SYNC_DUMMY = 0x00,
+    DATA_SYNC_ENROLL_FACE,
+    DATA_SYNC_ENROLL_FINGERPRINT,
+    DATA_SYNC_RESPONSE_ENROLL_FACE,
+    DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT,
+    DATA_SYNC_REQUEST_USER_DATA,
+    DATA_SYNC_RESPONSE_USER_DATA,
+    DATA_SYNC_RESPONSE_USERNAME_DATA,
+    DATA_SYNC_REQUEST_AUTHENTICATION,
+    DATA_SYNC_RESPONSE_AUTHENTICATION,
+    DATA_SYNC_TIME,
+    DATA_SYNC_STATE_CONNECTION,
+    DATA_SYNC_START_ATTENDANCE,
+    DATA_SYNC_REQUEST_ATTENDANCE,
+    DATA_SYNC_RESPONSE_ATTENDANCE,
+    DATA_SYNC_REQUEST_DELETE_USER_DATA,
+    DATA_SYNC_LAST,
+    DATA_STOP_FRAME = 0xFF
+  } __attribute__((packed)) Data_Frame;
   /**
    * @brief Data structure sync data between MCU1 and MCU2
    */
