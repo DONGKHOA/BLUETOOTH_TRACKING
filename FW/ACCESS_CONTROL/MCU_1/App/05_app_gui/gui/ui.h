@@ -70,7 +70,6 @@ extern lv_obj_t * ui_ESCEnrollText;
 void ui_event_HomeEnrollButton(lv_event_t * e);
 extern lv_obj_t * ui_HomeEnrollButton;
 extern lv_obj_t * ui_HomeEnrollText;
-void ui_event_IDEnrollPane(lv_event_t * e);
 extern lv_obj_t * ui_IDEnrollPane;
 extern lv_obj_t * ui_NumberUserID;
 extern lv_obj_t * ui_EnrollText;

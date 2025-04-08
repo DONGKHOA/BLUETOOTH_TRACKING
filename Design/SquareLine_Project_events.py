@@ -114,3 +114,11 @@ def EVENT_Enroll_DelButton(event_struct):
 def EVENT_Enroll_ReceiveID(event_struct):
     return
 
+
+def EVENT_Menu_To_Authenticate(event_struct):
+    return
+
+
+def EVENT_Menu_To_Enroll(event_struct):
+    return
+

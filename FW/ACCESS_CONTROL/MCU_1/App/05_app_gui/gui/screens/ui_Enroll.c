@@ -419,7 +419,6 @@ void ui_Enroll_screen_init(void)
 
     lv_obj_add_event_cb(ui_ESCEnrollButton, ui_event_ESCEnrollButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_HomeEnrollButton, ui_event_HomeEnrollButton, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_IDEnrollPane, ui_event_IDEnrollPane, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button5, ui_event_Button5, LV_EVENT_ALL, NULL);

@@ -60,7 +60,6 @@ lv_obj_t * ui_ESCEnrollText;
 void ui_event_HomeEnrollButton(lv_event_t * e);
 lv_obj_t * ui_HomeEnrollButton;
 lv_obj_t * ui_HomeEnrollText;
-void ui_event_IDEnrollPane(lv_event_t * e);
 lv_obj_t * ui_IDEnrollPane;
 lv_obj_t * ui_NumberUserID;
 lv_obj_t * ui_EnrollText;
@@ -198,6 +197,9 @@ void ui_event_EnrollButton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Menu_To_Enroll(e);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
     }
 }
@@ -238,15 +240,6 @@ void ui_event_HomeEnrollButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Home_screen_init);
-    }
-}
-
-void ui_event_IDEnrollPane(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Enroll_ReceiveID(e);
     }
 }
 

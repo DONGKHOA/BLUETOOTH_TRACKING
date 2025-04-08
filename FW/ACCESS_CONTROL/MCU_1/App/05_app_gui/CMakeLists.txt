@@ -9,6 +9,7 @@ list(APPEND sources ${gui_sources})
 set (sources    "app_display/app_display.c"
                 "events/attendance_event.c"
                 "events/enroll_event.c"
+                "events/faceid_enroll_event.c"
                 "events/data_event.c"
                 "events/user_info_event.c")
 

@@ -7,16 +7,24 @@
 
 #include "app_data.h"
 
-#include "esp_camera.h"
+#include "environment.h"
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "esp_log.h"
 
 /******************************************************************************
- *    PRIVATE DEFINES
+ *  PRIVATE DEFINES
  *****************************************************************************/
 
-#define TAG "ENROLL_EVENT"
+/******************************************************************************
+ *    PUBLIC DATA
+ *****************************************************************************/
+
+char    number_id[64]  = { 0 };
+uint8_t number_id_send = 0;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -25,193 +33,188 @@
 static void APP_Enroll_Timer(lv_timer_t *timer);
 
 /******************************************************************************
+ *    PRIVATE TYPEDEFS
+ *****************************************************************************/
+
+typedef struct
+{
+  QueueHandle_t *p_send_data_queue;
+  QueueHandle_t *p_receive_data_event_queue;
+} enroll_event_data_t;
+
+/******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
 
-static lv_obj_t   *camera_canvas = NULL;
+static enroll_event_data_t s_enroll_event_data;
+static DATA_SYNC_t         s_DATA_SYNC;
+
+static uint8_t enroll_index;
+
+static lv_obj_t   *popup_invalid_id;
 static lv_timer_t *timer_enroll;
 
-static QueueHandle_t      *p_camera_capture_queue;
-static QueueHandle_t      *p_result_recognition_queue;
-static EventGroupHandle_t *p_display_event;
-
-static camera_fb_t              *fb = NULL;
-static data_result_recognition_t s_data_result_recognition
-    = { .s_coord_box_face           = { 0, 0, 0, 0 },
-        .s_left_eye                 = { 0, 0 },
-        .s_right_eye                = { 0, 0 },
-        .s_left_mouth               = { 0, 0 },
-        .s_right_mouth              = { 0, 0 },
-        .s_nose                     = { 0, 0 },
-        .ID                         = -1,
-        .e_notification_recognition = NOTIFICATION_NONE };
-
-static bool               b_is_initialize = false;
-static lv_draw_rect_dsc_t rectangle_face;
-static lv_draw_rect_dsc_t rectangle_left_eye;
-static lv_draw_rect_dsc_t rectangle_right_eye;
-static lv_draw_rect_dsc_t rectangle_left_mouth;
-static lv_draw_rect_dsc_t rectangle_right_mouth;
-static lv_draw_rect_dsc_t rectangle_nouse;
+static bool b_is_initialize = false;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
  *****************************************************************************/
 
 void
-EVENT_Enroll_Before (lv_event_t *e)
+EVENT_Menu_To_Enroll (lv_event_t *e)
 {
   if (b_is_initialize == false)
   {
-    p_camera_capture_queue     = &s_data_system.s_camera_capture_queue;
-    p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
-    p_display_event            = &s_data_system.s_display_event;
-
-    camera_canvas = lv_canvas_create(ui_Enroll);
-
-    lv_draw_rect_dsc_init(&rectangle_face);
-    rectangle_face.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_face.border_width = 2;
-    rectangle_face.border_color = lv_color_make(0, 255, 0);
-
-    lv_draw_rect_dsc_init(&rectangle_left_eye);
-    rectangle_left_eye.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_left_eye.border_width = 2;
-    rectangle_left_eye.border_color = lv_color_make(0, 255, 0);
-
-    lv_draw_rect_dsc_init(&rectangle_right_eye);
-    rectangle_right_eye.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_right_eye.border_width = 2;
-    rectangle_right_eye.border_color = lv_color_make(0, 255, 0);
-
-    lv_draw_rect_dsc_init(&rectangle_left_mouth);
-    rectangle_left_mouth.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_left_mouth.border_width = 2;
-    rectangle_left_mouth.border_color = lv_color_make(0, 255, 0);
-
-    lv_draw_rect_dsc_init(&rectangle_right_mouth);
-    rectangle_right_mouth.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_right_mouth.border_width = 2;
-    rectangle_right_mouth.border_color = lv_color_make(0, 255, 0);
-
-    lv_draw_rect_dsc_init(&rectangle_nouse);
-    rectangle_nouse.bg_opa       = LV_OPA_TRANSP; // transparent fill
-    rectangle_nouse.border_width = 2;
-    rectangle_nouse.border_color = lv_color_make(0, 255, 0);
-
-    b_is_initialize = true;
-    timer_enroll    = lv_timer_create(APP_Enroll_Timer, 30, NULL);
-  }
-  else
-  {
-    lv_timer_resume(timer_enroll);
+    b_is_initialize                       = true;
+    s_enroll_event_data.p_send_data_queue = &s_data_system.s_send_data_queue;
+    s_enroll_event_data.p_receive_data_event_queue
+        = &s_data_system.s_receive_data_event_queue;
+    timer_enroll = lv_timer_create(APP_Enroll_Timer, 30, NULL);
   }
 
-  xEventGroupSetBits(*p_display_event,
-                     ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
+  memset(number_id, 0, sizeof(number_id));
+  enroll_index = 0;
+  lv_label_set_text(ui_NumberUserID, number_id);
 }
 
 void
-EVENT_Enroll_After (lv_event_t *e)
+EVENT_Enroll_Button0 (lv_event_t *e)
 {
-  s_data_result_recognition.s_coord_box_face.x1 = 0;
-  s_data_result_recognition.s_coord_box_face.y1 = 0;
-  s_data_result_recognition.s_coord_box_face.x2 = 0;
-  s_data_result_recognition.s_coord_box_face.y2 = 0;
-  s_data_result_recognition.s_left_eye.x        = 0;
-  s_data_result_recognition.s_left_eye.y        = 0;
-  s_data_result_recognition.s_right_eye.x       = 0;
-  s_data_result_recognition.s_right_eye.y       = 0;
-  s_data_result_recognition.s_left_mouth.x      = 0;
-  s_data_result_recognition.s_left_mouth.y      = 0;
-  s_data_result_recognition.s_right_mouth.x     = 0;
-  s_data_result_recognition.s_right_mouth.y     = 0;
-  s_data_result_recognition.s_nose.x            = 0;
-  s_data_result_recognition.s_nose.y            = 0;
-
-  lv_timer_pause(timer_enroll);
-  xEventGroupClearBits(*p_display_event,
-                       ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
-}
-
-void
-EVENT_Enroll_Finger_Before (lv_event_t *e)
-{
-}
-
-void
-EVENT_Enroll_FaceID_Before (lv_event_t *e)
-{
+  number_id[enroll_index] = '0';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
 }
 void
-Update_UserIDToEnroll (lv_event_t *e)
+EVENT_Enroll_Button1 (lv_event_t *e)
 {
+  number_id[enroll_index] = '1';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
 }
-
-// void
-// UserIDToEnroll (lv_event_t *e)
-// {
-// }
+void
+EVENT_Enroll_Button2 (lv_event_t *e)
+{
+  number_id[enroll_index] = '2';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button3 (lv_event_t *e)
+{
+  number_id[enroll_index] = '3';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button4 (lv_event_t *e)
+{
+  number_id[enroll_index] = '4';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button5 (lv_event_t *e)
+{
+  number_id[enroll_index] = '5';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button6 (lv_event_t *e)
+{
+  number_id[enroll_index] = '6';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button7 (lv_event_t *e)
+{
+  number_id[enroll_index] = '7';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button8 (lv_event_t *e)
+{
+  number_id[enroll_index] = '8';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_Button9 (lv_event_t *e)
+{
+  number_id[enroll_index] = '9';
+  lv_label_set_text(ui_NumberUserID, number_id);
+  enroll_index++;
+}
+void
+EVENT_Enroll_DelButton (lv_event_t *e)
+{
+  enroll_index--;
+  number_id[enroll_index] = 0;
+  lv_label_set_text(ui_NumberUserID, number_id);
+}
+void
+EVENT_Enroll_EnterButton (lv_event_t *e)
+{
+  number_id_send                = atoi(number_id);
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_USER_DATA;
+  s_DATA_SYNC.u8_data_packet[0] = number_id_send;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*s_enroll_event_data.p_send_data_queue, &s_DATA_SYNC, 0);
+}
 
 /******************************************************************************
- *  PRIVATE FUNCTION
+ *   PRIVATE FUNCTION
  *****************************************************************************/
-
 static void
 APP_Enroll_Timer (lv_timer_t *timer)
 {
-  xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1);
-
-  if (xQueueReceive(*p_camera_capture_queue, &fb, portMAX_DELAY) == pdPASS)
+  if (xQueueReceive(*s_enroll_event_data.p_receive_data_event_queue,
+                    &s_DATA_SYNC,
+                    portMAX_DELAY)
+      == pdTRUE)
   {
-    lv_canvas_set_buffer(
-        camera_canvas, fb->buf, fb->width, fb->height, LV_IMG_CF_TRUE_COLOR);
+    switch (s_DATA_SYNC.u8_data_start)
+    {
+      case DATA_SYNC_RESPONSE_USER_DATA:
+        if (s_DATA_SYNC.u8_data_packet[0] == 0x00)
+        {
+          // Invalid ID
+          popup_invalid_id = lv_obj_create(ui_Enroll);
+          lv_obj_set_width(popup_invalid_id, 280);
+          lv_obj_set_height(popup_invalid_id, 180);
+          lv_obj_set_align(popup_invalid_id, LV_ALIGN_CENTER);
+          lv_obj_clear_flag(popup_invalid_id, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+          lv_obj_set_style_shadow_color(popup_invalid_id,
+                                        lv_color_hex(0x969696),
+                                        LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_shadow_opa(
+              popup_invalid_id, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_shadow_width(
+              popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_shadow_spread(
+              popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_shadow_ofs_x(
+              popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_shadow_ofs_y(
+              popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
 
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_coord_box_face.x1,
-                        s_data_result_recognition.s_coord_box_face.y1,
-                        s_data_result_recognition.s_coord_box_face.x2
-                            - s_data_result_recognition.s_coord_box_face.x1,
-                        s_data_result_recognition.s_coord_box_face.y2
-                            - s_data_result_recognition.s_coord_box_face.y1,
-                        &rectangle_face);
+        if (s_DATA_SYNC.u8_data_packet[0] == 0x01)
+        {
+          // Valid ID
+          _ui_screen_change(&ui_UserInfo,
+                            LV_SCR_LOAD_ANIM_MOVE_RIGHT,
+                            50,
+                            0,
+                            &ui_UserInfo_screen_init);
+        }
+        break;
 
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_left_eye.x,
-                        s_data_result_recognition.s_left_eye.y,
-                        2,
-                        2,
-                        &rectangle_left_eye);
-
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_right_eye.x,
-                        s_data_result_recognition.s_right_eye.y,
-                        2,
-                        2,
-                        &rectangle_right_eye);
-
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_left_mouth.x,
-                        s_data_result_recognition.s_left_mouth.y,
-                        2,
-                        2,
-                        &rectangle_left_mouth);
-
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_right_mouth.x,
-                        s_data_result_recognition.s_right_mouth.y,
-                        2,
-                        2,
-                        &rectangle_right_mouth);
-
-    lv_canvas_draw_rect(camera_canvas,
-                        s_data_result_recognition.s_nose.x,
-                        s_data_result_recognition.s_nose.y,
-                        2,
-                        2,
-                        &rectangle_nouse);
+      default:
+        break;
+    }
   }
-
-  lv_obj_invalidate(camera_canvas);
-  esp_camera_fb_return(fb);
 }

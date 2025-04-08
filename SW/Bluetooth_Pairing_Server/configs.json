@@ -10,5 +10,9 @@
     "password": "18006230",
     "mqtt_server": "broker.emqx.io:1883",
     "topic": "bluetooth/GW1/data"
+  },
+  "24:EC:4A:46:06:8A": {
+    "ssid": "The Little Bean",
+    "password": "75Caothang"
   }
 }

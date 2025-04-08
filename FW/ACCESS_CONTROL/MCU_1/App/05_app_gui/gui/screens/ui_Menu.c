@@ -25,7 +25,7 @@ void ui_Menu_screen_init(void)
     lv_obj_set_style_text_font(ui_MenuText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_POPUPMenuPanel = lv_obj_create(ui_Menu);
-    lv_obj_set_width(ui_POPUPMenuPanel, 280);
+    lv_obj_set_width(ui_POPUPMenuPanel, 220);
     lv_obj_set_height(ui_POPUPMenuPanel, 180);
     lv_obj_set_align(ui_POPUPMenuPanel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_POPUPMenuPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
@@ -92,9 +92,9 @@ void ui_Menu_screen_init(void)
     lv_obj_set_style_text_font(ui_MenuTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ButtonMenuToHome = lv_btn_create(ui_Menu);
-    lv_obj_set_width(ui_ButtonMenuToHome, 12);
+    lv_obj_set_width(ui_ButtonMenuToHome, 30);
     lv_obj_set_height(ui_ButtonMenuToHome, 50);
-    lv_obj_set_x(ui_ButtonMenuToHome, -150);
+    lv_obj_set_x(ui_ButtonMenuToHome, -135);
     lv_obj_set_y(ui_ButtonMenuToHome, 0);
     lv_obj_set_align(ui_ButtonMenuToHome, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_ButtonMenuToHome, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);

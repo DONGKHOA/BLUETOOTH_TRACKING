@@ -11,8 +11,8 @@ extern "C" {
 #endif
 
 void EVENT_Attendance_Before(lv_event_t * e);
+void EVENT_Menu_To_Enroll(lv_event_t * e);
 void EVENT_Attendance_After(lv_event_t * e);
-void EVENT_Enroll_ReceiveID(lv_event_t * e);
 void EVENT_Enroll_Button1(lv_event_t * e);
 void EVENT_Enroll_Button2(lv_event_t * e);
 void EVENT_Enroll_Button5(lv_event_t * e);

@@ -397,7 +397,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Size",
                 "intarray": [
-                  280,
+                  220,
                   180
                 ],
                 "InheritedType": 7
@@ -891,8 +891,8 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  150,
-                  1
+                  135,
+                  0
                 ],
                 "InheritedType": 7
               },
@@ -901,7 +901,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Size",
                 "intarray": [
-                  12,
+                  30,
                   50
                 ],
                 "InheritedType": 7
@@ -2883,71 +2883,136 @@
                   },
                   {
                     "disabled": false,
-                    "nid": 1000510,
+                    "nid": 1000766,
                     "strtype": "_event/EventHandler",
                     "strval": "CLICKED",
                     "childs": [
                       {
-                        "nid": 1000511,
+                        "nid": 1000767,
                         "strtype": "_event/name",
-                        "strval": "MenuToAuthenticate",
+                        "strval": "EventEnroll",
                         "InheritedType": 10
                       },
                       {
-                        "nid": 1000512,
+                        "nid": 1000768,
                         "strtype": "_event/condition_C",
                         "strval": "",
                         "InheritedType": 10
                       },
                       {
-                        "nid": 1000513,
+                        "nid": 1000769,
                         "strtype": "_event/condition_P",
                         "strval": "",
                         "InheritedType": 10
                       },
                       {
-                        "nid": 1000514,
+                        "nid": 1000770,
+                        "strtype": "_event/action",
+                        "strval": "CALL FUNCTION",
+                        "childs": [
+                          {
+                            "nid": 1000771,
+                            "strtype": "CALL FUNCTION/Name",
+                            "strval": "CALL FUNCTION",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1000772,
+                            "strtype": "CALL FUNCTION/Call",
+                            "strval": "<{Function_name}>( event_struct )",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1000773,
+                            "strtype": "CALL FUNCTION/CallC",
+                            "strval": "<{Function_name}>( e );",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1000774,
+                            "strtype": "CALL FUNCTION/Function_name",
+                            "strval": "EVENT_Menu_To_Enroll",
+                            "InheritedType": 10
+                          },
+                          {
+                            "nid": 1000775,
+                            "strtype": "CALL FUNCTION/Dont_export_function",
+                            "strval": "True",
+                            "InheritedType": 2
+                          }
+                        ],
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 4
+                  },
+                  {
+                    "disabled": false,
+                    "nid": 1000782,
+                    "strtype": "_event/EventHandler",
+                    "strval": "CLICKED",
+                    "childs": [
+                      {
+                        "nid": 1000783,
+                        "strtype": "_event/name",
+                        "strval": "MenuToEnroll",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000784,
+                        "strtype": "_event/condition_C",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000785,
+                        "strtype": "_event/condition_P",
+                        "strval": "",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000786,
                         "strtype": "_event/action",
                         "strval": "CHANGE SCREEN",
                         "childs": [
                           {
-                            "nid": 1000515,
+                            "nid": 1000787,
                             "strtype": "CHANGE SCREEN/Name",
                             "strval": "CHANGE SCREEN",
                             "InheritedType": 10
                           },
                           {
-                            "nid": 1000516,
+                            "nid": 1000788,
                             "strtype": "CHANGE SCREEN/Call",
                             "strval": "ChangeScreen( <{Screen_to}>, lv.SCR_LOAD_ANIM.<{Fade_mode}>, <{Speed}>, <{Delay}>)",
                             "InheritedType": 10
                           },
                           {
-                            "nid": 1000517,
+                            "nid": 1000789,
                             "strtype": "CHANGE SCREEN/CallC",
                             "strval": "_ui_screen_change( &<{Screen_to}>, LV_SCR_LOAD_ANIM_<{Fade_mode}>, <{Speed}>, <{Delay}>, &<{Screen_to}>_screen_init);",
                             "InheritedType": 10
                           },
                           {
-                            "nid": 1000518,
+                            "nid": 1000790,
                             "strtype": "CHANGE SCREEN/Screen_to",
                             "strval": "GUID96881580-337714S629486",
                             "InheritedType": 9
                           },
                           {
-                            "nid": 1000519,
+                            "nid": 1000791,
                             "strtype": "CHANGE SCREEN/Fade_mode",
                             "strval": "MOVE_LEFT",
                             "InheritedType": 3
                           },
                           {
-                            "nid": 1000520,
+                            "nid": 1000792,
                             "strtype": "CHANGE SCREEN/Speed",
                             "integer": 50,
                             "InheritedType": 6
                           },
                           {
-                            "nid": 1000521,
+                            "nid": 1000793,
                             "strtype": "CHANGE SCREEN/Delay",
                             "InheritedType": 6
                           }
@@ -3008,7 +3073,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Size",
                 "intarray": [
-                  280,
+                  220,
                   180
                 ],
                 "InheritedType": 7
@@ -3333,7 +3398,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  -150,
+                  -135,
                   0
                 ],
                 "InheritedType": 7
@@ -3343,7 +3408,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Size",
                 "intarray": [
-                  12,
+                  30,
                   50
                 ],
                 "InheritedType": 7
@@ -5258,71 +5323,6 @@
                 "strtype": "PANEL/Style_scrollbar",
                 "strval": "lv.PART.SCROLLBAR, Rectangle, Pad",
                 "InheritedType": 11
-              },
-              {
-                "disabled": false,
-                "nid": 1000726,
-                "strtype": "_event/EventHandler",
-                "strval": "CLICKED",
-                "childs": [
-                  {
-                    "nid": 1000727,
-                    "strtype": "_event/name",
-                    "strval": "ReceiveID",
-                    "InheritedType": 10
-                  },
-                  {
-                    "nid": 1000728,
-                    "strtype": "_event/condition_C",
-                    "strval": "",
-                    "InheritedType": 10
-                  },
-                  {
-                    "nid": 1000729,
-                    "strtype": "_event/condition_P",
-                    "strval": "",
-                    "InheritedType": 10
-                  },
-                  {
-                    "nid": 1000730,
-                    "strtype": "_event/action",
-                    "strval": "CALL FUNCTION",
-                    "childs": [
-                      {
-                        "nid": 1000731,
-                        "strtype": "CALL FUNCTION/Name",
-                        "strval": "CALL FUNCTION",
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000732,
-                        "strtype": "CALL FUNCTION/Call",
-                        "strval": "<{Function_name}>( event_struct )",
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000733,
-                        "strtype": "CALL FUNCTION/CallC",
-                        "strval": "<{Function_name}>( e );",
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000734,
-                        "strtype": "CALL FUNCTION/Function_name",
-                        "strval": "EVENT_Enroll_ReceiveID",
-                        "InheritedType": 10
-                      },
-                      {
-                        "nid": 1000735,
-                        "strtype": "CALL FUNCTION/Dont_export_function",
-                        "strval": "True",
-                        "InheritedType": 2
-                      }
-                    ],
-                    "InheritedType": 10
-                  }
-                ],
-                "InheritedType": 4
               }
             ],
             "saved_objtypeKey": "PANEL"
@@ -16782,7 +16782,7 @@
     "uiExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "projectExportFolderPath": "D:\\Github\\BLUETOOTH_TRACKING\\FW\\ACCESS_CONTROL\\MCU_1\\App\\05_app_gui\\gui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 147,
+    "backup_cnt": 159,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
@@ -16799,7 +16799,7 @@
     "drive_fatfs_path": "",
     "naming": "Name",
     "naming_force_lowercase": false,
-    "nidcnt": 1000736,
+    "nidcnt": 1000794,
     "BitDepth": 16,
     "Name": "SquareLine_Project"
   }
