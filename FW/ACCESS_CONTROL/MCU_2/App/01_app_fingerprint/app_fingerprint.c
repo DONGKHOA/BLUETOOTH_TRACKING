@@ -31,13 +31,12 @@ typedef struct fingerprint_data
 
 static void APP_FINGERPRINT_task(void *arg);
 static void APP_FINGERPRINT_Timer_Callback(TimerHandle_t s_timer);
-static inline void APP_FINGERPRINT_Timer_Callback
 
-    /******************************************************************************
-     *    PRIVATE DATA
-     *****************************************************************************/
+/******************************************************************************
+ *    PRIVATE DATA
+ *****************************************************************************/
 
-    static fingerprint_data_t s_fingerprint_data;
+static fingerprint_data_t s_fingerprint_data;
 
 static uint8_t buffer1[1] = { 0x01 };
 static uint8_t buffer2[1] = { 0x02 };
@@ -65,7 +64,6 @@ void
 APP_FINGERPRINT_Init (void)
 {
   s_fingerprint_data.p_fingerprint_queue = &s_data_system.s_fingerprint_queue;
-  buffer1                                = 0x01;
   // Specify the start page for the search
 
   u8_start_page[0] = 0x00;

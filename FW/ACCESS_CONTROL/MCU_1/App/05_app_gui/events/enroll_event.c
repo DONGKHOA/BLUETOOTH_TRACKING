@@ -57,6 +57,7 @@ static int     full_name_len = 0;
 static int     packet_count  = 0;
 
 static lv_obj_t   *popup_invalid_id;
+static lv_obj_t   *label_invalid_id;
 static lv_timer_t *timer_enroll;
 
 static bool b_is_initialize = false;
@@ -222,6 +223,16 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
             lv_obj_set_style_shadow_ofs_y(
                 popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+            label_invalid_id = lv_label_create(popup_invalid_id);
+            lv_label_set_text(label_invalid_id, "Invalid ID");
+            lv_obj_center(label_invalid_id);
+            lv_obj_set_style_text_color(label_invalid_id,
+                                        lv_color_hex(0xFF0000),
+                                        LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(label_invalid_id,
+                                       &lv_font_montserrat_18,
+                                       LV_PART_MAIN | LV_STATE_DEFAULT);
+
             timer_enroll = lv_timer_create(
                 APP_ENROLL_DeletePopup, 1000, popup_invalid_id);
           }
@@ -313,5 +324,5 @@ APP_ENROLL_DeletePopup (lv_timer_t *timer)
 {
   lv_obj_t *popup_enroll = (lv_obj_t *)timer->user_data;
   lv_obj_del(popup_enroll);
-  lv_timer_del(timer_enroll); 
+  lv_timer_del(timer_enroll);
 }

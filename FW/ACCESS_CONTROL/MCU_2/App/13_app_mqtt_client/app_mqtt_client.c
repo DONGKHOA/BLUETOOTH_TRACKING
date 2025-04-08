@@ -184,7 +184,7 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_User_Data(
               data, user_id, face, finger, role, user_name, &user_len);
 
-          // Send user len to the queue for transmission to MCU1
+          // Send user len to the queue local database
           s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
           s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
           s_DATA_SYNC.u8_data_length    = 1;
