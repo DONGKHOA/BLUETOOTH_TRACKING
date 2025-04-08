@@ -118,10 +118,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
           break;
 
         case LOCAL_DATABASE_USER_DATA:
-
-          user_len = (s_DATA_SYNC.u8_data_packet[0] << 8)
-                     | s_DATA_SYNC.u8_data_packet[1];
-
+        
           taskENTER_CRITICAL(&spi_mux);
 
           // Update data local database

@@ -12,7 +12,7 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
- #define TAG "APP_RTC"
+#define TAG "APP_RTC"
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -63,4 +63,16 @@ APP_RTC_Init (void)
 static void
 APP_RTC_Task (void *arg)
 {
+  while (1)
+  {
+    taskENTER_CRITICAL(&i2c_mux);
+
+    xSemaphoreTake(s_data_system.s_i2c_mutex, 1000 / portTICK_PERIOD_MS);
+
+    DEV_DS3231_Register_Read(&s_handle_rtc.s_ds3231_data, I2C_NUM);
+
+    xSemaphoreGive(s_data_system.s_i2c_mutex);
+
+    taskEXIT_CRITICAL(&i2c_mux);
+  }
 }

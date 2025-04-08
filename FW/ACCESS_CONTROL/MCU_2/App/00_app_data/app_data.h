@@ -15,6 +15,8 @@
 #include "freertos/task.h"
 #include "freertos/FreeRTOSConfig.h"
 
+#include "environment.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -32,11 +34,6 @@ extern "C"
 
 #define TIME_SOURCE_SNTP_READY BIT0
 #define TIME_SOURCE_RTC_READY  BIT1
-
-#define LOCAL_DATABASE_USER_DATA                   0xFE
-#define LOCAL_DATABASE_RESPONSE_ENROLL_FACE        0xFD
-#define LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT 0xFC
-#define LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA   0xFB
 
 #define MAX_USER_DATA 10240 // Maximum user data size
 
@@ -98,6 +95,21 @@ extern "C"
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
 
+  typedef enum
+  {
+    LOCAL_DATABASE_USER_DATA = DATA_SYNC_LAST + 1,
+    LOCAL_DATABASE_RESPONSE_ENROLL_FACE,
+    LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT,
+    LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA
+  } __attribute__((packed)) local_database;
+
+  typedef enum
+  {
+    FINGER_ENROLL = 0x00,
+    FINGER_ATTENDANCE,
+    FINGER_DELETE
+  } __attribute__((packed)) finger_cmd;
+
   /**
    * @brief Data structure holding data of system
    *
@@ -112,6 +124,7 @@ extern "C"
     QueueHandle_t      s_data_mqtt_queue;
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_data_local_database_queue;
+    QueueHandle_t      s_fingerprint_queue;
     SemaphoreHandle_t  s_spi_mutex;
     SemaphoreHandle_t  s_i2c_mutex;
     EventGroupHandle_t s_flag_time_event;
@@ -126,8 +139,12 @@ extern "C"
 
   extern char       **user_name;
   extern int         *user_id;
+  extern int         *face;
+  extern int         *finger;
+  extern char       **role;
   extern uint16_t     user_len;
   extern portMUX_TYPE spi_mux;
+  extern portMUX_TYPE i2c_mux;
 
 #ifdef __cplusplus
 }

@@ -181,62 +181,17 @@ APP_MQTT_CLIENT_task (void *arg)
       {
         case USER_DATA_CMD:
           // Decode the user data from the server response
-          DECODE_User_Data(data, user_id, user_name, &user_len);
+          DECODE_User_Data(
+              data, user_id, face, finger, role, user_name, &user_len);
 
           // Send user len to the queue for transmission to MCU1
           s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
-          s_DATA_SYNC.u8_data_packet[0] = (user_len >> 8) & 0xFF; // High Byte
-          s_DATA_SYNC.u8_data_packet[1] = user_len & 0xFF;        // Low Byte
-          s_DATA_SYNC.u8_data_length    = 2;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
-          // if (xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
-          //                &s_DATA_SYNC,
-          //                0)
-          //     != pdTRUE)
-          // {
-          //   ESP_LOGE(TAG, "Failed to send user len to queue");
-          //   break;
-          // }
-
-          // // Send detail of user data to the queue for transmission to MCU1
-          // for (int i = 0; i < user_len; i++)
-          // {
-          //   // Send ID packet
-          //   s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
-          //   s_DATA_SYNC.u8_data_packet[0] = (uint8_t)user_id[i];
-          //   s_DATA_SYNC.u8_data_length    = 1;
-          //   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-          //   xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
-          //              &s_DATA_SYNC,
-          //              0);
-
-          //   // Parse the username and send each part
-          //   char *token = strtok(user_name[i], " ");
-          //   while (token != NULL)
-          //   {
-
-          //     s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
-          //     memcpy(s_DATA_SYNC.u8_data_packet, token, strlen(token));
-          //     s_DATA_SYNC.u8_data_length = strlen(token);
-          //     s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
-
-          //     xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
-          //                &s_DATA_SYNC,
-          //                0);
-
-          //     token = strtok(NULL, " ");
-          //   }
-
-          //   s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DETAIL_OF_USER_DATA;
-          //   s_DATA_SYNC.u8_data_packet[0] = '\n';
-          //   s_DATA_SYNC.u8_data_packet[1] = '\n';
-          //   s_DATA_SYNC.u8_data_length    = 2;
-          //   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-          //   xQueueSend(*s_mqtt_client_data.p_data_local_database_queue,
-          //              &s_DATA_SYNC,
-          //              0);
-          // }
+          xQueueSend(
+              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 

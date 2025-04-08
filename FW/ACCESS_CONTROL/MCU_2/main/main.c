@@ -103,7 +103,7 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
-      // APP_FINGERPRINT_Init();
+      APP_FINGERPRINT_Init();
       APP_DATA_TRANSMIT_Init();
       APP_DATA_RECEIVE_Init();
       APP_HANDLE_WIFI_Init();
@@ -113,7 +113,7 @@ app_main (void)
 
       // App Create Task
 
-      // APP_FINGERPRINT_CreateTask();
+      APP_FINGERPRINT_CreateTask();
       APP_DATA_TRANSMIT_CreateTask();
       APP_DATA_RECEIVE_CreateTask();
       APP_HANDLE_WIFI_CreateTask();
@@ -206,6 +206,12 @@ APP_MAIN_InitDataSystem (void)
 {
   user_id
       = (int *)heap_caps_malloc(MAX_USER_DATA * sizeof(int), MALLOC_CAP_SPIRAM);
+  face
+      = (int *)heap_caps_malloc(MAX_USER_DATA * sizeof(int), MALLOC_CAP_SPIRAM);
+  finger
+      = (int *)heap_caps_malloc(MAX_USER_DATA * sizeof(int), MALLOC_CAP_SPIRAM);
+  role      = (char **)heap_caps_malloc(MAX_USER_DATA * sizeof(uint8_t),
+                                   MALLOC_CAP_SPIRAM);
   user_name = (char **)heap_caps_malloc(MAX_USER_DATA * sizeof(uint8_t),
                                         MALLOC_CAP_SPIRAM);
 
@@ -213,6 +219,8 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_fingerprint_queue = xQueueCreate(4, sizeof(finger_cmd));
+
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_flag_time_event     = xEventGroupCreate();
@@ -229,7 +237,7 @@ static void
 APP_MAIN_Loading_Callback (TimerHandle_t xTimer)
 {
   xTimerStop(s_loading_timer, 0);
-  if (BSP_gpioGetState(BUTTON_USER_PIN) == 1)
+  if (BSP_gpioGetState(BUTTON_USER_PIN) == 0)
   {
     xEventGroupSetBits(s_data_system.s_configuration_event,
                        APP_CONFIGURATION_DISABLE);
