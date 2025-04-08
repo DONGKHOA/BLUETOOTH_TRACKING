@@ -101,6 +101,7 @@ APP_DATA_RECEIVE_task (void *arg)
         xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
         break;
 
+      case DATA_SYNC_REQUEST_AUTHENTICATION:
       case DATA_SYNC_REQUEST_USER_DATA:
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
@@ -114,8 +115,6 @@ APP_DATA_RECEIVE_task (void *arg)
         break;
 
       case DATA_SYNC_ENROLL_FACE:
-        break;
-      case DATA_SYNC_REQUEST_AUTHENTICATION:
         break;
       case DATA_SYNC_REQUEST_ATTENDANCE:
         break;

@@ -168,6 +168,33 @@ APP_MQTT_CLIENT_task (void *arg)
                                   0);
 
           break;
+        case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
+
+          char data[128];
+          if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
+          {
+            memcpy(data,
+                   "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                   "\"success\"}",
+                   sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                          "\"success\"}"));
+          }
+          else
+          {
+            memcpy(data,
+                   "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                   "\"fail\"}",
+                   sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                          "\"fail\"}"));
+          }
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_response_server,
+                                  data,
+                                  0,
+                                  1,
+                                  0);
+          break;
         default:
           break;
       }
@@ -261,11 +288,13 @@ APP_MQTT_CLIENT_task (void *arg)
         case DELETE_USER_DATA_CMD:
           DECODE_User_ID(data, &user_id_delete);
 
-          // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA;
-          s_DATA_SYNC.u8_data_packet[0] = user_id_delete;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_REQUEST_DELETE_USER_DATA;
+
+          s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
 
           // Notify the status of response to local database task via queue
           xQueueSend(

@@ -37,6 +37,9 @@ extern "C"
 
 #define MAX_USER_DATA 10240 // Maximum user data size
 
+#define LOCAL_DATABASE_SUCCESS (uint8_t)0x00
+#define LOCAL_DATABASE_FAIL    (uint8_t)0x01
+
   /*** CAN peripheral ********************************************************/
 
 #define CAN_MODE          TWAI_MODE_NORMAL
@@ -100,6 +103,7 @@ extern "C"
     LOCAL_DATABASE_USER_DATA = DATA_SYNC_LAST + 1,
     LOCAL_DATABASE_RESPONSE_ENROLL_FACE,
     LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT,
+    LOCAL_DATABASE_REQUEST_DELETE_USER_DATA,
     LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA
   } __attribute__((packed)) local_database;
 
