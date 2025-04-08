@@ -64,18 +64,22 @@ async def process_request():
                 mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
                 print("Sent response:", json_data)
 
-            case "AUTHENTICATE":
-                user_id = data.get("id")
-                json_data = json.dumps(handle_data.reponse_authenticate(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
-                print("Sent response:", json_data)
-
             case "ATTENDANCE":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.reponse_attendance(user_id))
                 mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
                 print("Sent response:", json_data)
 
+            case "ADD_USER_DATA":
+                print("Adding user data")
+                user_id = data.get("id")
+                json_data = json.dumps({
+                    "command": "DELETE_USER_DATA",
+                    "id": user_id
+                })
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                print("Sent response:", json_data)
+                
             case "DELETE_USER_DATA":
                 print("Deleting user data")
                 user_id = data.get("id")

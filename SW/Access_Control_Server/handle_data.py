@@ -27,6 +27,7 @@ def reponse_user_data():
             "name": user.get("name", ""),
             "face": user.get("face", 0),
             "finger": user.get("finger", 0),
+            "role": user.get("role", ""),
         })
     
     return {
@@ -119,25 +120,4 @@ def reponse_attendance(user_id):
     return {
         "command": "ATTENDANCE",
         "response": "fail"
-    }
-
-def reponse_authenticate(user_id):
-    users = load_users()
-
-    for user in users:
-        if user.get("id") == user_id:
-            if user.get("role") == "Admin":
-                return {
-                    "command": "AUTHENTICATE",
-                    "response": "success",
-                }
-            else:
-                return {
-                    "command": "AUTHENTICATE",
-                    "response": "fail",
-                }
-
-    return {
-        "command": "AUTHENTICATE",
-        "response": "fail",
     }

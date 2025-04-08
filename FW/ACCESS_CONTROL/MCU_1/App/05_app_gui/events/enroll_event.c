@@ -201,7 +201,6 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
         case DATA_SYNC_RESPONSE_USER_DATA:
           if (s_DATA_SYNC.u8_data_packet[0] == 0x00)
           {
-
             // Invalid ID
             popup_invalid_id = lv_obj_create(ui_Enroll);
             lv_obj_set_width(popup_invalid_id, 280);
@@ -224,7 +223,7 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
                 popup_invalid_id, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
             timer_enroll = lv_timer_create(
-                APP_ENROLL_DeletePopup, 3000, popup_invalid_id);
+                APP_ENROLL_DeletePopup, 1000, popup_invalid_id);
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == 0x01)
@@ -312,6 +311,7 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
 static void
 APP_ENROLL_DeletePopup (lv_timer_t *timer)
 {
-  lv_obj_t *popup = (lv_obj_t *)timer->user_data;
-  lv_obj_del(popup);
+  lv_obj_t *popup_enroll = (lv_obj_t *)timer->user_data;
+  lv_obj_del(popup_enroll);
+  lv_timer_del(timer_enroll); 
 }

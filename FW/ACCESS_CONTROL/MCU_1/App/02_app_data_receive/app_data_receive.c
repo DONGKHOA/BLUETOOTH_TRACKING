@@ -136,7 +136,8 @@ APP_DATA_RECEIVE_Task (void *arg)
         break;
 
       case DATA_SYNC_RESPONSE_USER_DATA:
-      
+
+        printf("User data response\r\n");
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
         s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
