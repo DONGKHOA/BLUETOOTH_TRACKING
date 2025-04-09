@@ -27,6 +27,9 @@ static void EVENT_PROCESS_AUTHENTICATE_DATA_Task(void *arg);
 static void EVENT_AUTHENTICATE_ShowSuccessPopup(void *user_data);
 static void EVENT_AUTHENTICATE_ShowFailPopup(void *user_data);
 
+static void EVENT_AUTHENTICATE_ShowEnrollScreen(void *param);
+static void EVENT_AUTHENTICATE_ShowMenuScreen(void *param);
+
 /******************************************************************************
  *    PRIVATE TYPEDEFS
  *****************************************************************************/
@@ -41,12 +44,14 @@ typedef struct
  *    PRIVATE DATA
  *****************************************************************************/
 
+static TaskHandle_t s_authenticate_task_handle;
+
 static authenticate_event_data_t s_authenticate_event_data;
 static DATA_SYNC_t               s_DATA_SYNC;
 
 static lv_timer_t *timer_authenticate;
 
-uint8_t authenticate_number_id_send = 1;
+static uint8_t authenticate_number_id_send = 1;
 
 static bool b_is_initialize = false;
 
@@ -65,6 +70,8 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
         = &s_data_system.s_receive_data_event_queue;
     EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask();
   }
+
+  vTaskResume(s_authenticate_task_handle);
 
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_AUTHENTICATION;
   s_DATA_SYNC.u8_data_packet[0] = (authenticate_number_id_send << 8) & 0xFF;
@@ -86,7 +93,7 @@ EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask (void)
               1024 * 4,
               NULL,
               6,
-              NULL);
+              &s_authenticate_task_handle);
 }
 
 static void
@@ -105,9 +112,6 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
           {
-            printf("Authentication success\r\n");
-
-            // lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
             lv_async_call(EVENT_AUTHENTICATE_ShowSuccessPopup, NULL);
           }
 
@@ -210,8 +214,7 @@ EVENT_AUTHENTICATE_DeletePopupFail_Timer (lv_timer_t *timer)
     timer_authenticate = NULL;
   }
 
-  _ui_screen_change(
-      &ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+  lv_async_call(EVENT_AUTHENTICATE_ShowMenuScreen, NULL);
 }
 
 static void
@@ -231,8 +234,25 @@ EVENT_AUTHENTICATE_DeletePopupSuccess_Timer (lv_timer_t *timer)
     timer_authenticate = NULL;
   }
 
+  lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
+}
+
+static void
+EVENT_AUTHENTICATE_ShowMenuScreen (void *param)
+{
+  vTaskSuspend(s_authenticate_task_handle);
+
+  _ui_screen_change(
+      &ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+}
+
+static void
+EVENT_AUTHENTICATE_ShowEnrollScreen (void *param)
+{
+  vTaskSuspend(s_authenticate_task_handle);
+
   EVENT_Authenticate_To_Enroll(NULL);
 
   _ui_screen_change(
-      &ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
+      &ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
 }

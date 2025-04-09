@@ -228,11 +228,11 @@ void ui_event_Attendance(lv_event_t * e)
 
 void ui_event_Authenticate(lv_event_t * e)
 {
-    lv_event_code_t event_code = lv_event_get_code(e);
+    // lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Authenticate_To_Enroll(e);
-    }
+    // if(event_code == LV_EVENT_CLICKED) {
+    //     EVENT_Authenticate_To_Enroll(e);
+    // }
 }
 
 void ui_event_ESCEnrollButton(lv_event_t * e)
@@ -378,7 +378,7 @@ void ui_event_EnrollFingerButton(lv_event_t * e)
         _ui_screen_change(&ui_FingerEnroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_FingerEnroll_screen_init);
     }
     if(event_code == LV_EVENT_CLICKED) {
-        EVENT_Enroll_Finger_Before(e);
+        EVENT_Enroll_Finger(e);
     }
 }
 
@@ -443,9 +443,9 @@ void ui_init(void)
     ui_Home_screen_init();
     ui_Menu_screen_init();
     ui_Attendance_screen_init();
+    ui_Authenticate_screen_init();
     ui_Enroll_screen_init();
     ui_UserInfo_screen_init();
-    ui_Authenticate_screen_init();
     ui_FaceIDEnroll_screen_init();
     ui_FingerEnroll_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);

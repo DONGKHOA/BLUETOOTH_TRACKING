@@ -9,6 +9,8 @@ void ui_FaceIDEnroll_screen_init(void)
 {
     ui_FaceIDEnroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_FaceIDEnroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_FaceIDEnroll, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_FaceIDEnroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_FaceIDEnroll, ui_event_FaceIDEnroll, LV_EVENT_ALL, NULL);
 

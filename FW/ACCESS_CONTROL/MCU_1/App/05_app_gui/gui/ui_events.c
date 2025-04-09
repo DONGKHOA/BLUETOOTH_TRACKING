@@ -5,11 +5,6 @@
 
 #include "ui.h"
 
-
-void
-EVENT_Enroll_Finger_Before (lv_event_t *e)
-{
-}
 void
 EVENT_Enroll_FaceID_Before (lv_event_t *e)
 {

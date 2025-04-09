@@ -9,6 +9,8 @@ void ui_Authenticate_screen_init(void)
 {
     ui_Authenticate = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Authenticate, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Authenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Authenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Authenticate, ui_event_Authenticate, LV_EVENT_ALL, NULL);
 

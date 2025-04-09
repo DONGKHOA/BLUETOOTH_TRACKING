@@ -9,6 +9,8 @@ void ui_Enroll_screen_init(void)
 {
     ui_Enroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Enroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Enroll, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Enroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ESCEnrollButton = lv_btn_create(ui_Enroll);
     lv_obj_set_width(ui_ESCEnrollButton, 50);
