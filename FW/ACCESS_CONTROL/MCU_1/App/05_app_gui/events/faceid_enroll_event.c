@@ -57,10 +57,15 @@ static lv_draw_rect_dsc_t rectangle_nouse;
 /******************************************************************************
  *   PUBLIC FUNCTION
  *****************************************************************************/
-
 void
-EVENT_Enroll_Before (lv_event_t *e)
+EVENT_Enroll_FaceID (lv_event_t *e)
 {
+  // xEventGroupSetBits(*p_display_event,
+  //                    ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
+}
+// void
+// EVENT_Enroll_Before (lv_event_t *e)
+// {
   // if (b_is_initialize == false)
   // {
   //   p_camera_capture_queue     = &s_data_system.s_camera_capture_queue;
@@ -109,11 +114,11 @@ EVENT_Enroll_Before (lv_event_t *e)
 
   // xEventGroupSetBits(*p_display_event,
   //                    ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
-}
+// }
 
-void
-EVENT_Enroll_After (lv_event_t *e)
-{
+// void
+// EVENT_Enroll_After (lv_event_t *e)
+// {
   // s_data_result_recognition.s_coord_box_face.x1 = 0;
   // s_data_result_recognition.s_coord_box_face.y1 = 0;
   // s_data_result_recognition.s_coord_box_face.x2 = 0;
@@ -132,7 +137,7 @@ EVENT_Enroll_After (lv_event_t *e)
   // lv_timer_pause(timer_faceid_enroll);
   // xEventGroupClearBits(*p_display_event,
   //                      ENROLL_FACE_ID_BIT | ENROLL_FINGERPRINT_BIT);
-}
+// }
 
 /******************************************************************************
  *  PRIVATE FUNCTION

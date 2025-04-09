@@ -309,22 +309,13 @@ void ui_Authenticate_screen_init(void)
     lv_obj_set_align(ui_DelButtonAuthenticate, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_DelButtonAuthenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_DelButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_DelButtonAuthenticate, &ui_img_1048813395, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_color(ui_DelButtonAuthenticate, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ui_DelButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_spread(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_x(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Image5 = lv_img_create(ui_DelButtonAuthenticate);
-    lv_img_set_src(ui_Image5, &ui_img_1048813395);
-    lv_obj_set_width(ui_Image5, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Image5, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image5, 1);
-    lv_obj_set_y(ui_Image5, 1);
-    lv_obj_set_align(ui_Image5, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Image5, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_Image5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_EnterButtonAuthenticate = lv_btn_create(ui_KeyboardAuthenticatePanel);
     lv_obj_set_width(ui_EnterButtonAuthenticate, 35);
@@ -334,22 +325,13 @@ void ui_Authenticate_screen_init(void)
     lv_obj_set_align(ui_EnterButtonAuthenticate, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_EnterButtonAuthenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_EnterButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_EnterButtonAuthenticate, &ui_img_1406808990, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_color(ui_EnterButtonAuthenticate, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ui_EnterButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_spread(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_x(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Image1 = lv_img_create(ui_EnterButtonAuthenticate);
-    lv_img_set_src(ui_Image1, &ui_img_1406808990);
-    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image1, 1);
-    lv_obj_set_y(ui_Image1, 0);
-    lv_obj_set_align(ui_Image1, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_ButtonAuthenticate0 = lv_btn_create(ui_KeyboardAuthenticatePanel);
     lv_obj_set_width(ui_ButtonAuthenticate0, 35);
@@ -388,23 +370,6 @@ void ui_Authenticate_screen_init(void)
     lv_obj_set_style_shadow_spread(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_x(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_NumberPassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
-    lv_obj_set_width(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_NumberPassIDAuthenticateText, LV_ALIGN_RIGHT_MID);
-    lv_obj_set_style_text_color(ui_NumberPassIDAuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_NumberPassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_NumberPassIDAuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_PassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
-    lv_obj_set_width(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_PassIDAuthenticateText, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_PassIDAuthenticateText, "ID:");
-    lv_obj_set_style_text_color(ui_PassIDAuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_PassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_PassIDAuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_AuthenticateText = lv_label_create(ui_Authenticate);
     lv_obj_set_width(ui_AuthenticateText, LV_SIZE_CONTENT);   /// 1

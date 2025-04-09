@@ -14,14 +14,23 @@
 #include <string.h>
 
 /******************************************************************************
+ *  PUBLIC VARIABLES
+ *****************************************************************************/
+
+extern char FaceIDCheck[4];
+extern char FingerCheck[4];
+
+/******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
 static void EVENT_ENROLL_DeletePopup_Timer(lv_timer_t *timer);
-static void EVENT_PROCESS_ENROLL_DATA_CreateTask(void);
+static void EVENT_ENROLL_DeletePopupSuccess_Timer(lv_timer_t *timer);
+
 static void EVENT_PROCESS_ENROLL_DATA_Task(void *arg);
 
 static void EVENT_ENROLL_ShowInvalidPopup(void *user_data);
+static void EVENT_ENROLL_ShowSuccessPopup(void *user_data);
 static void EVENT_ENROLL_ShowUserInfoScreen(void *param);
 
 /******************************************************************************
@@ -37,12 +46,19 @@ typedef struct
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
+char       full_name[64] = "";
+static int full_name_len = 0;
+static int packet_count  = 0;
+
+char           enroll_number_id[8] = { 0 };
+static uint8_t enroll_index;
 
 static TaskHandle_t s_enroll_task_handle;
 
 static enroll_event_data_t s_enroll_event_data;
 static DATA_SYNC_t         s_DATA_SYNC;
 
+static lv_obj_t   *ui_NumberUserID;
 static lv_timer_t *timer_enroll;
 
 static bool b_is_initialize = false;
@@ -59,7 +75,26 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
     s_enroll_event_data.p_send_data_queue = &s_data_system.s_send_data_queue;
     s_enroll_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
-    EVENT_PROCESS_ENROLL_DATA_CreateTask();
+
+    ui_NumberUserID = lv_label_create(ui_IDEnrollPane);
+    lv_obj_set_width(ui_NumberUserID, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_NumberUserID, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_align(ui_NumberUserID, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_style_text_color(ui_NumberUserID,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_NumberUserID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_NumberUserID,
+                               &lv_font_montserrat_16,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    xTaskCreate(EVENT_PROCESS_ENROLL_DATA_Task,
+                "process enroll task",
+                1024 * 4,
+                NULL,
+                6,
+                &s_enroll_task_handle);
   }
 
   vTaskResume(s_enroll_task_handle);
@@ -72,6 +107,11 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
 void
 EVENT_Enroll_Button0 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '0';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -79,6 +119,11 @@ EVENT_Enroll_Button0 (lv_event_t *e)
 void
 EVENT_Enroll_Button1 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '1';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -86,6 +131,11 @@ EVENT_Enroll_Button1 (lv_event_t *e)
 void
 EVENT_Enroll_Button2 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '2';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -93,6 +143,11 @@ EVENT_Enroll_Button2 (lv_event_t *e)
 void
 EVENT_Enroll_Button3 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '3';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -100,6 +155,11 @@ EVENT_Enroll_Button3 (lv_event_t *e)
 void
 EVENT_Enroll_Button4 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '4';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -107,6 +167,11 @@ EVENT_Enroll_Button4 (lv_event_t *e)
 void
 EVENT_Enroll_Button5 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '5';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -114,6 +179,11 @@ EVENT_Enroll_Button5 (lv_event_t *e)
 void
 EVENT_Enroll_Button6 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '6';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -121,6 +191,11 @@ EVENT_Enroll_Button6 (lv_event_t *e)
 void
 EVENT_Enroll_Button7 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '7';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -128,6 +203,11 @@ EVENT_Enroll_Button7 (lv_event_t *e)
 void
 EVENT_Enroll_Button8 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '8';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -135,6 +215,11 @@ EVENT_Enroll_Button8 (lv_event_t *e)
 void
 EVENT_Enroll_Button9 (lv_event_t *e)
 {
+  if (enroll_index >= 8)
+  {
+    return;
+  }
+
   enroll_number_id[enroll_index] = '9';
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
   enroll_index++;
@@ -142,6 +227,11 @@ EVENT_Enroll_Button9 (lv_event_t *e)
 void
 EVENT_Enroll_DelButton (lv_event_t *e)
 {
+  if (enroll_index == 0)
+  {
+    return;
+  }
+
   enroll_index--;
   enroll_number_id[enroll_index] = 0;
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
@@ -168,17 +258,6 @@ EVENT_Enroll_EnterButton (lv_event_t *e)
  *   PRIVATE FUNCTION
  *****************************************************************************/
 static void
-EVENT_PROCESS_ENROLL_DATA_CreateTask (void)
-{
-  xTaskCreate(EVENT_PROCESS_ENROLL_DATA_Task,
-              "process enroll task",
-              1024 * 4,
-              NULL,
-              6,
-              &s_enroll_task_handle);
-}
-
-static void
 EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
 {
   while (1)
@@ -199,26 +278,26 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
 
           if (s_DATA_SYNC.u8_data_packet[0] == 0x01)
           {
-            lv_label_set_text(ui_FingerCheck, "0/1");
-            lv_label_set_text(ui_FaceIDCheck, "0/1");
+            memcpy(FaceIDCheck, "0/1", sizeof(FaceIDCheck));
+            memcpy(FingerCheck, "0/1", sizeof(FingerCheck));
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == 0x02)
           {
-            lv_label_set_text(ui_FingerCheck, "0/1");
-            lv_label_set_text(ui_FaceIDCheck, "1/1");
+            memcpy(FaceIDCheck, "1/1", sizeof(FaceIDCheck));
+            memcpy(FingerCheck, "0/1", sizeof(FingerCheck));
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == 0x03)
           {
-            lv_label_set_text(ui_FingerCheck, "1/1");
-            lv_label_set_text(ui_FaceIDCheck, "0/1");
+            memcpy(FaceIDCheck, "0/1", sizeof(FaceIDCheck));
+            memcpy(FingerCheck, "1/1", sizeof(FingerCheck));
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == 0x04)
           {
-            lv_label_set_text(ui_FingerCheck, "1/1");
-            lv_label_set_text(ui_FaceIDCheck, "1/1");
+            memcpy(FaceIDCheck, "1/1", sizeof(FaceIDCheck));
+            memcpy(FingerCheck, "1/1", sizeof(FingerCheck));
           }
 
           break;
@@ -230,8 +309,8 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
           if (s_DATA_SYNC.u8_data_packet[0] == '\n'
               && s_DATA_SYNC.u8_data_packet[1] == '\n')
           {
-            // Change scrreen to user info
-            lv_async_call(EVENT_ENROLL_ShowUserInfoScreen, NULL);
+            // Change screen to user info
+            lv_async_call(EVENT_ENROLL_ShowSuccessPopup, NULL);
             break;
           }
 
@@ -276,6 +355,40 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
 }
 
 static void
+EVENT_ENROLL_ShowSuccessPopup (void *user_data)
+{
+  if (timer_enroll != NULL)
+  {
+    lv_timer_del(timer_enroll);
+    timer_enroll = NULL;
+  }
+
+  lv_obj_t *popup_enroll = lv_obj_create(ui_Enroll);
+  lv_obj_set_size(popup_enroll, 280, 180);
+  lv_obj_set_align(popup_enroll, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_enroll, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_enroll, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_enroll, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_enroll, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_enroll, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_enroll, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_enroll, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_enroll);
+  lv_label_set_text(label_invalid_id, "Valid ID");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0x00A00B), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_enroll = lv_timer_create(
+      EVENT_ENROLL_DeletePopupSuccess_Timer, 700, popup_enroll);
+}
+
+static void
 EVENT_ENROLL_ShowInvalidPopup (void *user_data)
 {
   if (timer_enroll != NULL)
@@ -306,22 +419,7 @@ EVENT_ENROLL_ShowInvalidPopup (void *user_data)
       label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
 
   timer_enroll
-      = lv_timer_create(EVENT_ENROLL_DeletePopup_Timer, 1000, popup_enroll);
-}
-
-static void
-EVENT_ENROLL_ShowUserInfoScreen (void *param)
-{
-  vTaskSuspend(s_enroll_task_handle);
-
-  lv_label_set_text(ui_IDTextEnroll2, full_name);
-  lv_label_set_text(ui_NumberID, enroll_number_id);
-
-  _ui_screen_change(&ui_UserInfo,
-                    LV_SCR_LOAD_ANIM_MOVE_LEFT,
-                    50,
-                    0,
-                    &ui_UserInfo_screen_init);
+      = lv_timer_create(EVENT_ENROLL_DeletePopup_Timer, 700, popup_enroll);
 }
 
 static void
@@ -340,4 +438,44 @@ EVENT_ENROLL_DeletePopup_Timer (lv_timer_t *timer)
   {
     timer_enroll = NULL;
   }
+}
+
+static void
+EVENT_ENROLL_DeletePopupSuccess_Timer (lv_timer_t *timer)
+{
+  lv_obj_t *popup_enroll = (lv_obj_t *)timer->user_data;
+
+  if (popup_enroll && lv_obj_is_valid(popup_enroll))
+  {
+    lv_obj_del(popup_enroll);
+  }
+
+  lv_timer_del(timer);
+
+  if (timer_enroll == timer)
+  {
+    timer_enroll = NULL;
+  }
+
+  lv_async_call(EVENT_ENROLL_ShowUserInfoScreen, NULL);
+}
+
+static void
+EVENT_ENROLL_ShowUserInfoScreen (void *param)
+{
+    vTaskSuspend(s_enroll_task_handle);
+
+  if (!lv_obj_is_valid(ui_UserInfo))
+  {
+    printf("ui_UserInfo is not valid!");
+    return;
+  }
+
+  _ui_screen_change(&ui_UserInfo,
+                    LV_SCR_LOAD_ANIM_MOVE_LEFT,
+                    500,
+                    0,
+                    &ui_UserInfo_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Enroll_To_UserInfo, NULL);
 }

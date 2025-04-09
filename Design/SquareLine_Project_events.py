@@ -198,3 +198,15 @@ def EVENT_Authenticate_EnterButton(event_struct):
 def EVENT_Authenticate_Button0(event_struct):
     return
 
+
+def EVENT_UserInfo(event_struct):
+    return
+
+
+def EVENT_AUTHENTICATE_ESC(event_struct):
+    return
+
+
+def EVENT_Enroll_To_UserInfo(event_struct):
+    return
+

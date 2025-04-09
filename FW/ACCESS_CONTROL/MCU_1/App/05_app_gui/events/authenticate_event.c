@@ -23,7 +23,8 @@ static void EVENT_AUTHENTICATE_DeletePopupFail_Timer(lv_timer_t *timer);
 static void EVENT_AUTHENTICATE_DeletePopupSuccess_Timer(lv_timer_t *timer);
 static void EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer(
     lv_timer_t *timer);
-static void EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask(void);
+static void EVENT_AUTHENTICATE_DeletePopup_Timer(lv_timer_t *timer);
+
 static void EVENT_PROCESS_AUTHENTICATE_DATA_Task(void *arg);
 
 static void EVENT_AUTHENTICATE_ShowSuccessPopup(void *user_data);
@@ -33,6 +34,8 @@ static void EVENT_AUTHENTICATE_ShowPasswordCorrectPopup(void *user_data);
 static void EVENT_AUTHENTICATE_ShowPasswordIncorrectPopup(void *user_data);
 
 static void EVENT_AUTHENTICATE_ShowEnrollScreen(void *param);
+
+static void EVENT_AUTHENTICATE_ShowInvalidPopup(void *user_data);
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -53,12 +56,14 @@ static TaskHandle_t s_authenticate_task_handle;
 static authenticate_event_data_t s_authenticate_event_data;
 static DATA_SYNC_t               s_DATA_SYNC;
 
-static char    authenticate_number_id[64] = { 0 };
+static char    authenticate_number_id[8] = { 0 };
 static uint8_t authenticate_number_id_send;
 static uint8_t authenticate_index;
 
 static int authenticate_password = 0;
 
+static lv_obj_t   *ui_PassIDAuthenticateText;
+static lv_obj_t   *ui_NumberPassIDAuthenticateText;
 static lv_timer_t *timer_authenticate;
 
 static bool b_is_initialize = false;
@@ -78,8 +83,43 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
         = &s_data_system.s_send_data_queue;
     s_authenticate_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
-    EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask();
+
+    ui_PassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
+    lv_obj_set_width(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_PassIDAuthenticateText, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_align(ui_PassIDAuthenticateText, LV_ALIGN_LEFT_MID);
+    lv_obj_set_style_text_color(ui_PassIDAuthenticateText,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_PassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_PassIDAuthenticateText,
+                               &lv_font_montserrat_16,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_NumberPassIDAuthenticateText
+        = lv_label_create(ui_PassIDAuthenticatePanel);
+    lv_obj_set_width(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_align(ui_NumberPassIDAuthenticateText, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_style_text_color(ui_NumberPassIDAuthenticateText,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_NumberPassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_NumberPassIDAuthenticateText,
+                               &lv_font_montserrat_16,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    xTaskCreate(EVENT_PROCESS_AUTHENTICATE_DATA_Task,
+                "process authenticate task",
+                1024 * 4,
+                NULL,
+                6,
+                &s_authenticate_task_handle);
   }
+
+  b_is_authenticate = false;
 
   lv_label_set_text(ui_PassIDAuthenticateText, "ID:");
 
@@ -93,6 +133,11 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
 void
 EVENT_Authenticate_Button0 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '0';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -101,6 +146,11 @@ EVENT_Authenticate_Button0 (lv_event_t *e)
 void
 EVENT_Authenticate_Button1 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '1';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -109,6 +159,11 @@ EVENT_Authenticate_Button1 (lv_event_t *e)
 void
 EVENT_Authenticate_Button2 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '2';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -117,6 +172,11 @@ EVENT_Authenticate_Button2 (lv_event_t *e)
 void
 EVENT_Authenticate_Button3 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '3';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -125,6 +185,11 @@ EVENT_Authenticate_Button3 (lv_event_t *e)
 void
 EVENT_Authenticate_Button4 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '4';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -133,6 +198,11 @@ EVENT_Authenticate_Button4 (lv_event_t *e)
 void
 EVENT_Authenticate_Button5 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '5';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -141,6 +211,11 @@ EVENT_Authenticate_Button5 (lv_event_t *e)
 void
 EVENT_Authenticate_Button6 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '6';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -149,6 +224,11 @@ EVENT_Authenticate_Button6 (lv_event_t *e)
 void
 EVENT_Authenticate_Button7 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '7';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -157,6 +237,11 @@ EVENT_Authenticate_Button7 (lv_event_t *e)
 void
 EVENT_Authenticate_Button8 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '8';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -165,6 +250,11 @@ EVENT_Authenticate_Button8 (lv_event_t *e)
 void
 EVENT_Authenticate_Button9 (lv_event_t *e)
 {
+  if (authenticate_index >= 8)
+  {
+    return;
+  }
+
   authenticate_number_id[authenticate_index] = '9';
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
   authenticate_index++;
@@ -173,6 +263,11 @@ EVENT_Authenticate_Button9 (lv_event_t *e)
 void
 EVENT_Authenticate_DelButton (lv_event_t *e)
 {
+  if (authenticate_index == 0)
+  {
+    return;
+  }
+
   authenticate_index--;
   authenticate_number_id[authenticate_index] = 0;
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
@@ -210,18 +305,6 @@ EVENT_Authenticate_EnterButton (lv_event_t *e)
 /******************************************************************************
  *   PRIVATE FUNCTION
  *****************************************************************************/
-
-static void
-EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask (void)
-{
-  xTaskCreate(EVENT_PROCESS_AUTHENTICATE_DATA_Task,
-              "process authenticate task",
-              1024 * 4,
-              NULL,
-              6,
-              &s_authenticate_task_handle);
-}
-
 static void
 EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
 {
@@ -252,11 +335,54 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
 
           break;
 
+        case DATA_SYNC_RESPONSE_USER_DATA:
+          if (s_DATA_SYNC.u8_data_packet[0] == 0x00)
+          {
+            // Invalid ID -> Show popup
+            lv_async_call(EVENT_AUTHENTICATE_ShowInvalidPopup, NULL);
+          }
+
+          break;
+
         default:
           break;
       }
     }
   }
+}
+
+static void
+EVENT_AUTHENTICATE_ShowInvalidPopup (void *user_data)
+{
+  if (timer_authenticate != NULL)
+  {
+    lv_timer_del(timer_authenticate);
+    timer_authenticate = NULL;
+  }
+
+  lv_obj_t *popup_authenticate = lv_obj_create(ui_Authenticate);
+  lv_obj_set_size(popup_authenticate, 280, 180);
+  lv_obj_set_align(popup_authenticate, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_authenticate, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_authenticate, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_authenticate, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_authenticate, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_authenticate);
+  lv_label_set_text(label_invalid_id, "Invalid ID");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0xFF0000), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_authenticate = lv_timer_create(
+      EVENT_AUTHENTICATE_DeletePopup_Timer, 700, popup_authenticate);
 }
 
 static void
@@ -291,7 +417,7 @@ EVENT_AUTHENTICATE_ShowPasswordCorrectPopup (void *user_data)
 
   timer_authenticate
       = lv_timer_create(EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer,
-                        1000,
+                        700,
                         popup_authenticate);
 }
 
@@ -326,7 +452,7 @@ EVENT_AUTHENTICATE_ShowPasswordIncorrectPopup (void *user_data)
       label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
 
   timer_authenticate = lv_timer_create(
-      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 1000, popup_authenticate);
+      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 700, popup_authenticate);
 }
 static void
 EVENT_AUTHENTICATE_ShowFailPopup (void *user_data)
@@ -359,7 +485,7 @@ EVENT_AUTHENTICATE_ShowFailPopup (void *user_data)
       label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
 
   timer_authenticate = lv_timer_create(
-      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 1000, popup_authenticate);
+      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 700, popup_authenticate);
 }
 
 static void
@@ -393,7 +519,25 @@ EVENT_AUTHENTICATE_ShowSuccessPopup (void *user_data)
       label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
 
   timer_authenticate = lv_timer_create(
-      EVENT_AUTHENTICATE_DeletePopupSuccess_Timer, 1000, popup_authenticate);
+      EVENT_AUTHENTICATE_DeletePopupSuccess_Timer, 700, popup_authenticate);
+}
+
+static void
+EVENT_AUTHENTICATE_DeletePopup_Timer (lv_timer_t *timer)
+{
+  lv_obj_t *popup_authenticate = (lv_obj_t *)timer->user_data;
+
+  if (popup_authenticate && lv_obj_is_valid(popup_authenticate))
+  {
+    lv_obj_del(popup_authenticate);
+  }
+
+  lv_timer_del(timer);
+
+  if (timer_authenticate == timer)
+  {
+    timer_authenticate = NULL;
+  }
 }
 
 static void
@@ -467,8 +611,8 @@ EVENT_AUTHENTICATE_ShowEnrollScreen (void *param)
 {
   vTaskSuspend(s_authenticate_task_handle);
 
-  EVENT_Authenticate_To_Enroll(NULL);
-
   _ui_screen_change(
-      &ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 50, 0, &ui_Enroll_screen_init);
+      &ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, &ui_Enroll_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Authenticate_To_Enroll, NULL);
 }

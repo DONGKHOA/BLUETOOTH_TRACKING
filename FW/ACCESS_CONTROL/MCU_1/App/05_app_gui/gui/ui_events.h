@@ -38,7 +38,7 @@ void EVENT_Enroll_Button9(lv_event_t * e);
 void EVENT_Enroll_DelButton(lv_event_t * e);
 void EVENT_Enroll_EnterButton(lv_event_t * e);
 void EVENT_Enroll_Button0(lv_event_t * e);
-void EVENT_Enroll_After(lv_event_t * e);
+void EVENT_Enroll_To_UserInfo(lv_event_t * e);
 void EVENT_Enroll_Finger(lv_event_t * e);
 void EVENT_Enroll_FaceID(lv_event_t * e);
 
