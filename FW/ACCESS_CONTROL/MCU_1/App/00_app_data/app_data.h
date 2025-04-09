@@ -147,7 +147,6 @@ extern "C"
     QueueHandle_t      s_result_recognition_queue;
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_receive_data_event_queue;
-    QueueHandle_t      s_display_data_queue;
     EventGroupHandle_t s_display_event;
   } DATA_System_t;
 
@@ -156,6 +155,13 @@ extern "C"
    ***************************************************************************/
 
   extern DATA_System_t s_data_system;
+
+  extern uint8_t enroll_number_id_send;
+  extern uint8_t enroll_index;
+  extern char    enroll_number_id[64];
+  extern char    full_name[64];
+  extern int     full_name_len;
+  extern int     packet_count;
 
 #ifdef __cplusplus
 }

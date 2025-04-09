@@ -170,7 +170,6 @@ APP_MAIN_InitDataSystem (void)
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
 
   s_data_system.s_send_data_queue      = xQueueCreate(4, sizeof(DATA_SYNC_t));
-  s_data_system.s_display_data_queue   = xQueueCreate(1, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));
   s_data_system.s_camera_recognition_queue
       = xQueueCreate(2, sizeof(camera_capture_t));

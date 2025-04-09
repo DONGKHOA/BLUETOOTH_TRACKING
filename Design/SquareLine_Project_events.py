@@ -142,3 +142,11 @@ def EVENT_Menu_To_Authenticate_After(event_struct):
 def EVENT_Menu_To_Authenticate_Before(event_struct):
     return
 
+
+def EVENT_Enroll_Finger(event_struct):
+    return
+
+
+def EVENT_Enroll_FaceID(event_struct):
+    return
+

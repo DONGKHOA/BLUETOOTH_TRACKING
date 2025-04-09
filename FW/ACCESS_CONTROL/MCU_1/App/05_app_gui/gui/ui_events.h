@@ -27,7 +27,7 @@ void EVENT_Enroll_DelButton(lv_event_t * e);
 void EVENT_Enroll_EnterButton(lv_event_t * e);
 void EVENT_Enroll_Button0(lv_event_t * e);
 void EVENT_Enroll_After(lv_event_t * e);
-void EVENT_Enroll_Finger_Before(lv_event_t * e);
+void EVENT_Enroll_Finger(lv_event_t * e);
 void EVENT_Enroll_FaceID_Before(lv_event_t * e);
 
 #ifdef __cplusplus

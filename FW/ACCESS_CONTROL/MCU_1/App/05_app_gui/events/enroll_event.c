@@ -38,16 +38,10 @@ typedef struct
  *    PRIVATE DATA
  *****************************************************************************/
 
+static TaskHandle_t s_enroll_task_handle;
+
 static enroll_event_data_t s_enroll_event_data;
 static DATA_SYNC_t         s_DATA_SYNC;
-
-static char    enroll_number_id[64] = { 0 };
-static uint8_t enroll_number_id_send;
-
-static uint8_t enroll_index;
-static char    full_name[64] = "";
-static int     full_name_len = 0;
-static int     packet_count  = 0;
 
 static lv_timer_t *timer_enroll;
 
@@ -67,6 +61,8 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
         = &s_data_system.s_receive_data_event_queue;
     EVENT_PROCESS_ENROLL_DATA_CreateTask();
   }
+
+  vTaskResume(s_enroll_task_handle);
 
   memset(enroll_number_id, 0, sizeof(enroll_number_id));
   enroll_index = 0;
@@ -153,6 +149,12 @@ EVENT_Enroll_DelButton (lv_event_t *e)
 void
 EVENT_Enroll_EnterButton (lv_event_t *e)
 {
+  memset(full_name, 0, sizeof(full_name));
+  full_name_len = 0;
+  packet_count  = 0;
+
+  vTaskResume(s_enroll_task_handle);
+
   enroll_number_id_send         = atoi(enroll_number_id);
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_USER_DATA;
   s_DATA_SYNC.u8_data_packet[0] = (enroll_number_id_send << 8) & 0xFF;
@@ -160,10 +162,6 @@ EVENT_Enroll_EnterButton (lv_event_t *e)
   s_DATA_SYNC.u8_data_length    = 2;
   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
   xQueueSend(*s_enroll_event_data.p_send_data_queue, &s_DATA_SYNC, 0);
-
-  memset(full_name, 0, sizeof(full_name));
-  full_name_len = 0;
-  packet_count  = 0;
 }
 
 /******************************************************************************
@@ -177,7 +175,7 @@ EVENT_PROCESS_ENROLL_DATA_CreateTask (void)
               1024 * 4,
               NULL,
               6,
-              NULL);
+              &s_enroll_task_handle);
 }
 
 static void
@@ -240,6 +238,7 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
           for (int i = 0; i < s_DATA_SYNC.u8_data_length; i++)
           {
             uint8_t byte = s_DATA_SYNC.u8_data_packet[i];
+            printf("byte: %02X\n", byte);
 
             if (byte == 0x00 || byte == 0xA5)
             {
@@ -313,9 +312,13 @@ EVENT_ENROLL_ShowInvalidPopup (void *user_data)
 static void
 EVENT_ENROLL_ShowUserInfoScreen (void *param)
 {
+  vTaskSuspend(s_enroll_task_handle);
+
   lv_label_set_text(ui_IDTextEnroll2, full_name);
+  lv_label_set_text(ui_NumberID, enroll_number_id);
+
   _ui_screen_change(&ui_UserInfo,
-                    LV_SCR_LOAD_ANIM_MOVE_RIGHT,
+                    LV_SCR_LOAD_ANIM_MOVE_LEFT,
                     50,
                     0,
                     &ui_UserInfo_screen_init);
