@@ -242,7 +242,18 @@ APP_LOCAL_DATABASE_Delete_UserName (uint16_t user_id_delete)
     index++;
   }
 
-  heap_caps_free(user_name[index]);
+  if (index == (user_len - 1))
+  {
+    heap_caps_free(user_name[index]);
+    return;
+  }
+  
+  for (uint16_t i = 1; i < user_len; i++)
+  {
+    memcpy(user_name[i - 1], user_name[i], 32);
+  }
+  heap_caps_free(user_name[user_len - 1]);
+  return;
 }
 
 static void
@@ -254,7 +265,18 @@ APP_LOCAL_DATABASE_Delete_UserRole (uint16_t user_id_delete)
     index++;
   }
 
-  heap_caps_free(role[index]);
+  if (index == (user_len - 1))
+  {
+    heap_caps_free(role[index]);
+    return;
+  }
+  
+  for (uint16_t i = 1; i < user_len; i++)
+  {
+    memcpy(role[i - 1], role[i], 6);
+  }
+  heap_caps_free(role[user_len - 1]);
+  return;
 }
 
 static void
