@@ -222,7 +222,7 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
-  s_data_system.s_fingerprint_queue = xQueueCreate(4, sizeof(finger_cmd));
+  s_data_system.s_fingerprint_queue = xQueueCreate(4, sizeof(DATA_SYNC_t));
 
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();

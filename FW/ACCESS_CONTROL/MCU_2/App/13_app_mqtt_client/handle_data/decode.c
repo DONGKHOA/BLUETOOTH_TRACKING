@@ -50,6 +50,18 @@ DECODE_Command (char *json_string)
     {
       return DELETE_USER_DATA_CMD;
     }
+    if (strcmp(cmd_item->valuestring, "SET_ROLE") == 0)
+    {
+      return SET_ROLE;
+    }
+    if (strcmp(cmd_item->valuestring, "DELETE_FINGER_USER") == 0)
+    {
+      return DELETE_FINGER_USER;
+    }
+    if (strcmp(cmd_item->valuestring, "DELETE_FACEID_USER") == 0)
+    {
+      return DELETE_FACEID_USER;
+    }
   }
 
   cJSON_Delete(root);
