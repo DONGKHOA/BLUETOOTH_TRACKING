@@ -19,12 +19,13 @@
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void EVENT_AUTHENTICATE_DeletePopup_Timer(lv_timer_t *timer);
+static void EVENT_AUTHENTICATE_DeletePopupFail_Timer(lv_timer_t *timer);
+static void EVENT_AUTHENTICATE_DeletePopupSuccess_Timer(lv_timer_t *timer);
 static void EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask(void);
 static void EVENT_PROCESS_AUTHENTICATE_DATA_Task(void *arg);
 
+static void EVENT_AUTHENTICATE_ShowSuccessPopup(void *user_data);
 static void EVENT_AUTHENTICATE_ShowFailPopup(void *user_data);
-static void EVENT_AUTHENTICATE_ShowEnrollScreen(void *param);
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -106,7 +107,8 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
           {
             printf("Authentication success\r\n");
 
-            lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
+            // lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
+            lv_async_call(EVENT_AUTHENTICATE_ShowSuccessPopup, NULL);
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
@@ -154,21 +156,45 @@ EVENT_AUTHENTICATE_ShowFailPopup (void *user_data)
       label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
 
   timer_authenticate = lv_timer_create(
-      EVENT_AUTHENTICATE_DeletePopup_Timer, 1000, popup_authenticate);
+      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 1000, popup_authenticate);
 }
 
 static void
-EVENT_AUTHENTICATE_ShowEnrollScreen (void *param)
+EVENT_AUTHENTICATE_ShowSuccessPopup (void *user_data)
 {
-  _ui_screen_change(&ui_Enroll,
-                    LV_SCR_LOAD_ANIM_MOVE_RIGHT,
-                    50,
-                    0,
-                    &ui_Enroll_screen_init);
+  if (timer_authenticate != NULL)
+  {
+    lv_timer_del(timer_authenticate);
+    timer_authenticate = NULL;
+  }
+
+  lv_obj_t *popup_authenticate = lv_obj_create(ui_Authenticate);
+  lv_obj_set_size(popup_authenticate, 280, 180);
+  lv_obj_set_align(popup_authenticate, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_authenticate, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_authenticate, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_authenticate, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_authenticate, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_authenticate);
+  lv_label_set_text(label_invalid_id, "Authentication Success");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0x00A00B), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_authenticate = lv_timer_create(
+      EVENT_AUTHENTICATE_DeletePopupSuccess_Timer, 1000, popup_authenticate);
 }
 
 static void
-EVENT_AUTHENTICATE_DeletePopup_Timer (lv_timer_t *timer)
+EVENT_AUTHENTICATE_DeletePopupFail_Timer (lv_timer_t *timer)
 {
   lv_obj_t *popup_authenticate = (lv_obj_t *)timer->user_data;
 
@@ -186,4 +212,27 @@ EVENT_AUTHENTICATE_DeletePopup_Timer (lv_timer_t *timer)
 
   _ui_screen_change(
       &ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+}
+
+static void
+EVENT_AUTHENTICATE_DeletePopupSuccess_Timer (lv_timer_t *timer)
+{
+  lv_obj_t *popup_authenticate = (lv_obj_t *)timer->user_data;
+
+  if (popup_authenticate && lv_obj_is_valid(popup_authenticate))
+  {
+    lv_obj_del(popup_authenticate);
+  }
+
+  lv_timer_del(timer);
+
+  if (timer_authenticate == timer)
+  {
+    timer_authenticate = NULL;
+  }
+
+  EVENT_Authenticate_To_Enroll(NULL);
+
+  _ui_screen_change(
+      &ui_Enroll, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Enroll_screen_init);
 }

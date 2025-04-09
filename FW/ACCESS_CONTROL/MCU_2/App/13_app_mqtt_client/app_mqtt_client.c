@@ -207,6 +207,13 @@ APP_MQTT_CLIENT_task (void *arg)
       switch (DECODE_Command(data))
       {
         case USER_DATA_CMD:
+
+        for (uint16_t i = 0; i < user_len; i++)
+        {
+          heap_caps_free(user_name[i]);
+          heap_caps_free(role[i]);
+        }
+        
           // Decode the user data from the server response
           DECODE_User_Data(
               data, user_id, face, finger, role, user_name, &user_len);
@@ -286,6 +293,7 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
 
         case DELETE_USER_DATA_CMD:
+
           DECODE_User_ID(data, &user_id_delete);
 
           s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_REQUEST_DELETE_USER_DATA;
@@ -346,7 +354,6 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_PUBLISHED:
 
       ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED");
-      xSemaphoreGive(s_mqtt_client_data.s_data_subscribe_sem);
 
       break;
     case MQTT_EVENT_DATA:

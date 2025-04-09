@@ -2,12 +2,16 @@
  *      INCLUDES
  *****************************************************************************/
 
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+
 #include "app_local_database.h"
 #include "app_data.h"
 
 #include "environment.h"
 
-#include <string.h>
+#include "esp_log.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -51,7 +55,7 @@ static void APP_LOCAL_DATABASE_Delete_UserID(uint16_t user_id_delete);
 void
 APP_LOCAL_DATABASE_CreateTask (void)
 {
-  xTaskCreate(APP_LOCAL_DATABASE_Task, "local db", 1024 * 4, NULL, 13, NULL);
+  xTaskCreate(APP_LOCAL_DATABASE_Task, "local db", 1024 * 10, NULL, 13, NULL);
 }
 
 void
@@ -79,7 +83,9 @@ APP_LOCAL_DATABASE_Task (void *arg)
     4  // face=1, finger=1
   };
   uint16_t u16_id;
+  uint16_t index;
   char     user_name_local_task[32];
+  bool     is_valid = true;
 
   while (1)
   {
@@ -95,7 +101,21 @@ APP_LOCAL_DATABASE_Task (void *arg)
           u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                    | s_DATA_SYNC.u8_data_packet[1];
 
-          if (u16_id > user_len)
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
           {
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
@@ -106,9 +126,9 @@ APP_LOCAL_DATABASE_Task (void *arg)
           else
           {
             register uint8_t u8_state
-                = state_lookup[(face[u16_id - 1] << 1) | finger[u16_id - 1]];
+                = state_lookup[(face[index] << 1) | finger[index]];
 
-            memcpy(user_name_local_task, user_name[u16_id - 1], 32);
+            memcpy(user_name_local_task, user_name[index], 32);
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
             s_DATA_SYNC.u8_data_packet[0] = u8_state;
@@ -137,7 +157,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
             s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
             xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
           }
-
           break;
 
         case DATA_SYNC_REQUEST_AUTHENTICATION:
@@ -145,18 +164,43 @@ APP_LOCAL_DATABASE_Task (void *arg)
           u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                    | s_DATA_SYNC.u8_data_packet[1];
 
-          register uint8_t u8_state = DATA_SYNC_FAIL;
-
-          if (memcmp(role[u16_id - 1], "admin", sizeof("admin")) == 0)
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
           {
-            u8_state = DATA_SYNC_SUCCESS;
-          }
 
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_AUTHENTICATION;
-          s_DATA_SYNC.u8_data_packet[0] = u8_state;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+          
+          if (!is_valid)
+          {
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+            xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+          }
+          else
+          {
+            register uint8_t u8_state = DATA_SYNC_FAIL;
+
+            if (memcmp(role[index], "admin", sizeof("admin")) == 0)
+            {
+              u8_state = DATA_SYNC_SUCCESS;
+            }
+
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_AUTHENTICATION;
+            s_DATA_SYNC.u8_data_packet[0] = u8_state;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+            xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+          }
 
           break;
 
@@ -211,7 +255,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
           xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
           xSemaphoreGive(*s_local_database.p_spi_mutex);
-
           taskEXIT_CRITICAL(&spi_mux);
 
           break;
@@ -247,11 +290,12 @@ APP_LOCAL_DATABASE_Delete_UserName (uint16_t user_id_delete)
     heap_caps_free(user_name[index]);
     return;
   }
-  
-  for (uint16_t i = 1; i < user_len; i++)
+
+  for (uint16_t i = index + 1; i < user_len; i++)
   {
     memcpy(user_name[i - 1], user_name[i], 32);
   }
+
   heap_caps_free(user_name[user_len - 1]);
   return;
 }
@@ -270,11 +314,12 @@ APP_LOCAL_DATABASE_Delete_UserRole (uint16_t user_id_delete)
     heap_caps_free(role[index]);
     return;
   }
-  
-  for (uint16_t i = 1; i < user_len; i++)
+
+  for (uint16_t i = index + 1; i < user_len; i++)
   {
     memcpy(role[i - 1], role[i], 6);
   }
+
   heap_caps_free(role[user_len - 1]);
   return;
 }
@@ -288,7 +333,18 @@ APP_LOCAL_DATABASE_Delete_UserFace (uint16_t user_id_delete)
     index++;
   }
 
-  face[index] = 0;
+  if (index == (user_len - 1))
+  {
+    face[index] = 0;
+    return;
+  }
+
+  for (uint16_t i = index + 1; i < user_len; i++)
+  {
+    face[i - 1] = face[i];
+  }
+
+  face[user_len - 1] = 0;
 }
 
 static void
@@ -300,7 +356,18 @@ APP_LOCAL_DATABASE_Delete_UserFinger (uint16_t user_id_delete)
     index++;
   }
 
-  finger[index] = 0;
+  if (index == (user_len - 1))
+  {
+    finger[index] = 0;
+    return;
+  }
+
+  for (uint16_t i = index + 1; i < user_len; i++)
+  {
+    finger[i - 1] = finger[i];
+  }
+
+  finger[user_len - 1] = 0;
 }
 
 static void
@@ -311,5 +378,17 @@ APP_LOCAL_DATABASE_Delete_UserID (uint16_t user_id_delete)
   {
     index++;
   }
-  user_id[index] = 0;
+
+  if (index == (user_len - 1))
+  {
+    user_id[index] = 0;
+    return;
+  }
+
+  for (uint16_t i = index + 1; i < user_len; i++)
+  {
+    user_id[i - 1] = user_id[i];
+  }
+
+  user_id[user_len - 1] = 0;
 }
