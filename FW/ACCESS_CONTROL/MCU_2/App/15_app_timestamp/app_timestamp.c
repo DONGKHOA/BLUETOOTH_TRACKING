@@ -22,14 +22,16 @@
  *****************************************************************************/
 typedef struct
 {
+  QueueHandle_t      *p_send_data_queue;
   EventGroupHandle_t *p_flag_time_event;
+  TimerHandle_t       s_timestamp_timer;
 } handle_timestamp_t;
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
 void        APP_TIMESTAMP_Notification_cb(struct timeval *tv);
-static void APP_TIMESTAMP_task(void *arg);
+static void APP_TIMESTAMP_Task(void *arg);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -44,12 +46,13 @@ static handle_timestamp_t s_handle_timestamp;
 void
 APP_TIMESTAMP_CreateTask (void)
 {
-  xTaskCreate(APP_TIMESTAMP_task, "timestamp task", 1024 * 3, NULL, 10, NULL);
+  xTaskCreate(APP_TIMESTAMP_Task, "timestamp task", 1024 * 10, NULL, 14, NULL);
 }
 
 void
 APP_TIMESTAMP_Init (void)
 {
+  s_handle_timestamp.p_send_data_queue = &s_data_system.s_send_data_queue;
   s_handle_timestamp.p_flag_time_event = &s_data_system.s_flag_time_event;
 
   xEventGroupClearBits(*s_handle_timestamp.p_flag_time_event,
@@ -75,29 +78,36 @@ APP_TIMESTAMP_Notification_cb (struct timeval *tv)
 }
 
 static void
-APP_TIMESTAMP_task (void *arg)
+APP_TIMESTAMP_Task (void *arg)
 {
+  DATA_SYNC_t s_DATA_SYNC;
+  EventBits_t uxBit;
   time_t      now;
-  EventBits_t bits;
+  struct tm   timeinfo;
+
   while (1)
   {
-    // Wait for SNTP or RTC to be ready
-    bits = xEventGroupWaitBits(*s_handle_timestamp.p_flag_time_event,
-                               TIME_SOURCE_SNTP_READY,
-                               pdFALSE,
-                               pdFALSE,
-                               portMAX_DELAY);
-
-    if (bits & TIME_SOURCE_SNTP_READY)
+    uxBit = xEventGroupGetBits(*s_handle_timestamp.p_flag_time_event);
+    if (uxBit & TIME_SOURCE_SNTP_READY)
     {
       time(&now);
       now += 7 * 3600;
-      ESP_LOGI(TAG, "Time: %ld\n", (uint32_t)now);
+
+      localtime_r(&now, &timeinfo);
+
+      s_DATA_SYNC.u8_data_start     = DATA_SYNC_TIME;
+      s_DATA_SYNC.u8_data_packet[0] = (uint8_t)timeinfo.tm_min;
+      s_DATA_SYNC.u8_data_packet[1] = (uint8_t)timeinfo.tm_hour;
+      s_DATA_SYNC.u8_data_packet[2] = (uint8_t)timeinfo.tm_mday;
+      s_DATA_SYNC.u8_data_packet[3] = (uint8_t)timeinfo.tm_mon;
+      s_DATA_SYNC.u8_data_packet[4] = (uint8_t)timeinfo.tm_year;
+      s_DATA_SYNC.u8_data_length    = 5;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+      xQueueSend(*s_handle_timestamp.p_send_data_queue, &s_DATA_SYNC, 0);
+
+      ESP_LOGI(TAG, "Time: %ld", (uint32_t)now);
     }
-    else
-    {
-      ESP_LOGW(TAG, "Time not synchronized yet (waiting for SNTP)");
-    }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(10000));
   }
 }
