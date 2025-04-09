@@ -9,6 +9,7 @@ void ui_UserInfo_screen_init(void)
 {
     ui_UserInfo = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_UserInfo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_UserInfo, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_UserInfo, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_UserInfo, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -40,6 +41,7 @@ void ui_UserInfo_screen_init(void)
     lv_obj_set_x(ui_NumberID, -109);
     lv_obj_set_y(ui_NumberID, -74);
     lv_obj_set_align(ui_NumberID, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_NumberID, "1");
     lv_obj_set_style_text_color(ui_NumberID, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_NumberID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -49,6 +51,7 @@ void ui_UserInfo_screen_init(void)
     lv_obj_set_x(ui_IDTextEnroll2, -25);
     lv_obj_set_y(ui_IDTextEnroll2, -75);
     lv_obj_set_align(ui_IDTextEnroll2, LV_ALIGN_RIGHT_MID);
+    lv_label_set_text(ui_IDTextEnroll2, "Ho Le Quoc Thang");
     lv_obj_set_style_text_color(ui_IDTextEnroll2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_IDTextEnroll2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -100,6 +103,7 @@ void ui_UserInfo_screen_init(void)
     lv_obj_set_x(ui_FingerCheck, -35);
     lv_obj_set_y(ui_FingerCheck, -41);
     lv_obj_set_align(ui_FingerCheck, LV_ALIGN_RIGHT_MID);
+    lv_label_set_text(ui_FingerCheck, "0/1");
     lv_obj_set_style_text_color(ui_FingerCheck, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FingerCheck, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -109,6 +113,7 @@ void ui_UserInfo_screen_init(void)
     lv_obj_set_x(ui_FaceIDCheck, -35);
     lv_obj_set_y(ui_FaceIDCheck, -4);
     lv_obj_set_align(ui_FaceIDCheck, LV_ALIGN_RIGHT_MID);
+    lv_label_set_text(ui_FaceIDCheck, "0/1");
     lv_obj_set_style_text_color(ui_FaceIDCheck, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FaceIDCheck, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -238,4 +243,5 @@ void ui_UserInfo_screen_init(void)
     lv_obj_add_event_cb(ui_ESCButton, ui_event_ESCButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_HomeButton, ui_event_HomeButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_UserInfo, ui_event_UserInfo, LV_EVENT_ALL, NULL);
+
 }

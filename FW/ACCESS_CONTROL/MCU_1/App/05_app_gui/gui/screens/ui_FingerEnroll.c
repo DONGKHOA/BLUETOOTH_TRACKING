@@ -9,6 +9,7 @@ void ui_FingerEnroll_screen_init(void)
 {
     ui_FingerEnroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_FingerEnroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_FingerEnroll, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_FingerEnroll, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_FingerEnroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -63,6 +64,7 @@ void ui_FingerEnroll_screen_init(void)
     lv_obj_set_x(ui_IDTextEnroll4, 15);
     lv_obj_set_y(ui_IDTextEnroll4, -30);
     lv_obj_set_align(ui_IDTextEnroll4, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_IDTextEnroll4, "1");
     lv_obj_set_style_text_color(ui_IDTextEnroll4, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_IDTextEnroll4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_IDTextEnroll4, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);

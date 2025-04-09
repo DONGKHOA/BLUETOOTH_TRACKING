@@ -9,6 +9,7 @@ void ui_Enroll_screen_init(void)
 {
     ui_Enroll = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Enroll, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_Enroll, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Enroll, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Enroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -85,10 +86,20 @@ void ui_Enroll_screen_init(void)
     ui_NumberUserID = lv_label_create(ui_IDEnrollPane);
     lv_obj_set_width(ui_NumberUserID, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_NumberUserID, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_NumberUserID, LV_ALIGN_CENTER);
+    lv_obj_set_align(ui_NumberUserID, LV_ALIGN_RIGHT_MID);
+    lv_label_set_text(ui_NumberUserID, "123");
     lv_obj_set_style_text_color(ui_NumberUserID, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_NumberUserID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_NumberUserID, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_IDEnrollText = lv_label_create(ui_IDEnrollPane);
+    lv_obj_set_width(ui_IDEnrollText, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_IDEnrollText, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_IDEnrollText, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_IDEnrollText, "ID:");
+    lv_obj_set_style_text_color(ui_IDEnrollText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_IDEnrollText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDEnrollText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_EnrollText = lv_label_create(ui_Enroll);
     lv_obj_set_width(ui_EnrollText, LV_SIZE_CONTENT);   /// 1
@@ -112,23 +123,23 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_EnrollTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_EnrollTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_KeyboardPanel = lv_obj_create(ui_Enroll);
-    lv_obj_set_width(ui_KeyboardPanel, 280);
-    lv_obj_set_height(ui_KeyboardPanel, 130);
-    lv_obj_set_x(ui_KeyboardPanel, 0);
-    lv_obj_set_y(ui_KeyboardPanel, 25);
-    lv_obj_set_align(ui_KeyboardPanel, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_KeyboardPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_KeyboardPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_KeyboardPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_color(ui_KeyboardPanel, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_KeyboardPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui_KeyboardPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_spread(ui_KeyboardPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_x(ui_KeyboardPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_y(ui_KeyboardPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_KeyboardEnrollPanel = lv_obj_create(ui_Enroll);
+    lv_obj_set_width(ui_KeyboardEnrollPanel, 280);
+    lv_obj_set_height(ui_KeyboardEnrollPanel, 130);
+    lv_obj_set_x(ui_KeyboardEnrollPanel, 0);
+    lv_obj_set_y(ui_KeyboardEnrollPanel, 25);
+    lv_obj_set_align(ui_KeyboardEnrollPanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_KeyboardEnrollPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_KeyboardEnrollPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_KeyboardEnrollPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_KeyboardEnrollPanel, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_KeyboardEnrollPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_KeyboardEnrollPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_KeyboardEnrollPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_KeyboardEnrollPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_KeyboardEnrollPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button1 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button1 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button1, 35);
     lv_obj_set_height(ui_Button1, 35);
     lv_obj_set_x(ui_Button1, -90);
@@ -152,7 +163,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number1, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button2 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button2 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button2, 35);
     lv_obj_set_height(ui_Button2, 35);
     lv_obj_set_x(ui_Button2, -30);
@@ -176,7 +187,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number2, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button5 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button5 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button5, 35);
     lv_obj_set_height(ui_Button5, 35);
     lv_obj_set_x(ui_Button5, -30);
@@ -200,7 +211,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number5, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button8 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button8 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button8, 35);
     lv_obj_set_height(ui_Button8, 35);
     lv_obj_set_x(ui_Button8, -30);
@@ -224,7 +235,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number8, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button4 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button4 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button4, 35);
     lv_obj_set_height(ui_Button4, 35);
     lv_obj_set_x(ui_Button4, -90);
@@ -248,7 +259,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number4, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button7 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button7 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button7, 35);
     lv_obj_set_height(ui_Button7, 35);
     lv_obj_set_x(ui_Button7, -90);
@@ -272,7 +283,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number7, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button3 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button3 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button3, 35);
     lv_obj_set_height(ui_Button3, 35);
     lv_obj_set_x(ui_Button3, 30);
@@ -296,7 +307,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number3, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button6 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button6 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button6, 35);
     lv_obj_set_height(ui_Button6, 35);
     lv_obj_set_x(ui_Button6, 30);
@@ -320,7 +331,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number6, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button9 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button9 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button9, 35);
     lv_obj_set_height(ui_Button9, 35);
     lv_obj_set_x(ui_Button9, 30);
@@ -344,7 +355,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_Number9, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Number9, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_DelButton = lv_btn_create(ui_KeyboardPanel);
+    ui_DelButton = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_DelButton, 35);
     lv_obj_set_height(ui_DelButton, 35);
     lv_obj_set_x(ui_DelButton, 90);
@@ -369,7 +380,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_EnterButton = lv_btn_create(ui_KeyboardPanel);
+    ui_EnterButton = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_EnterButton, 35);
     lv_obj_set_height(ui_EnterButton, 35);
     lv_obj_set_x(ui_EnterButton, 90);
@@ -394,7 +405,7 @@ void ui_Enroll_screen_init(void)
     lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_Button0 = lv_btn_create(ui_KeyboardPanel);
+    ui_Button0 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button0, 35);
     lv_obj_set_height(ui_Button0, 35);
     lv_obj_set_x(ui_Button0, 90);

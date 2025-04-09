@@ -10,6 +10,7 @@ void ui_Attendance_screen_init(void)
     ui_Attendance = lv_obj_create(NULL);
     lv_obj_add_state(ui_Attendance, LV_STATE_USER_1);       /// States
     lv_obj_clear_flag(ui_Attendance, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_Attendance, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Attendance, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Attendance, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 

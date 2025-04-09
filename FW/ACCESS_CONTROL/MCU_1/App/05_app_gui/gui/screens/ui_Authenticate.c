@@ -9,9 +9,439 @@ void ui_Authenticate_screen_init(void)
 {
     ui_Authenticate = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Authenticate, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_Authenticate, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Authenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Authenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_ESCAuthenticateButton = lv_btn_create(ui_Authenticate);
+    lv_obj_set_width(ui_ESCAuthenticateButton, 50);
+    lv_obj_set_height(ui_ESCAuthenticateButton, 20);
+    lv_obj_set_x(ui_ESCAuthenticateButton, 23);
+    lv_obj_set_y(ui_ESCAuthenticateButton, 106);
+    lv_obj_set_align(ui_ESCAuthenticateButton, LV_ALIGN_LEFT_MID);
+    lv_obj_set_style_bg_color(ui_ESCAuthenticateButton, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ESCAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ESCAuthenticateButton, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_ESCAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_ESCAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ESCAuthenticateButton, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ESCAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ESCAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ESCAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ESCAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ESCAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ESCAuthenticateButton, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ESCAuthenticateText = lv_label_create(ui_ESCAuthenticateButton);
+    lv_obj_set_width(ui_ESCAuthenticateText, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ESCAuthenticateText, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_ESCAuthenticateText, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_ESCAuthenticateText, "ESC");
+    lv_obj_set_style_text_color(ui_ESCAuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_ESCAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ESCAuthenticateText, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_HomeAuthenticateButton = lv_btn_create(ui_Authenticate);
+    lv_obj_set_width(ui_HomeAuthenticateButton, 50);
+    lv_obj_set_height(ui_HomeAuthenticateButton, 20);
+    lv_obj_set_x(ui_HomeAuthenticateButton, -23);
+    lv_obj_set_y(ui_HomeAuthenticateButton, 106);
+    lv_obj_set_align(ui_HomeAuthenticateButton, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_style_bg_color(ui_HomeAuthenticateButton, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_HomeAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_HomeAuthenticateButton, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_HomeAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_HomeAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_HomeAuthenticateButton, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_HomeAuthenticateButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_HomeAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_HomeAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_HomeAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_HomeAuthenticateButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_HomeAuthenticateButton, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_HomeEnrollText2 = lv_label_create(ui_HomeAuthenticateButton);
+    lv_obj_set_width(ui_HomeEnrollText2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_HomeEnrollText2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_HomeEnrollText2, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_HomeEnrollText2, "Home");
+    lv_obj_set_style_text_color(ui_HomeEnrollText2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_HomeEnrollText2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_HomeEnrollText2, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_KeyboardAuthenticatePanel = lv_obj_create(ui_Authenticate);
+    lv_obj_set_width(ui_KeyboardAuthenticatePanel, 280);
+    lv_obj_set_height(ui_KeyboardAuthenticatePanel, 130);
+    lv_obj_set_x(ui_KeyboardAuthenticatePanel, 0);
+    lv_obj_set_y(ui_KeyboardAuthenticatePanel, 25);
+    lv_obj_set_align(ui_KeyboardAuthenticatePanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_KeyboardAuthenticatePanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_KeyboardAuthenticatePanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_KeyboardAuthenticatePanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_KeyboardAuthenticatePanel, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_KeyboardAuthenticatePanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_KeyboardAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_KeyboardAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_KeyboardAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_KeyboardAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate1 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate1, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate1, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate1, -90);
+    lv_obj_set_y(ui_ButtonAuthenticate1, -40);
+    lv_obj_set_align(ui_ButtonAuthenticate1, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate1, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate1, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate1, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate1, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate1, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number20 = lv_label_create(ui_ButtonAuthenticate1);
+    lv_obj_set_width(ui_Number20, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number20, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number20, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number20, "1");
+    lv_obj_set_style_text_color(ui_Number20, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number20, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number20, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate2 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate2, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate2, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate2, -30);
+    lv_obj_set_y(ui_ButtonAuthenticate2, -40);
+    lv_obj_set_align(ui_ButtonAuthenticate2, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate2, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number10 = lv_label_create(ui_ButtonAuthenticate2);
+    lv_obj_set_width(ui_Number10, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number10, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number10, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number10, "2");
+    lv_obj_set_style_text_color(ui_Number10, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number10, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number10, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate5 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate5, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate5, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate5, -30);
+    lv_obj_set_y(ui_ButtonAuthenticate5, 0);
+    lv_obj_set_align(ui_ButtonAuthenticate5, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate5, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate5, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate5, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate5, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate5, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate5, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number11 = lv_label_create(ui_ButtonAuthenticate5);
+    lv_obj_set_width(ui_Number11, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number11, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number11, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number11, "5");
+    lv_obj_set_style_text_color(ui_Number11, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number11, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number11, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate8 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate8, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate8, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate8, -30);
+    lv_obj_set_y(ui_ButtonAuthenticate8, 40);
+    lv_obj_set_align(ui_ButtonAuthenticate8, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate8, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate8, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate8, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate8, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate8, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate8, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number12 = lv_label_create(ui_ButtonAuthenticate8);
+    lv_obj_set_width(ui_Number12, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number12, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number12, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number12, "8");
+    lv_obj_set_style_text_color(ui_Number12, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number12, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number12, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate4 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate4, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate4, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate4, -90);
+    lv_obj_set_y(ui_ButtonAuthenticate4, 0);
+    lv_obj_set_align(ui_ButtonAuthenticate4, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate4, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate4, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate4, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate4, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate4, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate4, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number13 = lv_label_create(ui_ButtonAuthenticate4);
+    lv_obj_set_width(ui_Number13, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number13, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number13, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number13, "4");
+    lv_obj_set_style_text_color(ui_Number13, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number13, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number13, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate7 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate7, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate7, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate7, -90);
+    lv_obj_set_y(ui_ButtonAuthenticate7, 40);
+    lv_obj_set_align(ui_ButtonAuthenticate7, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate7, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate7, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate7, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate7, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate7, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate7, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number14 = lv_label_create(ui_ButtonAuthenticate7);
+    lv_obj_set_width(ui_Number14, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number14, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number14, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number14, "7");
+    lv_obj_set_style_text_color(ui_Number14, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number14, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number14, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate3 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate3, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate3, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate3, 30);
+    lv_obj_set_y(ui_ButtonAuthenticate3, -40);
+    lv_obj_set_align(ui_ButtonAuthenticate3, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate3, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number15 = lv_label_create(ui_ButtonAuthenticate3);
+    lv_obj_set_width(ui_Number15, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number15, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number15, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number15, "3");
+    lv_obj_set_style_text_color(ui_Number15, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number15, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number15, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate6 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate6, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate6, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate6, 30);
+    lv_obj_set_y(ui_ButtonAuthenticate6, 0);
+    lv_obj_set_align(ui_ButtonAuthenticate6, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate6, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate6, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate6, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate6, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate6, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate6, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number16 = lv_label_create(ui_ButtonAuthenticate6);
+    lv_obj_set_width(ui_Number16, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number16, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number16, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number16, "6");
+    lv_obj_set_style_text_color(ui_Number16, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number16, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number16, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ButtonAuthenticate9 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate9, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate9, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate9, 30);
+    lv_obj_set_y(ui_ButtonAuthenticate9, 40);
+    lv_obj_set_align(ui_ButtonAuthenticate9, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate9, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate9, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate9, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate9, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate9, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate9, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate9, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate9, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number17 = lv_label_create(ui_ButtonAuthenticate9);
+    lv_obj_set_width(ui_Number17, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number17, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number17, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number17, "9");
+    lv_obj_set_style_text_color(ui_Number17, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number17, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number17, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_DelButtonAuthenticate = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_DelButtonAuthenticate, 35);
+    lv_obj_set_height(ui_DelButtonAuthenticate, 35);
+    lv_obj_set_x(ui_DelButtonAuthenticate, 90);
+    lv_obj_set_y(ui_DelButtonAuthenticate, -40);
+    lv_obj_set_align(ui_DelButtonAuthenticate, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_DelButtonAuthenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_DelButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_DelButtonAuthenticate, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_DelButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_DelButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Image5 = lv_img_create(ui_DelButtonAuthenticate);
+    lv_img_set_src(ui_Image5, &ui_img_1048813395);
+    lv_obj_set_width(ui_Image5, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Image5, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Image5, 1);
+    lv_obj_set_y(ui_Image5, 1);
+    lv_obj_set_align(ui_Image5, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image5, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_EnterButtonAuthenticate = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_EnterButtonAuthenticate, 35);
+    lv_obj_set_height(ui_EnterButtonAuthenticate, 35);
+    lv_obj_set_x(ui_EnterButtonAuthenticate, 90);
+    lv_obj_set_y(ui_EnterButtonAuthenticate, 0);
+    lv_obj_set_align(ui_EnterButtonAuthenticate, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_EnterButtonAuthenticate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_EnterButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_EnterButtonAuthenticate, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_EnterButtonAuthenticate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_EnterButtonAuthenticate, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Image1 = lv_img_create(ui_EnterButtonAuthenticate);
+    lv_img_set_src(ui_Image1, &ui_img_1406808990);
+    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Image1, 1);
+    lv_obj_set_y(ui_Image1, 0);
+    lv_obj_set_align(ui_Image1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ButtonAuthenticate0 = lv_btn_create(ui_KeyboardAuthenticatePanel);
+    lv_obj_set_width(ui_ButtonAuthenticate0, 35);
+    lv_obj_set_height(ui_ButtonAuthenticate0, 35);
+    lv_obj_set_x(ui_ButtonAuthenticate0, 90);
+    lv_obj_set_y(ui_ButtonAuthenticate0, 40);
+    lv_obj_set_align(ui_ButtonAuthenticate0, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ButtonAuthenticate0, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ButtonAuthenticate0, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ButtonAuthenticate0, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ButtonAuthenticate0, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_ButtonAuthenticate0, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_ButtonAuthenticate0, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_ButtonAuthenticate0, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_ButtonAuthenticate0, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Number18 = lv_label_create(ui_ButtonAuthenticate0);
+    lv_obj_set_width(ui_Number18, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Number18, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Number18, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Number18, "0");
+    lv_obj_set_style_text_color(ui_Number18, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Number18, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Number18, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_PassIDAuthenticatePanel = lv_obj_create(ui_Authenticate);
+    lv_obj_set_width(ui_PassIDAuthenticatePanel, 280);
+    lv_obj_set_height(ui_PassIDAuthenticatePanel, 30);
+    lv_obj_set_x(ui_PassIDAuthenticatePanel, 0);
+    lv_obj_set_y(ui_PassIDAuthenticatePanel, -70);
+    lv_obj_set_align(ui_PassIDAuthenticatePanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_PassIDAuthenticatePanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_shadow_color(ui_PassIDAuthenticatePanel, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_PassIDAuthenticatePanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_x(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_ofs_y(ui_PassIDAuthenticatePanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_NumberPassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
+    lv_obj_set_width(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_NumberPassIDAuthenticateText, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_NumberPassIDAuthenticateText, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_style_text_color(ui_NumberPassIDAuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_NumberPassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_NumberPassIDAuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_PassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
+    lv_obj_set_width(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_PassIDAuthenticateText, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_PassIDAuthenticateText, "ID:");
+    lv_obj_set_style_text_color(ui_PassIDAuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_PassIDAuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_PassIDAuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_AuthenticateText = lv_label_create(ui_Authenticate);
+    lv_obj_set_width(ui_AuthenticateText, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_AuthenticateText, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_AuthenticateText, 0);
+    lv_obj_set_y(ui_AuthenticateText, -105);
+    lv_obj_set_align(ui_AuthenticateText, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_AuthenticateText, "Authenticate");
+    lv_obj_set_style_text_color(ui_AuthenticateText, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_AuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_AuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_AuthenticateTime = lv_label_create(ui_Authenticate);
+    lv_obj_set_width(ui_AuthenticateTime, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_AuthenticateTime, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_AuthenticateTime, 23);
+    lv_obj_set_y(ui_AuthenticateTime, -105);
+    lv_obj_set_align(ui_AuthenticateTime, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_AuthenticateTime, "Time");
+    lv_obj_set_style_text_color(ui_AuthenticateTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_AuthenticateTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_AuthenticateTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_ESCAuthenticateButton, ui_event_ESCAuthenticateButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_HomeAuthenticateButton, ui_event_HomeAuthenticateButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate1, ui_event_ButtonAuthenticate1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate2, ui_event_ButtonAuthenticate2, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate5, ui_event_ButtonAuthenticate5, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate8, ui_event_ButtonAuthenticate8, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate4, ui_event_ButtonAuthenticate4, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate7, ui_event_ButtonAuthenticate7, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate3, ui_event_ButtonAuthenticate3, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate6, ui_event_ButtonAuthenticate6, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate9, ui_event_ButtonAuthenticate9, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_DelButtonAuthenticate, ui_event_DelButtonAuthenticate, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_EnterButtonAuthenticate, ui_event_EnterButtonAuthenticate, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ButtonAuthenticate0, ui_event_ButtonAuthenticate0, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Authenticate, ui_event_Authenticate, LV_EVENT_ALL, NULL);
 
 }

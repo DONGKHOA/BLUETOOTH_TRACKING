@@ -6,6 +6,6 @@
 #include "ui.h"
 
 void
-EVENT_Enroll_FaceID_Before (lv_event_t *e)
+EVENT_Enroll_FaceID (lv_event_t *e)
 {
 }

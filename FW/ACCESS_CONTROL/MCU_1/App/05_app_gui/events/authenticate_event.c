@@ -21,14 +21,18 @@
 
 static void EVENT_AUTHENTICATE_DeletePopupFail_Timer(lv_timer_t *timer);
 static void EVENT_AUTHENTICATE_DeletePopupSuccess_Timer(lv_timer_t *timer);
+static void EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer(
+    lv_timer_t *timer);
 static void EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask(void);
 static void EVENT_PROCESS_AUTHENTICATE_DATA_Task(void *arg);
 
 static void EVENT_AUTHENTICATE_ShowSuccessPopup(void *user_data);
 static void EVENT_AUTHENTICATE_ShowFailPopup(void *user_data);
 
+static void EVENT_AUTHENTICATE_ShowPasswordCorrectPopup(void *user_data);
+static void EVENT_AUTHENTICATE_ShowPasswordIncorrectPopup(void *user_data);
+
 static void EVENT_AUTHENTICATE_ShowEnrollScreen(void *param);
-static void EVENT_AUTHENTICATE_ShowMenuScreen(void *param);
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -49,11 +53,17 @@ static TaskHandle_t s_authenticate_task_handle;
 static authenticate_event_data_t s_authenticate_event_data;
 static DATA_SYNC_t               s_DATA_SYNC;
 
+static char    authenticate_number_id[64] = { 0 };
+static uint8_t authenticate_number_id_send;
+static uint8_t authenticate_index;
+
+static int authenticate_password = 0;
+
 static lv_timer_t *timer_authenticate;
 
-static uint8_t authenticate_number_id_send = 1;
-
 static bool b_is_initialize = false;
+
+static bool b_is_authenticate = false;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -71,14 +81,130 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
     EVENT_PROCESS_AUTHENTICATE_DATA_CreateTask();
   }
 
-  vTaskResume(s_authenticate_task_handle);
+  lv_label_set_text(ui_PassIDAuthenticateText, "ID:");
 
-  s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_AUTHENTICATION;
-  s_DATA_SYNC.u8_data_packet[0] = (authenticate_number_id_send << 8) & 0xFF;
-  s_DATA_SYNC.u8_data_packet[1] = authenticate_number_id_send & 0xFF;
-  s_DATA_SYNC.u8_data_length    = 2;
-  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-  xQueueSend(*s_authenticate_event_data.p_send_data_queue, &s_DATA_SYNC, 0);
+  memset(authenticate_number_id, 0, sizeof(authenticate_number_id));
+  authenticate_index = 0;
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+
+  vTaskResume(s_authenticate_task_handle);
+}
+
+void
+EVENT_Authenticate_Button0 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '0';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button1 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '1';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button2 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '2';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button3 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '3';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button4 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '4';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button5 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '5';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button6 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '6';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button7 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '7';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button8 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '8';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_Button9 (lv_event_t *e)
+{
+  authenticate_number_id[authenticate_index] = '9';
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+  authenticate_index++;
+}
+
+void
+EVENT_Authenticate_DelButton (lv_event_t *e)
+{
+  authenticate_index--;
+  authenticate_number_id[authenticate_index] = 0;
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+}
+
+void
+EVENT_Authenticate_EnterButton (lv_event_t *e)
+{
+  if (!b_is_authenticate)
+  {
+    authenticate_number_id_send   = atoi(authenticate_number_id);
+    s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_AUTHENTICATION;
+    s_DATA_SYNC.u8_data_packet[0] = (authenticate_number_id_send << 8) & 0xFF;
+    s_DATA_SYNC.u8_data_packet[1] = authenticate_number_id_send & 0xFF;
+    s_DATA_SYNC.u8_data_length    = 2;
+    s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+    xQueueSend(*s_authenticate_event_data.p_send_data_queue, &s_DATA_SYNC, 0);
+  }
+  else
+  {
+    authenticate_password = atoi(authenticate_number_id);
+    if (authenticate_password == AUTHENTICATE_PASSWORD)
+    {
+      b_is_authenticate = false;
+      lv_async_call(EVENT_AUTHENTICATE_ShowPasswordCorrectPopup, NULL);
+    }
+    else
+    {
+      // Invalid Password -> Show popup
+      lv_async_call(EVENT_AUTHENTICATE_ShowPasswordIncorrectPopup, NULL);
+    }
+  }
 }
 
 /******************************************************************************
@@ -112,11 +238,15 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
           {
+            // Enter Password to access enroll screen if authenticator is admin
+            b_is_authenticate = true;
+
             lv_async_call(EVENT_AUTHENTICATE_ShowSuccessPopup, NULL);
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
           {
+            b_is_authenticate = false;
             lv_async_call(EVENT_AUTHENTICATE_ShowFailPopup, NULL);
           }
 
@@ -129,6 +259,75 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
   }
 }
 
+static void
+EVENT_AUTHENTICATE_ShowPasswordCorrectPopup (void *user_data)
+{
+  if (timer_authenticate != NULL)
+  {
+    lv_timer_del(timer_authenticate);
+    timer_authenticate = NULL;
+  }
+
+  lv_obj_t *popup_authenticate = lv_obj_create(ui_Authenticate);
+  lv_obj_set_size(popup_authenticate, 280, 180);
+  lv_obj_set_align(popup_authenticate, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_authenticate, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_authenticate, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_authenticate, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_authenticate, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_authenticate);
+  lv_label_set_text(label_invalid_id, "Password Correct");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0x00A00B), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_authenticate
+      = lv_timer_create(EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer,
+                        1000,
+                        popup_authenticate);
+}
+
+static void
+EVENT_AUTHENTICATE_ShowPasswordIncorrectPopup (void *user_data)
+{
+  if (timer_authenticate != NULL)
+  {
+    lv_timer_del(timer_authenticate);
+    timer_authenticate = NULL;
+  }
+
+  lv_obj_t *popup_authenticate = lv_obj_create(ui_Authenticate);
+  lv_obj_set_size(popup_authenticate, 280, 180);
+  lv_obj_set_align(popup_authenticate, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_authenticate, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_authenticate, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_authenticate, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_authenticate, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_authenticate, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_authenticate);
+  lv_label_set_text(label_invalid_id, "Password Incorrect");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0xFF0000), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_authenticate = lv_timer_create(
+      EVENT_AUTHENTICATE_DeletePopupFail_Timer, 1000, popup_authenticate);
+}
 static void
 EVENT_AUTHENTICATE_ShowFailPopup (void *user_data)
 {
@@ -213,8 +412,6 @@ EVENT_AUTHENTICATE_DeletePopupFail_Timer (lv_timer_t *timer)
   {
     timer_authenticate = NULL;
   }
-
-  lv_async_call(EVENT_AUTHENTICATE_ShowMenuScreen, NULL);
 }
 
 static void
@@ -234,16 +431,35 @@ EVENT_AUTHENTICATE_DeletePopupSuccess_Timer (lv_timer_t *timer)
     timer_authenticate = NULL;
   }
 
-  lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
+  lv_label_set_text(ui_PassIDAuthenticateText, "Password:");
+
+  memset(authenticate_number_id, 0, sizeof(authenticate_number_id));
+  authenticate_index = 0;
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
 }
 
 static void
-EVENT_AUTHENTICATE_ShowMenuScreen (void *param)
+EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer (lv_timer_t *timer)
 {
-  vTaskSuspend(s_authenticate_task_handle);
+  lv_obj_t *popup_authenticate = (lv_obj_t *)timer->user_data;
 
-  _ui_screen_change(
-      &ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 50, 0, &ui_Menu_screen_init);
+  if (popup_authenticate && lv_obj_is_valid(popup_authenticate))
+  {
+    lv_obj_del(popup_authenticate);
+  }
+
+  lv_timer_del(timer);
+
+  if (timer_authenticate == timer)
+  {
+    timer_authenticate = NULL;
+  }
+
+  memset(authenticate_number_id, 0, sizeof(authenticate_number_id));
+  authenticate_index = 0;
+  lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+
+  lv_async_call(EVENT_AUTHENTICATE_ShowEnrollScreen, NULL);
 }
 
 static void

@@ -25,6 +25,8 @@ extern "C"
 #define DATA_SYNC_STATE_CONNECT     (uint8_t)0x00
 #define DATA_SYNC_STATE_NOT_CONNECT (uint8_t)0x01
 
+#define AUTHENTICATE_PASSWORD 123
+
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/

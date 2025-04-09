@@ -14,6 +14,18 @@ void EVENT_Attendance_Before(lv_event_t * e);
 void EVENT_Menu_To_Authenticate(lv_event_t * e);
 void EVENT_Attendance_After(lv_event_t * e);
 void EVENT_Authenticate_To_Enroll(lv_event_t * e);
+void EVENT_Authenticate_Button1(lv_event_t * e);
+void EVENT_Authenticate_Button2(lv_event_t * e);
+void EVENT_Authenticate_Button5(lv_event_t * e);
+void EVENT_Authenticate_Button8(lv_event_t * e);
+void EVENT_Authenticate_Button4(lv_event_t * e);
+void EVENT_Authenticate_Button7(lv_event_t * e);
+void EVENT_Authenticate_Button3(lv_event_t * e);
+void EVENT_Authenticate_Button6(lv_event_t * e);
+void EVENT_Authenticate_Button9(lv_event_t * e);
+void EVENT_Authenticate_DelButton(lv_event_t * e);
+void EVENT_Authenticate_EnterButton(lv_event_t * e);
+void EVENT_Authenticate_Button0(lv_event_t * e);
 void EVENT_Enroll_Button1(lv_event_t * e);
 void EVENT_Enroll_Button2(lv_event_t * e);
 void EVENT_Enroll_Button5(lv_event_t * e);
@@ -28,7 +40,7 @@ void EVENT_Enroll_EnterButton(lv_event_t * e);
 void EVENT_Enroll_Button0(lv_event_t * e);
 void EVENT_Enroll_After(lv_event_t * e);
 void EVENT_Enroll_Finger(lv_event_t * e);
-void EVENT_Enroll_FaceID_Before(lv_event_t * e);
+void EVENT_Enroll_FaceID(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

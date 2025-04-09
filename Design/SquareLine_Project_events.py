@@ -150,3 +150,51 @@ def EVENT_Enroll_Finger(event_struct):
 def EVENT_Enroll_FaceID(event_struct):
     return
 
+
+def EVENT_Authenticate_Button1(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button2(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button5(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button8(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button4(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button7(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button3(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button6(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button9(event_struct):
+    return
+
+
+def EVENT_Authenticate_DelButton(event_struct):
+    return
+
+
+def EVENT_Authenticate_EnterButton(event_struct):
+    return
+
+
+def EVENT_Authenticate_Button0(event_struct):
+    return
+
