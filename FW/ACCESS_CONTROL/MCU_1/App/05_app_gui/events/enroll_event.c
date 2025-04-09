@@ -230,7 +230,7 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
           if (s_DATA_SYNC.u8_data_packet[0] == '\n'
               && s_DATA_SYNC.u8_data_packet[1] == '\n')
           {
-            // Change scrreen to user info
+            // Change screen to user info
             lv_async_call(EVENT_ENROLL_ShowUserInfoScreen, NULL);
             break;
           }
