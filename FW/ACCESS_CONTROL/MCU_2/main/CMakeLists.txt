@@ -2,8 +2,7 @@ set (includes ".")
 
 set (sources "main.c")
 
-set (requires 16_app_security
-              01_app_fingerprint
+set (requires 01_app_fingerprint
               02_app_data_receive 
               03_app_data_transmit 
               05_app_local_database

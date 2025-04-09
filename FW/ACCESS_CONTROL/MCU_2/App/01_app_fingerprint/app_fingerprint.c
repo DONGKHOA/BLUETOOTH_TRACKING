@@ -29,12 +29,17 @@ typedef struct fingerprint_data
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_FINGERPRINT_task(void *arg);
-static void APP_FINGERPRINT_Timer_Callback(TimerHandle_t s_timer);
+static void        APP_FINGERPRINT_task(void *arg);
+static void        APP_FINGERPRINT_Timer_Callback(TimerHandle_t s_timer);
+static inline void APP_FINGERPRINT_Enroll(void);
+static inline void APP_FINGERPRINT_Attendance(void);
+static inline void APP_FINGERPRINT_Delete(void);
 
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
+
+int finger_user_id;
 
 static fingerprint_data_t s_fingerprint_data;
 
@@ -96,27 +101,27 @@ static void
 APP_FINGERPRINT_task (void *arg)
 {
   uint8_t    confirmation_code;
-  finger_cmd e_finger_cmd;
+  DATA_SYNC_t s_DATA_SYNC;
 
   while (1)
   {
     if (xQueueReceive(*s_fingerprint_data.p_fingerprint_queue,
-                      &e_finger_cmd,
+                      &s_DATA_SYNC,
                       portMAX_DELAY)
         == pdTRUE)
     {
-      switch (e_finger_cmd)
+      switch (s_DATA_SYNC.u8_data_start)
       {
         case FINGER_ENROLL:
-
+        APP_FINGERPRINT_Enroll();
           break;
 
         case FINGER_ATTENDANCE:
-
+        APP_FINGERPRINT_Attendance();
           break;
 
         case FINGER_DELETE:
-
+        APP_FINGERPRINT_Delete();
           break;
 
         default:
@@ -124,6 +129,21 @@ APP_FINGERPRINT_task (void *arg)
       }
     }
   }
+}
+
+static inline void APP_FINGERPRINT_Enroll(void)
+{
+
+}
+
+static inline void APP_FINGERPRINT_Attendance(void)
+{
+
+}
+
+static inline void APP_FINGERPRINT_Delete(void)
+{
+
 }
 
 static void

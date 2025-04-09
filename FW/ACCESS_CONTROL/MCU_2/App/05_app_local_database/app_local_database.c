@@ -28,6 +28,7 @@ typedef struct
   QueueHandle_t     *p_data_mqtt_queue;
   QueueHandle_t     *p_send_data_queue;
   QueueHandle_t     *p_data_local_database_queue;
+  QueueHandle_t     *p_fingerprint_queue;
   SemaphoreHandle_t *p_spi_mutex;
 } local_database_t;
 
@@ -65,7 +66,8 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_send_data_queue = &s_data_system.s_send_data_queue;
   s_local_database.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
-  s_local_database.p_spi_mutex = &s_data_system.s_spi_mutex;
+  s_local_database.p_spi_mutex        = &s_data_system.s_spi_mutex;
+  s_local_database._fingerprint_queue = &s_data_system.s_fingerprint_queue;
 }
 
 /******************************************************************************
@@ -177,7 +179,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
             index++;
           }
-          
+
           if (!is_valid)
           {
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_USER_DATA;
@@ -266,6 +268,36 @@ APP_LOCAL_DATABASE_Task (void *arg)
           // Update data local database
 
           taskEXIT_CRITICAL(&spi_mux);
+
+          break;
+
+        case LOCAL_SET_ROLE:
+
+        // Update data in sdcard
+
+        // Update data in psram
+
+        break;
+
+        case LOCAL_FINGER_DELETE:
+
+          // Update data in sdcard
+
+          // Update data in psram
+
+          // Update in fingerprint hardware
+          s_DATA_SYNC.u8_data_start = FINGER_DELETE;
+          xQueueSend(*s_local_database.p_fingerprint_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case LOCAL_FACEID_DELETE:
+
+          // Update data in sdcard
+
+          // Update data in psram
+
+          // Update in face hardware
 
           break;
 

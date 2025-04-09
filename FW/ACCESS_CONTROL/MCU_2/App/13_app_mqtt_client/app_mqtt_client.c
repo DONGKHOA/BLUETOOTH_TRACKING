@@ -117,6 +117,7 @@ static void
 APP_MQTT_CLIENT_task (void *arg)
 {
   DATA_SYNC_t s_DATA_SYNC;
+  finger_cmd  e_finger_cmd;
   uint8_t     is_init = 0;
 
   while (1)
@@ -208,12 +209,12 @@ APP_MQTT_CLIENT_task (void *arg)
       {
         case USER_DATA_CMD:
 
-        for (uint16_t i = 0; i < user_len; i++)
-        {
-          heap_caps_free(user_name[i]);
-          heap_caps_free(role[i]);
-        }
-        
+          for (uint16_t i = 0; i < user_len; i++)
+          {
+            heap_caps_free(user_name[i]);
+            heap_caps_free(role[i]);
+          }
+
           // Decode the user data from the server response
           DECODE_User_Data(
               data, user_id, face, finger, role, user_name, &user_len);
@@ -308,6 +309,55 @@ APP_MQTT_CLIENT_task (void *arg)
           xQueueSend(
               *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
+          break;
+
+        case SET_ROLE:
+
+          DECODE_User_ID(data, &user_id_delete);
+
+          s_DATA_SYNC.u8_data_start = LOCAL_SET_ROLE;
+
+          s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
+
+          xQueueSend(
+              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case DELETE_FINGER_USER:
+
+          DECODE_User_ID(data, &user_id_delete);
+
+          s_DATA_SYNC.u8_data_start = LOCAL_FINGER_DELETE;
+
+          s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
+
+          xQueueSend(
+              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case DELETE_FACEID_USER:
+          DECODE_User_ID(data, &user_id_delete);
+
+          s_DATA_SYNC.u8_data_start = LOCAL_FACEID_DELETE;
+
+          s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
+
+          xQueueSend(
+              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
           break;
 
         default:
