@@ -198,9 +198,6 @@ extern lv_obj_t * ui_IDTextEnroll4;
 extern lv_obj_t * ui_IDTextEnroll5;
 extern lv_obj_t * ui_FingerStatus1;
 extern lv_obj_t * ui_FingerStatus2;
-void ui_event_ESCButton3(lv_event_t * e);
-extern lv_obj_t * ui_ESCButton3;
-extern lv_obj_t * ui_ESCText3;
 // CUSTOM VARIABLES
 
 // EVENTS

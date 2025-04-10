@@ -100,34 +100,4 @@ void ui_FingerEnroll_screen_init(void)
     lv_obj_set_style_bg_color(ui_FingerStatus2, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_FingerStatus2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_ESCButton3 = lv_btn_create(ui_FingerEnroll);
-    lv_obj_set_width(ui_ESCButton3, 50);
-    lv_obj_set_height(ui_ESCButton3, 20);
-    lv_obj_set_x(ui_ESCButton3, 23);
-    lv_obj_set_y(ui_ESCButton3, 106);
-    lv_obj_set_align(ui_ESCButton3, LV_ALIGN_LEFT_MID);
-    lv_obj_set_style_bg_color(ui_ESCButton3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_ESCButton3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_color(ui_ESCButton3, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_ESCButton3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_spread(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_x(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_ofs_y(ui_ESCButton3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_ESCButton3, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_ESCText3 = lv_label_create(ui_ESCButton3);
-    lv_obj_set_width(ui_ESCText3, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_ESCText3, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_ESCText3, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_ESCText3, "ESC");
-    lv_obj_set_style_text_color(ui_ESCText3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_ESCText3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_ESCText3, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_add_event_cb(ui_ESCButton3, ui_event_ESCButton3, LV_EVENT_ALL, NULL);
-
 }
