@@ -58,46 +58,4 @@ void ui_FingerEnroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_IDTextEnroll3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_IDTextEnroll3, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_IDTextEnroll4 = lv_label_create(ui_POPUPMenuPanel4);
-    lv_obj_set_width(ui_IDTextEnroll4, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_IDTextEnroll4, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_IDTextEnroll4, 15);
-    lv_obj_set_y(ui_IDTextEnroll4, -30);
-    lv_obj_set_align(ui_IDTextEnroll4, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_IDTextEnroll4, "1");
-    lv_obj_set_style_text_color(ui_IDTextEnroll4, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_IDTextEnroll4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_IDTextEnroll4, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_IDTextEnroll5 = lv_label_create(ui_POPUPMenuPanel4);
-    lv_obj_set_width(ui_IDTextEnroll5, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_IDTextEnroll5, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_IDTextEnroll5, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_IDTextEnroll5, "Please place your finger");
-    lv_obj_set_style_text_color(ui_IDTextEnroll5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_IDTextEnroll5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_IDTextEnroll5, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_FingerStatus1 = lv_obj_create(ui_POPUPMenuPanel4);
-    lv_obj_set_width(ui_FingerStatus1, 20);
-    lv_obj_set_height(ui_FingerStatus1, 20);
-    lv_obj_set_x(ui_FingerStatus1, -20);
-    lv_obj_set_y(ui_FingerStatus1, 30);
-    lv_obj_set_align(ui_FingerStatus1, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_FingerStatus1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_FingerStatus1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_FingerStatus1, lv_color_hex(0x00FF1C), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_FingerStatus1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_FingerStatus2 = lv_obj_create(ui_POPUPMenuPanel4);
-    lv_obj_set_width(ui_FingerStatus2, 20);
-    lv_obj_set_height(ui_FingerStatus2, 20);
-    lv_obj_set_x(ui_FingerStatus2, 20);
-    lv_obj_set_y(ui_FingerStatus2, 30);
-    lv_obj_set_align(ui_FingerStatus2, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_FingerStatus2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_FingerStatus2, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_FingerStatus2, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_FingerStatus2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
 }

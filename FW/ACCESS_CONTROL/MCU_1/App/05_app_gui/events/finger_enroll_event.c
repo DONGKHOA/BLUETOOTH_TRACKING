@@ -61,6 +61,58 @@ EVENT_Enroll_Finger (lv_event_t *e)
     s_finger_enroll_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
 
+    ui_IDTextEnroll4 = lv_label_create(ui_POPUPMenuPanel4);
+    lv_obj_set_width(ui_IDTextEnroll4, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_IDTextEnroll4, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_IDTextEnroll4, 15);
+    lv_obj_set_y(ui_IDTextEnroll4, -30);
+    lv_obj_set_align(ui_IDTextEnroll4, LV_ALIGN_CENTER);
+    lv_obj_set_style_text_color(ui_IDTextEnroll4,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_IDTextEnroll4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDTextEnroll4,
+                               &lv_font_montserrat_20,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_IDTextEnroll5 = lv_label_create(ui_POPUPMenuPanel4);
+    lv_obj_set_width(ui_IDTextEnroll5, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_IDTextEnroll5, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_align(ui_IDTextEnroll5, LV_ALIGN_CENTER);
+    lv_obj_set_style_text_color(ui_IDTextEnroll5,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_IDTextEnroll5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_IDTextEnroll5,
+                               &lv_font_montserrat_18,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_FingerStatus1 = lv_obj_create(ui_POPUPMenuPanel4);
+    lv_obj_set_width(ui_FingerStatus1, 20);
+    lv_obj_set_height(ui_FingerStatus1, 20);
+    lv_obj_set_x(ui_FingerStatus1, -20);
+    lv_obj_set_y(ui_FingerStatus1, 30);
+    lv_obj_set_align(ui_FingerStatus1, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_FingerStatus1, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_set_style_radius(
+        ui_FingerStatus1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(
+        ui_FingerStatus1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_FingerStatus2 = lv_obj_create(ui_POPUPMenuPanel4);
+    lv_obj_set_width(ui_FingerStatus2, 20);
+    lv_obj_set_height(ui_FingerStatus2, 20);
+    lv_obj_set_x(ui_FingerStatus2, 20);
+    lv_obj_set_y(ui_FingerStatus2, 30);
+    lv_obj_set_align(ui_FingerStatus2, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_FingerStatus2, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_set_style_radius(
+        ui_FingerStatus2, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(
+        ui_FingerStatus2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     xTaskCreate(EVENT_PROCESS_FINGER_ENROLL_DATA_Task,
                 "process finger enroll task",
                 1024 * 4,
@@ -70,6 +122,13 @@ EVENT_Enroll_Finger (lv_event_t *e)
   }
 
   lv_label_set_text(ui_IDTextEnroll4, enroll_number_id);
+  lv_label_set_text(ui_IDTextEnroll5, "Please place your finger");
+  lv_obj_set_style_bg_color(ui_FingerStatus1,
+                            lv_color_hex(0x00FF1C),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_bg_color(ui_FingerStatus2,
+                            lv_color_hex(0xFF0000),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
 
   vTaskResume(s_finger_enroll_task_handle);
 
@@ -97,11 +156,11 @@ EVENT_PROCESS_FINGER_ENROLL_DATA_Task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
-        case DATA_SYNC_RESPONSE_ENROLL_FIRST_FINGERPRINT:
+        case DATA_SYNC_RESPONSE_ENROLL_FOUND_FINGERPRINT:
           // Handle enroll fingerprint response
           break;
 
-        case DATA_SYNC_RESPONSE_ENROLL_SECOND_FINGERPRINT:
+        case DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT:
           // Handle enroll fingerprint response
           break;
 
