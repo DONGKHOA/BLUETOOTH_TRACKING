@@ -188,9 +188,6 @@ lv_obj_t * ui_IDTextEnroll4;
 lv_obj_t * ui_IDTextEnroll5;
 lv_obj_t * ui_FingerStatus1;
 lv_obj_t * ui_FingerStatus2;
-void ui_event_ESCButton3(lv_event_t * e);
-lv_obj_t * ui_ESCButton3;
-lv_obj_t * ui_ESCText3;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -584,15 +581,6 @@ void ui_event_FaceIDEnroll(lv_event_t * e)
     }
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_FaceID_Back(e);
-    }
-}
-
-void ui_event_ESCButton3(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_UserInfo, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_UserInfo_screen_init);
     }
 }
 

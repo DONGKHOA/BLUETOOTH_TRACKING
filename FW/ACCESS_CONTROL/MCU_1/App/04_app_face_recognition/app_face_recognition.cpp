@@ -160,12 +160,12 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
           if (userid > 0)
           {
-
+            xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend success Face");
           }
           else
           {
-
+            xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend failed | Face");
           }
         }

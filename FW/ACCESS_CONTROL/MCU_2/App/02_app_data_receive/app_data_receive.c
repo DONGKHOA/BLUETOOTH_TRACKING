@@ -18,7 +18,7 @@
  *    PUBLIC VARIABLES
  *****************************************************************************/
 
-extern uint16_t finger_user_id;
+extern uint16_t u16_finger_user_id;
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -39,8 +39,8 @@ extern uint16_t finger_user_id;
  */
 typedef struct ble_ibeacon_data
 {
-  QueueHandle_t *p_data_mqtt_queue;
-  QueueHandle_t *p_data_local_database_queue;
+  QueueHandle_t      *p_data_mqtt_queue;
+  QueueHandle_t      *p_data_local_database_queue;
   EventGroupHandle_t *p_fingerprint_event;
 } data_receive_data_t;
 
@@ -100,10 +100,10 @@ APP_DATA_RECEIVE_task (void *arg)
     {
       case DATA_SYNC_ENROLL_FINGERPRINT:
 
-        finger_user_id = s_receive_message.data[1];
+        u16_finger_user_id = s_receive_message.data[1];
 
-        xEventGroupSetBits(
-            *s_data_receive_data.p_fingerprint_event, EVENT_ENROLL_FINGERPRINT);
+        xEventGroupSetBits(*s_data_receive_data.p_fingerprint_event,
+                           EVENT_ENROLL_FINGERPRINT);
         break;
 
       case DATA_SYNC_REQUEST_AUTHENTICATION:
