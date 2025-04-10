@@ -35,6 +35,8 @@ extern "C"
 #define TIME_SOURCE_SNTP_READY BIT0
 #define TIME_SOURCE_RTC_READY  BIT1
 
+#define EVENT_ENROLL_FINGERPRINT BIT3
+
 #define MAX_USER_DATA 10240 // Maximum user data size
 
 #define LOCAL_DATABASE_SUCCESS (uint8_t)0x00

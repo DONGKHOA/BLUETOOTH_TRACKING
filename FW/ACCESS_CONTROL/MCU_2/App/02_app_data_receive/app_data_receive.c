@@ -15,6 +15,12 @@
 #include "esp_log.h"
 
 /******************************************************************************
+ *    PUBLIC VARIABLES
+ *****************************************************************************/
+
+extern int finger_user_id;
+
+/******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
@@ -94,12 +100,10 @@ APP_DATA_RECEIVE_task (void *arg)
     {
       case DATA_SYNC_ENROLL_FINGERPRINT:
 
-        s_DATA_SYNC.u8_data_start     = FINGER_ENROLL;
-        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
+        finger_user_id = s_receive_message.data[1];
 
-        
+        xEventGroupSetBits(
+            *s_data_receive_data.p_fingerprint_event, EVENT_ENROLL_FINGERPRINT);
         break;
 
       case DATA_SYNC_REQUEST_AUTHENTICATION:

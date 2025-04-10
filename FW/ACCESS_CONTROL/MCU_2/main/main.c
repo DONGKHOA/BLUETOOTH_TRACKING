@@ -104,7 +104,7 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
-      // APP_FINGERPRINT_Init();
+      APP_FINGERPRINT_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_TRANSMIT_Init();
       APP_DATA_RECEIVE_Init();
@@ -115,7 +115,7 @@ app_main (void)
 
       // App Create Task
 
-      // APP_FINGERPRINT_CreateTask();
+      APP_FINGERPRINT_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
       APP_DATA_TRANSMIT_CreateTask();
       APP_DATA_RECEIVE_CreateTask();

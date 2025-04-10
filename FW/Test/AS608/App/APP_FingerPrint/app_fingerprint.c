@@ -144,12 +144,11 @@ APP_Fingerprint_Register_Task (void *pvParameters)
 
     DEV_AS608_Img2Tz(UART_PORT_NUM_2, default_address, buffer2);
 
-    u8_confirmation_code = DEV_AS608_RegModel(UART_PORT_NUM_2,
-    default_address); if (u8_confirmation_code == 0)
+    u8_confirmation_code = DEV_AS608_RegModel(UART_PORT_NUM_2, default_address);
+    if (u8_confirmation_code == 0)
     {
       u8_confirmation_code = DEV_AS608_Search(
-          UART_PORT_NUM_2, default_address, buffer1, start_page,
-          page_number);
+          UART_PORT_NUM_2, default_address, buffer1, start_page, page_number);
       if (u8_confirmation_code == 0)
       {
         printf("Fingerprint detected!\n");

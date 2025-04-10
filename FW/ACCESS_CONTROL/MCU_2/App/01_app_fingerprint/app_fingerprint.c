@@ -21,8 +21,10 @@
 
 typedef struct fingerprint_data
 {
-  TimerHandle_t  s_timeout;
-  QueueHandle_t *p_fingerprint_queue;
+  TimerHandle_t       s_timeout;
+  QueueHandle_t      *p_send_data_queue;
+  QueueHandle_t      *p_fingerprint_queue;
+  EventGroupHandle_t *p_fingerprint_event;
 } fingerprint_data_t;
 
 /******************************************************************************
@@ -39,7 +41,13 @@ static inline void APP_FINGERPRINT_Delete(void);
  *    PRIVATE DATA
  *****************************************************************************/
 
+DATA_SYNC_t s_DATA_SYNC;
+
+static uint8_t finger_count;
+
 int finger_user_id;
+
+uint8_t u8_page_id[2] = { 0 };
 
 static fingerprint_data_t s_fingerprint_data;
 
@@ -68,7 +76,8 @@ APP_FINGERPRINT_CreateTask (void)
 void
 APP_FINGERPRINT_Init (void)
 {
-  s_fingerprint_data.p_fingerprint_queue = &s_data_system.s_fingerprint_queue;
+  s_fingerprint_data.p_send_data_queue   = &s_data_system.s_send_data_queue;
+  s_fingerprint_data.p_fingerprint_event = &s_data_system.s_fingerprint_event;
   // Specify the start page for the search
 
   u8_start_page[0] = 0x00;
@@ -100,50 +109,96 @@ APP_FINGERPRINT_Init (void)
 static void
 APP_FINGERPRINT_task (void *arg)
 {
-  uint8_t    confirmation_code;
+  uint8_t     uxBits;
   DATA_SYNC_t s_DATA_SYNC;
 
   while (1)
   {
-    if (xQueueReceive(*s_fingerprint_data.p_fingerprint_queue,
-                      &s_DATA_SYNC,
-                      portMAX_DELAY)
-        == pdTRUE)
+    uxBits = xEventGroupWaitBits(*s_fingerprint_data.p_fingerprint_event,
+                                 EVENT_ENROLL_FINGERPRINT,
+                                 pdFALSE,
+                                 pdFALSE,
+                                 portMAX_DELAY);
+
+    if (uxBits & EVENT_ENROLL_FINGERPRINT)
     {
-      switch (s_DATA_SYNC.u8_data_start)
-      {
-        case FINGER_ENROLL:
-        APP_FINGERPRINT_Enroll();
-          break;
+      u8_page_id[0] = ((finger_user_id >> 8) & 0xFF);
+      u8_page_id[1] = (finger_user_id & 0xFF);
+      APP_FINGERPRINT_Enroll();
+    }
+  }
+  vTaskDelay(pdMS_TO_TICKS(10));
+}
 
-        case FINGER_ATTENDANCE:
-        APP_FINGERPRINT_Attendance();
-          break;
+static inline void
+APP_FINGERPRINT_Enroll (void)
+{
+  uint8_t u8_enroll_confirmation_code;
 
-        case FINGER_DELETE:
-        APP_FINGERPRINT_Delete();
-          break;
+  u8_enroll_confirmation_code
+      = DEV_AS608_GenImg(UART_FINGERPRINT_NUM, u8_default_address);
+  if (u8_enroll_confirmation_code != 0)
+  {
+    continue;
+  }
 
-        default:
-          break;
-      }
+  u8_enroll_confirmation_code
+      = DEV_AS608_Img2Tz(UART_FINGERPRINT_NUM, u8_default_address, buffer1);
+  if (u8_enroll_confirmation_code != 0)
+  {
+    continue;
+  }
+
+  // Send MCU1 to notify that the fingerprint have store to buffer 1
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FIRST_FINGERPRINT;
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
+  finger_count++;
+
+  if (finger_count == 2)
+  {
+    u8_enroll_confirmation_code
+        = DEV_AS608_RegModel(UART_FINGERPRINT_NUM, u8_default_address);
+    if (u8_enroll_confirmation_code != 0)
+    {
+      continue;
+    }
+
+    u8_enroll_confirmation_code = DEV_AS608_Search(UART_FINGERPRINT_NUM,
+                                                   u8_default_address,
+                                                   buffer1,
+                                                   u8_start_page,
+                                                   u8_page_number);
+
+    if (u8_enroll_confirmation_code == 0)
+    {
+      continue;
+    }
+
+    u8_enroll_confirmation_code = DEV_AS608_Store(
+        UART_FINGERPRINT_NUM, u8_default_address, buffer1, u8_page_id);
+    if (u8_enroll_confirmation_code == 0)
+    {
+      printf("Enroll success! Stored template with ID: %d", u8_user_id);
+    }
+    else
+    {
+      printf("Error: Cannot store template | %d", u8_enroll_confirmation_code);
     }
   }
 }
 
-static inline void APP_FINGERPRINT_Enroll(void)
+static inline void
+APP_FINGERPRINT_Attendance (void)
 {
-
 }
 
-static inline void APP_FINGERPRINT_Attendance(void)
+static inline void
+APP_FINGERPRINT_Delete (void)
 {
-
-}
-
-static inline void APP_FINGERPRINT_Delete(void)
-{
-
 }
 
 static void
