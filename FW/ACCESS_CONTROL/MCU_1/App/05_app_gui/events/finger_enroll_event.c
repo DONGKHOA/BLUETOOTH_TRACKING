@@ -124,7 +124,7 @@ EVENT_Enroll_Finger (lv_event_t *e)
   lv_label_set_text(ui_IDTextEnroll4, enroll_number_id);
   lv_label_set_text(ui_IDTextEnroll5, "Please place your finger");
   lv_obj_set_style_bg_color(ui_FingerStatus1,
-                            lv_color_hex(0x00FF1C),
+                            lv_color_hex(0xFF0000),
                             LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_color(ui_FingerStatus2,
                             lv_color_hex(0xFF0000),
