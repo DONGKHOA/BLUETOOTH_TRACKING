@@ -32,14 +32,13 @@ static EventGroupHandle_t *p_display_event;
 
 static camera_fb_t              *fb = NULL;
 static data_result_recognition_t s_data_result_recognition
-    = { .s_coord_box_face           = { 0, 0, 0, 0 },
-        .s_left_eye                 = { 0, 0 },
-        .s_right_eye                = { 0, 0 },
-        .s_left_mouth               = { 0, 0 },
-        .s_right_mouth              = { 0, 0 },
-        .s_nose                     = { 0, 0 },
-        .ID                         = -1,
-        .e_notification_recognition = NOTIFICATION_NONE };
+    = { .s_coord_box_face = { 0, 0, 0, 0 },
+        .s_left_eye       = { 0, 0 },
+        .s_right_eye      = { 0, 0 },
+        .s_left_mouth     = { 0, 0 },
+        .s_right_mouth    = { 0, 0 },
+        .s_nose           = { 0, 0 },
+        .ID               = -1 };
 
 static bool               b_is_initialize = false;
 static lv_draw_rect_dsc_t rectangle_face;
@@ -141,7 +140,7 @@ APP_Attendance_Timer (lv_timer_t *timer)
 
   xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1);
 
-  if (xQueueReceive(*p_camera_capture_queue, &fb, portMAX_DELAY) == pdPASS)
+  if (xQueueReceive(*p_camera_capture_queue, &fb, 1) == pdPASS)
   {
     lv_canvas_set_buffer(
         camera_canvas, fb->buf, fb->width, fb->height, LV_IMG_CF_TRUE_COLOR);
@@ -198,9 +197,6 @@ APP_Attendance_Timer (lv_timer_t *timer)
 static void
 EVENT_ATTENDANCE_ShowHomeScreen (void *param)
 {
-  _ui_screen_change(&ui_Home,
-                    LV_SCR_LOAD_ANIM_MOVE_RIGHT,
-                    500,
-                    0,
-                    &ui_Home_screen_init);
+  _ui_screen_change(
+      &ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
 }
