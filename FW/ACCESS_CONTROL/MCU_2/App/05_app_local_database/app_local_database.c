@@ -66,7 +66,7 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_send_data_queue = &s_data_system.s_send_data_queue;
   s_local_database.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
-  s_local_database.p_spi_mutex        = &s_data_system.s_spi_mutex;
+  s_local_database.p_spi_mutex         = &s_data_system.s_spi_mutex;
   s_local_database.p_fingerprint_queue = &s_data_system.s_fingerprint_queue;
 }
 
@@ -223,7 +223,10 @@ APP_LOCAL_DATABASE_Task (void *arg)
           // Update data local database
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
           // Notify the status of response to transmit task via queue
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
@@ -273,11 +276,11 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case LOCAL_SET_ROLE:
 
-        // Update data in sdcard
+          // Update data in sdcard
 
-        // Update data in psram
+          // Update data in psram
 
-        break;
+          break;
 
         case LOCAL_FINGER_DELETE:
 
