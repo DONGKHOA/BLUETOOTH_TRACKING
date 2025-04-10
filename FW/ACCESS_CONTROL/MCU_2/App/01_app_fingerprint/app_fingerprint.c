@@ -203,7 +203,7 @@ APP_FINGERPRINT_task (void *arg)
         if (u8_enroll_confirmation_code == 0)
         {
           // Send data to local database to update data in sdcard
-          printf("Enroll success! Stored template with ID: %d",
+          printf("Enroll success! Stored template with ID: %d\r\n",
                  u16_finger_user_id);
 
           s_DATA_SYNC.u8_data_start
@@ -223,7 +223,7 @@ APP_FINGERPRINT_task (void *arg)
         else
         {
           // Send fail to MCU1
-          printf("Error: Cannot store template | %d",
+          printf("Error: Cannot store template | %d\r\n",
                  u8_enroll_confirmation_code);
           s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
           s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;

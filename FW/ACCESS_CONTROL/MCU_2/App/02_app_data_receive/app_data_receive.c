@@ -69,6 +69,7 @@ APP_DATA_RECEIVE_CreateTask (void)
 void
 APP_DATA_RECEIVE_Init (void)
 {
+  s_data_receive_data.p_fingerprint_event = &s_data_system.s_fingerprint_event;
   s_data_receive_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
   s_data_receive_data.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
@@ -100,7 +101,8 @@ APP_DATA_RECEIVE_task (void *arg)
     {
       case DATA_SYNC_ENROLL_FINGERPRINT:
 
-        u16_finger_user_id = s_receive_message.data[1];
+        u16_finger_user_id = ((s_receive_message.data[1] << 8) & 0xFF)
+                             | (s_receive_message.data[2] & 0xFF);
 
         xEventGroupSetBits(*s_data_receive_data.p_fingerprint_event,
                            EVENT_ENROLL_FINGERPRINT);
