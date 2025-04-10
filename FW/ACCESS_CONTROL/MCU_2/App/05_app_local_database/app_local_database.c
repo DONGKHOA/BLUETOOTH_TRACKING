@@ -67,7 +67,7 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
   s_local_database.p_spi_mutex        = &s_data_system.s_spi_mutex;
-  s_local_database._fingerprint_queue = &s_data_system.s_fingerprint_queue;
+  s_local_database.p_fingerprint_queue = &s_data_system.s_fingerprint_queue;
 }
 
 /******************************************************************************

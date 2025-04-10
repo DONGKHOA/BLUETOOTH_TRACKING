@@ -156,12 +156,8 @@ extern "C"
 
   extern DATA_System_t s_data_system;
 
-  extern uint8_t enroll_number_id_send;
-  extern uint8_t enroll_index;
-  extern char    enroll_number_id[64];
-  extern char    full_name[64];
-  extern int     full_name_len;
-  extern int     packet_count;
+  // extern char    enroll_number_id[8];
+  extern uint16_t enroll_number_id_send;
 
 #ifdef __cplusplus
 }

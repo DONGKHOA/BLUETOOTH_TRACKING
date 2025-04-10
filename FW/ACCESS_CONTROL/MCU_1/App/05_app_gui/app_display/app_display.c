@@ -41,7 +41,6 @@ extern ili9341_handle_t s_ili9341_0;
 extern xpt2046_handle_t s_xpt2046_0;
 extern lv_obj_t        *ui_Time;
 
-// static lv_color_t         buf1[DISP_BUF_SIZE];
 static lv_disp_draw_buf_t draw_buf;
 
 /******************************************************************************
@@ -97,8 +96,7 @@ APP_DISPLAY_Init (void)
 
   esp_timer_handle_t lv_tick_timer;
   esp_timer_create(&lv_tick_timer_args, &lv_tick_timer);
-  esp_timer_start_periodic(lv_tick_timer, 5 * 1000); // Increase tick every 5ms
-
+  esp_timer_start_periodic(lv_tick_timer, 1 * 1000); // Increase tick every 5ms
   ui_init();
 }
 
@@ -128,7 +126,7 @@ APP_DISPLAY_Task (void *arg)
 {
   while (1)
   {
-    lv_timer_handler(); // Handle events and draw GUI
+    lv_timer_handler();            // Handle events and draw GUI
     vTaskDelay(pdMS_TO_TICKS(10)); // Yield CPU
   }
 }

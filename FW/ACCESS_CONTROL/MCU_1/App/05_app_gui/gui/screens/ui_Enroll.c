@@ -83,15 +83,6 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_shadow_ofs_x(ui_IDEnrollPane, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_IDEnrollPane, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_NumberUserID = lv_label_create(ui_IDEnrollPane);
-    lv_obj_set_width(ui_NumberUserID, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_NumberUserID, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_NumberUserID, LV_ALIGN_RIGHT_MID);
-    lv_label_set_text(ui_NumberUserID, "123");
-    lv_obj_set_style_text_color(ui_NumberUserID, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_NumberUserID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_NumberUserID, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_IDEnrollText = lv_label_create(ui_IDEnrollPane);
     lv_obj_set_width(ui_IDEnrollText, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_IDEnrollText, LV_SIZE_CONTENT);    /// 1
@@ -363,22 +354,13 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_align(ui_DelButton, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_DelButton, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_DelButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_DelButton, &ui_img_1048813395, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_color(ui_DelButton, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ui_DelButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui_DelButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_spread(ui_DelButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_x(ui_DelButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_DelButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Image2 = lv_img_create(ui_DelButton);
-    lv_img_set_src(ui_Image2, &ui_img_1048813395);
-    lv_obj_set_width(ui_Image2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Image2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image2, 1);
-    lv_obj_set_y(ui_Image2, 1);
-    lv_obj_set_align(ui_Image2, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_EnterButton = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_EnterButton, 35);
@@ -388,22 +370,13 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_align(ui_EnterButton, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_EnterButton, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_EnterButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_EnterButton, &ui_img_1406808990, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_color(ui_EnterButton, lv_color_hex(0x969696), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ui_EnterButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui_EnterButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_spread(ui_EnterButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_x(ui_EnterButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_EnterButton, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_Image3 = lv_img_create(ui_EnterButton);
-    lv_img_set_src(ui_Image3, &ui_img_1406808990);
-    lv_obj_set_width(ui_Image3, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Image3, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image3, 1);
-    lv_obj_set_y(ui_Image3, 0);
-    lv_obj_set_align(ui_Image3, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Image3, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_Image3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_Button0 = lv_btn_create(ui_KeyboardEnrollPanel);
     lv_obj_set_width(ui_Button0, 35);

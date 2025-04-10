@@ -76,8 +76,8 @@ APP_HANDLE_WIFI_Task (void *arg)
   //   WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
   //   WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
   // }
-  memcpy(s_handle_wifi.u8_ssid, "47.47", sizeof("47.47"));
-  memcpy(s_handle_wifi.u8_pass, "0902900086", sizeof("0902900086"));
+  memcpy(s_handle_wifi.u8_ssid, "QUOCTHANG", sizeof("QUOCTHANG"));
+  memcpy(s_handle_wifi.u8_pass, "17122003", sizeof("17122003"));
   WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
   vTaskDelete(s_handle_wifi_task);
 }

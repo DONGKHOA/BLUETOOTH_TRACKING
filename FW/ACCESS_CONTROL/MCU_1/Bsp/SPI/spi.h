@@ -26,7 +26,8 @@ extern "C"
     SPI_CLOCK_5MHz   = 5000000,
     SPI_CLOCK_10MHz  = 10000000,
     SPI_CLOCK_20MHz  = 20000000,
-    SPI_CLOCK_40MHz  = 40000000
+    SPI_CLOCK_40MHz  = 40000000,
+    SPI_CLOCK_80MHz  = 80000000,
   } spi_config_clock_t;
 
   /*****************************************************************************
