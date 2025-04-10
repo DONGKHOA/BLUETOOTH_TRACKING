@@ -180,29 +180,75 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
               (uint16_t *)s_camera_capture.u8_buff,
               { (int)s_camera_capture.height, (int)s_camera_capture.width, 3 },
               detect_candidates);
-
-          if ((detect_results.size() > 0)
-              && check_face_in_box(s_data_result_recognition.s_left_eye.x,
-                                   s_data_result_recognition.s_left_eye.y,
-                                   s_data_result_recognition.s_right_eye.x,
-                                   s_data_result_recognition.s_right_eye.y,
-                                   s_data_result_recognition.s_nose.x,
-                                   s_data_result_recognition.s_nose.y,
-                                   s_data_result_recognition.s_left_mouth.x,
-                                   s_data_result_recognition.s_left_mouth.y,
-                                   s_data_result_recognition.s_right_mouth.x,
-                                   s_data_result_recognition.s_right_mouth.y,
-                                   100,
-                                   20,
-                                   230,
-                                   200))
+          if (detect_results.size())
           {
+            vTaskDelay(pdMS_TO_TICKS(1));
+            uint16_t i = 0;
+            for (std::list<dl::detect::result_t>::iterator prediction
+                 = detect_results.begin();
+                 prediction != detect_results.end();
+                 prediction++, i++)
+            {
+              if (prediction->keypoint.size() == 10)
+              {
+                s_data_result_recognition.s_coord_box_face.x1
+                    = DL_MAX(prediction->box[0], 0);
+                s_data_result_recognition.s_coord_box_face.y1
+                    = DL_MAX(prediction->box[1], 0);
+                s_data_result_recognition.s_coord_box_face.x2
+                    = DL_MAX(prediction->box[2], 0);
+                s_data_result_recognition.s_coord_box_face.y2
+                    = DL_MAX(prediction->box[3], 0);
 
-            stable_face_count_attendance++;
-            ESP_LOGI(TAG,
-                     "stable_face_count_attendance: %d",
-                     stable_face_count_attendance);
+                s_data_result_recognition.s_left_eye.x
+                    = DL_MAX(prediction->keypoint[0], 0);
+                s_data_result_recognition.s_left_eye.y
+                    = DL_MAX(prediction->keypoint[1], 0);
+
+                s_data_result_recognition.s_left_mouth.x
+                    = DL_MAX(prediction->keypoint[2], 0);
+                s_data_result_recognition.s_left_mouth.y
+                    = DL_MAX(prediction->keypoint[3], 0);
+
+                s_data_result_recognition.s_nose.x
+                    = DL_MAX(prediction->keypoint[4], 0);
+                s_data_result_recognition.s_nose.y
+                    = DL_MAX(prediction->keypoint[5], 0);
+
+                s_data_result_recognition.s_right_eye.x
+                    = DL_MAX(prediction->keypoint[6], 0);
+                s_data_result_recognition.s_right_eye.y
+                    = DL_MAX(prediction->keypoint[7], 0);
+
+                s_data_result_recognition.s_right_mouth.x
+                    = DL_MAX(prediction->keypoint[8], 0);
+                s_data_result_recognition.s_right_mouth.y
+                    = DL_MAX(prediction->keypoint[9], 0);
+              }
+            }
+            if (check_face_in_box(s_data_result_recognition.s_left_eye.x,
+                                  s_data_result_recognition.s_left_eye.y,
+                                  s_data_result_recognition.s_right_eye.x,
+                                  s_data_result_recognition.s_right_eye.y,
+                                  s_data_result_recognition.s_nose.x,
+                                  s_data_result_recognition.s_nose.y,
+                                  s_data_result_recognition.s_left_mouth.x,
+                                  s_data_result_recognition.s_left_mouth.y,
+                                  s_data_result_recognition.s_right_mouth.x,
+                                  s_data_result_recognition.s_right_mouth.y,
+                                  100,
+                                  20,
+                                  230,
+                                  200))
+            {
+
+              stable_face_count_attendance++;
+              ESP_LOGI(TAG,
+                       "stable_face_count_attendance: %d",
+                       stable_face_count_attendance);
+            }
           }
+
           else
           {
             s_data_result_recognition.s_coord_box_face.x1 = 0;
