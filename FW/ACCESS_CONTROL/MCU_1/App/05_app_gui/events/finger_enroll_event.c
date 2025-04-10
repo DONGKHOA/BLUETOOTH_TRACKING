@@ -20,8 +20,14 @@ extern char     enroll_number_id[8];
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void EVENT_ENROLL_DeletePopup_Timer(lv_timer_t *timer);
 static void EVENT_PROCESS_FINGER_ENROLL_DATA_Task(void *arg);
+
+static void EVENT_FINGER_ShowSuccessStatus(void *user_data);
+static void EVENT_FINGER_ShowFailStatus(void *user_data);
+static void EVENT_FINGER_ShowSuccessEnroll(void *user_data);
+static void EVENT_FINGER_ShowFailEnroll(void *user_data);
+
+static void EVENT_ENROLL_ShowHomeScreen(void *param);
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -42,7 +48,6 @@ static TaskHandle_t s_finger_enroll_task_handle;
 static finger_enroll_event_data_t s_finger_enroll_event_data;
 static DATA_SYNC_t                s_DATA_SYNC;
 
-// static lv_timer_t *timer_finger_enroll;
 
 static bool b_is_initialize = false;
 
@@ -157,11 +162,27 @@ EVENT_PROCESS_FINGER_ENROLL_DATA_Task (void *arg)
       switch (s_DATA_SYNC.u8_data_start)
       {
         case DATA_SYNC_RESPONSE_ENROLL_FOUND_FINGERPRINT:
-          // Handle enroll fingerprint response
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
+          {
+            lv_async_call(EVENT_FINGER_ShowSuccessStatus, NULL);
+          }
+
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
+          {
+            lv_async_call(EVENT_FINGER_ShowFailStatus, NULL);
+          }
           break;
 
         case DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT:
-          // Handle enroll fingerprint response
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
+          {
+            lv_async_call(EVENT_FINGER_ShowSuccessEnroll, NULL);
+          }
+
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
+          {
+            lv_async_call(EVENT_FINGER_ShowFailEnroll, NULL);
+          }
           break;
 
         default:
@@ -169,4 +190,53 @@ EVENT_PROCESS_FINGER_ENROLL_DATA_Task (void *arg)
       }
     }
   }
+}
+
+static void
+EVENT_FINGER_ShowSuccessStatus (void *user_data)
+{
+  lv_label_set_text(ui_IDTextEnroll5, "Remove and place finger again");
+  lv_obj_set_style_bg_color(ui_FingerStatus1,
+                            lv_color_hex(0x00FF1C),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+static void
+EVENT_FINGER_ShowFailStatus (void *user_data)
+{
+  lv_label_set_text(ui_IDTextEnroll5, "Not found finger");
+  lv_obj_set_style_bg_color(ui_FingerStatus1,
+                            lv_color_hex(0xFF0000),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+static void
+EVENT_FINGER_ShowSuccessEnroll (void *user_data)
+{
+  lv_label_set_text(ui_IDTextEnroll5, "Enroll successfully");
+  lv_obj_set_style_bg_color(ui_FingerStatus2,
+                            lv_color_hex(0x00FF1C),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+
+  lv_async_call(EVENT_ENROLL_ShowHomeScreen, NULL);
+}
+
+static void
+EVENT_FINGER_ShowFailEnroll (void *user_data)
+{
+  lv_label_set_text(ui_IDTextEnroll5, "Enroll unsuccessfully");
+  lv_obj_set_style_bg_color(ui_FingerStatus2,
+                            lv_color_hex(0xFF0000),
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+
+  lv_async_call(EVENT_ENROLL_ShowHomeScreen, NULL);
+}
+
+static void
+EVENT_ENROLL_ShowHomeScreen (void *param)
+{
+  vTaskSuspend(s_finger_enroll_task_handle);
+
+  _ui_screen_change(
+      &ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
 }
