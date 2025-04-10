@@ -228,6 +228,7 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_flag_time_event     = xEventGroupCreate();
   s_data_system.s_configuration_event = xEventGroupCreate();
+  s_data_system.s_fingerprint_event   = xEventGroupCreate();
 
   s_loading_timer = xTimerCreate("loading_timer",
                                  LOADING_TIMEOUT / portTICK_PERIOD_MS,

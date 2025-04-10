@@ -136,6 +136,7 @@ extern "C"
     SemaphoreHandle_t  s_i2c_mutex;
     EventGroupHandle_t s_flag_time_event;
     EventGroupHandle_t s_configuration_event;
+    EventGroupHandle_t s_fingerprint_event;
   } DATA_System_t;
 
   /****************************************************************************
