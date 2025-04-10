@@ -38,8 +38,7 @@ static data_result_recognition_t s_data_result_recognition
         .s_left_mouth               = { 0, 0 },
         .s_right_mouth              = { 0, 0 },
         .s_nose                     = { 0, 0 },
-        .ID                         = -1,
-        .e_notification_recognition = NOTIFICATION_NONE };
+        .ID                         = -1};
 
 static bool               b_is_initialize = false;
 static lv_draw_rect_dsc_t rectangle_face;

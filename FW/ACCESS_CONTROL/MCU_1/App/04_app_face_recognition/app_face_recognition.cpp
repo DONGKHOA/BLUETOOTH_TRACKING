@@ -102,20 +102,17 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
   static uint8_t stable_face_count_attendance = 0;
   static bool    is_face_recognized           = false;
   static int16_t userid                       = -1;
-  static uint8_t post_attend_frame_count      = 0;
-  static bool    is_attend_success            = false;
 
   std::list<dl::detect::result_t> detect_results;
 
   data_result_recognition_t s_data_result_recognition
-      = { .s_coord_box_face           = { 0, 0, 0, 0 },
-          .s_left_eye                 = { 0, 0 },
-          .s_right_eye                = { 0, 0 },
-          .s_left_mouth               = { 0, 0 },
-          .s_right_mouth              = { 0, 0 },
-          .s_nose                     = { 0, 0 },
-          .ID                         = -1,
-          .e_notification_recognition = NOTIFICATION_NONE };
+      = { .s_coord_box_face = { 0, 0, 0, 0 },
+          .s_left_eye       = { 0, 0 },
+          .s_right_eye      = { 0, 0 },
+          .s_left_mouth     = { 0, 0 },
+          .s_right_mouth    = { 0, 0 },
+          .s_nose           = { 0, 0 },
+          .ID               = -1 };
 
   self->recognizer->set_partition(
       ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
@@ -163,25 +160,13 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
           if (userid > 0)
           {
-            is_attend_success = true;
+
             ESP_LOGI(TAG, "Attend success Face");
           }
           else
           {
-            is_attend_success = false;
+
             ESP_LOGI(TAG, "Attend failed | Face");
-          }
-          post_attend_frame_count++;
-          if (post_attend_frame_count >= 15)
-          {
-            post_attend_frame_count      = 0;
-            stable_face_count_attendance = 0;
-            is_face_recognized           = false;
-            ESP_LOGI(TAG, "Attend completed.");
-            if (is_attend_success == true)
-            {
-            }
-            userid = -1;
           }
         }
         else
@@ -245,7 +230,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
         if (stable_face_count_enroll >= 10)
         {
           stable_face_count_enroll = 0;
-          std::string text_id = std::to_string(user_id);
+          std::string text_id      = std::to_string(user_id);
 
           self->recognizer->enroll_id(
               (uint16_t *)s_camera_capture.u8_buff,

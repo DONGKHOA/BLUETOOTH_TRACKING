@@ -75,13 +75,6 @@ extern "C"
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
 
-  typedef enum
-  {
-    NOTIFICATION_NONE = 0,
-    NOTIFICATION_ENROLL_1, // "Keep your eyes in the box"
-    NOTIFICATION_ENROLL_2, // "Enroll success"
-  } notification_recognition_t;
-
   typedef struct
   {
     struct coord_box_face
@@ -116,8 +109,7 @@ extern "C"
       uint16_t x;
       uint16_t y;
     } s_nose;
-    int                        ID;
-    notification_recognition_t e_notification_recognition;
+    int ID;
   } data_result_recognition_t;
 
   typedef struct

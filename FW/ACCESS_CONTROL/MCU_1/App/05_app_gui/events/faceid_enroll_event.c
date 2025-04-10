@@ -37,14 +37,13 @@ static EventGroupHandle_t *p_display_event;
 
 static camera_fb_t              *fb = NULL;
 static data_result_recognition_t s_data_result_recognition
-    = { .s_coord_box_face           = { 0, 0, 0, 0 },
-        .s_left_eye                 = { 0, 0 },
-        .s_right_eye                = { 0, 0 },
-        .s_left_mouth               = { 0, 0 },
-        .s_right_mouth              = { 0, 0 },
-        .s_nose                     = { 0, 0 },
-        .ID                         = -1,
-        .e_notification_recognition = NOTIFICATION_NONE };
+    = { .s_coord_box_face = { 0, 0, 0, 0 },
+        .s_left_eye       = { 0, 0 },
+        .s_right_eye      = { 0, 0 },
+        .s_left_mouth     = { 0, 0 },
+        .s_right_mouth    = { 0, 0 },
+        .s_nose           = { 0, 0 },
+        .ID               = -1 };
 
 static bool               b_is_initialize = false;
 static lv_draw_rect_dsc_t rectangle_face;
