@@ -41,11 +41,7 @@ extern ili9341_handle_t s_ili9341_0;
 extern xpt2046_handle_t s_xpt2046_0;
 extern lv_obj_t        *ui_Time;
 
-// static lv_color_t         buf1[DISP_BUF_SIZE];
 static lv_disp_draw_buf_t draw_buf;
-
-lv_img_dsc_t lv_imgs;
-uint8_t     *psram_display_array;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -101,24 +97,6 @@ APP_DISPLAY_Init (void)
   esp_timer_handle_t lv_tick_timer;
   esp_timer_create(&lv_tick_timer_args, &lv_tick_timer);
   esp_timer_start_periodic(lv_tick_timer, 1 * 1000); // Increase tick every 5ms
-
-  // psram_display_array
-  //     = heap_caps_malloc(153600, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
-
-  // memset(psram_display_array, 0xFF, 320 * 240 * 2);
-  // if (psram_display_array == NULL)
-  // {
-  //   ESP_LOGE(TAG, "Failed to allocate memory in PSRAM for image");
-  //   return;
-  // }
-
-  // lv_imgs.header.always_zero = 0;
-  // lv_imgs.header.w           = 320;
-  // lv_imgs.header.h           = 240;
-  // lv_imgs.header.cf          = LV_IMG_CF_TRUE_COLOR_ALPHA;
-  // lv_imgs.data_size          = 320 * 240 * 4;
-  // lv_imgs.data               = psram_display_array;
-
   ui_init();
 }
 

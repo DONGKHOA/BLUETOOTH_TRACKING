@@ -35,7 +35,7 @@ extern "C"
 #define SPI2_SCLK_PIN GPIO_NUM_48
 #define SPI2_CS_PIN   GPIO_NUM_46
 
-#define SPI2_CLOCK_SPEED_HZ          SPI_CLOCK_80MHz
+#define SPI2_CLOCK_SPEED_HZ          SPI_CLOCK_40MHz
 #define SPI2_SPI_BUS_MAX_TRANSFER_SZ (DISP_BUF_SIZE * 2)
 #define SPI2_DMA_CHANNEL             SPI_DMA_CH_AUTO
 #define SPI2_SPI_MODE                0
