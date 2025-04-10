@@ -85,8 +85,7 @@ static camera_config_t camera_config = {
 void
 APP_HANDLE_CAMERA_CreateTask (void)
 {
-  xTaskCreate(
-      APP_HANDLE_CAMERA_Task, "camera task", 1024 * 4, NULL, 6, NULL);
+  xTaskCreate(APP_HANDLE_CAMERA_Task, "camera task", 1024 * 4, NULL, 6, NULL);
 }
 void
 APP_HANDLE_CAMERA_Init (void)
@@ -123,8 +122,8 @@ APP_HANDLE_CAMERA_Init (void)
 static void
 APP_HANDLE_CAMERA_Task (void *arg)
 {
-  EventBits_t  uxBits;
   camera_fb_t *fb = NULL;
+  EventBits_t  uxBits;
 
   while (1)
   {
@@ -134,28 +133,27 @@ APP_HANDLE_CAMERA_Task (void *arg)
                                  pdFALSE,
                                  portMAX_DELAY);
 
-    if (uxBits == 0)
+    if ((uxBits & ENROLL_FACE_ID_BIT) || (uxBits & ATTENDANCE_BIT))
     {
-      continue;
+      fb = esp_camera_fb_get();
+
+      if (!fb)
+      {
+        ESP_LOGE(TAG, "Camera Capture Failed");
+        continue;
+      }
+
+      memcpy(psram_array, fb->buf, fb->len);
+      s_camera_capture.width  = fb->width;
+      s_camera_capture.height = fb->height;
+
+      xQueueSend(*s_app_handle_camera.p_camera_recognition_queue,
+                 &s_camera_capture,
+                 0);
+
+      xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
+
+      vTaskDelay(pdMS_TO_TICKS(30));
     }
-
-    fb = esp_camera_fb_get();
-
-    if (!fb)
-    {
-      ESP_LOGE(TAG, "Camera Capture Failed");
-      continue;
-    }
-
-    memcpy(psram_array, fb->buf, fb->len);
-    s_camera_capture.width = fb->width;
-    s_camera_capture.height = fb->height;
-
-    xQueueSend(
-        *s_app_handle_camera.p_camera_recognition_queue, &s_camera_capture, 0);
-
-    xQueueSend(*s_app_handle_camera.p_camera_capture_queue, &fb, 0);
-
-    vTaskDelay(pdMS_TO_TICKS(30));
   }
 }

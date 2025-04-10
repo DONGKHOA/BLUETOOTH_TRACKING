@@ -133,6 +133,11 @@ EVENT_Attendance_After (lv_event_t *e)
 static void
 APP_Attendance_Timer (lv_timer_t *timer)
 {
+  if ((xEventGroupGetBits(*p_display_event) & ATTENDANCE_BIT) == 0)
+  {
+    
+  }
+  
   xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1);
 
   if (xQueueReceive(*p_camera_capture_queue, &fb, portMAX_DELAY) == pdPASS)

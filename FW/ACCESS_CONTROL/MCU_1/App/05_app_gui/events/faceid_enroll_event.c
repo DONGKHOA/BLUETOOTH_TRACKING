@@ -110,7 +110,7 @@ EVENT_Enroll_FaceID (lv_event_t *e)
 }
 
 void
-EVENT_Enroll_After (lv_event_t *e)
+EVENT_FaceID_Back (lv_event_t *e)
 {
   s_data_result_recognition.s_coord_box_face.x1 = 0;
   s_data_result_recognition.s_coord_box_face.y1 = 0;
@@ -128,6 +128,7 @@ EVENT_Enroll_After (lv_event_t *e)
   s_data_result_recognition.s_nose.y            = 0;
 
   lv_timer_pause(timer_faceid_enroll);
+  xEventGroupClearBits(*p_display_event, ENROLL_FACE_ID_BIT);
 }
 
 /******************************************************************************
@@ -139,7 +140,7 @@ APP_FACEID_Enroll_Timer (lv_timer_t *timer)
 {
   xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1);
 
-  if (xQueueReceive(*p_camera_capture_queue, &fb, portMAX_DELAY) == pdPASS)
+  if (xQueueReceive(*p_camera_capture_queue, &fb, 1) == pdPASS)
   {
     lv_canvas_set_buffer(
         camera_canvas, fb->buf, fb->width, fb->height, LV_IMG_CF_TRUE_COLOR);
