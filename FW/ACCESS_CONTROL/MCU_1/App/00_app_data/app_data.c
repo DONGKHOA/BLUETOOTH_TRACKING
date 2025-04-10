@@ -13,6 +13,3 @@
  *****************************************************************************/
 
 DATA_System_t s_data_system;
-
-// char    enroll_number_id[8] = { 0 };     
-uint16_t enroll_number_id_send;

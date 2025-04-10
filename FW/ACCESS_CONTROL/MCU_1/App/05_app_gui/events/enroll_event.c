@@ -51,6 +51,7 @@ static int full_name_len = 0;
 static int packet_count  = 0;
 
 char           enroll_number_id[8] = { 0 };
+uint16_t       user_id;
 static uint8_t enroll_index;
 
 static TaskHandle_t s_enroll_task_handle;
@@ -245,10 +246,10 @@ EVENT_Enroll_EnterButton (lv_event_t *e)
 
   vTaskResume(s_enroll_task_handle);
 
-  enroll_number_id_send         = atoi(enroll_number_id);
+  user_id                       = atoi(enroll_number_id);
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_USER_DATA;
-  s_DATA_SYNC.u8_data_packet[0] = (enroll_number_id_send << 8) & 0xFF;
-  s_DATA_SYNC.u8_data_packet[1] = enroll_number_id_send & 0xFF;
+  s_DATA_SYNC.u8_data_packet[0] = (user_id << 8) & 0xFF;
+  s_DATA_SYNC.u8_data_packet[1] = user_id & 0xFF;
   s_DATA_SYNC.u8_data_length    = 2;
   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
   xQueueSend(*s_enroll_event_data.p_send_data_queue, &s_DATA_SYNC, 0);
@@ -463,7 +464,7 @@ EVENT_ENROLL_DeletePopupSuccess_Timer (lv_timer_t *timer)
 static void
 EVENT_ENROLL_ShowUserInfoScreen (void *param)
 {
-    vTaskSuspend(s_enroll_task_handle);
+  vTaskSuspend(s_enroll_task_handle);
 
   if (!lv_obj_is_valid(ui_UserInfo))
   {

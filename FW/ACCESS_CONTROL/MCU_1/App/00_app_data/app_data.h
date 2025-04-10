@@ -156,9 +156,6 @@ extern "C"
 
   extern DATA_System_t s_data_system;
 
-  // extern char    enroll_number_id[8];
-  extern uint16_t enroll_number_id_send;
-
 #ifdef __cplusplus
 }
 #endif

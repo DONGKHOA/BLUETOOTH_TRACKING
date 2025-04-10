@@ -245,7 +245,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
       {
         if (stable_face_count_enroll >= 10)
         {
-          std::string text_id = std::to_string(enroll_number_id_send);
+          std::string text_id = std::to_string(user_id);
 
           self->recognizer->enroll_id(
               (uint16_t *)s_camera_capture.u8_buff,
