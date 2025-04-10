@@ -620,8 +620,8 @@ void ui_init(void)
     ui_Attendance_screen_init();
     ui_Authenticate_screen_init();
     ui_Enroll_screen_init();
-    // ui_UserInfo_screen_init();
-    // ui_FaceIDEnroll_screen_init();
+    ui_UserInfo_screen_init();
+    ui_FaceIDEnroll_screen_init();
     // ui_FingerEnroll_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Home);
