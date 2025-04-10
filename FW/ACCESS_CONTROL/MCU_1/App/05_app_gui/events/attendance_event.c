@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 static void APP_Attendance_Timer(lv_timer_t *timer);
+static void EVENT_ATTENDANCE_ShowHomeScreen(void *param);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -133,6 +134,11 @@ EVENT_Attendance_After (lv_event_t *e)
 static void
 APP_Attendance_Timer (lv_timer_t *timer)
 {
+  if ((xEventGroupGetBits(*p_display_event) & ATTENDANCE_BIT) == 0)
+  {
+    lv_async_call(EVENT_ATTENDANCE_ShowHomeScreen, NULL);
+  }
+
   xQueueReceive(*p_result_recognition_queue, &s_data_result_recognition, 1);
 
   if (xQueueReceive(*p_camera_capture_queue, &fb, portMAX_DELAY) == pdPASS)
@@ -187,4 +193,14 @@ APP_Attendance_Timer (lv_timer_t *timer)
 
   lv_obj_invalidate(camera_canvas);
   esp_camera_fb_return(fb);
+}
+
+static void
+EVENT_ATTENDANCE_ShowHomeScreen (void *param)
+{
+  _ui_screen_change(&ui_Home,
+                    LV_SCR_LOAD_ANIM_MOVE_RIGHT,
+                    500,
+                    0,
+                    &ui_Home_screen_init);
 }
