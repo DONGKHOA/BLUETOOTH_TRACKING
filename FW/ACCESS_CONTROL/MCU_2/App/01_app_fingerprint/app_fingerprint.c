@@ -24,6 +24,7 @@ typedef struct fingerprint_data
   TimerHandle_t       s_timeout;
   QueueHandle_t      *p_send_data_queue;
   QueueHandle_t      *p_fingerprint_queue;
+  QueueHandle_t      *p_data_local_database_queue;
   EventGroupHandle_t *p_fingerprint_event;
 } fingerprint_data_t;
 
@@ -45,7 +46,7 @@ DATA_SYNC_t s_DATA_SYNC;
 
 static uint8_t finger_count;
 
-int finger_user_id;
+uint16_t finger_user_id;
 
 uint8_t u8_page_id[2] = { 0 };
 
@@ -78,6 +79,8 @@ APP_FINGERPRINT_Init (void)
 {
   s_fingerprint_data.p_send_data_queue   = &s_data_system.s_send_data_queue;
   s_fingerprint_data.p_fingerprint_event = &s_data_system.s_fingerprint_event;
+  s_fingerprint_data.p_data_local_database_queue
+      = &s_data_system.s_data_local_database_queue;
   // Specify the start page for the search
 
   u8_start_page[0] = 0x00;
@@ -122,8 +125,6 @@ APP_FINGERPRINT_task (void *arg)
 
     if (uxBits & EVENT_ENROLL_FINGERPRINT)
     {
-      u8_page_id[0] = ((finger_user_id >> 8) & 0xFF);
-      u8_page_id[1] = (finger_user_id & 0xFF);
       APP_FINGERPRINT_Enroll();
     }
   }
@@ -149,14 +150,14 @@ APP_FINGERPRINT_Enroll (void)
     continue;
   }
 
+  finger_count++;
+
   // Send MCU1 to notify that the fingerprint have store to buffer 1
-  s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FIRST_FINGERPRINT;
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FOUND_FINGERPRINT;
   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
   s_DATA_SYNC.u8_data_length    = 1;
   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
   xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
-
-  finger_count++;
 
   if (finger_count == 2)
   {
@@ -165,28 +166,44 @@ APP_FINGERPRINT_Enroll (void)
     if (u8_enroll_confirmation_code != 0)
     {
       continue;
+      finger_count = 0;
     }
 
-    u8_enroll_confirmation_code = DEV_AS608_Search(UART_FINGERPRINT_NUM,
-                                                   u8_default_address,
-                                                   buffer1,
-                                                   u8_start_page,
-                                                   u8_page_number);
+    u8_page_id[0] = ((finger_user_id >> 8) & 0xFF);
+    u8_page_id[1] = (finger_user_id & 0xFF);
 
-    if (u8_enroll_confirmation_code == 0)
-    {
-      continue;
-    }
-
+    // Process to store finger
     u8_enroll_confirmation_code = DEV_AS608_Store(
         UART_FINGERPRINT_NUM, u8_default_address, buffer1, u8_page_id);
     if (u8_enroll_confirmation_code == 0)
     {
-      printf("Enroll success! Stored template with ID: %d", u8_user_id);
+      // Send data to local database to update data in sdcard
+      printf("Enroll success! Stored template with ID: %d", finger_user_id);
+      s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT;
+      s_DATA_SYNC.u8_data_packet[0] = (finger_user_id << 8) & 0xFF;
+      s_DATA_SYNC.u8_data_packet[1] = finger_user_id & 0xFF;
+      s_DATA_SYNC.u8_data_length    = 2;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+      xQueueSend(
+          *s_fingerprint_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+
+      finger_count = 0;
+      xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
+                           EVENT_ENROLL_FINGERPRINT);
     }
     else
     {
+      // Send fail to MCU1
       printf("Error: Cannot store template | %d", u8_enroll_confirmation_code);
+      s_DATA_SYNC.u8_data_start     = DATA_SYNC_ENROLL_FINGERPRINT;
+      s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+      s_DATA_SYNC.u8_data_length    = 1;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+      xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
+      finger_count = 0;
+      xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
+                           EVENT_ENROLL_FINGERPRINT);
     }
   }
 }
