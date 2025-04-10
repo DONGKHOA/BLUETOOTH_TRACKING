@@ -11,7 +11,6 @@ SET(SOURCES components/ui_comp_popupmenupanel.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c
-    ui_events.c
     images/ui_img_1101766569.c
     images/ui_img_1052123464.c
     images/ui_img_694049672.c

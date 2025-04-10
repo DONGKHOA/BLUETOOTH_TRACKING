@@ -21,7 +21,6 @@ extern char     enroll_number_id[8];
  *****************************************************************************/
 
 static void EVENT_ENROLL_DeletePopup_Timer(lv_timer_t *timer);
-static void EVENT_PROCESS_FINGER_ENROLL_DATA_CreateTask(void);
 static void EVENT_PROCESS_FINGER_ENROLL_DATA_Task(void *arg);
 
 /******************************************************************************
@@ -62,14 +61,18 @@ EVENT_Enroll_Finger (lv_event_t *e)
     s_finger_enroll_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
 
-    EVENT_PROCESS_FINGER_ENROLL_DATA_CreateTask();
+    xTaskCreate(EVENT_PROCESS_FINGER_ENROLL_DATA_Task,
+                "process finger enroll task",
+                1024 * 4,
+                NULL,
+                6,
+                &s_finger_enroll_task_handle);
   }
 
   lv_label_set_text(ui_IDTextEnroll4, enroll_number_id);
 
   vTaskResume(s_finger_enroll_task_handle);
 
-  user_id                       = atoi(enroll_number_id);
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_ENROLL_FINGERPRINT;
   s_DATA_SYNC.u8_data_packet[0] = (user_id << 8) & 0xFF;
   s_DATA_SYNC.u8_data_packet[1] = user_id & 0xFF;
@@ -81,17 +84,6 @@ EVENT_Enroll_Finger (lv_event_t *e)
 /******************************************************************************
  *   PRIVATE FUNCTION
  *****************************************************************************/
-
-static void
-EVENT_PROCESS_FINGER_ENROLL_DATA_CreateTask (void)
-{
-  xTaskCreate(EVENT_PROCESS_FINGER_ENROLL_DATA_Task,
-              "process finger enroll task",
-              1024 * 4,
-              NULL,
-              6,
-              &s_finger_enroll_task_handle);
-}
 
 static void
 EVENT_PROCESS_FINGER_ENROLL_DATA_Task (void *arg)

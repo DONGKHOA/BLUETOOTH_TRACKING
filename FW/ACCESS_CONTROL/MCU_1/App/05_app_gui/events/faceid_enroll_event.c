@@ -128,7 +128,6 @@ EVENT_Enroll_After (lv_event_t *e)
   s_data_result_recognition.s_nose.y            = 0;
 
   lv_timer_pause(timer_faceid_enroll);
-  xEventGroupClearBits(*p_display_event, ENROLL_FACE_ID_BIT);
 }
 
 /******************************************************************************

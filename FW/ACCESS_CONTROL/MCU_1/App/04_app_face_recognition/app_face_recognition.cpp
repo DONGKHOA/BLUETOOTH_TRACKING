@@ -180,7 +180,6 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             ESP_LOGI(TAG, "Attend completed.");
             if (is_attend_success == true)
             {
-              
             }
             userid = -1;
           }
@@ -245,6 +244,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
       {
         if (stable_face_count_enroll >= 10)
         {
+          stable_face_count_enroll = 0;
           std::string text_id = std::to_string(user_id);
 
           self->recognizer->enroll_id(
@@ -257,6 +257,9 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
           ESP_LOGI(TAG,
                    "Enroll ID %d",
                    self->recognizer->get_enrolled_ids().back().id);
+          ESP_LOGI(TAG, "Enroll completed.");
+
+          xEventGroupClearBits(*self->p_display_event, ENROLL_FACE_ID_BIT);
         }
         else
         {

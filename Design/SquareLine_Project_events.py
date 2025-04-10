@@ -210,3 +210,7 @@ def EVENT_AUTHENTICATE_ESC(event_struct):
 def EVENT_Enroll_To_UserInfo(event_struct):
     return
 
+
+def EVENT_FaceID_Back(event_struct):
+    return
+

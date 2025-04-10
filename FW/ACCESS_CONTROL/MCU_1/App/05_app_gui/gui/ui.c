@@ -582,6 +582,9 @@ void ui_event_FaceIDEnroll(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_UserInfo, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_UserInfo_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_FaceID_Back(e);
+    }
 }
 
 void ui_event_ESCButton3(lv_event_t * e)
@@ -610,7 +613,7 @@ void ui_init(void)
     ui_Enroll_screen_init();
     ui_UserInfo_screen_init();
     ui_FaceIDEnroll_screen_init();
-    // ui_FingerEnroll_screen_init();
+    ui_FingerEnroll_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Home);
 }
