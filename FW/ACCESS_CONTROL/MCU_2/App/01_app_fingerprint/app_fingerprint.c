@@ -263,11 +263,12 @@ APP_FINGERPRINT_task (void *arg)
                                               &u16_stored_fingerprints);
       if (u8_confirmation_code == 0)
       {
-        printf("Fingerprint detected: %d\r\n", u16_stored_fingerprints);
+        printf("Fingerprint detected: %d\r\n", u16_stored_fingerprints + 1);
         // Send data to local database
-        s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
-        s_DATA_SYNC.u8_data_packet[0] = (u16_stored_fingerprints << 8) & 0xFF;
-        s_DATA_SYNC.u8_data_packet[1] = u16_stored_fingerprints & 0xFF;
+        s_DATA_SYNC.u8_data_start = DATA_SYNC_REQUEST_ATTENDANCE;
+        s_DATA_SYNC.u8_data_packet[0]
+            = ((u16_stored_fingerprints + 1) << 8) & 0xFF;
+        s_DATA_SYNC.u8_data_packet[1] = (u16_stored_fingerprints + 1) & 0xFF;
         s_DATA_SYNC.u8_data_length    = 2;
         s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
         xQueueSend(*s_fingerprint_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);

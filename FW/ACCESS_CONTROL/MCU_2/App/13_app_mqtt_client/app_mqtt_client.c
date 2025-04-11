@@ -119,7 +119,7 @@ APP_MQTT_CLIENT_task (void *arg)
   DATA_SYNC_t s_DATA_SYNC;
   uint8_t     is_init = 0;
 
-  char data[128];
+  char data_send[128];
 
   while (1)
   {
@@ -141,13 +141,13 @@ APP_MQTT_CLIENT_task (void *arg)
       {
         case DATA_SYNC_ENROLL_FACE:
 
-          sprintf(data,
+          sprintf(data_send,
                   "{\"command\" : \"ENROLL_FACE\", \"id\": %d}",
                   (s_DATA_SYNC.u8_data_packet[0] << 8)
                       | s_DATA_SYNC.u8_data_packet[1]);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
-                                  data,
+                                  data_send,
                                   0,
                                   1,
                                   0);
@@ -155,13 +155,13 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
         case DATA_SYNC_ENROLL_FINGERPRINT:
 
-          sprintf(data,
+          sprintf(data_send,
                   "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
                   (s_DATA_SYNC.u8_data_packet[0] << 8)
                       | s_DATA_SYNC.u8_data_packet[1]);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
-                                  data,
+                                  data_send,
                                   0,
                                   1,
                                   0);
@@ -170,13 +170,13 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
-          sprintf(data,
+          sprintf(data_send,
                   "{\"command\" : \"ATTENDANCE\", \"id\": %d}",
                   (s_DATA_SYNC.u8_data_packet[0] << 8)
                       | s_DATA_SYNC.u8_data_packet[1]);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
-                                  data,
+                                  data_send,
                                   0,
                                   1,
                                   0);
@@ -186,7 +186,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
           {
-            memcpy(data,
+            memcpy(data_send,
                    "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
                    "\"success\"}",
                    sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
@@ -194,7 +194,7 @@ APP_MQTT_CLIENT_task (void *arg)
           }
           else
           {
-            memcpy(data,
+            memcpy(data_send,
                    "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
                    "\"fail\"}",
                    sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
@@ -203,7 +203,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_response_server,
-                                  data,
+                                  data_send,
                                   0,
                                   1,
                                   0);
@@ -219,7 +219,6 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (DECODE_Command(data))
       {
-
         case USER_DATA_CMD:
 
           for (uint16_t i = 0; i < user_len; i++)
@@ -237,8 +236,6 @@ APP_MQTT_CLIENT_task (void *arg)
           s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-          printf("1111111111111111\r\n");
 
           xQueueSend(
               *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
