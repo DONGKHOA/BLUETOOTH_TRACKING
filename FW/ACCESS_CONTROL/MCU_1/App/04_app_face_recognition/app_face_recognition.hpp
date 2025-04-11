@@ -20,6 +20,7 @@ class Face
   private:
   QueueHandle_t          *p_camera_recognition_queue;
   QueueHandle_t          *p_result_recognition_queue;
+  QueueHandle_t          *p_send_data_queue;
   EventGroupHandle_t     *p_display_event;
   HumanFaceDetectMSR01    detector;
   HumanFaceDetectMNP01    detector2;
