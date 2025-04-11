@@ -246,7 +246,7 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = LOCAL_DATABASE_RESPONSE_ENROLL_FACE;
+          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ENROLL_FACE;
           s_DATA_SYNC.u8_data_length = 1;
           s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
           if (status == 1)
@@ -259,7 +259,7 @@ APP_MQTT_CLIENT_task (void *arg)
           }
           // Notify the status of response to local database task via queue
           xQueueSend(
-              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+              *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -268,7 +268,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           // Send data to the queue for transmission to MCU1
           s_DATA_SYNC.u8_data_start
-              = LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT;
+              = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
           s_DATA_SYNC.u8_data_length = 1;
           s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
           if (status == 1)
@@ -281,7 +281,7 @@ APP_MQTT_CLIENT_task (void *arg)
           }
           // Notify the status of response to local database task via queue
           xQueueSend(
-              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+              *s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 
