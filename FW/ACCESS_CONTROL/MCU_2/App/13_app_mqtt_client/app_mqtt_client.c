@@ -140,9 +140,15 @@ APP_MQTT_CLIENT_task (void *arg)
       {
         case DATA_SYNC_ENROLL_FACE:
 
+          char data[128];
+
+          sprintf(data,
+                  "{\"command\" : \"ENROLL_FACE\", \"id\": %d}",
+                  (s_DATA_SYNC.u8_data_packet[0] << 8)
+                      | s_DATA_SYNC.u8_data_packet[1]);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
-                                  "{\"command\" : \"ENROLL_FACE\"}",
+                                  data,
                                   0,
                                   1,
                                   0);
@@ -150,12 +156,19 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
         case DATA_SYNC_ENROLL_FINGERPRINT:
 
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  p_topic_request_server,
-                                  "{\"command\" : \"ENROLL_FINGERPRINT\"}",
-                                  0,
-                                  1,
-                                  0);
+        
+        char data[128];
+
+        sprintf(data,
+                "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
+                (s_DATA_SYNC.u8_data_packet[0] << 8)
+                    | s_DATA_SYNC.u8_data_packet[1]);
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_request_server,
+                                data,
+                                0,
+                                1,
+                                0);
 
           break;
 

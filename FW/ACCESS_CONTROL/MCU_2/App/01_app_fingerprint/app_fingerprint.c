@@ -23,7 +23,6 @@ typedef struct fingerprint_data
 {
   TimerHandle_t       s_timeout;
   QueueHandle_t      *p_send_data_queue;
-  QueueHandle_t      *p_fingerprint_queue;
   QueueHandle_t      *p_data_local_database_queue;
   EventGroupHandle_t *p_fingerprint_event;
 } fingerprint_data_t;

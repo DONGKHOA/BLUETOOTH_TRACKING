@@ -25,11 +25,11 @@
 
 typedef struct
 {
-  QueueHandle_t     *p_data_mqtt_queue;
-  QueueHandle_t     *p_send_data_queue;
-  QueueHandle_t     *p_data_local_database_queue;
-  QueueHandle_t     *p_fingerprint_queue;
-  SemaphoreHandle_t *p_spi_mutex;
+  QueueHandle_t      *p_data_mqtt_queue;
+  QueueHandle_t      *p_send_data_queue;
+  QueueHandle_t      *p_data_local_database_queue;
+  EventGroupHandle_t *p_fingerprint_event;
+  SemaphoreHandle_t  *p_spi_mutex;
 } local_database_t;
 
 /******************************************************************************
@@ -37,6 +37,8 @@ typedef struct
  *****************************************************************************/
 
 static local_database_t s_local_database;
+
+extern uint16_t u16_finger_user_id;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -67,7 +69,7 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
   s_local_database.p_spi_mutex         = &s_data_system.s_spi_mutex;
-  s_local_database.p_fingerprint_queue = &s_data_system.s_fingerprint_queue;
+  s_local_database.p_fingerprint_event = &s_data_system.s_fingerprint_event;
 }
 
 /******************************************************************************
@@ -212,6 +214,66 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           // Update data in psram
 
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          face[index] = 1;
+
+          xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case DATA_SYNC_ENROLL_FINGERPRINT:
+
+          // Update data in sdcard
+
+          // Update data in psram
+
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          finger[index] = 1;
+
+          xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
           break;
 
         case LOCAL_DATABASE_RESPONSE_ENROLL_FACE:
@@ -260,12 +322,17 @@ APP_LOCAL_DATABASE_Task (void *arg)
           APP_LOCAL_DATABASE_Delete_UserID(u16_id);
           user_len--;
 
-          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA;
-          s_DATA_SYNC.u8_data_packet[0] = LOCAL_DATABASE_SUCCESS;
+          u16_finger_user_id = u16_id;
+          xEventGroupSetBits(*s_local_database.p_fingerprint_event,
+                             EVENT_DELETE_FINGERPRINT);
+
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_DELETE_FACE_ID;
+          s_DATA_SYNC.u8_data_packet[0] = (u16_id << 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = u16_id & 0xFF;        // Low
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
-          xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
           xSemaphoreGive(*s_local_database.p_spi_mutex);
           taskEXIT_CRITICAL(&spi_mux);
@@ -297,8 +364,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
           // Update data in psram
 
           // Update in fingerprint hardware
-          s_DATA_SYNC.u8_data_start = FINGER_DELETE;
-          xQueueSend(*s_local_database.p_fingerprint_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -308,7 +373,35 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           // Update data in psram
 
-          // Update in face hardware
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          face[index] = 0;
+
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_DELETE_FACE_ID;
+
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 
