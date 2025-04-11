@@ -23,9 +23,12 @@ static void EVENT_ATTENDANCE_ShowHomeScreen(void *param);
  *    PRIVATE DATA
  *****************************************************************************/
 
+DATA_SYNC_t s_DATA_SYNC;
+
 static lv_obj_t   *camera_canvas = NULL;
 static lv_timer_t *timer_attendance;
 
+static QueueHandle_t      *p_send_data_queue;
 static QueueHandle_t      *p_camera_capture_queue;
 static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
@@ -60,6 +63,7 @@ EVENT_Attendance_Before (lv_event_t *e)
     p_camera_capture_queue     = &s_data_system.s_camera_capture_queue;
     p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
     p_display_event            = &s_data_system.s_display_event;
+    p_send_data_queue          = &s_data_system.s_send_data_queue;
 
     camera_canvas = lv_canvas_create(ui_Attendance);
 
@@ -100,6 +104,13 @@ EVENT_Attendance_Before (lv_event_t *e)
   {
     lv_timer_resume(timer_attendance);
   }
+
+  // Send Start Attendance to MCU2
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_START_ATTENDANCE;
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*p_send_data_queue, &s_DATA_SYNC, 0);
 
   xEventGroupSetBits(*p_display_event, ATTENDANCE_BIT);
 }

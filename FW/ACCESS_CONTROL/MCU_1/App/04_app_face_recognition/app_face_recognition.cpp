@@ -9,6 +9,8 @@
 #include "app_data.h"
 #include "app_face_recognition.hpp"
 
+#include "environment.h"
+
 /******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
@@ -68,6 +70,7 @@ Face::Face ()
 {
   this->p_camera_recognition_queue = &s_data_system.s_camera_recognition_queue;
   this->p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
+  this->p_send_data_queue          = &s_data_system.s_send_data_queue;
 
   this->p_display_event = &s_data_system.s_display_event;
 
@@ -118,6 +121,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
       ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
 
   self->recognizer->set_ids_from_flash();
+
+  DATA_SYNC_t s_DATA_SYNC;
 
   while (1)
   {
@@ -290,6 +295,14 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
                    self->recognizer->get_enrolled_ids().back().id);
           ESP_LOGI(TAG, "Enroll completed.");
 
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_ENROLL_FACE;
+          s_DATA_SYNC.u8_data_packet[0] = (user_id << 8) & 0xFF;
+          s_DATA_SYNC.u8_data_packet[1] = user_id & 0xFF;
+          s_DATA_SYNC.u8_data_length    = 2;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          xQueueSend(*self->p_send_data_queue, &s_DATA_SYNC, 0);
+
           xEventGroupClearBits(*self->p_display_event, ENROLL_FACE_ID_BIT);
         }
         else
@@ -391,6 +404,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
       if ((uxBits & DELETE_FACE_ID_BIT) != 0)
       {
+        self->recognizer->delete_id(user_id, true);
+        ESP_LOGE("DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
       }
     }
   }

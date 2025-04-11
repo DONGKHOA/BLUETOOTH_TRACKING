@@ -33,7 +33,8 @@
  */
 typedef struct
 {
-  QueueHandle_t *p_receive_data_event_queue;
+  QueueHandle_t      *p_receive_data_event_queue;
+  EventGroupHandle_t *p_display_event;
 } data_receive_data_t;
 
 /******************************************************************************
@@ -41,6 +42,12 @@ typedef struct
  *****************************************************************************/
 
 static void APP_DATA_RECEIVE_Task(void *arg);
+
+/******************************************************************************
+ *    EXTERN DATA
+ *****************************************************************************/
+
+extern uint16_t user_id;
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -63,6 +70,7 @@ APP_DATA_RECEIVE_Init (void)
 {
   s_data_receive_data.p_receive_data_event_queue
       = &s_data_system.s_receive_data_event_queue;
+  s_data_receive_data.p_display_event = &s_data_system.s_display_event;
 }
 
 /******************************************************************************
@@ -184,6 +192,14 @@ APP_DATA_RECEIVE_Task (void *arg)
 
         xQueueSend(
             *s_data_receive_data.p_receive_data_event_queue, &s_DATA_SYNC, 0);
+
+        break;
+
+      case DATA_SYNC_DELETE_FACE_ID:
+
+        user_id = (s_receive_message.data[1] << 8) | s_receive_message.data[2];
+        xEventGroupSetBits(*s_data_receive_data.p_display_event,
+                           DELETE_FACE_ID_BIT);
 
         break;
 
