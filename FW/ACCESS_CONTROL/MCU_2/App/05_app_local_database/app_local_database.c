@@ -348,6 +348,27 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           // Update data in psram
 
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          
+
           break;
 
         case LOCAL_FINGER_DELETE:
