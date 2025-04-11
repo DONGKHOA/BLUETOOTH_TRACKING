@@ -117,8 +117,9 @@ static void
 APP_MQTT_CLIENT_task (void *arg)
 {
   DATA_SYNC_t s_DATA_SYNC;
-  finger_cmd  e_finger_cmd;
   uint8_t     is_init = 0;
+
+  char data[128];
 
   while (1)
   {
@@ -140,8 +141,6 @@ APP_MQTT_CLIENT_task (void *arg)
       {
         case DATA_SYNC_ENROLL_FACE:
 
-          char data[128];
-
           sprintf(data,
                   "{\"command\" : \"ENROLL_FACE\", \"id\": %d}",
                   (s_DATA_SYNC.u8_data_packet[0] << 8)
@@ -155,9 +154,6 @@ APP_MQTT_CLIENT_task (void *arg)
 
           break;
         case DATA_SYNC_ENROLL_FINGERPRINT:
-
-        
-        char data[128];
 
         sprintf(data,
                 "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
@@ -184,7 +180,6 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
         case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
 
-          char data[128];
           if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
           {
             memcpy(data,
