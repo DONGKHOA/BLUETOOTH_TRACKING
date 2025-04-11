@@ -94,6 +94,7 @@ APP_DATA_RECEIVE_task (void *arg)
 
     if (s_receive_message.identifier != CAN_ID)
     {
+
       continue;
     }
 
