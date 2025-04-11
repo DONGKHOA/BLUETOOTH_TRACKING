@@ -21,16 +21,21 @@
 static void APP_Attendance_Timer(lv_timer_t *timer);
 static void EVENT_ATTENDANCE_ShowHomeScreen(void *param);
 
+static void EVENT_PROCESS_ATTENDANCE_DATA_Task(void *arg);
+
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
 
 DATA_SYNC_t s_DATA_SYNC;
 
+static TaskHandle_t s_attendance_task_handle;
+
 static lv_obj_t   *camera_canvas = NULL;
 static lv_timer_t *timer_attendance;
 
 static QueueHandle_t      *p_send_data_queue;
+static QueueHandle_t      *p_receive_data_event_queue;
 static QueueHandle_t      *p_camera_capture_queue;
 static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
@@ -66,6 +71,7 @@ EVENT_Attendance_Before (lv_event_t *e)
     p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
     p_display_event            = &s_data_system.s_display_event;
     p_send_data_queue          = &s_data_system.s_send_data_queue;
+    p_receive_data_event_queue = &s_data_system.s_receive_data_event_queue;
 
     camera_canvas = lv_canvas_create(ui_Attendance);
 
@@ -101,11 +107,20 @@ EVENT_Attendance_Before (lv_event_t *e)
 
     b_is_initialize  = true;
     timer_attendance = lv_timer_create(APP_Attendance_Timer, 30, NULL);
+
+    xTaskCreate(EVENT_PROCESS_ATTENDANCE_DATA_Task,
+                "process attendance task",
+                1024 * 4,
+                NULL,
+                6,
+                &s_attendance_task_handle);
   }
   else
   {
     lv_timer_resume(timer_attendance);
   }
+
+  vTaskResume(s_attendance_task_handle);
 
   // Send Start Attendance to MCU2
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_START_ATTENDANCE;
@@ -142,6 +157,30 @@ EVENT_Attendance_After (lv_event_t *e)
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
+
+static void
+EVENT_PROCESS_ATTENDANCE_DATA_Task (void *arg)
+{
+  while (1)
+  {
+    if (xQueueReceive(*p_receive_data_event_queue, &s_DATA_SYNC, portMAX_DELAY)
+        == pdTRUE)
+    {
+      switch (s_DATA_SYNC.u8_data_start)
+      {
+        case DATA_SYNC_RESPONSE_ATTENDANCE:
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
+          {
+            xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+}
 
 static void
 APP_Attendance_Timer (lv_timer_t *timer)
@@ -210,6 +249,10 @@ APP_Attendance_Timer (lv_timer_t *timer)
 static void
 EVENT_ATTENDANCE_ShowHomeScreen (void *param)
 {
+  lv_timer_pause(timer_attendance);
+
+  vTaskSuspend(s_attendance_task_handle);
+
   _ui_screen_change(
       &ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
 }

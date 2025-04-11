@@ -52,6 +52,8 @@ static bool check_eyes_in_box(uint16_t left_eye_x,
  *    PRIVATE DATA
  *****************************************************************************/
 
+DATA_SYNC_t s_DATA_SYNC;
+
 /******************************************************************************
  *    EXTERN DATA
  *****************************************************************************/
@@ -167,11 +169,25 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
           {
             xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend success Face");
+
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FACE;
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+            xQueueSend(*self->p_send_data_queue, &s_DATA_SYNC, 0);
           }
           else
           {
             xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend failed | Face");
+
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FACE;
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+            xQueueSend(*self->p_send_data_queue, &s_DATA_SYNC, 0);
           }
         }
         else
@@ -405,7 +421,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
       if ((uxBits & DELETE_FACE_ID_BIT) != 0)
       {
         self->recognizer->delete_id(user_id, true);
-        ESP_LOGE("DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
+        ESP_LOGE(
+            "DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
       }
     }
   }
