@@ -206,6 +206,14 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
+        case DATA_SYNC_ENROLL_FACE:
+
+          // Update data in sdcard
+
+          // Update data in psram
+
+          break;
+
         case LOCAL_DATABASE_RESPONSE_ENROLL_FACE:
 
           // Update data local database
