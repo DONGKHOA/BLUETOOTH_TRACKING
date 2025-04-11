@@ -210,7 +210,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case DATA_SYNC_ENROLL_FACE:
 
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -243,8 +249,14 @@ APP_LOCAL_DATABASE_Task (void *arg)
           break;
 
         case DATA_SYNC_ENROLL_FINGERPRINT:
+                    
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
 
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -276,39 +288,15 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
-        case LOCAL_DATABASE_RESPONSE_ENROLL_FACE:
-
-          // Update data local database
-
-          // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ENROLL_FACE;
-
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
-
-          break;
-
-        case LOCAL_DATABASE_RESPONSE_ENROLL_FINGERPRINT:
-
-          // Update data local database
-
-          // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
-          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-          // Notify the status of response to transmit task via queue
-          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
-
-          break;
-
         case LOCAL_DATABASE_REQUEST_DELETE_USER_DATA:
 
           taskENTER_CRITICAL(&spi_mux);
           xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
 
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -334,24 +322,29 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
-          xSemaphoreGive(*s_local_database.p_spi_mutex);
-          taskEXIT_CRITICAL(&spi_mux);
-
           break;
 
         case LOCAL_DATABASE_USER_DATA:
 
           taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
 
-          // Update data local database
+          // Update data in sdcard
 
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
           taskEXIT_CRITICAL(&spi_mux);
 
           break;
 
         case LOCAL_SET_ROLE:
 
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -359,7 +352,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case LOCAL_FINGER_DELETE:
 
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -369,7 +368,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case LOCAL_FACEID_DELETE:
 
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
@@ -407,7 +412,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
         case LOCAL_DATABASE_RESPONSE_ATTENDANCE:
 
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
           // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
 
           // Update data in psram
 
