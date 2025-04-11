@@ -237,6 +237,8 @@ APP_MQTT_CLIENT_task (void *arg)
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
+          printf("1111111111111111\r\n");
+
           xQueueSend(
               *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
