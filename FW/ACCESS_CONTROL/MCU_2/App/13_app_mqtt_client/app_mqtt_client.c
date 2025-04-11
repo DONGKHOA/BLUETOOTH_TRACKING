@@ -155,24 +155,28 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
         case DATA_SYNC_ENROLL_FINGERPRINT:
 
-        sprintf(data,
-                "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
-                (s_DATA_SYNC.u8_data_packet[0] << 8)
-                    | s_DATA_SYNC.u8_data_packet[1]);
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_request_server,
-                                data,
-                                0,
-                                1,
-                                0);
+          sprintf(data,
+                  "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
+                  (s_DATA_SYNC.u8_data_packet[0] << 8)
+                      | s_DATA_SYNC.u8_data_packet[1]);
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_request_server,
+                                  data,
+                                  0,
+                                  1,
+                                  0);
 
           break;
 
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
+          sprintf(data,
+                  "{\"command\" : \"ATTENDANCE\", \"id\": %d}",
+                  (s_DATA_SYNC.u8_data_packet[0] << 8)
+                      | s_DATA_SYNC.u8_data_packet[1]);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   p_topic_request_server,
-                                  "{\"command\" : \"ATTENDANCE\"}",
+                                  data,
                                   0,
                                   1,
                                   0);
@@ -285,7 +289,7 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ATTENDANCE;
+          s_DATA_SYNC.u8_data_start  = LOCAL_DATABASE_RESPONSE_ATTENDANCE;
           s_DATA_SYNC.u8_data_length = 1;
           s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
           if (status == 1)
@@ -297,7 +301,7 @@ APP_MQTT_CLIENT_task (void *arg)
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
           }
           // Notify the status of response to transmit task via queue
-          xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+          xQueueSend(*s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 

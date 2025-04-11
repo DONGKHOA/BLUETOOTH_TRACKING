@@ -405,6 +405,18 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
+        case LOCAL_DATABASE_RESPONSE_ATTENDANCE:
+
+          // Update data in sdcard
+
+          // Update data in psram
+
+          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ATTENDANCE;
+
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
+          break;
+
         default:
           break;
       }

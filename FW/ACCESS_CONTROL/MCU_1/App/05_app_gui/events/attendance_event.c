@@ -173,6 +173,11 @@ EVENT_PROCESS_ATTENDANCE_DATA_Task (void *arg)
           {
             xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
           }
+
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
+          {
+            xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
+          }
           break;
 
         default:

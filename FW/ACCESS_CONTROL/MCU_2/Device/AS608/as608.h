@@ -62,7 +62,8 @@ extern "C"
                            uint8_t        *p_AS608_address,
                            uint8_t        *p_buffer_id,
                            uint8_t        *p_start_page,
-                           uint8_t        *p_page_number);
+                           uint8_t        *p_page_number,
+                           uint16_t       *p_stored_fingerprints);
 
   /**
    * @brief Function to combine both character files and generate template,

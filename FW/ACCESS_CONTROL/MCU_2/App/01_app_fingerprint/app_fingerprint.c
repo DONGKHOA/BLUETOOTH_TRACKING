@@ -24,6 +24,7 @@ typedef struct fingerprint_data
   TimerHandle_t       s_timeout;
   QueueHandle_t      *p_send_data_queue;
   QueueHandle_t      *p_data_local_database_queue;
+  QueueHandle_t      *p_data_mqtt_queue;
   EventGroupHandle_t *p_fingerprint_event;
 } fingerprint_data_t;
 
@@ -80,6 +81,7 @@ APP_FINGERPRINT_Init (void)
   s_fingerprint_data.p_fingerprint_event = &s_data_system.s_fingerprint_event;
   s_fingerprint_data.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
+  s_fingerprint_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
   // Specify the start page for the search
 
   u8_start_page[0] = 0x00;
@@ -112,8 +114,9 @@ static void
 APP_FINGERPRINT_task (void *arg)
 {
   uint8_t  uxBits;
-  uint8_t  u8_confirmation_code;
   uint16_t index;
+  uint8_t  u8_confirmation_code;
+  uint16_t u16_stored_fingerprints = 0;
 
   DATA_SYNC_t s_DATA_SYNC;
 
@@ -256,15 +259,18 @@ APP_FINGERPRINT_task (void *arg)
                                               u8_default_address,
                                               buffer1,
                                               u8_start_page,
-                                              u8_page_number);
+                                              u8_page_number,
+                                              &u16_stored_fingerprints);
       if (u8_confirmation_code == 0)
       {
-        // Send to MCU1 to notify that the fingerprint have detected
-        s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ATTENDANCE;
-        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
-        s_DATA_SYNC.u8_data_length    = 1;
+        printf("Fingerprint detected: %d\r\n", u16_stored_fingerprints);
+        // Send data to local database
+        s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
+        s_DATA_SYNC.u8_data_packet[0] = (u16_stored_fingerprints << 8) & 0xFF;
+        s_DATA_SYNC.u8_data_packet[1] = u16_stored_fingerprints & 0xFF;
+        s_DATA_SYNC.u8_data_length    = 2;
         s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-        xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
+        xQueueSend(*s_fingerprint_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
         xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
                              EVENT_ATTENDANCE_FINGERPRINT);

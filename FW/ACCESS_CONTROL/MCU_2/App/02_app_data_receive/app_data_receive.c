@@ -147,8 +147,9 @@ APP_DATA_RECEIVE_task (void *arg)
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
-        s_DATA_SYNC.u8_data_length    = s_receive_message.data[2];
-        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
 
         xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
         break;
