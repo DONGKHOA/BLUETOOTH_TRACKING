@@ -46,12 +46,16 @@ def reponse_enroll_face(user_id):
             save_users(users)
             return {
                 "command": "ENROLL_FACE",
-                "response": "success"
+                "user_id": user_id,
+                "name": user.get("name"),
+                "response": "success",
             }
 
     # If not found
     return {
         "command": "ENROLL_FACE",
+        "user_id": user_id,
+        "name": user.get("name"),
         "response": "fail"
     }
 
@@ -66,12 +70,16 @@ def reponse_enroll_finger(user_id):
             save_users(users)
             return {
                 "command": "ENROLL_FINGER",
+                "user_id": user_id,
+                "name": user.get("name"),
                 "response": "success"
             }
 
     # If not found
     return {
         "command": "ENROLL_FINGER",
+        "user_id": user_id,
+        "name": user.get("name"),
         "response": "fail"
     }
 

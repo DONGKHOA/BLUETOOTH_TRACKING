@@ -3,31 +3,7 @@
     "id": 1,
     "name": "Ho Le Quoc Thang",
     "employee_id": "2114826",
-    "role": "Admin",
-    "face": 1,
-    "finger": 1
-  },
-  {
-    "id": 2,
-    "name": "Dong Thanh Khoa",
-    "employee_id": "12312312",
-    "role": "User",
-    "face": 0,
-    "finger": 0
-  },
-  {
-    "id": 3,
-    "name": "Thang Ho",
-    "employee_id": "21321412",
-    "role": "User",
-    "face": 0,
-    "finger": 0
-  },
-  {
-    "id": 4,
-    "name": "Khoa Dong",
-    "employee_id": "12125124",
-    "role": "User",
+    "role": "admin",
     "face": 0,
     "finger": 0
   }

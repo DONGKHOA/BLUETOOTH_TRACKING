@@ -51,8 +51,8 @@
                         <td><input type="text" class="form-control" name="employee_id" value="{{ user.employee_id }}"></td>
                         <td>
                             <select class="form-select" name="role">
-                                <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
-                                <option value="User" {% if user.role == 'User' %}selected{% endif %}>User</option>
+                                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>admin</option>
+                                <option value="user" {% if user.role == 'user' %}selected{% endif %}>user</option>
                             </select>
                         </td>
                         <td>

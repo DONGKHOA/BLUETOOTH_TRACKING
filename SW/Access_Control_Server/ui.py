@@ -72,6 +72,15 @@ def update_users():
             "finger": 0
         })
 
+        # Send a DELETE_USER_DATA command to the queue
+        print(f"Adding user data for ID: {last_id + 1}")
+
+        redis_client.rpush("mqtt_queue", json.dumps({
+            "command": "ADD_USER_DATA",
+            "id": last_id + 1,
+            "name": name,
+        }))
+
     save_users(users)
     return redirect(url_for('index'))
 
@@ -80,12 +89,8 @@ def delete_user(index):
     users = load_users()
 
     if 0 <= index < len(users):
-        delete_user = users.pop(index)
-        user_id = delete_user.get("id")
-
-        # Reset all user IDs (starting from 1)
-        for i, user in enumerate(users, start=1):
-            user["id"] = i
+        delete_id_user = users.pop(index)
+        user_id = delete_id_user.get("id")
 
         save_users(users)
 
