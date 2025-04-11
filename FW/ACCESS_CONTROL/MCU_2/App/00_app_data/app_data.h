@@ -37,6 +37,7 @@ extern "C"
 
 #define EVENT_ENROLL_FINGERPRINT     BIT0
 #define EVENT_ATTENDANCE_FINGERPRINT BIT1
+#define EVENT_DELETE_FINGERPRINT     BIT2
 
 #define MAX_USER_DATA 10240 // Maximum user data size
 
@@ -134,7 +135,6 @@ extern "C"
     QueueHandle_t      s_data_mqtt_queue;
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_data_local_database_queue;
-    QueueHandle_t      s_fingerprint_queue;
     SemaphoreHandle_t  s_spi_mutex;
     SemaphoreHandle_t  s_i2c_mutex;
     EventGroupHandle_t s_flag_time_event;
