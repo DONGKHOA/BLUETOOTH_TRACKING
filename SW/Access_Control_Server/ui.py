@@ -72,7 +72,7 @@ def update_users():
             "finger": 0
         })
 
-        # Send a DELETE_USER_DATA command to the queue
+        # Send a ADD_USER_DATA command to the queue
         print(f"Adding user data for ID: {last_id + 1}")
 
         redis_client.rpush("mqtt_queue", json.dumps({
@@ -103,6 +103,69 @@ def delete_user(index):
                 "id": user_id
             }))
 
+    return redirect(url_for('index'))
+
+@app.route('/delete_face/<int:user_id>', methods=['POST'])
+def delete_face(user_id):
+    users = load_users()  # Đọc từ file users.json
+    for user in users:
+        if user['id'] == user_id:
+            user['face'] = 0
+
+            save_users(users)
+
+            # Send a DELETE_FACEID_USER command to the queue
+            print(f"Deleting faceid user data for ID: {user_id}")
+
+            redis_client.rpush("mqtt_queue", json.dumps({
+                "command": "DELETE_FACEID_USER",
+                "id": user_id
+            }))
+
+            break
+
+    return redirect(url_for('index'))
+
+@app.route('/delete_finger/<int:user_id>', methods=['POST'])
+def delete_finger(user_id):
+    users = load_users()
+    for user in users:
+        if user['id'] == user_id:
+            user['finger'] = 0
+
+            save_users(users)
+
+            # Send a DELETE_FINGER_USER command to the queue
+            print(f"Deleting finger user data for ID: {user_id}")
+
+            redis_client.rpush("mqtt_queue", json.dumps({
+                "command": "DELETE_FINGER_USER",
+                "id": user_id
+            }))
+            
+            break
+
+    return redirect(url_for('index'))
+
+@app.route('/set_role/<int:user_id>', methods=['POST'])
+def set_role(user_id):
+    new_role = request.form['role']
+    users = load_users()
+
+    for user in users:
+        if user['id'] == user_id:
+            user['role'] = new_role
+
+            save_users(users)
+
+            # Send a SET_ROLE command to the queue
+            print(f"Set new role of user data with ID: {user_id}")
+
+            redis_client.rpush("mqtt_queue", json.dumps({
+                "command": "SET_ROLE",
+                "id": user_id,
+                "role": new_role
+            }))
     return redirect(url_for('index'))
 
 @app.route('/attendance')

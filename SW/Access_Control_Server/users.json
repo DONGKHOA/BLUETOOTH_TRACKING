@@ -3,8 +3,16 @@
     "id": 1,
     "name": "Ho Le Quoc Thang",
     "employee_id": "2114826",
+    "role": "user",
+    "face": 0,
+    "finger": 0
+  },
+  {
+    "id": 2,
+    "name": "Dong Thanh Khoa",
+    "employee_id": "3213123",
     "role": "admin",
-    "face": 1,
+    "face": 0,
     "finger": 0
   }
 ]

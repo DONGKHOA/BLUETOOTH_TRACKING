@@ -2,36 +2,8 @@
   {
     "id": 1,
     "name": "Ho Le Quoc Thang",
-    "date": "31/03/2025",
-    "check1": "20:15:54",
-    "check2": "20:16:07",
-    "check3": "20:20:23",
-    "check4": "20:21:13",
-    "check5": "20:21:14",
-    "check6": "20:21:15"
-  },
-  {
-    "id": 2,
-    "name": "Dong Thanh Khoa",
-    "date": "31/03/2025",
-    "check1": "20:24:32"
-  },
-  {
-    "id": 2,
-    "name": "Dong Thanh Khoa",
-    "date": "01/04/2025",
-    "check1": "12:20:07"
-  },
-  {
-    "id": 1,
-    "name": "Ho Le Quoc Thang",
-    "date": "01/04/2025",
-    "check1": "12:20:19"
-  },
-  {
-    "id": 1,
-    "name": "Ho Le Quoc Thang",
     "date": "11/04/2025",
-    "check1": "13:50:18"
+    "check1": "22:28:40",
+    "check2": "23:39:31"
   }
 ]

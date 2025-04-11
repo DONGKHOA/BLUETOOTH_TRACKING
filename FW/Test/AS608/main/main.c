@@ -77,8 +77,8 @@ app_main (void)
 
   BSP_uartDriverInit(UART_NUM);
 
-  xTaskCreate(TestMain_Fingerprint_Register_Task,
-              "TestMain_Fingerprint_Register_Task",
+  xTaskCreate(TestMain_Finger_Delete_All_Task,
+              "TestMain_Finger_Delete_All_Task",
               4096,
               NULL,
               10,

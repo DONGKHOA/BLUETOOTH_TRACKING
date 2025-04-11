@@ -32,11 +32,8 @@ typedef struct fingerprint_data
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void        APP_FINGERPRINT_task(void *arg);
-static void        APP_FINGERPRINT_Timer_Callback(TimerHandle_t s_timer);
-static inline void APP_FINGERPRINT_Enroll(void);
-static inline void APP_FINGERPRINT_Attendance(void);
-static inline void APP_FINGERPRINT_Delete(void);
+static void APP_FINGERPRINT_task(void *arg);
+static void APP_FINGERPRINT_Timer_Callback(TimerHandle_t s_timer);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -59,6 +56,8 @@ static uint8_t buffer2[1] = { 0x02 };
 static uint8_t u8_start_page[2] = { 0x00, 0x00 };
 // Specify the page range for the search
 static uint8_t u8_page_number[2] = { 0x00, 0xC8 };
+
+static uint8_t u8_number_of_delete_id[2] = { 0x00, 0x01 };
 
 static uint8_t u8_default_address[4]  = { 0xFF, 0xFF, 0xFF, 0xFF };
 static uint8_t u8_default_password[4] = { 0x00, 0x00, 0x00, 0x00 };
@@ -124,7 +123,8 @@ APP_FINGERPRINT_task (void *arg)
   {
     uxBits = xEventGroupWaitBits(*s_fingerprint_data.p_fingerprint_event,
                                  EVENT_ENROLL_FINGERPRINT
-                                     | EVENT_ATTENDANCE_FINGERPRINT,
+                                     | EVENT_ATTENDANCE_FINGERPRINT
+                                     | EVENT_DELETE_FINGERPRINT,
                                  pdFALSE,
                                  pdFALSE,
                                  portMAX_DELAY);
@@ -289,23 +289,43 @@ APP_FINGERPRINT_task (void *arg)
                              EVENT_ATTENDANCE_FINGERPRINT);
       }
     }
+
+    if (uxBits & EVENT_DELETE_FINGERPRINT)
+    {
+      index = 0;
+      while (u16_finger_user_id != user_id[index])
+      {
+
+        if (index >= user_len)
+        {
+          break;
+        }
+
+        index++;
+      }
+
+      u8_page_id[0] = ((index >> 8) & 0xFF);
+      u8_page_id[1] = (index & 0xFF);
+
+      u8_confirmation_code = DEV_AS608_DeleteChar(UART_FINGERPRINT_NUM,
+                                                  u8_default_address,
+                                                  u8_page_id,
+                                                  u8_number_of_delete_id);
+      if (u8_confirmation_code == 0)
+      {
+        printf("Delete success! ID: %d\r\n", u16_finger_user_id);
+        xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
+                             EVENT_DELETE_FINGERPRINT);
+      }
+      else
+      {
+        printf("Error: Cannot delete template | %d\r\n", u8_confirmation_code);
+        xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
+                             EVENT_DELETE_FINGERPRINT);
+      }
+    }
   }
   vTaskDelay(pdMS_TO_TICKS(10));
-}
-
-static inline void
-APP_FINGERPRINT_Enroll (void)
-{
-}
-
-static inline void
-APP_FINGERPRINT_Attendance (void)
-{
-}
-
-static inline void
-APP_FINGERPRINT_Delete (void)
-{
 }
 
 static void

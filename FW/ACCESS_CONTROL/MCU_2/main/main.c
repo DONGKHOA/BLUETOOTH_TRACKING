@@ -240,7 +240,7 @@ static void
 APP_MAIN_Loading_Callback (TimerHandle_t xTimer)
 {
   xTimerStop(s_loading_timer, 0);
-  if (BSP_gpioGetState(BUTTON_USER_PIN) == 0)
+  if (BSP_gpioGetState(BUTTON_USER_PIN) == 1)
   {
     xEventGroupSetBits(s_data_system.s_configuration_event,
                        APP_CONFIGURATION_DISABLE);

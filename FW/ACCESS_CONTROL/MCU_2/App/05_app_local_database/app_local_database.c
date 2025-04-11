@@ -386,6 +386,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
               // Update in fingerprint hardware
 
+              u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                       | s_DATA_SYNC.u8_data_packet[1];
+
+              u16_finger_user_id = u16_id;
+              xEventGroupSetBits(*s_local_database.p_fingerprint_event,
+                                 EVENT_DELETE_FINGERPRINT);
+
               break;
 
             case LOCAL_FACEID_DELETE:

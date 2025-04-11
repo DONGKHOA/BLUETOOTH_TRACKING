@@ -167,7 +167,7 @@ APP_MQTT_CLIENT_task (void *arg)
                                   0);
 
           break;
-
+ 
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
           sprintf(data_send,
@@ -278,6 +278,7 @@ APP_MQTT_CLIENT_task (void *arg)
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
           }
           // Notify the status of response to local database task via queue
+
           xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;

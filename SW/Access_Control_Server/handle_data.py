@@ -69,7 +69,7 @@ def reponse_enroll_finger(user_id):
             user["finger"] = 1
             save_users(users)
             return {
-                "command": "ENROLL_FINGER",
+                "command": "ENROLL_FINGERPRINT",
                 "user_id": user_id,
                 "name": user.get("name"),
                 "response": "success"
@@ -77,7 +77,7 @@ def reponse_enroll_finger(user_id):
 
     # If not found
     return {
-        "command": "ENROLL_FINGER",
+        "command": "ENROLL_FINGERPRINT",
         "user_id": user_id,
         "name": user.get("name"),
         "response": "fail"

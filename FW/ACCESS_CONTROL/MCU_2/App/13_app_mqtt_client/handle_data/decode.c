@@ -38,7 +38,7 @@ DECODE_Command (char *json_string)
     {
       return ENROLL_FACE_CMD;
     }
-    if (strcmp(cmd_item->valuestring, "ENROLL_FINGER") == 0)
+    if (strcmp(cmd_item->valuestring, "ENROLL_FINGERPRINT") == 0)
     {
       return ENROLL_FINGER_CMD;
     }
