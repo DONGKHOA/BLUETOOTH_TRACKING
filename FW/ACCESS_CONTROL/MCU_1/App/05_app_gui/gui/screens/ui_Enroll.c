@@ -103,17 +103,6 @@ void ui_Enroll_screen_init(void)
     lv_obj_set_style_text_opa(ui_EnrollText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_EnrollText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_EnrollTime = lv_label_create(ui_Enroll);
-    lv_obj_set_width(ui_EnrollTime, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_EnrollTime, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_EnrollTime, 23);
-    lv_obj_set_y(ui_EnrollTime, -105);
-    lv_obj_set_align(ui_EnrollTime, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_EnrollTime, "Time");
-    lv_obj_set_style_text_color(ui_EnrollTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_EnrollTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_EnrollTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_KeyboardEnrollPanel = lv_obj_create(ui_Enroll);
     lv_obj_set_width(ui_KeyboardEnrollPanel, 280);
     lv_obj_set_height(ui_KeyboardEnrollPanel, 130);

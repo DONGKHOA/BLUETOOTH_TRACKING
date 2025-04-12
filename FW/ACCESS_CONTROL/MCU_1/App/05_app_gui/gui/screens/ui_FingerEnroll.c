@@ -13,17 +13,6 @@ void ui_FingerEnroll_screen_init(void)
     lv_obj_set_style_bg_color(ui_FingerEnroll, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_FingerEnroll, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_MenuTime2 = lv_label_create(ui_FingerEnroll);
-    lv_obj_set_width(ui_MenuTime2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_MenuTime2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_MenuTime2, 23);
-    lv_obj_set_y(ui_MenuTime2, -105);
-    lv_obj_set_align(ui_MenuTime2, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_MenuTime2, "Time");
-    lv_obj_set_style_text_color(ui_MenuTime2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_MenuTime2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MenuTime2, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_FP_Enroll = lv_label_create(ui_FingerEnroll);
     lv_obj_set_width(ui_FP_Enroll, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_FP_Enroll, LV_SIZE_CONTENT);    /// 1

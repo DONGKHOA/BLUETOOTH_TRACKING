@@ -17,13 +17,21 @@
  *  PUBLIC VARIABLES
  *****************************************************************************/
 
+char     full_name[64]       = "";
+char     enroll_number_id[8] = { 0 };
+uint16_t user_id;
+
 extern char FaceIDCheck[4];
 extern char FingerCheck[4];
+extern char time_buffer[8];
+extern char date_buffer[16];
+
+extern time_data_t s_time_data;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
-
+static void EVENT_UPDATE_ENROLL_TIME_Timer(lv_timer_t *timer);
 static void EVENT_ENROLL_DeletePopup_Timer(lv_timer_t *timer);
 static void EVENT_ENROLL_DeletePopupSuccess_Timer(lv_timer_t *timer);
 
@@ -46,21 +54,20 @@ typedef struct
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-char       full_name[64] = "";
-static int full_name_len = 0;
-static int packet_count  = 0;
-
-char           enroll_number_id[8] = { 0 };
-uint16_t       user_id;
-static uint8_t enroll_index;
-
 static TaskHandle_t s_enroll_task_handle;
+
+static lv_obj_t   *ui_EnrollTime;
+static lv_obj_t   *ui_NumberUserID;
+static lv_timer_t *timer_enroll;
+static lv_timer_t *timer_update_time_enroll;
 
 static enroll_event_data_t s_enroll_event_data;
 static DATA_SYNC_t         s_DATA_SYNC;
 
-static lv_obj_t   *ui_NumberUserID;
-static lv_timer_t *timer_enroll;
+static int full_name_len = 0;
+static int packet_count  = 0;
+
+static uint8_t enroll_index;
 
 static bool b_is_initialize = false;
 
@@ -77,6 +84,19 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
     s_enroll_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
 
+    ui_EnrollTime = lv_label_create(ui_Enroll);
+    lv_obj_set_width(ui_EnrollTime, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_EnrollTime, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_EnrollTime, 23);
+    lv_obj_set_y(ui_EnrollTime, -105);
+    lv_obj_set_align(ui_EnrollTime, LV_ALIGN_LEFT_MID);
+    lv_obj_set_style_text_color(
+        ui_EnrollTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_EnrollTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(
+        ui_EnrollTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_NumberUserID = lv_label_create(ui_IDEnrollPane);
     lv_obj_set_width(ui_NumberUserID, LV_SIZE_CONTENT);  /// 1
     lv_obj_set_height(ui_NumberUserID, LV_SIZE_CONTENT); /// 1
@@ -90,6 +110,9 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
                                &lv_font_montserrat_16,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    timer_update_time_enroll
+        = lv_timer_create(EVENT_UPDATE_ENROLL_TIME_Timer, 1000, NULL);
+
     xTaskCreate(EVENT_PROCESS_ENROLL_DATA_Task,
                 "process enroll task",
                 1024 * 4,
@@ -97,12 +120,23 @@ EVENT_Authenticate_To_Enroll (lv_event_t *e)
                 6,
                 &s_enroll_task_handle);
   }
-
-  vTaskResume(s_enroll_task_handle);
+  else
+  {
+    lv_timer_resume(timer_update_time_enroll);
+    vTaskResume(s_enroll_task_handle);
+  }
 
   memset(enroll_number_id, 0, sizeof(enroll_number_id));
   enroll_index = 0;
   lv_label_set_text(ui_NumberUserID, enroll_number_id);
+  lv_label_set_text(ui_EnrollTime, time_buffer);
+}
+
+void
+EVENT_Enroll_After (lv_event_t *e)
+{
+  lv_timer_pause(timer_update_time_enroll);
+  vTaskSuspend(s_enroll_task_handle);
 }
 
 void
@@ -348,11 +382,40 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
 
           break;
 
+        case DATA_SYNC_TIME:
+          // Handle time data response
+          s_time_data.u8_minute = s_DATA_SYNC.u8_data_packet[0];
+          s_time_data.u8_hour   = s_DATA_SYNC.u8_data_packet[1];
+          s_time_data.u8_day    = s_DATA_SYNC.u8_data_packet[2];
+          s_time_data.u8_month  = s_DATA_SYNC.u8_data_packet[3];
+          s_time_data.u8_year   = s_DATA_SYNC.u8_data_packet[4];
+
+          snprintf(time_buffer,
+                   sizeof(time_buffer),
+                   "%02d:%02d",
+                   s_time_data.u8_hour,
+                   s_time_data.u8_minute);
+
+          snprintf(date_buffer,
+                   sizeof(date_buffer),
+                   "%02d-%02d-%04d",
+                   s_time_data.u8_day,
+                   s_time_data.u8_month + 1,
+                   s_time_data.u8_year + 1900);
+
+          break;
+
         default:
           break;
       }
     }
   }
+}
+
+static void
+EVENT_UPDATE_ENROLL_TIME_Timer (lv_timer_t *timer)
+{
+  lv_label_set_text(ui_EnrollTime, time_buffer);
 }
 
 static void
@@ -464,6 +527,8 @@ EVENT_ENROLL_DeletePopupSuccess_Timer (lv_timer_t *timer)
 static void
 EVENT_ENROLL_ShowUserInfoScreen (void *param)
 {
+  lv_timer_pause(timer_update_time_enroll);
+
   vTaskSuspend(s_enroll_task_handle);
 
   if (!lv_obj_is_valid(ui_UserInfo))

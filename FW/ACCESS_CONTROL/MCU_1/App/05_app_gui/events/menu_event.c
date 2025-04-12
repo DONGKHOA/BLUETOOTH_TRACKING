@@ -32,12 +32,13 @@ static void EVENT_UPDATE_MENU_TIME_Timer(lv_timer_t *timer);
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-lv_obj_t          *ui_MenuTime;
+
+static TaskHandle_t s_menu_task_handle;
+
+static lv_obj_t   *ui_MenuTime;
 static lv_timer_t *timer_menu;
 
 static QueueHandle_t *p_receive_data_event_queue;
-
-static TaskHandle_t s_menu_task_handle;
 
 static bool b_is_initialize = false;
 
@@ -66,7 +67,7 @@ EVENT_Menu_Before (lv_event_t *e)
     lv_obj_set_style_text_font(
         ui_MenuTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    timer_menu = lv_timer_create(EVENT_UPDATE_MENU_TIME_Timer, 30, NULL);
+    timer_menu = lv_timer_create(EVENT_UPDATE_MENU_TIME_Timer, 1000, NULL);
 
     xTaskCreate(EVENT_PROCESS_MENU_DATA_Task,
                 "process menu task",

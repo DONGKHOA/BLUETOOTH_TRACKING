@@ -27,8 +27,6 @@ static void EVENT_PROCESS_ATTENDANCE_DATA_Task(void *arg);
  *    PRIVATE DATA
  *****************************************************************************/
 
-DATA_SYNC_t s_DATA_SYNC;
-
 static TaskHandle_t s_attendance_task_handle;
 
 static lv_obj_t   *camera_canvas = NULL;
@@ -39,6 +37,8 @@ static QueueHandle_t      *p_receive_data_event_queue;
 static QueueHandle_t      *p_camera_capture_queue;
 static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
+
+static DATA_SYNC_t s_DATA_SYNC;
 
 static camera_fb_t              *fb = NULL;
 static data_result_recognition_t s_data_result_recognition
@@ -150,6 +150,7 @@ EVENT_Attendance_After (lv_event_t *e)
   s_data_result_recognition.s_nose.y            = 0;
 
   lv_timer_pause(timer_attendance);
+  vTaskSuspend(s_attendance_task_handle);
   xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
 }
 

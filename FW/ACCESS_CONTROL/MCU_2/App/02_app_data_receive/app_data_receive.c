@@ -150,7 +150,6 @@ APP_DATA_RECEIVE_task (void *arg)
         break;
 
       case DATA_SYNC_REQUEST_ATTENDANCE:
-        break;
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
         s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
@@ -159,6 +158,10 @@ APP_DATA_RECEIVE_task (void *arg)
         s_DATA_SYNC.u8_data_stop      = s_receive_message.data[4];
 
         xQueueSend(*s_data_receive_data.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
+        // Disable fingerprint attendance
+        xEventGroupClearBits(*s_data_receive_data.p_fingerprint_event,
+                             EVENT_ATTENDANCE_FINGERPRINT);
         break;
 
       default:

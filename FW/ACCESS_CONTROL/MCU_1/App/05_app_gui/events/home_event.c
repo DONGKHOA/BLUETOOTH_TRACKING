@@ -33,13 +33,13 @@ static void EVENT_UPDATE_HOME_TIME_Timer(lv_timer_t *timer);
  *    PRIVATE DATA
  *****************************************************************************/
 
+static TaskHandle_t s_home_task_handle;
+
 static lv_obj_t   *ui_HomeTime;
 static lv_obj_t   *ui_HomeDay;
 static lv_timer_t *timer_home;
 
 static QueueHandle_t *p_receive_data_event_queue;
-
-static TaskHandle_t s_home_task_handle;
 
 static bool b_is_initialize = false;
 
@@ -78,7 +78,7 @@ EVENT_Home_Before (lv_event_t *e)
     lv_obj_set_style_text_font(
         ui_HomeDay, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    timer_home = lv_timer_create(EVENT_UPDATE_HOME_TIME_Timer, 30, NULL);
+    timer_home = lv_timer_create(EVENT_UPDATE_HOME_TIME_Timer, 1000, NULL);
 
     xTaskCreate(EVENT_PROCESS_HOME_DATA_Task,
                 "process home task",

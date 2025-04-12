@@ -64,24 +64,21 @@ typedef struct
 
 static TaskHandle_t s_authenticate_task_handle;
 
-static authenticate_event_data_t s_authenticate_event_data;
-static DATA_SYNC_t               s_DATA_SYNC;
-
-static char    authenticate_number_id[8] = { 0 };
-static uint8_t authenticate_number_id_send;
-static uint8_t authenticate_index;
-
-static int authenticate_password = 0;
-
 static lv_obj_t   *ui_AuthenticateTime;
 static lv_obj_t   *ui_PassIDAuthenticateText;
 static lv_obj_t   *ui_NumberPassIDAuthenticateText;
 static lv_timer_t *timer_authenticate;
 static lv_timer_t *timer_update_time_authenticate;
 
-static bool b_is_initialize = false;
+static DATA_SYNC_t               s_DATA_SYNC;
+static authenticate_event_data_t s_authenticate_event_data;
 
-static bool b_is_authenticate = false;
+static char    authenticate_number_id[8] = { 0 };
+static uint8_t authenticate_number_id_send;
+static uint8_t authenticate_index;
+static int     authenticate_password = 0;
+static bool    b_is_initialize       = false;
+static bool    b_is_authenticate     = false;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -140,7 +137,7 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
                                LV_PART_MAIN | LV_STATE_DEFAULT);
 
     timer_update_time_authenticate
-        = lv_timer_create(EVENT_UPDATE_AUTHENTICATE_TIME_Timer, 30, NULL);
+        = lv_timer_create(EVENT_UPDATE_AUTHENTICATE_TIME_Timer, 1000, NULL);
 
     xTaskCreate(EVENT_PROCESS_AUTHENTICATE_DATA_Task,
                 "process authenticate task",
@@ -152,6 +149,7 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
   else
   {
     lv_timer_resume(timer_update_time_authenticate);
+    vTaskResume(s_authenticate_task_handle);
   }
 
   b_is_authenticate = false;
@@ -162,8 +160,13 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
   memset(authenticate_number_id, 0, sizeof(authenticate_number_id));
   authenticate_index = 0;
   lv_label_set_text(ui_NumberPassIDAuthenticateText, authenticate_number_id);
+}
 
-  vTaskResume(s_authenticate_task_handle);
+void
+EVENT_Authenticate_After (lv_event_t *e)
+{
+  lv_timer_pause(timer_update_time_authenticate);
+  vTaskSuspend(s_authenticate_task_handle);
 }
 
 void

@@ -383,11 +383,11 @@ APP_LOCAL_DATABASE_Task (void *arg)
               taskEXIT_CRITICAL(&spi_mux);
 
               // Update data in psram
-
-              // Update in fingerprint hardware
-
               u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                        | s_DATA_SYNC.u8_data_packet[1];
+
+              APP_LOCAL_DATABASE_Delete_UserFinger(u16_id);
+              // Update in fingerprint hardware
 
               u16_finger_user_id = u16_id;
               xEventGroupSetBits(*s_local_database.p_fingerprint_event,

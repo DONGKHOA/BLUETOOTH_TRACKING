@@ -3,9 +3,9 @@
     "id": 1,
     "name": "Ho Le Quoc Thang",
     "employee_id": "2114826",
-    "role": "user",
-    "face": 0,
-    "finger": 0
+    "role": "admin",
+    "face": 1,
+    "finger": 1
   },
   {
     "id": 2,

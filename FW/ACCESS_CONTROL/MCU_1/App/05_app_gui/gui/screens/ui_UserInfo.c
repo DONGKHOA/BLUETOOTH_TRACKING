@@ -131,17 +131,6 @@ void ui_UserInfo_screen_init(void)
     lv_obj_set_style_text_opa(ui_UserInfoText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_UserInfoText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_UserInfoTime = lv_label_create(ui_UserInfo);
-    lv_obj_set_width(ui_UserInfoTime, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_UserInfoTime, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_UserInfoTime, 23);
-    lv_obj_set_y(ui_UserInfoTime, -105);
-    lv_obj_set_align(ui_UserInfoTime, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_UserInfoTime, "Time");
-    lv_obj_set_style_text_color(ui_UserInfoTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_UserInfoTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_UserInfoTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_ESCButton = lv_btn_create(ui_UserInfo);
     lv_obj_set_width(ui_ESCButton, 50);
     lv_obj_set_height(ui_ESCButton, 20);

@@ -234,3 +234,11 @@ def EVENT_Menu_Before(event_struct):
 def EVENT_Menu_After(event_struct):
     return
 
+
+def EVENT_UserInfo_After(event_struct):
+    return
+
+
+def EVENT_Authenticate_After(event_struct):
+    return
+
