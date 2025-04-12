@@ -214,3 +214,23 @@ def EVENT_Enroll_To_UserInfo(event_struct):
 def EVENT_FaceID_Back(event_struct):
     return
 
+
+def EVENT_Home(event_struct):
+    return
+
+
+def EVENT_Home_After(event_struct):
+    return
+
+
+def EVENT_Home_Before(event_struct):
+    return
+
+
+def EVENT_Menu_Before(event_struct):
+    return
+
+
+def EVENT_Menu_After(event_struct):
+    return
+

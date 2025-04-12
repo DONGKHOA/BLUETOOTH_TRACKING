@@ -143,6 +143,24 @@ APP_DATA_RECEIVE_Task (void *arg)
 
         break;
 
+      case DATA_SYNC_TIME:
+
+        memset(&s_DATA_SYNC, 0, sizeof(s_DATA_SYNC));
+
+        s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];
+        s_DATA_SYNC.u8_data_packet[0] = s_receive_message.data[1];
+        s_DATA_SYNC.u8_data_packet[1] = s_receive_message.data[2];
+        s_DATA_SYNC.u8_data_packet[2] = s_receive_message.data[3];
+        s_DATA_SYNC.u8_data_packet[3] = s_receive_message.data[4];
+        s_DATA_SYNC.u8_data_packet[4] = s_receive_message.data[5];
+        s_DATA_SYNC.u8_data_length    = s_receive_message.data[6];
+        s_DATA_SYNC.u8_data_stop      = s_receive_message.data[7];
+
+        xQueueSend(
+            *s_data_receive_data.p_receive_data_event_queue, &s_DATA_SYNC, 0);
+
+        break;
+
       case DATA_SYNC_STATE_CONNECTION:
 
         s_DATA_SYNC.u8_data_start     = s_receive_message.data[0];

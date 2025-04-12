@@ -168,6 +168,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend success Face");
 
+            stable_face_count_attendance = 0;
+
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = (userid << 8) & 0xFF;
             s_DATA_SYNC.u8_data_packet[1] = userid & 0xFF;
@@ -180,6 +182,15 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
           {
             xEventGroupClearBits(*self->p_display_event, ATTENDANCE_BIT);
             ESP_LOGI(TAG, "Attend failed | Face");
+
+            stable_face_count_attendance = 0;
+
+            s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+            xQueueSend(*self->p_send_data_queue, &s_DATA_SYNC, 0);
           }
         }
         else

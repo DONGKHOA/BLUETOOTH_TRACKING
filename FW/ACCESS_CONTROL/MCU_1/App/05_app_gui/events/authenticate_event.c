@@ -16,8 +16,19 @@
 #include "esp_log.h"
 
 /******************************************************************************
+ *  PUBLIC VARIABLES
+ *****************************************************************************/
+
+extern char time_buffer[8];
+extern char date_buffer[16];
+
+extern time_data_t s_time_data;
+
+/******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
+
+static void EVENT_UPDATE_AUTHENTICATE_TIME_Timer(lv_timer_t *timer);
 
 static void EVENT_AUTHENTICATE_DeletePopupFail_Timer(lv_timer_t *timer);
 static void EVENT_AUTHENTICATE_DeletePopupSuccess_Timer(lv_timer_t *timer);
@@ -62,9 +73,11 @@ static uint8_t authenticate_index;
 
 static int authenticate_password = 0;
 
+static lv_obj_t   *ui_AuthenticateTime;
 static lv_obj_t   *ui_PassIDAuthenticateText;
 static lv_obj_t   *ui_NumberPassIDAuthenticateText;
 static lv_timer_t *timer_authenticate;
+static lv_timer_t *timer_update_time_authenticate;
 
 static bool b_is_initialize = false;
 
@@ -83,6 +96,21 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
         = &s_data_system.s_send_data_queue;
     s_authenticate_event_data.p_receive_data_event_queue
         = &s_data_system.s_receive_data_event_queue;
+
+    ui_AuthenticateTime = lv_label_create(ui_Authenticate);
+    lv_obj_set_width(ui_AuthenticateTime, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_AuthenticateTime, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_AuthenticateTime, 23);
+    lv_obj_set_y(ui_AuthenticateTime, -105);
+    lv_obj_set_align(ui_AuthenticateTime, LV_ALIGN_LEFT_MID);
+    lv_obj_set_style_text_color(ui_AuthenticateTime,
+                                lv_color_hex(0x000000),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(
+        ui_AuthenticateTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_AuthenticateTime,
+                               &lv_font_montserrat_16,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_PassIDAuthenticateText = lv_label_create(ui_PassIDAuthenticatePanel);
     lv_obj_set_width(ui_PassIDAuthenticateText, LV_SIZE_CONTENT);  /// 1
@@ -111,6 +139,9 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
                                &lv_font_montserrat_16,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    timer_update_time_authenticate
+        = lv_timer_create(EVENT_UPDATE_AUTHENTICATE_TIME_Timer, 30, NULL);
+
     xTaskCreate(EVENT_PROCESS_AUTHENTICATE_DATA_Task,
                 "process authenticate task",
                 1024 * 4,
@@ -118,10 +149,15 @@ EVENT_Menu_To_Authenticate (lv_event_t *e)
                 6,
                 &s_authenticate_task_handle);
   }
+  else
+  {
+    lv_timer_resume(timer_update_time_authenticate);
+  }
 
   b_is_authenticate = false;
 
   lv_label_set_text(ui_PassIDAuthenticateText, "ID:");
+  lv_label_set_text(ui_AuthenticateTime, time_buffer);
 
   memset(authenticate_number_id, 0, sizeof(authenticate_number_id));
   authenticate_index = 0;
@@ -317,6 +353,28 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
+        case DATA_SYNC_TIME:
+          // Handle time data response
+          s_time_data.u8_minute = s_DATA_SYNC.u8_data_packet[0];
+          s_time_data.u8_hour   = s_DATA_SYNC.u8_data_packet[1];
+          s_time_data.u8_day    = s_DATA_SYNC.u8_data_packet[2];
+          s_time_data.u8_month  = s_DATA_SYNC.u8_data_packet[3];
+          s_time_data.u8_year   = s_DATA_SYNC.u8_data_packet[4];
+
+          snprintf(time_buffer,
+                   sizeof(time_buffer),
+                   "%02d:%02d",
+                   s_time_data.u8_hour,
+                   s_time_data.u8_minute);
+
+          snprintf(date_buffer,
+                   sizeof(date_buffer),
+                   "%02d-%02d-%04d",
+                   s_time_data.u8_day,
+                   s_time_data.u8_month + 1,
+                   s_time_data.u8_year + 1900);
+          break;
+
         case DATA_SYNC_RESPONSE_AUTHENTICATION:
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
@@ -349,6 +407,12 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
       }
     }
   }
+}
+
+static void
+EVENT_UPDATE_AUTHENTICATE_TIME_Timer (lv_timer_t *timer)
+{
+  lv_label_set_text(ui_AuthenticateTime, time_buffer);
 }
 
 static void
@@ -609,6 +673,8 @@ EVENT_AUTHENTICATE_DeletePopupPasswordCorrect_Timer (lv_timer_t *timer)
 static void
 EVENT_AUTHENTICATE_ShowEnrollScreen (void *param)
 {
+  lv_timer_pause(timer_update_time_authenticate);
+
   vTaskSuspend(s_authenticate_task_handle);
 
   _ui_screen_change(

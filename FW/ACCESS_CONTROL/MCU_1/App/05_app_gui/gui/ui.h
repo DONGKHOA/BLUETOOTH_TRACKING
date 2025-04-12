@@ -23,8 +23,6 @@ void ui_Home_screen_init(void);
 extern lv_obj_t * ui_Home;
 extern lv_obj_t * ui_HomeText;
 extern lv_obj_t * ui_POPUPHomePanel;
-extern lv_obj_t * ui_HomeTime;
-extern lv_obj_t * ui_HomeDay;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 extern lv_obj_t * ui_ButtonHomeToMenu;
 extern lv_obj_t * ui_ImageWifi;
@@ -44,7 +42,6 @@ extern lv_obj_t * ui_Label1;
 void ui_event_EnrollButton(lv_event_t * e);
 extern lv_obj_t * ui_EnrollButton;
 extern lv_obj_t * ui_Label2;
-extern lv_obj_t * ui_MenuTime;
 void ui_event_ButtonMenuToHome(lv_event_t * e);
 extern lv_obj_t * ui_ButtonMenuToHome;
 // CUSTOM VARIABLES
@@ -102,7 +99,6 @@ extern lv_obj_t * ui_ButtonAuthenticate0;
 extern lv_obj_t * ui_Number18;
 extern lv_obj_t * ui_PassIDAuthenticatePanel;
 extern lv_obj_t * ui_AuthenticateText;
-extern lv_obj_t * ui_AuthenticateTime;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Enroll
@@ -194,14 +190,11 @@ extern lv_obj_t * ui_MenuTime2;
 extern lv_obj_t * ui_FP_Enroll;
 extern lv_obj_t * ui_POPUPMenuPanel4;
 extern lv_obj_t * ui_IDTextEnroll3;
-extern lv_obj_t * ui_IDTextEnroll4;
-extern lv_obj_t * ui_IDTextEnroll5;
-extern lv_obj_t * ui_FingerStatus1;
-extern lv_obj_t * ui_FingerStatus2;
 // CUSTOM VARIABLES
 
 // EVENTS
 
+void ui_event____initial_actions0(lv_event_t * e);
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS

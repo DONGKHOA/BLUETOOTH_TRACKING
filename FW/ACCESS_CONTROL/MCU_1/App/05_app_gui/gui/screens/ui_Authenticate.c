@@ -382,17 +382,6 @@ void ui_Authenticate_screen_init(void)
     lv_obj_set_style_text_opa(ui_AuthenticateText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_AuthenticateText, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_AuthenticateTime = lv_label_create(ui_Authenticate);
-    lv_obj_set_width(ui_AuthenticateTime, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_AuthenticateTime, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_AuthenticateTime, 23);
-    lv_obj_set_y(ui_AuthenticateTime, -105);
-    lv_obj_set_align(ui_AuthenticateTime, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_AuthenticateTime, "Time");
-    lv_obj_set_style_text_color(ui_AuthenticateTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_AuthenticateTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_AuthenticateTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     lv_obj_add_event_cb(ui_ESCAuthenticateButton, ui_event_ESCAuthenticateButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_HomeAuthenticateButton, ui_event_HomeAuthenticateButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_ButtonAuthenticate1, ui_event_ButtonAuthenticate1, LV_EVENT_ALL, NULL);

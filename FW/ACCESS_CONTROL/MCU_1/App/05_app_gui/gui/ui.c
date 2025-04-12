@@ -13,8 +13,6 @@ void ui_Home_screen_init(void);
 lv_obj_t * ui_Home;
 lv_obj_t * ui_HomeText;
 lv_obj_t * ui_POPUPHomePanel;
-lv_obj_t * ui_HomeTime;
-lv_obj_t * ui_HomeDay;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 lv_obj_t * ui_ButtonHomeToMenu;
 lv_obj_t * ui_ImageWifi;
@@ -34,7 +32,6 @@ lv_obj_t * ui_Label1;
 void ui_event_EnrollButton(lv_event_t * e);
 lv_obj_t * ui_EnrollButton;
 lv_obj_t * ui_Label2;
-lv_obj_t * ui_MenuTime;
 void ui_event_ButtonMenuToHome(lv_event_t * e);
 lv_obj_t * ui_ButtonMenuToHome;
 // CUSTOM VARIABLES
@@ -92,7 +89,6 @@ lv_obj_t * ui_ButtonAuthenticate0;
 lv_obj_t * ui_Number18;
 lv_obj_t * ui_PassIDAuthenticatePanel;
 lv_obj_t * ui_AuthenticateText;
-lv_obj_t * ui_AuthenticateTime;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Enroll
@@ -184,13 +180,10 @@ lv_obj_t * ui_MenuTime2;
 lv_obj_t * ui_FP_Enroll;
 lv_obj_t * ui_POPUPMenuPanel4;
 lv_obj_t * ui_IDTextEnroll3;
-lv_obj_t * ui_IDTextEnroll4;
-lv_obj_t * ui_IDTextEnroll5;
-lv_obj_t * ui_FingerStatus1;
-lv_obj_t * ui_FingerStatus2;
 // CUSTOM VARIABLES
 
 // EVENTS
+void ui_event____initial_actions0(lv_event_t * e);
 lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
@@ -213,6 +206,10 @@ void ui_event_ButtonHomeToMenu(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Menu_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_After(e);
+        EVENT_Menu_Before(e);
+    }
 }
 
 void ui_event_AttendanceButton(lv_event_t * e)
@@ -224,6 +221,7 @@ void ui_event_AttendanceButton(lv_event_t * e)
     }
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_Attendance_Before(e);
+        EVENT_Menu_After(e);
     }
 }
 
@@ -233,6 +231,7 @@ void ui_event_EnrollButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_Menu_To_Authenticate(e);
+        EVENT_Menu_After(e);
     }
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Authenticate, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Authenticate_screen_init);
@@ -245,6 +244,10 @@ void ui_event_ButtonMenuToHome(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_Before(e);
+        EVENT_Menu_After(e);
     }
 }
 
@@ -276,6 +279,9 @@ void ui_event_ESCAuthenticateButton(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Menu, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Menu_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Menu_Before(e);
+    }
 }
 
 void ui_event_HomeAuthenticateButton(lv_event_t * e)
@@ -284,6 +290,9 @@ void ui_event_HomeAuthenticateButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_Before(e);
     }
 }
 
@@ -410,6 +419,9 @@ void ui_event_HomeEnrollButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_Before(e);
     }
 }
 
@@ -570,6 +582,9 @@ void ui_event_HomeButton(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_Before(e);
+    }
 }
 
 void ui_event_FaceIDEnroll(lv_event_t * e)
@@ -577,10 +592,22 @@ void ui_event_FaceIDEnroll(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_UserInfo, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_UserInfo_screen_init);
+        _ui_screen_change(&ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
     }
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_FaceID_Back(e);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        EVENT_Home_Before(e);
+    }
+}
+
+void ui_event____initial_actions0(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOAD_START) {
+        EVENT_Home_Before(e);
     }
 }
 
@@ -603,5 +630,8 @@ void ui_init(void)
     ui_FaceIDEnroll_screen_init();
     ui_FingerEnroll_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
+    lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
+
+    lv_disp_load_scr(ui____initial_actions0);
     lv_disp_load_scr(ui_Home);
 }

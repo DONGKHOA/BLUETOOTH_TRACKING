@@ -142,6 +142,15 @@ extern "C"
     EventGroupHandle_t s_display_event;
   } DATA_System_t;
 
+  typedef struct
+  {
+    uint8_t u8_minute;
+    uint8_t u8_hour;
+    uint8_t u8_day;
+    uint8_t u8_month;
+    uint8_t u8_year;
+  } time_data_t;
+
   /****************************************************************************
    *   PUBLIC DATA
    ***************************************************************************/

@@ -106,6 +106,12 @@ APP_DATA_RECEIVE_task (void *arg)
                            EVENT_ATTENDANCE_FINGERPRINT);
         break;
 
+      case DATA_SYNC_STOP_ATTENDANCE:
+
+        xEventGroupClearBits(*s_data_receive_data.p_fingerprint_event,
+                             EVENT_ATTENDANCE_FINGERPRINT);
+        break;
+
       case DATA_SYNC_ENROLL_FINGERPRINT:
 
         u16_finger_user_id = ((s_receive_message.data[1] << 8) & 0xFF)

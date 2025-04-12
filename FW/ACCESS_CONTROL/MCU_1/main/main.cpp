@@ -89,17 +89,17 @@ app_main (void)
   // App Initialization
 
   APP_DISPLAY_Init();
-  APP_HANDLE_CAMERA_Init();
+  // APP_HANDLE_CAMERA_Init();
   APP_DATA_RECEIVE_Init();
-  p_face = new Face();
+  // p_face = new Face();
   APP_DATA_TRANSMIT_Init();
 
   // App Create Task
 
   APP_DATA_RECEIVE_CreateTask();
   APP_DISPLAY_CreateTask();
-  APP_HANDLE_CAMERA_CreateTask();
-  p_face->CreateTask();
+  // APP_HANDLE_CAMERA_CreateTask();
+  // p_face->CreateTask();
   APP_DATA_TRANSMIT_CreateTask();
 }
 

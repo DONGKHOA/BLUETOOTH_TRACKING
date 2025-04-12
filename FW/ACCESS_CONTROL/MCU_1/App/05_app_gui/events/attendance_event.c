@@ -118,9 +118,10 @@ EVENT_Attendance_Before (lv_event_t *e)
   else
   {
     lv_timer_resume(timer_attendance);
+    vTaskResume(s_attendance_task_handle);
   }
 
-  vTaskResume(s_attendance_task_handle);
+  xEventGroupSetBits(*p_display_event, ATTENDANCE_BIT);
 
   // Send Start Attendance to MCU2
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_START_ATTENDANCE;
@@ -128,8 +129,6 @@ EVENT_Attendance_Before (lv_event_t *e)
   s_DATA_SYNC.u8_data_length    = 1;
   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
   xQueueSend(*p_send_data_queue, &s_DATA_SYNC, 0);
-
-  xEventGroupSetBits(*p_display_event, ATTENDANCE_BIT);
 }
 
 void
@@ -254,10 +253,26 @@ APP_Attendance_Timer (lv_timer_t *timer)
 static void
 EVENT_ATTENDANCE_ShowHomeScreen (void *param)
 {
-  lv_timer_pause(timer_attendance);
+  s_data_result_recognition.s_coord_box_face.x1 = 0;
+  s_data_result_recognition.s_coord_box_face.y1 = 0;
+  s_data_result_recognition.s_coord_box_face.x2 = 0;
+  s_data_result_recognition.s_coord_box_face.y2 = 0;
+  s_data_result_recognition.s_left_eye.x        = 0;
+  s_data_result_recognition.s_left_eye.y        = 0;
+  s_data_result_recognition.s_right_eye.x       = 0;
+  s_data_result_recognition.s_right_eye.y       = 0;
+  s_data_result_recognition.s_left_mouth.x      = 0;
+  s_data_result_recognition.s_left_mouth.y      = 0;
+  s_data_result_recognition.s_right_mouth.x     = 0;
+  s_data_result_recognition.s_right_mouth.y     = 0;
+  s_data_result_recognition.s_nose.x            = 0;
+  s_data_result_recognition.s_nose.y            = 0;
 
+  lv_timer_pause(timer_attendance);
   vTaskSuspend(s_attendance_task_handle);
 
   _ui_screen_change(
       &ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Home_Before, NULL);
 }

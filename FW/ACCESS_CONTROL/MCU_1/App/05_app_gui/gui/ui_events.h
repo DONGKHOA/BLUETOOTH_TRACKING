@@ -10,7 +10,11 @@
 extern "C" {
 #endif
 
+void EVENT_Home_Before(lv_event_t * e);
+void EVENT_Home_After(lv_event_t * e);
+void EVENT_Menu_Before(lv_event_t * e);
 void EVENT_Attendance_Before(lv_event_t * e);
+void EVENT_Menu_After(lv_event_t * e);
 void EVENT_Menu_To_Authenticate(lv_event_t * e);
 void EVENT_Attendance_After(lv_event_t * e);
 void EVENT_Authenticate_To_Enroll(lv_event_t * e);

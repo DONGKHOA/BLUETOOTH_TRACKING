@@ -35,26 +35,6 @@ void ui_Home_screen_init(void)
     lv_obj_set_style_shadow_ofs_x(ui_POPUPHomePanel, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_ofs_y(ui_POPUPHomePanel, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_HomeTime = lv_label_create(ui_POPUPHomePanel);
-    lv_obj_set_width(ui_HomeTime, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_HomeTime, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_HomeTime, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_HomeTime, "11:00");
-    lv_obj_set_style_text_color(ui_HomeTime, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_HomeTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_HomeTime, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_HomeDay = lv_label_create(ui_Home);
-    lv_obj_set_width(ui_HomeDay, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_HomeDay, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_HomeDay, 23);
-    lv_obj_set_y(ui_HomeDay, 108);
-    lv_obj_set_align(ui_HomeDay, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_HomeDay, "21-10-2024");
-    lv_obj_set_style_text_color(ui_HomeDay, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_HomeDay, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_HomeDay, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_ButtonHomeToMenu = lv_btn_create(ui_Home);
     lv_obj_set_width(ui_ButtonHomeToMenu, 30);
     lv_obj_set_height(ui_ButtonHomeToMenu, 50);

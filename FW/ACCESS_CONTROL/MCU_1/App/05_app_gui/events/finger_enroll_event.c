@@ -48,6 +48,10 @@ static TaskHandle_t s_finger_enroll_task_handle;
 static finger_enroll_event_data_t s_finger_enroll_event_data;
 static DATA_SYNC_t                s_DATA_SYNC;
 
+static lv_obj_t *ui_IDTextEnroll4;
+static lv_obj_t *ui_IDTextEnroll5;
+static lv_obj_t *ui_FingerStatus1;
+static lv_obj_t *ui_FingerStatus2;
 
 static bool b_is_initialize = false;
 
@@ -239,4 +243,6 @@ EVENT_ENROLL_ShowHomeScreen (void *param)
 
   _ui_screen_change(
       &ui_Home, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Home_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Home_Before, NULL);
 }
