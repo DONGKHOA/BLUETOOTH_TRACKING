@@ -68,16 +68,16 @@ APP_HANDLE_WIFI_Init (void)
 static void
 APP_HANDLE_WIFI_Task (void *arg)
 {
-  // uint8_t num_wifi = WIFI_GetNumSSID();
+  uint8_t num_wifi = WIFI_GetNumSSID();
 
-  // if (num_wifi != 0)
-  // {
-  //   WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1);
-  //   WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
-  //   WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
-  // }
-  memcpy(s_handle_wifi.u8_ssid, "Tiger", sizeof("Tiger"));
-  memcpy(s_handle_wifi.u8_pass, "thanhTRI1972", sizeof("thanhTRI1972"));
-  WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
+  if (num_wifi != 0)
+  {
+    WIFI_ScanSSID(s_handle_wifi.u8_ssid, 1);
+    WIFI_ScanPass(s_handle_wifi.u8_pass, 1);
+    WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
+  }
+  // memcpy(s_handle_wifi.u8_ssid, "Tiger", sizeof("Tiger"));
+  // memcpy(s_handle_wifi.u8_pass, "thanhTRI1972", sizeof("thanhTRI1972"));
+  // WIFI_Connect(s_handle_wifi.u8_ssid, s_handle_wifi.u8_pass);
   vTaskDelete(s_handle_wifi_task);
 }
