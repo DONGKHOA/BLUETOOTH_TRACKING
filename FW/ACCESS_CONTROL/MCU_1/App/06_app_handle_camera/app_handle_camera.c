@@ -85,7 +85,7 @@ static camera_config_t camera_config = {
 void
 APP_HANDLE_CAMERA_CreateTask (void)
 {
-  xTaskCreate(APP_HANDLE_CAMERA_Task, "camera task", 1024 * 4, NULL, 6, NULL);
+  xTaskCreate(APP_HANDLE_CAMERA_Task, "camera task", 1024 * 4, NULL, 8, NULL);
 }
 void
 APP_HANDLE_CAMERA_Init (void)

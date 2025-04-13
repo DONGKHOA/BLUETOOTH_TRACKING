@@ -58,7 +58,7 @@ static void APP_LOCAL_DATABASE_Delete_UserID(uint16_t user_id_delete);
 void
 APP_LOCAL_DATABASE_CreateTask (void)
 {
-  xTaskCreate(APP_LOCAL_DATABASE_Task, "local db", 1024 * 10, NULL, 13, NULL);
+  xTaskCreate(APP_LOCAL_DATABASE_Task, "local db", 1024 * 10, NULL, 11, NULL);
 }
 
 void

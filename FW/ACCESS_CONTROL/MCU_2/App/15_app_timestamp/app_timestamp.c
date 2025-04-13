@@ -46,7 +46,7 @@ static handle_timestamp_t s_handle_timestamp;
 void
 APP_TIMESTAMP_CreateTask (void)
 {
-  xTaskCreate(APP_TIMESTAMP_Task, "timestamp task", 1024 * 10, NULL, 14, NULL);
+  xTaskCreate(APP_TIMESTAMP_Task, "timestamp task", 1024 * 10, NULL, 10, NULL);
 }
 
 void

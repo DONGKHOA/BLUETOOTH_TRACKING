@@ -51,7 +51,7 @@ APP_HANDLE_WIFI_CreateTask (void)
               "wifi task",
               1024 * 20,
               NULL,
-              13,
+              14,
               &s_handle_wifi_task);
 }
 
