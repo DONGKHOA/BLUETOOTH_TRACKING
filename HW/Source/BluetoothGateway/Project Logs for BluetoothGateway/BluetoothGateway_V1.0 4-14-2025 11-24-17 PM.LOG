@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=NetU3_8 Pin=U5-2
+Removed Pin From Net: NetName=NetU3_11 Pin=U5-4
+Added Pin To Net: NetName=NetU3_11 Pin=U5-2
+Added Pin To Net: NetName=NetU3_8 Pin=U5-4
+Added Member To Class: ClassName=UART_RS485 Member=Component U5 MAX3485EESA+
