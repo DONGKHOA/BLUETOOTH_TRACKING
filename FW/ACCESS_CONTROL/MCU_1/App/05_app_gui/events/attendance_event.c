@@ -149,6 +149,12 @@ EVENT_Attendance_After (lv_event_t *e)
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
 
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*p_send_data_queue, &s_DATA_SYNC, 0);
+
   lv_timer_pause(timer_attendance);
   vTaskSuspend(s_attendance_task_handle);
   xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
@@ -268,6 +274,12 @@ EVENT_ATTENDANCE_ShowHomeScreen (void *param)
   s_data_result_recognition.s_right_mouth.y     = 0;
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
+
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*p_send_data_queue, &s_DATA_SYNC, 0);
 
   lv_timer_pause(timer_attendance);
   vTaskSuspend(s_attendance_task_handle);

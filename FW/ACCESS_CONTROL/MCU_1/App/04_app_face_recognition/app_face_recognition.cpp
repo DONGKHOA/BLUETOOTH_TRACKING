@@ -126,17 +126,18 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
   while (1)
   {
-    if (xQueueReceive(
-            *self->p_camera_recognition_queue, &s_camera_capture, portMAX_DELAY)
+    uxBits = xEventGroupWaitBits(*self->p_display_event,
+                                 ATTENDANCE_BIT | ENROLL_FACE_ID_BIT
+                                     | DELETE_FACE_ID_BIT,
+                                 pdFALSE,
+                                 pdFALSE,
+                                 0);
+
+    if (xQueueReceive(*self->p_camera_recognition_queue,
+                      &s_camera_capture,
+                      100 / portTICK_PERIOD_MS)
         == pdPASS)
     {
-      uxBits = xEventGroupWaitBits(*self->p_display_event,
-                                   ATTENDANCE_BIT | ENROLL_FACE_ID_BIT
-                                       | DELETE_FACE_ID_BIT,
-                                   pdFALSE,
-                                   pdFALSE,
-                                   0);
-
       if ((uxBits & ATTENDANCE_BIT) != 0)
       {
         if (stable_face_count_attendance >= 10)
@@ -420,13 +421,16 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
           }
         }
       }
+    }
 
-      if ((uxBits & DELETE_FACE_ID_BIT) != 0)
-      {
-        self->recognizer->delete_id(user_id, true);
-        ESP_LOGE(
-            "DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
-      }
+    if ((uxBits & DELETE_FACE_ID_BIT) != 0)
+    {
+      vTaskDelay(10);
+      self->recognizer->delete_id(user_id, true);
+      ESP_LOGE(
+          "DELETE", "% d IDs left", self->recognizer->get_enrolled_id_num());
+
+      xEventGroupClearBits(*self->p_display_event, DELETE_FACE_ID_BIT);
     }
   }
 }
