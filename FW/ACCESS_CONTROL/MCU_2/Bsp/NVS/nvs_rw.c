@@ -129,11 +129,10 @@ exit_write:
  * the error code indicating the success or failure of the operation.
  */
 esp_err_t
-NVS_ReadString (const char *name, const char *key, char *savedData)
+NVS_ReadString (const char *name, const char *key, char *savedData, uint8_t len)
 {
   nvs_handle_t nvsHandle;
   esp_err_t    retVal;
-  uint8_t      len;
 
   ESP_LOGW(TAG, "Show Value-> name: %s, key: %s, len: %d", name, key, len);
 

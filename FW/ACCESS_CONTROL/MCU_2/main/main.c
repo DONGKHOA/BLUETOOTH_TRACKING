@@ -74,6 +74,7 @@ void
 app_main (void)
 {
   // BSP Initialization
+  APP_MAIN_InitGPIO();
   APP_MAIN_InitCan();
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();

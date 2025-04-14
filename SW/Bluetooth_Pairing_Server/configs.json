@@ -12,11 +12,15 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "The Little Bean",
-    "password": "75Caothang"
+    "ssid": "47.47",
+    "password": "0902900086"
   },
   "24:58:7C:E2:C3:A6": {
-    "ssid": "The Little Bean",
-    "password": "75Caothang"
+    "ssid": "47.47",
+    "password": "0902900086"
+  },
+  "0C:DC:7E:63:2E:16": {
+    "ssid": "47.47",
+    "password": "0902900086"
   }
 }
