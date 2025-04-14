@@ -49,25 +49,25 @@ async def process_request():
         match command:
             case "USER_DATA":
                 json_data = json.dumps(handle_data.reponse_user_data())
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
             
             case "ENROLL_FACE":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.reponse_enroll_face(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ENROLL_FINGERPRINT":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.reponse_enroll_finger(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ATTENDANCE":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.reponse_attendance(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ADD_USER_DATA":
@@ -77,7 +77,7 @@ async def process_request():
                     "id": data.get("id"),
                     "name": data.get("name"),
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
                 
             case "DELETE_USER_DATA":
@@ -86,7 +86,7 @@ async def process_request():
                     "command": "DELETE_USER_DATA",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "SET_ROLE":
@@ -96,7 +96,7 @@ async def process_request():
                     "id": data.get("id"),
                     "role": data.get("role")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "DELETE_FINGER_USER":
@@ -105,7 +105,7 @@ async def process_request():
                     "command": "DELETE_FINGER_USER",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "DELETE_FACEID_USER":
@@ -114,7 +114,7 @@ async def process_request():
                     "command": "DELETE_FACEID_USER",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=0)
+                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
                 print("Sent response:", json_data)
 
 
