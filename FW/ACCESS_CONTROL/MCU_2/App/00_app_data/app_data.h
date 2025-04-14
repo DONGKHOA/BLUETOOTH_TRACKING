@@ -120,6 +120,13 @@ extern "C"
     FINGER_DELETE
   } __attribute__((packed)) finger_cmd;
 
+  typedef enum
+  {
+    STATE_WIFI_CONNECTED = 0x00,
+    STATE_WIFI_DISCONNECTED,
+    STATE_BLUETOOTH_CONFIG
+  } __attribute__((packed)) state_system_t;
+
   /**
    * @brief Data structure holding data of system
    *
@@ -139,6 +146,7 @@ extern "C"
     EventGroupHandle_t s_flag_time_event;
     EventGroupHandle_t s_configuration_event;
     EventGroupHandle_t s_fingerprint_event;
+    state_system_t     s_state_system;
   } DATA_System_t;
 
   /****************************************************************************

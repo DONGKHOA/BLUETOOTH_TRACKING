@@ -31,6 +31,7 @@
 #include "app_rtc.h"
 #include "app_configuration.h"
 #include "app_local_database.h"
+#include "app_led_status.h"
 
 #include "environment.h"
 
@@ -98,8 +99,10 @@ app_main (void)
         portMAX_DELAY);
     if (uxBits & APP_CONFIGURATION_ENABLE)
     {
+      APP_STATUS_LED_Init();
       APP_CONFIGURATION_Init();
 
+      APP_STATUS_LED_CreateTask();
       APP_CONFIGURATION_CreateTask();
       break;
     }
@@ -112,6 +115,7 @@ app_main (void)
       APP_MQTT_CLIENT_Init();
       APP_HANDLE_WIFI_Init();
       APP_TIMESTAMP_Init();
+      APP_STATUS_LED_Init();
 
       // App Create Task
 
@@ -122,6 +126,7 @@ app_main (void)
       APP_DATA_RECEIVE_CreateTask();
       APP_TIMESTAMP_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
+      APP_STATUS_LED_CreateTask();
       break;
     }
   }
