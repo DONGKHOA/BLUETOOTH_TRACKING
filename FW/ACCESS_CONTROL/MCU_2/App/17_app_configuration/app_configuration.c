@@ -130,7 +130,7 @@ static void APP_CONFIGURATION_gatts_event_handler(
  *    PRIVATE DATA
  *****************************************************************************/
 
-static char c_device_name[ESP_BLE_ADV_DATA_LEN_MAX] = "BLUETOOTH_GATEWAY";
+static char c_device_name[ESP_BLE_ADV_NAME_LEN_MAX] = "BLUETOOTH_GATEWAY";
 
 static uint8_t              char1_str[] = { 0x11, 0x22, 0x33 };
 static esp_gatt_char_prop_t a_property  = 0;
@@ -322,32 +322,6 @@ APP_CONFIGURATION_ProcessData (
     WIFI_SetPass(u8_pass, 1);
 
     WIFI_SetNumSSID(1);
-  }
-  else if (memcmp(s_configuration_data_event->u8_data,
-                  "MQTTSERVER",
-                  sizeof("MQTTSERVER") - 1)
-           == 0)
-  {
-    printf("MQTTSERVER\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTSERVER_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
-  }
-  else if (memcmp(s_configuration_data_event->u8_data,
-                  "MQTTTOPIC",
-                  sizeof("MQTTTOPIC") - 1)
-           == 0)
-  {
-    printf("MQTTTOPIC\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTTOPIC_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
   }
 }
 

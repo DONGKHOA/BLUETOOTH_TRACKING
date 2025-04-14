@@ -83,30 +83,15 @@ APP_MQTT_CLIENT_Init (void)
       = &s_data_system.s_data_local_database_queue;
   s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
 
-  char mqtt_server[64];
-
-  if (NVS_ReadString("MQTT", MQTTSERVER_NVS, mqtt_server) == ESP_OK)
-  {
-    memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
-    memcpy(mqtt_server, "mqtt://", 7);
-    esp_mqtt_client_config_t mqtt_cfg = {
-      .broker.address.uri = mqtt_server,
-    };
-    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
-  }
-  else
-  {
-    esp_mqtt_client_config_t mqtt_cfg = {
-      .broker.address.uri = URL_DEFAULT,
-    };
-    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
-  }
+  esp_mqtt_client_config_t mqtt_cfg = {
+    .broker.address.uri = URL_DEFAULT,
+  };
+  s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
 
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
                                  ESP_EVENT_ANY_ID,
                                  mqtt_event_handler,
                                  NULL);
-  esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
 }
 
 /******************************************************************************
