@@ -38,7 +38,8 @@ static QueueHandle_t      *p_camera_capture_queue;
 static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
 
-static DATA_SYNC_t s_DATA_SYNC;
+static DATA_SYNC_t     s_DATA_SYNC;
+static state_system_t *p_state_system;
 
 static camera_fb_t              *fb = NULL;
 static data_result_recognition_t s_data_result_recognition
@@ -72,6 +73,8 @@ EVENT_Attendance_Before (lv_event_t *e)
     p_display_event            = &s_data_system.s_display_event;
     p_send_data_queue          = &s_data_system.s_send_data_queue;
     p_receive_data_event_queue = &s_data_system.s_receive_data_event_queue;
+
+    p_state_system = &s_data_system.s_state_system;
 
     camera_canvas = lv_canvas_create(ui_Attendance);
 
@@ -121,6 +124,7 @@ EVENT_Attendance_Before (lv_event_t *e)
     vTaskResume(s_attendance_task_handle);
   }
 
+  *p_state_system = STATE_ATTENDANCE;
   xEventGroupSetBits(*p_display_event, ATTENDANCE_BIT);
 
   // Send Start Attendance to MCU2
@@ -148,6 +152,8 @@ EVENT_Attendance_After (lv_event_t *e)
   s_data_result_recognition.s_right_mouth.y     = 0;
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
+
+  *p_state_system = STATE_IDLE;
 
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
@@ -177,11 +183,13 @@ EVENT_PROCESS_ATTENDANCE_DATA_Task (void *arg)
         case DATA_SYNC_RESPONSE_ATTENDANCE:
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
           {
+            *p_state_system = STATE_ATTENDANCE_SUCCESS;
             xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
           }
 
           if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_FAIL)
           {
+            *p_state_system = STATE_ATTENDANCE_FAIL;
             xEventGroupClearBits(*p_display_event, ATTENDANCE_BIT);
           }
           break;
@@ -274,6 +282,8 @@ EVENT_ATTENDANCE_ShowHomeScreen (void *param)
   s_data_result_recognition.s_right_mouth.y     = 0;
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
+
+  *p_state_system = STATE_IDLE;
 
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;

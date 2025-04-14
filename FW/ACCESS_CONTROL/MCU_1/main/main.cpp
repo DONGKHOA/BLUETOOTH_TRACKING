@@ -36,6 +36,7 @@
 #include "app_data_receive.h"
 #include "app_handle_camera.h"
 #include "app_face_recognition.hpp"
+#include "app_led_status.h"
 
 #include "environment.h"
 
@@ -59,6 +60,7 @@ Face            *p_face;
 
 static spi_device_handle_t spi_ili9341_handle;
 static spi_device_handle_t spi_xpt2046_handle;
+static state_system_t     *p_state_system;
 
 /******************************************************************************
  *    PRIVATE PROTOTYPE FUNCTION
@@ -115,6 +117,8 @@ APP_MAIN_InitGPIO (void)
 
   esp_rom_gpio_pad_select_gpio(ILI9341_RST_PIN);
   gpio_set_direction(ILI9341_RST_PIN, GPIO_MODE_OUTPUT);
+
+  BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
 }
 
 static inline void
@@ -168,6 +172,9 @@ APP_MAIN_InitDataSystem (void)
 
   s_xpt2046_0.p_spi_Handle = &spi_xpt2046_handle;
   s_xpt2046_0.e_irq_pin    = XPT2046_IRQ_PIN;
+
+  p_state_system  = &s_data_system.s_state_system;
+  *p_state_system = STATE_IDLE;
 
   s_data_system.s_send_data_queue      = xQueueCreate(4, sizeof(DATA_SYNC_t));
   s_data_system.s_camera_capture_queue = xQueueCreate(2, sizeof(camera_fb_t *));

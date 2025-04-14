@@ -17,6 +17,9 @@ extern "C"
   /****************************************************************************
    *    PUBLIC DEFINES
    ***************************************************************************/
+  /*** GPIO peripheral *******************************************************/
+
+#define LED_STATUS_PIN  GPIO_NUM_1
 
   /*** CAN peripheral ********************************************************/
 
@@ -119,6 +122,25 @@ extern "C"
     size_t   height;
   } camera_capture_t;
 
+  typedef struct
+  {
+    uint8_t u8_minute;
+    uint8_t u8_hour;
+    uint8_t u8_day;
+    uint8_t u8_month;
+    uint8_t u8_year;
+  } time_data_t;
+
+  typedef enum
+  {
+    STATE_IDLE = 0x00,
+    STATE_ATTENDANCE,
+    STATE_ATTENDANCE_SUCCESS,
+    STATE_ATTENDANCE_FAIL,
+    STATE_ENROLL_SUCCESS,
+    STATE_ENROLL_FAIL
+  } __attribute__((packed)) state_system_t;
+
   /**
    * @brief Data structure holding data of system
    *
@@ -140,16 +162,8 @@ extern "C"
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_receive_data_event_queue;
     EventGroupHandle_t s_display_event;
+    state_system_t     s_state_system;
   } DATA_System_t;
-
-  typedef struct
-  {
-    uint8_t u8_minute;
-    uint8_t u8_hour;
-    uint8_t u8_day;
-    uint8_t u8_month;
-    uint8_t u8_year;
-  } time_data_t;
 
   /****************************************************************************
    *   PUBLIC DATA

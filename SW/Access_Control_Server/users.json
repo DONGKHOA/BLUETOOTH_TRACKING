@@ -5,14 +5,14 @@
     "employee_id": "2114826",
     "role": "admin",
     "face": 0,
-    "finger": 0
+    "finger": 1
   },
   {
     "id": 2,
     "name": "Dong Thanh Khoa",
     "employee_id": "3213123",
     "role": "admin",
-    "face": 1,
+    "face": 0,
     "finger": 0
   }
 ]

@@ -39,6 +39,7 @@ typedef struct mqtt_client_data
   QueueHandle_t           *p_data_local_database_queue;
   SemaphoreHandle_t        s_data_subscribe_sem;
   esp_mqtt_client_handle_t s_MQTT_Client;
+  state_system_t          *p_state_system;
 } mqtt_client_data_t;
 
 /******************************************************************************
@@ -54,7 +55,6 @@ static void mqtt_event_handler(void            *handler_args,
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-
 static mqtt_client_data_t s_mqtt_client_data;
 static char               data[1024 * 10];
 static int                status;
@@ -82,6 +82,10 @@ APP_MQTT_CLIENT_Init (void)
   s_mqtt_client_data.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
   s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
+
+  s_mqtt_client_data.p_state_system = &s_data_system.s_state_system;
+
+  *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
   esp_mqtt_client_config_t mqtt_cfg = {
     .broker.address.uri = URL_DEFAULT,
@@ -112,7 +116,8 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       if (is_init == 0)
       {
-        is_init = 1;
+        is_init                            = 1;
+        *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
         esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
       }
     }
@@ -152,7 +157,7 @@ APP_MQTT_CLIENT_task (void *arg)
                                   0);
 
           break;
- 
+
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
           sprintf(data_send,
@@ -412,6 +417,7 @@ mqtt_event_handler (void            *handler_args,
       break;
     case MQTT_EVENT_DISCONNECTED:
 
+      *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
 
       break;

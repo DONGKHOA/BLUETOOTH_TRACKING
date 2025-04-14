@@ -170,6 +170,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             ESP_LOGI(TAG, "Attend success Face");
 
             stable_face_count_attendance = 0;
+            is_face_recognized = false;
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = (userid << 8) & 0xFF;
@@ -185,6 +186,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             ESP_LOGI(TAG, "Attend failed | Face");
 
             stable_face_count_attendance = 0;
+            is_face_recognized = false;
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
