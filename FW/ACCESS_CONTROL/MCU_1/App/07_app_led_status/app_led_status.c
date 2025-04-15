@@ -7,18 +7,22 @@
 
 #include "gpio.h"
 
+#define TAG             "APP_LED_STATUS"
+#define TIME_LED_STATUS 100 / portTICK_PERIOD_MS
+
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
 
-static uint32_t        u32_count = 0;
+static uint32_t        u32_time_count_1 = 0;
+static uint32_t        u32_time_count_2 = 0;
 static state_system_t *p_state_system;
+static TimerHandle_t   led_status_timer;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void APP_STATUS_LED_Task(void *arg);
 static void APP_Timer_Callback(TimerHandle_t xTimer);
 
 static void TOGGLE_LED(void);
@@ -30,23 +34,14 @@ static void LED_OFF(void);
  *****************************************************************************/
 
 void
-APP_STATUS_LED_CreateTask (void)
-{
-  xTaskCreate(APP_STATUS_LED_Task, "Led status task", 1024 * 2, NULL, 4, NULL);
-}
-
-void
 APP_STATUS_LED_Init (void)
 {
   p_state_system = &s_data_system.s_state_system;
 
-  TimerHandle_t led_status_timer
-      = xTimerCreate("Led Status Timer",
-                     pdMS_TO_TICKS(100), // Period 100ms
-                     pdTRUE,             // Auto reload
-                     NULL,
-                     APP_Timer_Callback // Callback function
-      );
+  *p_state_system = STATE_IDLE;
+
+  led_status_timer = xTimerCreate(
+      "Led Status Timer", TIME_LED_STATUS, pdTRUE, NULL, APP_Timer_Callback);
 
   xTimerStart(led_status_timer, 0);
 }
@@ -54,69 +49,110 @@ APP_STATUS_LED_Init (void)
 static void
 APP_Timer_Callback (TimerHandle_t xTimer)
 {
-  u32_count += 100; // Increase count every 100ms
+  switch (*p_state_system)
+  {
+    case STATE_IDLE:
+
+      if (u32_time_count_1 >= 15)
+      {
+        TOGGLE_LED();
+        u32_time_count_1 = 0;
+      }
+
+      break;
+
+    case STATE_ATTENDANCE:
+
+      if (u32_time_count_1 >= 5)
+      {
+        TOGGLE_LED();
+        u32_time_count_1 = 0;
+      }
+
+      break;
+
+    case STATE_ATTENDANCE_SUCCESS:
+
+      if (u32_time_count_2 >= 30)
+      {
+        *p_state_system = STATE_IDLE;
+        LED_OFF();
+        u32_time_count_1 = 0;
+        u32_time_count_2 = 0;
+      }
+      else
+      {
+        LED_ON();
+        u32_time_count_2++;
+      }
+
+      break;
+
+    case STATE_ATTENDANCE_FAIL:
+
+      if (u32_time_count_2 >= 30)
+      {
+        *p_state_system = STATE_IDLE;
+        LED_OFF();
+        u32_time_count_1 = 0;
+        u32_time_count_2 = 0;
+      }
+
+      else if (u32_time_count_1 >= 1)
+      {
+        TOGGLE_LED();
+        u32_time_count_1 = 0;
+        u32_time_count_2++;
+      }
+
+      break;
+
+    case STATE_ENROLL_SUCCESS:
+
+      if (u32_time_count_2 >= 30)
+      {
+        *p_state_system = STATE_IDLE;
+        LED_OFF();
+        u32_time_count_1 = 0;
+        u32_time_count_2 = 0;
+      }
+      else
+      {
+        LED_ON();
+        u32_time_count_2++;
+      }
+
+      break;
+
+    case STATE_ENROLL_FAIL:
+
+      if (u32_time_count_2 >= 30)
+      {
+        *p_state_system = STATE_IDLE;
+        LED_OFF();
+        u32_time_count_1 = 0;
+        u32_time_count_2 = 0;
+      }
+
+      else if (u32_time_count_1 >= 1)
+      {
+        TOGGLE_LED();
+        u32_time_count_1 = 0;
+        u32_time_count_2++;
+      }
+
+      break;
+
+    default:
+      break;
+  }
+
+  u32_time_count_1++;
 }
 
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
-
-static void
-APP_STATUS_LED_Task (void *arg)
-{
-  uint32_t attendance_success = 0;
-  while (1)
-  {
-    if (p_state_system != NULL)
-    {
-      switch (*p_state_system)
-      {
-        case STATE_IDLE:
-          if (u32_count % 1000)
-          {
-            TOGGLE_LED();
-            attendance_success = 0;
-          }
-          break;
-
-        case STATE_ATTENDANCE:
-          LED_ON();
-          break;
-
-        case STATE_ATTENDANCE_SUCCESS:
-          if (u32_count % 5000)
-          {
-            TOGGLE_LED();
-            attendance_success = 1;
-          }
-
-          if (attendance_success == 1)
-          {
-            LED_OFF();
-            attendance_success = 0;
-          }
-          
-          break;
-
-        case STATE_ATTENDANCE_FAIL:
-
-          break;
-
-        case STATE_ENROLL_SUCCESS:
-
-          break;
-
-        case STATE_ENROLL_FAIL:
-
-          break;
-
-        default:
-          break;
-      }
-    }
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-  }
-}
 
 static void
 TOGGLE_LED (void)

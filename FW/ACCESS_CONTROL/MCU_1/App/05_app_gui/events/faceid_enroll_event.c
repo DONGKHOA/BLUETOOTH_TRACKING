@@ -36,6 +36,7 @@ static QueueHandle_t      *p_result_recognition_queue;
 static EventGroupHandle_t *p_display_event;
 
 static camera_fb_t              *fb = NULL;
+static state_system_t           *p_state_system;
 static data_result_recognition_t s_data_result_recognition
     = { .s_coord_box_face = { 0, 0, 0, 0 },
         .s_left_eye       = { 0, 0 },
@@ -61,6 +62,7 @@ EVENT_Enroll_FaceID (lv_event_t *e)
 {
   if (b_is_initialize == false)
   {
+    p_state_system             = &s_data_system.s_state_system;
     p_camera_capture_queue     = &s_data_system.s_camera_capture_queue;
     p_result_recognition_queue = &s_data_system.s_result_recognition_queue;
     p_display_event            = &s_data_system.s_display_event;
@@ -128,6 +130,8 @@ EVENT_FaceID_Back (lv_event_t *e)
 
   lv_timer_pause(timer_faceid_enroll);
   xEventGroupClearBits(*p_display_event, ENROLL_FACE_ID_BIT);
+
+  *p_state_system = STATE_ENROLL_FAIL;
 }
 
 /******************************************************************************

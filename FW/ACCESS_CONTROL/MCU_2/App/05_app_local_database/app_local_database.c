@@ -303,6 +303,25 @@ APP_LOCAL_DATABASE_Task (void *arg)
           u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                    | s_DATA_SYNC.u8_data_packet[1];
 
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
           APP_LOCAL_DATABASE_Delete_UserName(u16_id);
           APP_LOCAL_DATABASE_Delete_UserRole(u16_id);
           APP_LOCAL_DATABASE_Delete_UserFace(u16_id);
@@ -315,8 +334,8 @@ APP_LOCAL_DATABASE_Task (void *arg)
                              EVENT_DELETE_FINGERPRINT);
 
           s_DATA_SYNC.u8_data_start     = DATA_SYNC_DELETE_FACE_ID;
-          s_DATA_SYNC.u8_data_packet[0] = (u16_id << 8) & 0xFF; // High
-          s_DATA_SYNC.u8_data_packet[1] = u16_id & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_packet[0] = (index << 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = index & 0xFF;        // Low
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
@@ -356,110 +375,115 @@ APP_LOCAL_DATABASE_Task (void *arg)
           while (u16_id != user_id[index])
           {
 
-            //   if (index >= user_len)
-            //   {
-            //     is_valid = false;
-            //     break;
-            //   }
-
-            //   index++;
-            // }
-
-            // if (!is_valid)
-            // {
-            //   break;
-            // }
-
-            break;
-
-            case LOCAL_FINGER_DELETE:
-
-              taskENTER_CRITICAL(&spi_mux);
-              xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
-
-              // Update data in sdcard
-
-              xSemaphoreGive(*s_local_database.p_spi_mutex);
-              taskEXIT_CRITICAL(&spi_mux);
-
-              // Update data in psram
-              u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
-                       | s_DATA_SYNC.u8_data_packet[1];
-
-              APP_LOCAL_DATABASE_Delete_UserFinger(u16_id);
-              // Update in fingerprint hardware
-
-              u16_finger_user_id = u16_id;
-              xEventGroupSetBits(*s_local_database.p_fingerprint_event,
-                                 EVENT_DELETE_FINGERPRINT);
-
+            if (index >= user_len)
+            {
+              is_valid = false;
               break;
+            }
 
-            case LOCAL_FACEID_DELETE:
-
-              taskENTER_CRITICAL(&spi_mux);
-              xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
-
-              // Update data in sdcard
-
-              xSemaphoreGive(*s_local_database.p_spi_mutex);
-              taskEXIT_CRITICAL(&spi_mux);
-
-              // Update data in psram
-
-              u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
-                       | s_DATA_SYNC.u8_data_packet[1];
-
-              index    = 0;
-              is_valid = true;
-              while (u16_id != user_id[index])
-              {
-
-                if (index >= user_len)
-                {
-                  is_valid = false;
-                  break;
-                }
-
-                index++;
-              }
-
-              if (!is_valid)
-              {
-                break;
-              }
-
-              face[index] = 0;
-
-              // Send data to the queue for transmission to MCU1
-              s_DATA_SYNC.u8_data_start = DATA_SYNC_DELETE_FACE_ID;
-
-              // Notify the status of response to transmit task via queue
-              xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
-
-              break;
-
-            case LOCAL_DATABASE_RESPONSE_ATTENDANCE:
-
-              taskENTER_CRITICAL(&spi_mux);
-              xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
-
-              // Update data in sdcard
-
-              xSemaphoreGive(*s_local_database.p_spi_mutex);
-              taskEXIT_CRITICAL(&spi_mux);
-
-              // Update data in psram
-
-              s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ATTENDANCE;
-
-              xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
-
-              break;
-
-            default:
-              break;
+            index++;
           }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          break;
+
+        case LOCAL_FINGER_DELETE:
+
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
+          // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
+
+          // Update data in psram
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          APP_LOCAL_DATABASE_Delete_UserFinger(u16_id);
+          // Update in fingerprint hardware
+
+          u16_finger_user_id = u16_id;
+          xEventGroupSetBits(*s_local_database.p_fingerprint_event,
+                             EVENT_DELETE_FINGERPRINT);
+
+          break;
+
+        case LOCAL_FACEID_DELETE:
+
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
+          // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
+
+          // Update data in psram
+
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          face[index] = 0;
+
+          // Send data to the queue for transmission to MCU1
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_DELETE_FACE_ID;
+
+          s_DATA_SYNC.u8_data_packet[0] = (index >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = index & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
+
+          // Notify the status of response to transmit task via queue
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case LOCAL_DATABASE_RESPONSE_ATTENDANCE:
+
+          taskENTER_CRITICAL(&spi_mux);
+          xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
+
+          // Update data in sdcard
+
+          xSemaphoreGive(*s_local_database.p_spi_mutex);
+          taskEXIT_CRITICAL(&spi_mux);
+
+          // Update data in psram
+
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ATTENDANCE;
+
+          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        default:
+          break;
       }
     }
   }

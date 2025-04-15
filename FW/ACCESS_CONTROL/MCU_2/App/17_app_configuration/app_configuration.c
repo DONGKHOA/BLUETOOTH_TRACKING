@@ -132,7 +132,7 @@ static void APP_CONFIGURATION_gatts_event_handler(
 
 static state_system_t *p_state_system;
 
-static char c_device_name[ESP_BLE_ADV_DATA_LEN_MAX] = "BLUETOOTH_GATEWAY";
+static char c_device_name[ESP_BLE_ADV_DATA_LEN_MAX] = "ACCESS_CONTROL";
 
 static uint8_t              char1_str[] = { 0x11, 0x22, 0x33 };
 static esp_gatt_char_prop_t a_property  = 0;

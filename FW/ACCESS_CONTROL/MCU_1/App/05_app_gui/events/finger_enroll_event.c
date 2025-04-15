@@ -64,6 +64,7 @@ static lv_obj_t   *ui_FingerStatus2;
 static lv_timer_t *timer_update_time_finger_enroll;
 
 static DATA_SYNC_t                s_DATA_SYNC;
+static state_system_t            *p_state_system;
 static finger_enroll_event_data_t s_finger_enroll_event_data;
 
 static bool b_is_initialize = false;
@@ -77,6 +78,7 @@ EVENT_Enroll_Finger (lv_event_t *e)
 {
   if (b_is_initialize == false)
   {
+    p_state_system  = &s_data_system.s_state_system;
     b_is_initialize = true;
     s_finger_enroll_event_data.p_send_data_queue
         = &s_data_system.s_send_data_queue;
@@ -282,6 +284,7 @@ EVENT_FINGER_ShowFailStatus (void *user_data)
 static void
 EVENT_FINGER_ShowSuccessEnroll (void *user_data)
 {
+  *p_state_system = STATE_ENROLL_SUCCESS;
   lv_label_set_text(ui_IDTextEnroll5, "Enroll successfully");
   lv_obj_set_style_bg_color(ui_FingerStatus2,
                             lv_color_hex(0x00FF1C),
@@ -293,6 +296,7 @@ EVENT_FINGER_ShowSuccessEnroll (void *user_data)
 static void
 EVENT_FINGER_ShowFailEnroll (void *user_data)
 {
+  *p_state_system = STATE_ENROLL_FAIL;
   lv_label_set_text(ui_IDTextEnroll5, "Enroll unsuccessfully");
   lv_obj_set_style_bg_color(ui_FingerStatus2,
                             lv_color_hex(0xFF0000),

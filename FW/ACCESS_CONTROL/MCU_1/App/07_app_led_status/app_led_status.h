@@ -14,7 +14,6 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void APP_STATUS_LED_CreateTask(void);
   void APP_STATUS_LED_Init(void);
 
 #ifdef __cplusplus
