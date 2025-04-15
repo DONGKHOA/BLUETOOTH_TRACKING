@@ -20,7 +20,7 @@ class BluetoothManager:
                 "name": d.name,
                 "address": d.address,
                 "rssi": d.rssi
-            } for d in devices if d.name and "BLUETOOTH_GATEWAY" in d.name]
+            } for d in devices if d.name and ("BLUETOOTH_GATEWAY" in d.name or "ACCESS_CONTROL" in d.name)]
         return self.run_async(do_scan())
 
     def connect(self, mac):

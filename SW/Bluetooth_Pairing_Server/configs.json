@@ -1,9 +1,9 @@
 {
   "B8:D6:1A:68:BB:BA": {
-    "ssid": "Vu Phu",
-    "password": "123",
-    "mqtt_server": "192.168.1.21:1883",
-    "topic": "Bluetooth/dataTopic/010123304"
+    "ssid": "KOPHiN COFFEE",
+    "password": "kophincamon",
+    "mqtt_server": "172.16.0.123:1883",
+    "topic": "bluetooth/GW1/data"
   },
   "B8:D6:1A:6A:3D:0E": {
     "ssid": "Thuc Coffee",
@@ -12,8 +12,8 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "Thuc Coffee",
-    "password": "18006230"
+    "ssid": "KOPHiN COFFEE",
+    "password": "kophincamon"
   },
   "24:58:7C:E2:C3:A6": {
     "ssid": "47.47",
