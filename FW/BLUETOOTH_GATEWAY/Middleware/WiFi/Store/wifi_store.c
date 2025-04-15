@@ -97,7 +97,7 @@ WIFI_ScanSSID (uint8_t *ssid, uint8_t id)
 {
   char ssid_key[32];
   sprintf(ssid_key, "%d ssid", id);
-  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid);
+  return NVS_ReadString(SSID_NVS, (const char *)ssid_key, (char *)ssid, 32);
 }
 
 esp_err_t
@@ -105,7 +105,7 @@ WIFI_ScanPass (uint8_t *pass, uint8_t id)
 {
   char pass_key[32];
   sprintf(pass_key, "%d pass", id);
-  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass);
+  return NVS_ReadString(PASS_NVS, (const char *)pass_key, (char *)pass, 32);
 }
 
 esp_err_t
