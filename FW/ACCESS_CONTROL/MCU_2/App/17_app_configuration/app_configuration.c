@@ -130,7 +130,10 @@ static void APP_CONFIGURATION_gatts_event_handler(
  *    PRIVATE DATA
  *****************************************************************************/
 
+static DATA_SYNC_t s_DATA_SYNC;
+
 static state_system_t *p_state_system;
+static QueueHandle_t  *p_send_data_queue;
 
 static char c_device_name[ESP_BLE_ADV_DATA_LEN_MAX] = "ACCESS_CONTROL";
 
@@ -269,8 +272,15 @@ void
 APP_CONFIGURATION_Init (void)
 {
   p_state_system = &s_data_system.s_state_system;
+  p_send_data_queue = &s_data_system.s_send_data_queue;
 
   *p_state_system = STATE_BLUETOOTH_CONFIG;
+
+  s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_CONNECTION_BLE;
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+  xQueueSend(*p_send_data_queue, &s_DATA_SYNC, 0);
 
   s_configuration_data.s_configuration_data_queue
       = xQueueCreate(2, sizeof(configuration_data_event_t));

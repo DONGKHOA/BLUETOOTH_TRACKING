@@ -242,3 +242,15 @@ def EVENT_UserInfo_After(event_struct):
 def EVENT_Authenticate_After(event_struct):
     return
 
+
+def EVENT_UserInfo_Finger(event_struct):
+    return
+
+
+def EVENT_UserInfo_FaceID(event_struct):
+    return
+
+
+def EVENT_UserInfo_Back(event_struct):
+    return
+

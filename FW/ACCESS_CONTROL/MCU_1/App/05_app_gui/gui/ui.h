@@ -25,10 +25,6 @@ extern lv_obj_t * ui_HomeText;
 extern lv_obj_t * ui_POPUPHomePanel;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 extern lv_obj_t * ui_ButtonHomeToMenu;
-extern lv_obj_t * ui_ImageWifi;
-extern lv_obj_t * ui_ImageBluetooth;
-extern lv_obj_t * ui_ImageSDCard;
-extern lv_obj_t * ui_ImageWifiDisconnect;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -196,10 +192,6 @@ extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_1101766569);    // assets/right-arrow.png
-LV_IMG_DECLARE(ui_img_1052123464);    // assets/wi-fi-resize.png
-LV_IMG_DECLARE(ui_img_694049672);    // assets/bluetooth-resize.png
-LV_IMG_DECLARE(ui_img_988180266);    // assets/sd-card-resize.png
-LV_IMG_DECLARE(ui_img_1985633929);    // assets/wi-fi-discon-resize.png
 LV_IMG_DECLARE(ui_img_388382192);    // assets/left-arrow.png
 LV_IMG_DECLARE(ui_img_1048813395);    // assets/x-icon-resize1.png
 LV_IMG_DECLARE(ui_img_1406808990);    // assets/tick-icon-resize1.png

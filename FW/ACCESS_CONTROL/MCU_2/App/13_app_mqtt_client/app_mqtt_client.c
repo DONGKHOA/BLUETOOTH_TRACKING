@@ -55,6 +55,7 @@ static void mqtt_event_handler(void            *handler_args,
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
+static DATA_SYNC_t s_DATA_SYNC;
 static mqtt_client_data_t s_mqtt_client_data;
 static char               data[1024 * 10];
 static int                status;
@@ -105,7 +106,6 @@ APP_MQTT_CLIENT_Init (void)
 static void
 APP_MQTT_CLIENT_task (void *arg)
 {
-  DATA_SYNC_t s_DATA_SYNC;
   uint8_t     is_init = 0;
 
   char data_send[128];
@@ -119,6 +119,13 @@ APP_MQTT_CLIENT_task (void *arg)
         is_init                            = 1;
         *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
         esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
+
+        // Send state wifi to MCU1
+        s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_CONNECTION_WIFI;
+        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+        s_DATA_SYNC.u8_data_length    = 1;
+        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+        xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
       }
     }
 
@@ -418,6 +425,14 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_DISCONNECTED:
 
       *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
+
+      // Send state wifi to MCU1
+      s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_CONNECTION_WIFI;
+      s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+      s_DATA_SYNC.u8_data_length    = 1;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+      xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
 
       break;

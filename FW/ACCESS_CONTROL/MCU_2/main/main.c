@@ -89,6 +89,12 @@ app_main (void)
 
   xTimerStart(s_loading_timer, 0);
 
+  APP_DATA_TRANSMIT_Init();
+  APP_STATUS_LED_Init();
+
+  APP_DATA_TRANSMIT_CreateTask();
+  APP_STATUS_LED_CreateTask();
+
   while (1)
   {
     EventBits_t uxBits = xEventGroupWaitBits(
@@ -99,10 +105,8 @@ app_main (void)
         portMAX_DELAY);
     if (uxBits & APP_CONFIGURATION_ENABLE)
     {
-      APP_STATUS_LED_Init();
       APP_CONFIGURATION_Init();
 
-      APP_STATUS_LED_CreateTask();
       APP_CONFIGURATION_CreateTask();
       break;
     }
@@ -110,23 +114,20 @@ app_main (void)
     {
       APP_FINGERPRINT_Init();
       APP_LOCAL_DATABASE_Init();
-      APP_DATA_TRANSMIT_Init();
       APP_DATA_RECEIVE_Init();
       APP_MQTT_CLIENT_Init();
       APP_HANDLE_WIFI_Init();
       APP_TIMESTAMP_Init();
-      APP_STATUS_LED_Init();
 
       // App Create Task
 
       APP_HANDLE_WIFI_CreateTask();
       APP_FINGERPRINT_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
-      APP_DATA_TRANSMIT_CreateTask();
       APP_DATA_RECEIVE_CreateTask();
       APP_TIMESTAMP_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
-      APP_STATUS_LED_CreateTask();
+
       break;
     }
   }

@@ -15,10 +15,6 @@ lv_obj_t * ui_HomeText;
 lv_obj_t * ui_POPUPHomePanel;
 void ui_event_ButtonHomeToMenu(lv_event_t * e);
 lv_obj_t * ui_ButtonHomeToMenu;
-lv_obj_t * ui_ImageWifi;
-lv_obj_t * ui_ImageBluetooth;
-lv_obj_t * ui_ImageSDCard;
-lv_obj_t * ui_ImageWifiDisconnect;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Menu
@@ -544,6 +540,8 @@ void ui_event_UserInfo(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         EVENT_Enroll_To_UserInfo(e);
+        EVENT_Enroll_Finger(e);
+        EVENT_Enroll_FaceID(e);
     }
 }
 
