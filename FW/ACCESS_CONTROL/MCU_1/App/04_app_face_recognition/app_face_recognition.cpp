@@ -52,6 +52,8 @@ static bool check_eyes_in_box(uint16_t left_eye_x,
  *    PRIVATE DATA
  *****************************************************************************/
 
+static state_system_t *p_state_system;
+
 /******************************************************************************
  *    EXTERN DATA
  *****************************************************************************/
@@ -75,6 +77,8 @@ Face::Face ()
   this->p_display_event = &s_data_system.s_display_event;
 
   this->recognizer = new FaceRecognition112V1S8();
+
+  p_state_system = &s_data_system.s_state_system;
 }
 
 Face::~Face () // Added destructor implementation
@@ -170,7 +174,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             ESP_LOGI(TAG, "Attend success Face");
 
             stable_face_count_attendance = 0;
-            is_face_recognized = false;
+            is_face_recognized           = false;
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = (userid << 8) & 0xFF;
@@ -186,7 +190,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             ESP_LOGI(TAG, "Attend failed | Face");
 
             stable_face_count_attendance = 0;
-            is_face_recognized = false;
+            is_face_recognized           = false;
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
@@ -326,6 +330,7 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
           xQueueSend(*self->p_send_data_queue, &s_DATA_SYNC, 0);
 
           xEventGroupClearBits(*self->p_display_event, ENROLL_FACE_ID_BIT);
+          *p_state_system = STATE_ENROLL_SUCCESS;
         }
         else
         {

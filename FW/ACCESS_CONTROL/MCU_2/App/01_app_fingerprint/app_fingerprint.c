@@ -178,6 +178,12 @@ APP_FINGERPRINT_task (void *arg)
             = DEV_AS608_RegModel(UART_FINGERPRINT_NUM, u8_default_address);
         if (u8_confirmation_code != 0)
         {
+          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
           u8_finger_count = 0;
           xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
                                EVENT_ENROLL_FINGERPRINT);

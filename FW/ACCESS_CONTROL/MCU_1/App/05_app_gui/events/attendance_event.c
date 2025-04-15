@@ -282,9 +282,7 @@ EVENT_ATTENDANCE_ShowHomeScreen (void *param)
   s_data_result_recognition.s_right_mouth.y     = 0;
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
-
-  *p_state_system = STATE_IDLE;
-
+  
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
   s_DATA_SYNC.u8_data_length    = 1;
