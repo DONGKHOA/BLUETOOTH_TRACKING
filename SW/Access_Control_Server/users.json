@@ -5,12 +5,12 @@
     "employee_id": "2114826",
     "role": "admin",
     "face": 0,
-    "finger": 1
+    "finger": 0
   },
   {
     "id": 2,
     "name": "Dong Thanh Khoa",
-    "employee_id": "3213123",
+    "employee_id": "12312312",
     "role": "admin",
     "face": 0,
     "finger": 0

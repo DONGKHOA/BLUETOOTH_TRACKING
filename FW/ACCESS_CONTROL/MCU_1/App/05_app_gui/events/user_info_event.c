@@ -32,8 +32,13 @@ extern time_data_t s_time_data;
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-static void EVENT_PROCESS_USERINFO_DATA_Task(void *arg);
+static void EVENT_USERINFO_DeletePopup_Timer(lv_timer_t *timer);
 static void EVENT_UPDATE_USERINFO_TIME_Timer(lv_timer_t *timer);
+
+static void EVENT_PROCESS_USERINFO_DATA_Task(void *arg);
+static void EVENT_USERINFO_ShowInvalidPopup(void *user_data);
+static void EVENT_USERINFO_ShowFingerEnrollScreen(void *param);
+static void EVENT_USERINFO_ShowFaceIDEnrollScreen(void *param);
 
 /******************************************************************************
  *    PRIVATE DATA
@@ -44,6 +49,7 @@ static lv_obj_t   *ui_IDTextEnroll2;
 static lv_obj_t   *ui_NumberID;
 static lv_obj_t   *ui_FingerCheck;
 static lv_obj_t   *ui_FaceIDCheck;
+static lv_timer_t *timer_userinfo;
 static lv_timer_t *timer_update_time_userinfo;
 
 static QueueHandle_t *p_receive_data_event_queue;
@@ -151,7 +157,32 @@ EVENT_Enroll_To_UserInfo (lv_event_t *e)
 }
 
 void
-EVENT_UserInfo_After (lv_event_t *e)
+EVENT_UserInfo_Finger (lv_event_t *e)
+{
+  if (strcmp(FingerCheck, "1/1") != 0)
+  {
+    lv_async_call(EVENT_USERINFO_ShowFingerEnrollScreen, NULL);
+  }
+  else
+  {
+    lv_async_call(EVENT_USERINFO_ShowInvalidPopup, NULL);
+  }
+}
+
+void EVENT_UserInfo_FaceID (lv_event_t *e)
+{
+  if (strcmp(FaceIDCheck, "1/1") != 0)
+  {
+    lv_async_call(EVENT_USERINFO_ShowFaceIDEnrollScreen, NULL);
+  }
+  else
+  {
+    lv_async_call(EVENT_USERINFO_ShowInvalidPopup, NULL);
+  }
+}
+
+void
+EVENT_UserInfo_Back (lv_event_t *e)
 {
   lv_timer_pause(timer_update_time_userinfo);
   vTaskSuspend(s_userinfo_task_handle);
@@ -207,4 +238,100 @@ static void
 EVENT_UPDATE_USERINFO_TIME_Timer (lv_timer_t *timer)
 {
   lv_label_set_text(ui_UserInfoTime, time_buffer);
+}
+
+static void
+EVENT_USERINFO_ShowInvalidPopup (void *user_data)
+{
+  if (timer_userinfo != NULL)
+  {
+    lv_timer_del(timer_userinfo);
+    timer_userinfo = NULL;
+  }
+
+  lv_obj_t *popup_userinfo = lv_obj_create(ui_UserInfo);
+  lv_obj_set_size(popup_userinfo, 280, 180);
+  lv_obj_set_align(popup_userinfo, LV_ALIGN_CENTER);
+  lv_obj_clear_flag(popup_userinfo, LV_OBJ_FLAG_SCROLLABLE);
+
+  lv_obj_set_style_shadow_color(
+      popup_userinfo, lv_color_hex(0x969696), LV_PART_MAIN);
+  lv_obj_set_style_shadow_opa(popup_userinfo, 255, LV_PART_MAIN);
+  lv_obj_set_style_shadow_width(popup_userinfo, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_spread(popup_userinfo, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_x(popup_userinfo, 2, LV_PART_MAIN);
+  lv_obj_set_style_shadow_ofs_y(popup_userinfo, 2, LV_PART_MAIN);
+
+  lv_obj_t *label_invalid_id = lv_label_create(popup_userinfo);
+  lv_label_set_text(label_invalid_id, "Delete before enroll");
+  lv_obj_center(label_invalid_id);
+  lv_obj_set_style_text_color(
+      label_invalid_id, lv_color_hex(0xFF0000), LV_PART_MAIN);
+  lv_obj_set_style_text_font(
+      label_invalid_id, &lv_font_montserrat_18, LV_PART_MAIN);
+
+  timer_userinfo
+      = lv_timer_create(EVENT_USERINFO_DeletePopup_Timer, 700, popup_userinfo);
+}
+
+static void
+EVENT_USERINFO_DeletePopup_Timer (lv_timer_t *timer)
+{
+  lv_obj_t *popup_userinfo = (lv_obj_t *)timer->user_data;
+
+  if (popup_userinfo && lv_obj_is_valid(popup_userinfo))
+  {
+    lv_obj_del(popup_userinfo);
+  }
+
+  lv_timer_del(timer);
+
+  if (timer_userinfo == timer)
+  {
+    timer_userinfo = NULL;
+  }
+}
+
+static void
+EVENT_USERINFO_ShowFingerEnrollScreen (void *param)
+{
+  lv_timer_pause(timer_update_time_userinfo);
+
+  vTaskSuspend(s_userinfo_task_handle);
+
+  if (!lv_obj_is_valid(ui_FingerEnroll))
+  {
+    printf("ui_FingerEnroll is not valid!");
+    return;
+  }
+
+  _ui_screen_change(&ui_FingerEnroll,
+                    LV_SCR_LOAD_ANIM_MOVE_LEFT,
+                    500,
+                    0,
+                    &ui_FingerEnroll_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Enroll_Finger, NULL);
+}
+
+static void
+EVENT_USERINFO_ShowFaceIDEnrollScreen (void *param)
+{
+  lv_timer_pause(timer_update_time_userinfo);
+
+  vTaskSuspend(s_userinfo_task_handle);
+
+  if (!lv_obj_is_valid(ui_FaceIDEnroll))
+  {
+    printf("ui_FaceIDEnroll is not valid!");
+    return;
+  }
+
+  _ui_screen_change(&ui_FaceIDEnroll,
+                    LV_SCR_LOAD_ANIM_MOVE_LEFT,
+                    500,
+                    0,
+                    &ui_FaceIDEnroll_screen_init);
+
+  lv_async_call((lv_async_cb_t)EVENT_Enroll_FaceID, NULL);
 }
