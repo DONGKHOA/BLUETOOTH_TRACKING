@@ -1,8 +1,8 @@
 {
   "B8:D6:1A:68:BB:BA": {
-    "ssid": "KOPHiN COFFEE",
-    "password": "kophincamon",
-    "mqtt_server": "172.16.0.123:1883",
+    "ssid": "The Simple Cafe L1",
+    "password": "simpleisthebest",
+    "mqtt_server": "192.168.0.199:1883",
     "topic": "bluetooth/GW1/data"
   },
   "B8:D6:1A:6A:3D:0E": {
