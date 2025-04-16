@@ -1,0 +1,12 @@
+Change Component Comment : Designator=R3 Old Comment=4.7K/1%/1_10W New Comment=10K/1%/1_10W
+Change Component Comment : Designator=R1 Old Comment=68K/1%/1_10W New Comment=53.6K/1%/1_10W
+Change component parameters: Designator = "R1" ("R1"); Footprint = "Resistor_0603"; UniqueID = "\IPUZQINQ" ("\IPUZQINQ")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 53.6 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-53-6-kohm-0603-1-"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R3" ("R3"); Footprint = "Resistor_0603"; UniqueID = "\LKXGXEYO" ("\LKXGXEYO")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "Ði?n Tr? 10 KOhm 0603 1%"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"; VariantName = "[No Variations]"
