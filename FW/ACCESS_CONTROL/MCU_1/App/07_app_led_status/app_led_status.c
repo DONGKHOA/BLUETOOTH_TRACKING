@@ -26,8 +26,8 @@ static TimerHandle_t   led_status_timer;
 static void APP_Timer_Callback(TimerHandle_t xTimer);
 
 static void TOGGLE_LED(void);
-static void LED_ON(void);
-static void LED_OFF(void);
+static inline void LED_ON(void);
+static inline void LED_OFF(void);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -162,13 +162,13 @@ TOGGLE_LED (void)
   BSP_gpioSetState(LED_STATUS_PIN, led_status);
 }
 
-static void
+static inline void
 LED_ON (void)
 {
   BSP_gpioSetState(LED_STATUS_PIN, 1);
 }
 
-static void
+static inline void
 LED_OFF (void)
 {
   BSP_gpioSetState(LED_STATUS_PIN, 0);
