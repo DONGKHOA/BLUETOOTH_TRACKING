@@ -20,7 +20,7 @@ static state_system_t *p_state_system;
 
 static void APP_Timer_Callback(TimerHandle_t xTimer);
 
-static void TOGGLE_LED(void);
+static void        TOGGLE_LED(void);
 static inline void LED_ON(void);
 static inline void LED_OFF(void);
 
