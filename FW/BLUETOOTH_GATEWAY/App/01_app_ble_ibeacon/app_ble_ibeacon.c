@@ -201,7 +201,9 @@ APP_BLE_IBEACON_Task (void *arg)
         == pdPASS)
     {
       printf("\r\nNumber of Tag: %ld\r\n", u32_number_node);
-      memcpy(s_beacon_data_task.u8_beacon_addr, s_beacon_data_cb.u8_beacon_addr, 6);
+      memcpy(s_beacon_data_task.u8_beacon_addr,
+             s_beacon_data_cb.u8_beacon_addr,
+             6);
       s_beacon_data_task.rssi = s_beacon_data_cb.rssi;
 
       if ((u32_number_node == 0)
@@ -275,8 +277,8 @@ static void
 APP_BLE_IBEACON_UpdateDataDevice (beacon_data_t *p_data)
 {
   ibeacon_infor_tag_t s_beacon_infor_tag;
-  uint8_t            u8_count = 0;
-  Node_t            *p_temp   = p_head_linked_list_ble_inf;
+  uint8_t             u8_count = 0;
+  Node_t             *p_temp   = p_head_linked_list_ble_inf;
   while (p_temp != NULL)
   {
     if (memcmp(((beacon_data_t *)(p_temp->p_data))->u8_beacon_addr,
@@ -328,12 +330,12 @@ APP_BLE_IBEACON_GAP_Callback (esp_gap_ble_cb_event_t  event,
   beacon_data_cb_t s_beacon_data_cb;
   switch (event)
   {
-    case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT: {
-      uint32_t duration = 0;
-      esp_ble_gap_start_scanning(duration);
+    case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT:
+      // uint32_t duration = 0;
+      esp_ble_gap_start_scanning((uint32_t) 0);
       break;
-    }
-    case ESP_GAP_BLE_SCAN_START_COMPLETE_EVT: {
+
+    case ESP_GAP_BLE_SCAN_START_COMPLETE_EVT:
       if ((err = param->scan_start_cmpl.status) != ESP_BT_STATUS_SUCCESS)
       {
         ESP_LOGE(TAG, "Scan start failed: %s", esp_err_to_name(err));
@@ -343,29 +345,25 @@ APP_BLE_IBEACON_GAP_Callback (esp_gap_ble_cb_event_t  event,
         ESP_LOGI(TAG, "Start scanning...");
       }
       break;
-    }
-    case ESP_GAP_BLE_SCAN_RESULT_EVT: {
-      esp_ble_gap_cb_param_t *scan_result = (esp_ble_gap_cb_param_t *)param;
-      switch (scan_result->scan_rst.search_evt)
-      {
-        case ESP_GAP_SEARCH_INQ_RES_EVT: {
-          if (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv,
-                                        scan_result->scan_rst.adv_data_len))
-          {
-            memcpy(s_beacon_data_cb.u8_beacon_addr, scan_result->scan_rst.bda, 6);
-            s_beacon_data_cb.rssi = (int8_t)scan_result->scan_rst.rssi;
 
-            xQueueSend(s_ble_ibeacon_data.s_queue_ble_inf,
-                       (void *)&s_beacon_data_cb,
-                       (TickType_t)0);
-          }
-          break;
-        }
-        default:
-          break;
+    case ESP_GAP_BLE_SCAN_RESULT_EVT:
+
+      esp_ble_gap_cb_param_t *scan_result = (esp_ble_gap_cb_param_t *)param;
+
+      if ((scan_result->scan_rst.search_evt == ESP_GAP_SEARCH_INQ_RES_EVT)
+          && (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv,
+                                        scan_result->scan_rst.adv_data_len)))
+      {
+        memcpy(s_beacon_data_cb.u8_beacon_addr, scan_result->scan_rst.bda, 6);
+        s_beacon_data_cb.rssi = (int8_t)scan_result->scan_rst.rssi;
+
+        xQueueSend(s_ble_ibeacon_data.s_queue_ble_inf,
+                   (void *)&s_beacon_data_cb,
+                   (TickType_t)0);
       }
+
       break;
-    }
+
     default:
       break;
   }
