@@ -1,0 +1,19 @@
+Removed Pin From Net: NetName=GND Pin=U3-40
+Removed Pin From Net: NetName=GND Pin=U3-41
+Removed Pin From Net: NetName=GND Pin=U3-42
+Removed Pin From Net: NetName=GND Pin=U3-43
+Removed Pin From Net: NetName=GND Pin=U3-44
+Removed Pin From Net: NetName=GND Pin=U3-45
+Removed Pin From Net: NetName=GND Pin=U3-46
+Removed Pin From Net: NetName=GND Pin=U3-47
+Removed Pin From Net: NetName=GND Pin=U3-48
+Removed Pin From Net: NetName=GND Pin=U3-49
+Removed Pin From Net: NetName=GND Pin=U3-50
+Removed Pin From Net: NetName=GND Pin=U3-51
+Change Net Color : Old Net Color=RGB(69, 129, 142) New Net Color=RGB(19, 79, 92)
+Change Class Name : Old Net Name=Display New Net Name=Designator
+Change Class Name : Old Net Name=Ethernet New Net Name=Designator
+Change Class Name : Old Net Name=Interface New Net Name=Designator
+Change Class Name : Old Net Name=MCU New Net Name=Designator
+Change Class Name : Old Net Name=Power_Supply New Net Name=Designator
+Change Class Name : Old Net Name=UART_RS485 New Net Name=Designator
