@@ -457,6 +457,23 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
+[Document25]
+DocumentPath=BluetoothGateway.PrjPcbStructure
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [Configuration1]
 Name=Sources
 ParameterCount=0
@@ -1430,7 +1447,7 @@ Net1=NetName=3V3|NetColor=clYellow
 Net2=NetName=3V3_FILTER|NetColor=clFuchsia
 Net3=NetName=3V3-FILTER|NetColor=$00043F78
 Net4=NetName=5V|NetColor=$00E8864A
-Net5=NetName=GND|NetColor=$008E8145
+Net5=NetName=GND|NetColor=$005C4F13
 Net6=NetName=VCC|NetColor=clFuchsia
 
 [Comparison Options]
