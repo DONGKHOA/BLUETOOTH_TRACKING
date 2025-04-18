@@ -93,7 +93,6 @@ app_main (void)
   APP_STATUS_LED_Init();
 
   APP_DATA_TRANSMIT_CreateTask();
-  APP_STATUS_LED_CreateTask();
 
   while (1)
   {
