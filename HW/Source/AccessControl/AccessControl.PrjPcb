@@ -1623,7 +1623,8 @@ Net5=NetName=2V5|NetColor=$00FF0099
 Net6=NetName=2V8|NetColor=clLime
 Net7=NetName=3V3|NetColor=clYellow
 Net8=NetName=5V|NetColor=$000099FF
-Net9=NetName=VCC|NetColor=clRed
+Net9=NetName=GND|NetColor=$005C4F13
+Net10=NetName=VCC|NetColor=clRed
 
 [Comparison Options]
 ComparisonOptions0=Kind=Net|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0

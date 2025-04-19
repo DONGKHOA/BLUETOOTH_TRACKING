@@ -1,0 +1,19 @@
+Added Pin To Net: NetName=CAN_P Pin=R109-1
+Added Pin To Net: NetName=CAN_P Pin=U24-8
+Change Net Color : Old Net Color=RGB(158, 161, 117) New Net Color=RGB(19, 79, 92)
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Member To Class: ClassName=Designator Member=Component TP1 GND1
+Added Member To Class: ClassName=Designator Member=Component TP2 GND2
+Added Member To Class: ClassName=Designator Member=Component TP4 VCC
+Added Member To Class: ClassName=Designator Member=Component TP6 5V
+Added Member To Class: ClassName=Designator Member=Component TP8 3V3
