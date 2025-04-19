@@ -1045,7 +1045,7 @@ APP_CONFIGURATION_gatts_profile_b_event_handler (
 }
 
 static void
-xAPP_CONFIGURATION_gatts_event_handler (esp_gatts_cb_event_t      event,
+APP_CONFIGURATION_gatts_event_handler (esp_gatts_cb_event_t      event,
                                        esp_gatt_if_t             gatts_if,
                                        esp_ble_gatts_cb_param_t *param)
 {
