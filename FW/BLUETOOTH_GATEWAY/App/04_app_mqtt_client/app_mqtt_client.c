@@ -103,8 +103,7 @@ APP_MQTT_CLIENT_Init (void)
     s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
   }
 
-  if (NVS_ReadString(
-          "MQTT", MQTTTOPIC_NVS, s_mqtt_client_data.c_topic_pub, 64)
+  if (NVS_ReadString("MQTT", MQTTTOPIC_NVS, s_mqtt_client_data.c_topic_pub, 64)
       != ESP_OK)
   {
     strcpy(s_mqtt_client_data.c_topic_pub, TOPIC_DEFAULT);
@@ -170,21 +169,22 @@ APP_MQTT_CLIENT_Task (void *arg)
                 generated_str,
                 sizeof(s_mqtt_client_data.c_data_pub) - 1);
         s_mqtt_client_data.c_data_pub[sizeof(s_mqtt_client_data.c_data_pub) - 1]
-            = '\0';          // Ensure null-termination
+            = '\0'; // Ensure null-termination
+
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                s_mqtt_client_data.c_topic_pub,
+                                (const char *)&s_mqtt_client_data.c_data_pub,
+                                0,
+                                1,
+                                0);
+
+        s_mqtt_client_data.u8_num_dev = 0;
+        memset(s_mqtt_client_data.c_data_pub,
+               0,
+               sizeof(s_mqtt_client_data.c_data_pub));
+               
         free(generated_str); // Free the original allocated string
       }
-
-      esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                              s_mqtt_client_data.c_topic_pub,
-                              (const char *)&s_mqtt_client_data.c_data_pub,
-                              0,
-                              1,
-                              0);
-
-      s_mqtt_client_data.u8_num_dev = 0;
-      memset(s_mqtt_client_data.c_data_pub,
-             0,
-             sizeof(s_mqtt_client_data.c_data_pub));
     }
   }
 }
