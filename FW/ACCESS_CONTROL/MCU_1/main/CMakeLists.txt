@@ -15,7 +15,6 @@ set (requires Env
               SN65HVD230DR
               ILI9341
               SPI
-              NVS
               GPIO)
 
 idf_component_register(SRCS ${sources}

@@ -20,7 +20,6 @@
 #include "can.h"
 #include "spi.h"
 #include "gpio.h"
-#include "nvs_rw.h"
 
 /*** device ******************************************************************/
 
