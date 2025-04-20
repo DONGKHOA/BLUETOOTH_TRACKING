@@ -112,14 +112,14 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
   std::list<dl::detect::result_t> detect_results;
 
-  data_result_recognition_t s_data_result_recognition
-      = { .s_coord_box_face = { 0, 0, 0, 0 },
-          .s_left_eye       = { 0, 0 },
-          .s_right_eye      = { 0, 0 },
-          .s_left_mouth     = { 0, 0 },
-          .s_right_mouth    = { 0, 0 },
-          .s_nose           = { 0, 0 },
-          .ID               = -1 };
+  data_result_recognition_t s_data_result_recognition = {
+    .s_coord_box_face = { 0, 0, 0, 0 },
+    .s_left_eye       = { 0, 0 },
+    .s_right_eye      = { 0, 0 },
+    .s_left_mouth     = { 0, 0 },
+    .s_right_mouth    = { 0, 0 },
+    .s_nose           = { 0, 0 },
+  };
 
   self->recognizer->set_partition(
       ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");

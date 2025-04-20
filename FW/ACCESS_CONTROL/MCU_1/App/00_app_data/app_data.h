@@ -112,7 +112,6 @@ extern "C"
       uint16_t x;
       uint16_t y;
     } s_nose;
-    int ID;
   } data_result_recognition_t;
 
   typedef struct

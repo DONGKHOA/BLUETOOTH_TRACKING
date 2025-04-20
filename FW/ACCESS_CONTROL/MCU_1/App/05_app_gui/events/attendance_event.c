@@ -41,15 +41,15 @@ static EventGroupHandle_t *p_display_event;
 static DATA_SYNC_t     s_DATA_SYNC;
 static state_system_t *p_state_system;
 
-static camera_fb_t              *fb = NULL;
-static data_result_recognition_t s_data_result_recognition
-    = { .s_coord_box_face = { 0, 0, 0, 0 },
-        .s_left_eye       = { 0, 0 },
-        .s_right_eye      = { 0, 0 },
-        .s_left_mouth     = { 0, 0 },
-        .s_right_mouth    = { 0, 0 },
-        .s_nose           = { 0, 0 },
-        .ID               = -1 };
+static camera_fb_t              *fb                        = NULL;
+static data_result_recognition_t s_data_result_recognition = {
+  .s_coord_box_face = { 0, 0, 0, 0 },
+  .s_left_eye       = { 0, 0 },
+  .s_right_eye      = { 0, 0 },
+  .s_left_mouth     = { 0, 0 },
+  .s_right_mouth    = { 0, 0 },
+  .s_nose           = { 0, 0 },
+};
 
 static bool               b_is_initialize = false;
 static lv_draw_rect_dsc_t rectangle_face;
@@ -282,7 +282,7 @@ EVENT_ATTENDANCE_ShowHomeScreen (void *param)
   s_data_result_recognition.s_right_mouth.y     = 0;
   s_data_result_recognition.s_nose.x            = 0;
   s_data_result_recognition.s_nose.y            = 0;
-  
+
   s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
   s_DATA_SYNC.u8_data_length    = 1;
