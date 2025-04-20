@@ -310,26 +310,22 @@ EVENT_PROCESS_ENROLL_DATA_Task (void *arg)
             // Invalid ID -> Show popup
             lv_async_call(EVENT_ENROLL_ShowInvalidPopup, NULL);
           }
-
-          if (s_DATA_SYNC.u8_data_packet[0] == 0x01)
+          else if (s_DATA_SYNC.u8_data_packet[0] == 0x01)
           {
             memcpy(FaceIDCheck, "0/1", sizeof(FaceIDCheck));
             memcpy(FingerCheck, "0/1", sizeof(FingerCheck));
           }
-
-          if (s_DATA_SYNC.u8_data_packet[0] == 0x02)
+          else if (s_DATA_SYNC.u8_data_packet[0] == 0x02)
           {
             memcpy(FaceIDCheck, "1/1", sizeof(FaceIDCheck));
             memcpy(FingerCheck, "0/1", sizeof(FingerCheck));
           }
-
-          if (s_DATA_SYNC.u8_data_packet[0] == 0x03)
+          else if (s_DATA_SYNC.u8_data_packet[0] == 0x03)
           {
             memcpy(FaceIDCheck, "0/1", sizeof(FaceIDCheck));
             memcpy(FingerCheck, "1/1", sizeof(FingerCheck));
           }
-
-          if (s_DATA_SYNC.u8_data_packet[0] == 0x04)
+          else if (s_DATA_SYNC.u8_data_packet[0] == 0x04)
           {
             memcpy(FaceIDCheck, "1/1", sizeof(FaceIDCheck));
             memcpy(FingerCheck, "1/1", sizeof(FingerCheck));
