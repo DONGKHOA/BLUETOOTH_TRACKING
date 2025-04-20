@@ -474,6 +474,127 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
+[Document26]
+DocumentPath=OutputJob.OutJob
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument2]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument3]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0.REP
+DItemRevisionGUID=
+
+[GeneratedDocument4]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0.REP
+DItemRevisionGUID=
+
+[GeneratedDocument5]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Copper_Signal_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument6]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Copper_Signal_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument7]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Copper_Signal_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument8]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Copper_Signal_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument9]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Legend_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument10]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Legend_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument11]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Legend_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument12]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Legend_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument13]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_NPTH_Drill.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument14]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_NPTH_Drill.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument15]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Paste_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument16]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Paste_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument17]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Paste_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument18]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Paste_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument19]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Profile.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument20]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Profile.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument21]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_PTH_Drill.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument22]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_PTH_Drill.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument23]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Soldermask_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument24]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Soldermask_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument25]
+DocumentPath=Project Outputs for BluetoothGateway\GerberX2\BluetoothGateway_V1.0.0_Soldermask_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument26]
+DocumentPath=Project Outputs for Free Documents\GerberX2\BluetoothGateway_V1.0.0_Soldermask_Top.gbr
+DItemRevisionGUID=
+
 [Configuration1]
 Name=Sources
 ParameterCount=0
