@@ -176,7 +176,7 @@ EVENT_PROCESS_ATTENDANCE_DATA_Task (void *arg)
   while (1)
   {
     if (xQueueReceive(*p_receive_data_event_queue, &s_DATA_SYNC, portMAX_DELAY)
-        == pdTRUE)
+        == pdPASS)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {

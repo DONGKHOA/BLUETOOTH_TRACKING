@@ -80,7 +80,7 @@ APP_DATA_TRANSMIT_task (void *arg)
     if (xQueueReceive(*s_data_transmit_data.p_send_data_queue,
                       &s_data_transmit_data.s_data_sync,
                       portMAX_DELAY)
-        == pdTRUE)
+        == pdPASS)
     {
       index = 0;
 

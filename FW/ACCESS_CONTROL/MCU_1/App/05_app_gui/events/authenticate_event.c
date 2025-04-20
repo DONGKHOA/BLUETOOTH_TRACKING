@@ -352,7 +352,7 @@ EVENT_PROCESS_AUTHENTICATE_DATA_Task (void *arg)
     if (xQueueReceive(*s_authenticate_event_data.p_receive_data_event_queue,
                       &s_DATA_SYNC,
                       portMAX_DELAY)
-        == pdTRUE)
+        == pdPASS)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {

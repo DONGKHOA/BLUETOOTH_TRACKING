@@ -199,7 +199,7 @@ EVENT_PROCESS_FINGER_ENROLL_DATA_Task (void *arg)
     if (xQueueReceive(*s_finger_enroll_event_data.p_receive_data_event_queue,
                       &s_DATA_SYNC,
                       portMAX_DELAY)
-        == pdTRUE)
+        == pdPASS)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
