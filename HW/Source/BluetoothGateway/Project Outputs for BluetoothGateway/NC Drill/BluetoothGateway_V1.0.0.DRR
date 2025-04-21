@@ -1,0 +1,30 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: BluetoothGateway_V1.0.0.PcbDoc   4/21/2025  12:03:46 PM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : BluetoothGateway_V1.0.0-RoundHoles.TXT
+ASCII SlotHoles File : BluetoothGateway_V1.0.0-SlotHoles.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             267       PTH        35.42inch (899.55mm)
+T2      20mil (0.5mm)                                             Round             32        PTH        13.43inch (341.21mm)
+T3      33mil (0.85mm)                                            Round             4         PTH        0.30inch (7.62mm)
+T4      35mil (0.89mm)                                            Round             8         PTH        0.71inch (18.08mm)
+T5      39mil (0.991mm)                                           Round             5         PTH        0.96inch (24.50mm)
+T6      40mil (1.02mm)                                            Round             4         PTH        0.52inch (13.25mm)
+T7      47mil (1.2mm)                                             Round             4         PTH        0.89inch (22.50mm)
+T8      55mil (1.4mm)                                             Round             5         PTH        4.72inch (119.88mm)
+T9      63mil (1.6mm)                                             Round             2         PTH        0.20inch (5.08mm)
+T10     64mil (1.63mm)                                            Round             2         PTH        0.61inch (15.49mm)
+T11     67mil (1.7mm)                                             Round             5         PTH        1.08inch (27.54mm)
+T12     67mil (1.7mm)                                             Slot              2         PTH        0.96inch (24.47mm)
+T13     126mil (3.2mm)                                            Round             4         PTH        11.61inch (294.94mm)
+T14     71mil (1.8mm)                                             Round             2         NPTH       0.35inch (9.00mm)
+T15     110mil (2.8mm)                                            Round             4         NPTH       7.13inch (181.00mm)
+T16     128mil (3.25mm)                                           Round             2         NPTH       0.45inch (11.43mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              352
+
+Total Processing Time (hh:mm:ss) : 00:00:00

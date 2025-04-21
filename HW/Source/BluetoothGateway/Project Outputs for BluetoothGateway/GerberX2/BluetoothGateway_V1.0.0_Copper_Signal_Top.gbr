@@ -3,7 +3,7 @@ G04 Layer_Physical_Order=1*
 G04 Layer_Color=255*
 %FSLAX45Y45*%
 %MOMM*%
-%TF.SameCoordinates,619A4647-45A5-4391-A3B6-217FFA113737*%
+%TF.SameCoordinates,6140C124-B29E-4EDD-BC75-2642A01B609D*%
 %TF.FilePolarity,Positive*%
 %TF.FileFunction,Copper,L1,Top,Signal*%
 %TF.Part,Single*%
@@ -72,7 +72,7 @@ G04:AMPARAMS|DCode=13|XSize=0.86mm|YSize=0.26mm|CornerRadius=0.0091mm|HoleSize=0
 %ADD47C,0.20320*%
 %TA.AperFunction,ComponentPad*%
 %ADD48C,2.80000*%
-%ADD49C,0.30000*%
+%ADD49C,0.60000*%
 %ADD50C,1.80000*%
 %ADD51C,1.70790*%
 %ADD52R,3.30000X3.30000*%
@@ -16377,5 +16377,5 @@ X7379000Y1935140D02*
 D03*
 X7377609Y2011531D02*
 D03*
-%TF.MD5,31f1a2249ea6ee3edc109e663b82c77a*%
+%TF.MD5,f97ec816193413b9e2ff499a2607d281*%
 M02*

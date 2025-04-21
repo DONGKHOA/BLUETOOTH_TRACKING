@@ -1,26 +1,13 @@
-Project Outputs Generation Report
----------------------------------
-Start Output Generation At 10:38:01 AM On 4/20/2025
-
-Output: Gerber X2 Files
-Type  : GerberX2
-From  : Variant [[No Variations]] of PCB Document [BluetoothGateway_V1.0.0.PcbDoc]
-   Generated File[BluetoothGateway_V1.0.0_Copper_Signal_Top.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Copper_Signal_Bot.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Legend_Top.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Legend_Bot.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Soldermask_Top.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Soldermask_Bot.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Paste_Top.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Paste_Bot.gbr]
-   Generated File[BluetoothGateway_V1.0.0_Profile.gbr]
-   Generated File[BluetoothGateway_V1.0.0_NPTH_Drill.gbr]
-   Generated File[BluetoothGateway_V1.0.0_PTH_Drill.gbr]
-   Generated File[BluetoothGateway_V1.0.0.EXTREP]
-   Generated File[BluetoothGateway_V1.0.0.REP]
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [BluetoothGateway_V1.0.0.PcbDoc]
+   Generated File[BluetoothGateway_V1.0.0-RoundHoles.TXT]
+   Generated File[BluetoothGateway_V1.0.0-SlotHoles.TXT]
+   Generated File[BluetoothGateway_V1.0.0.LDP]
+   Generated File[BluetoothGateway_V1.0.0.DRR]
 
 
-Files Generated   : 13
+Files Generated   : 4
 Documents Printed : 0
 
-Finished Output Generation At 10:38:03 AM On 4/20/2025
+Finished Output Generation At 12:03:46 PM On 4/21/2025
