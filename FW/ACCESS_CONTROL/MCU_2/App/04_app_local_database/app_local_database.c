@@ -355,7 +355,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
-        case LOCAL_SET_ROLE:
+        case LOCAL_DATABASE_SET_ROLE:
 
           taskENTER_CRITICAL(&spi_mux);
           xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
@@ -391,7 +391,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
-        case LOCAL_FINGER_DELETE:
+        case LOCAL_DATABASE_FINGER_DELETE:
 
           taskENTER_CRITICAL(&spi_mux);
           xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);
@@ -414,7 +414,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
-        case LOCAL_FACEID_DELETE:
+        case LOCAL_DATABASE_FACEID_DELETE:
 
           taskENTER_CRITICAL(&spi_mux);
           xSemaphoreTake(*s_local_database.p_spi_mutex, portMAX_DELAY);

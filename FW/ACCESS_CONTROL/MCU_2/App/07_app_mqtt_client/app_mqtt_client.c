@@ -323,7 +323,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           DECODE_User_ID(data, &user_id_delete);
 
-          s_DATA_SYNC.u8_data_start = LOCAL_SET_ROLE;
+          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_SET_ROLE;
 
           s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
           s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
@@ -340,7 +340,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           DECODE_User_ID(data, &user_id_delete);
 
-          s_DATA_SYNC.u8_data_start = LOCAL_FINGER_DELETE;
+          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_FINGER_DELETE;
 
           s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
           s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
@@ -356,7 +356,7 @@ APP_MQTT_CLIENT_task (void *arg)
         case DELETE_FACEID_USER:
           DECODE_User_ID(data, &user_id_delete);
 
-          s_DATA_SYNC.u8_data_start = LOCAL_FACEID_DELETE;
+          s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_FACEID_DELETE;
 
           s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
           s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
