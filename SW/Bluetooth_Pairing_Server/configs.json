@@ -12,8 +12,10 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "The Simple Cafe L1",
-    "password": "simpleisthebest"
+    "ssid": "Thuc Coffee",
+    "password": "18006230",
+    "mqtt_server": "192.168.1.103:1883",
+    "topic": "bluetooth/GW1/data"
   },
   "24:58:7C:E2:C3:A6": {
     "ssid": "47.47",
