@@ -1,0 +1,336 @@
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Màu sắc chủ đạo */
+:root {
+    --primary-color: #2c3e50; /* Xanh đậm */
+    --secondary-color: #3498db; /* Xanh dương sáng */
+    --accent-color: #e74c3c; /* Đỏ */
+    --background-color: #ecf0f1; /* Xám nhạt */
+    --text-color: #333;
+    --success-color: #27ae60; /* Xanh lá */
+    --border-color: #ddd;
+}
+
+/* Body */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Thanh điều hướng */
+nav {
+    background-color: var(--primary-color);
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+}
+
+/* Container chính */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề */
+h1, h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+}
+
+button {
+    padding: 0.75rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--primary-color);
+}
+
+/* Thông báo lỗi */
+.error {
+    color: var(--accent-color);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Bảng và danh sách */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Nút điều khiển Gateway */
+button.on {
+    background-color: var(--success-color);
+}
+
+button.off {
+    background-color: var(--accent-color);
+}
+
+/* Biểu đồ */
+canvas {
+    max-width: 100%;
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        text-align: center;
+    }
+    .container {
+        padding: 1rem;
+    }
+}
+/* Thêm vào cuối file style.css */
+.edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #2980b9;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Điều chỉnh thanh điều hướng giống hình ảnh */
+nav {
+    background-color: #e74c3c; /* Đỏ giống Happy Bubbles */
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 30px;
+    margin-right: 0.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #c0392b;
+    border-radius: 5px;
+}
+
+.data-section {
+    width: 80%;
+    max-width: 700px;
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* NEW: log container inside .data-section */
+.log-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    height: 250px;               /* Fixed scrollable height */
+    overflow-y: auto;
+    background: #f9f9f9;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: left;            /* Make logs align left */
+    border-radius: 6px;
+}
+
+/* Existing sections */
+.config-section {
+    width: 80%;
+    max-width: 700px;
+    height: auto;
+    background: white;
+    padding: 30px;
+    margin: 30px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.config-section label {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.config-section input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+#configMessage {
+    margin-top: 13px;
+    font-size: 16px;
+    color: green;
+    text-align: center;
+}
+
+.config-display {
+    width: 80%;
+    height: 150px;
+    max-width: 700px;
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.config-display p {
+    font-size: 18px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    .data-section, .config-section {
+        width: 95%;
+        overflow-x: auto;
+    }
+}

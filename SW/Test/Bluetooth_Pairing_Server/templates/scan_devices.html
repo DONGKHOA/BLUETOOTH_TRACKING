@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find Devices</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/scan_devices.css') }}">
+</head>
+<body>
+  <!-- Top Red Bar -->
+  <header class="gateway-header">
+    <h1>BLUETOOTH GATEWAY</h1>
+  </header>
+
+  <!-- White Card with Controls -->
+  <div class="container card-header">
+    <div class="left"></div>
+    <div class="center">Find Devices</div>
+    <div class="right"><button onclick="scanDevices()">Scan</button></div>
+  </div>
+
+  <!-- Scan Result List -->
+  <div class="container">
+    <ul id="deviceList" class="device-list"></ul>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/scan_devices.js') }}"></script>
+</body>
+</html>

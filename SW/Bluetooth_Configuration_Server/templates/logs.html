@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Logs{% endblock %}
+{% block content %}
+    <h1>System Logs</h1>
+    <div class="log-container">
+
+        <!-- System Log Configuration Display -->
+        <div class="config-display">
+            <h2>Current System Log Configuration</h2>
+            <p><strong>Max File Size:</strong> <span id="currentMaxBytes">Loading...</span> MB</p>
+            <p><strong>Max Log Files:</strong> <span id="currentBackupCount">Loading...</span></p>
+        </div>
+
+        <!-- 🔹 Logging Configuration Section -->
+        <div class="config-section">
+            <h2>Update Logging Configuration</h2>
+            <form id="configForm">
+                <label for="maxBytes">Max File Size (MB):</label>
+                <input type="number" id="maxBytes" name="maxBytes" required><br><br>
+        
+                <label for="backupCount">Max Log Files:</label>
+                <input type="number" id="backupCount" name="backupCount" required><br><br>
+        
+                <button type="submit">Save Settings</button>
+            </form>
+        
+            <!-- Log Message INSIDE the rectangle -->
+            <p id="configMessage"></p>
+        </div>
+
+        <!-- Listener Logs -->
+        <div class="data-section">
+            <h2>Listener Logs</h2>
+            <button class="refreshLogs" data-type="listener">Refresh Logs</button>
+            <button class="clearLogs" data-type="listener">Clear Logs</button>
+            <div id="listenerLogMessages" class="log-box"></div>
+        </div>
+
+        <!-- Processor Logs -->
+        <div class="data-section">
+            <h2>Processor Logs</h2>
+            <button class="refreshLogs" data-type="processor">Refresh Logs</button>
+            <button class="clearLogs" data-type="processor">Clear Logs</button>
+            <div id="processorLogMessages" class="log-box"></div>
+        </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            fetchLogs("listener");
+            fetchLogs("processor");
+
+            setInterval(() => {
+                fetchLogs("listener");
+                fetchLogs("processor");
+            }, 1000);
+
+            $(".refreshLogs").click(function () {
+                let type = $(this).data("type");
+                fetchLogs(type);
+            });
+
+            $.get("/get_logging_config", function(response) {
+                if (response.success) {
+                    $("#currentMaxBytes").text(response.maxBytes / (1024 * 1024));  // Convert bytes to MB
+                    $("#currentBackupCount").text(response.backupCount);
+                    $("#maxBytes").val(response.maxBytes / (1024 * 1024));  // Pre-fill input fields
+                    $("#backupCount").val(response.backupCount);
+                }
+            });
+            
+            // Handle updating logging configuration
+            $("#configForm").submit(function(event) {
+                event.preventDefault();
+                $.post("/update_logging_config", $(this).serialize(), function(response) {
+                    $("#configMessage").text(response.message).css("color", response.success ? "green" : "red");
+                    if (response.success) {
+                        $("#currentMaxBytes").text($("#maxBytes").val());
+                        $("#currentBackupCount").text($("#backupCount").val());
+                    }
+                }, "json");
+            });
+
+            $(".clearLogs").click(function () {
+                let type = $(this).data("type");
+                $.post("/clear_logs", { type: type }, function (response) {
+                    let logContainer = $(`#${type}LogMessages`);
+                    if (response.success) {
+                        logContainer.html(`<p>${response.message}</p>`);
+                    } else {
+                        logContainer.html(`<p>Error clearing logs.</p>`);
+                    }
+                });
+            });
+        });
+
+        function fetchLogs(type) {
+            $.get(`/get_logs?type=${type}`, function (response) {
+                let logContainer = $(`#${type}LogMessages`);
+                logContainer.empty();
+                if (response.success) {
+                    if (response.logs.length === 0) {
+                        logContainer.append("<p>No logs available.</p>");
+                    } else {
+                        response.logs.forEach(log => {
+                            logContainer.append(`<p>${log}</p>`);
+                        });
+                    }
+                } else {
+                    logContainer.append("<p>Error loading logs.</p>");
+                }
+            }).fail(function () {
+                $(`#${type}LogMessages`).html("<p>Failed to connect to the server.</p>");
+            });
+        }
+    </script>
+{% endblock %}

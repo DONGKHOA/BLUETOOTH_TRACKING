@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Beacons{% endblock %}
+{% block content %}
+    <h1>Found Beacons</h1>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+        <button onclick="fetchBeacons()" style="background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; margin-right: 10px;">
+            &#8635;
+        </button>
+        <button onclick="clearBeaconLogs()" style="background-color: #e74c3c; color: white; padding: 10px; border: none; border-radius: 5px; width: 150px; height: 40px; font-size: 1.2rem; cursor: pointer;">
+            Clear All Logs
+        </button>
+    </div>
+    <table id="beaconTable">
+        <thead>
+            <tr>
+                <th>Beacon ID</th>
+                <th>Current Location</th>
+                <th>Last Seen</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- New Section for Logs -->
+    <h2>Beacon Detection Logs</h2>
+    <table id="beaconLogTable">
+        <thead>
+            <tr>
+                <th>Beacon ID</th>
+                <th>Event</th>
+                <th>Gateway</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function fetchBeacons() {
+            fetch('/api/beacons')
+                .then(response => response.json())
+                .then(data => {
+                    const beaconTbody = document.querySelector('#beaconTable tbody');
+                    beaconTbody.innerHTML = '';
+
+                    for (const [beaconId, beacon] of Object.entries(data)) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${beaconId}</td>
+                            <td>${beacon.gateways[0] || "Unknown"}</td>
+                            <td>${beacon.last_seen ? beacon.last_seen : "N/A"}</td>
+                            <td><button class="edit-btn" onclick="editBeacon('${beaconId}')">Edit</button></td>
+                            <td><button class="delete-btn" onclick="deleteBeacon('${beaconId}')">Delete</button></td>
+                        `;
+                        beaconTbody.appendChild(tr);
+                    }
+                });
+        }
+
+        function fetchBeaconLogs() {
+            fetch('/api/beacon_logs')
+                .then(response => response.json())
+                .then(data => {
+                    const logTbody = document.querySelector('#beaconLogTable tbody');
+                    logTbody.innerHTML = '';
+
+                    // const latestLogs = {};  // Store the latest log for each beacon
+
+                    // Loop through logs in descending order (newest first)
+                    data.forEach(log => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${log.beacon_id}</td>
+                            <td>${log.event === "detected" ? "Detected" : "Lost"}</td>
+                            <td>${log.gateway ? log.gateway : "N/A"}</td>
+                            <td>${log.timestamp ? log.timestamp : "N/A"}</td>
+                        `;
+                        logTbody.appendChild(tr);
+                    });
+                });
+        }
+
+        function deleteBeacon(beaconId) {
+            // if (confirm(`Are you sure you want to delete beacon ${beaconId}?`)) {
+            fetch(`/api/beacons/${beaconId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    // alert(data.message);
+                    fetchBeacons();  // Refresh UI after deletion
+                    fetchBeaconLogs(); // Refresh logs
+                })
+                .catch(error => console.error('Error deleting beacon:', error));
+            // }
+        }
+        
+        function clearBeaconLogs() {
+            if (confirm("Are you sure you want to delete all beacon logs?")) {
+                fetch('/api/clear_beacon_logs', { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        fetchBeaconLogs(); // Refresh logs
+                    })
+                    .catch(error => console.error('Error clearing logs:', error));
+            }
+        }
+
+        function clearDectectionBeaconLogs() {
+            fetch('/api/clear_dectection_beacon_logs', { method: 'DELETE' })
+                .then(data => {
+                    fetchBeaconLogs(); // Refresh logs
+                })
+        }
+
+
+        // Refresh data when page loads
+        window.onload = function() {
+            fetchBeacons();
+            fetchBeaconLogs();
+        };
+
+        setInterval(fetchBeaconLogs, 1000);  // Refresh logs every 1 seconds
+        setInterval(fetchBeacons, 1000);
+        setInterval(clearDectectionBeaconLogs, 60000); // Clear logs every 10 minutes
+    </script>
+{% endblock %}
