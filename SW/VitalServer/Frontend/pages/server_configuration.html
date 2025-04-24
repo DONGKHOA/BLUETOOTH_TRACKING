@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/server_configuration.css') }}">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/server_configuration.js') }}" defer></script>
+
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">TCP<span>SERVER</span></h2>
+        <ul class="menu">
+            <li class="menu-item"><a href="{{ url_for('server_management.server_management') }}">Server Status</a></li>
+            <li class="active"><a href="{{ url_for('server_configuration.server_configuration') }}">Configuration <br> TCP Server</a></li>
+            <li class="menu-item"><a href="{{ url_for('system_log.system_log_home') }}">System Log</a></li>
+            <li class="menu-item"><a href="{{ url_for('login.logout') }}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-container">
+
+        <!-- TCP Server Configuration -->
+        <div class="tcp-server-container">
+            <h1>TCP Server Configuration</h1>
+    
+            <!-- Server Control Section -->
+            <div class="data-section">
+                <h2>TCP Server Control</h2>
+                <button id="startServer">Start Server</button>
+                <button id="stopServer">Stop Server</button>
+                <div id="serverMessage"></div>
+            </div>
+
+            <!-- Authentication Section -->
+            <div class="data-section">
+                <form id="AuthenticateForm">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" id="AuthenticateButton">Authenticate</button>
+                    <div id="authMessage" style="color: red;"></div>
+                </form>
+            </div>
+
+            <!-- Facility List -->
+            <div class="table-section">
+                <h2>Facility Lists</h2>
+                <p>Total Entries: <span id="facilityCount">0</span></p>
+                <table id="facilityTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Timezone</th>
+                            <th>TCP Server Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Facility data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Select Facility ID -->
+            <div class="select-facility">
+                <h2>Select Facility ID</h2>
+                <form id="facilityForm">
+                    <label for="facility_id">Choose an ID:</label>
+                    <select name="facility_id" id="facility_id">
+                        {% if data %}
+                            {% for item in data %}
+                                <option value="{{ item.id }}">{{ item.id }} - {{ item.name }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="" disabled>No facilities available</option>
+                        {% endif %}
+                    </select>
+                    <button type="submit" id="FacilityIDButton">Update</button>
+                </form>
+
+                <div id="facilityMessage"></div>  <!-- Display messages dynamically -->
+            </div>
+        </div> 
+
+        <!-- AWS Connection Configuration (Certificate + AWS IoT) BELOW TCP SERVER -->
+        <div class="aws-configuration-container">
+            <h1>AWS Connection Configuration</h1>
+
+            <!-- Uploaded Files & AWS IoT Endpoint -->
+            <div class="aws-uploaded-section">
+                <h2>Current Certtificate Files & AWS IoT Endpoint</h2>
+                <ul id="uploadedFilesList">
+                    {% for file in uploaded_files %}
+                        <li>{{ file }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>AWS IoT Endpoint:</strong> <span id="awsEndpointDisplay">{{ aws_endpoint }}</span></p>
+            </div>
+
+            <!-- Certificate Files Section -->
+            <div class="upload-section">
+                <h2>Certificate Files</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="file-input-container">
+                        <span class="fixed-file-name">.crt</span>
+                        <label for="file1" class="custom-file-upload">Choose File</label>
+                        <input type="file" name="file1" id="file1" hidden>
+                        <span id="fileInfo1" class="file-path">No file chosen</span>
+                    </div>
+                    <div class="file-input-container">
+                        <span class="fixed-file-name">.private.key</span>
+                        <label for="file2" class="custom-file-upload">Choose File</label>
+                        <input type="file" name="file2" id="file2" hidden>
+                        <span id="fileInfo2" class="file-path">No file chosen</span>
+                    </div>
+                    <div class="file-input-container">
+                        <span class="fixed-file-name">.cert.pem</span>
+                        <label for="file3" class="custom-file-upload">Choose File</label>
+                        <input type="file" name="file3" id="file3" hidden>
+                        <span id="fileInfo3" class="file-path">No file chosen</span>
+                    </div>
+                    <button type="submit" id="UploadButton">Upload</button>
+                </form>
+
+                <div id="uploadMessage"></div>  <!-- Display messages dynamically -->
+            </div>
+
+
+            <!-- AWS IoT Endpoint Section -->
+            <div class="aws-update-section">
+                <h2>Update AWS IoT Endpoint</h2>
+                <form id="awsEndpointForm">
+                    <label for="aws_iot_endpoint">AWS IoT Endpoint:</label>
+                    <input type="text" id="aws_iot_endpoint" name="aws_iot_endpoint" required>
+                    <button type="submit" id="AWSUpdateButton">Update</button>
+                    <button type="button" id="AWSCheckingButton">Check Connection</button>
+                </form>
+                <div id="AWSEndPoint"></div>
+            </div>
+        </div>
+    </div>    
+    <br>
+</body>
+</html>

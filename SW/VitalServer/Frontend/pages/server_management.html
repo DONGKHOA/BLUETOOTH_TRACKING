@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Status</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/server_management.css') }}">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/server_management.js') }}" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">TCP<span>SERVER</span></h2>
+        <ul class="menu">
+            <li class="active"><a href="{{ url_for('server_management.server_management') }}">Server Status</a></li>
+            <li class="menu-item"><a href="{{ url_for('server_configuration.server_configuration') }}">Configuration TCP Server</a></li>
+            <li class="menu-item"><a href="{{ url_for('system_log.system_log_home') }}">System Log</a></li>
+            <li class="menu-item"><a href="{{ url_for('login.logout') }}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Server Status</h1>
+        <div class="status-container">
+            <div class="status-card green" id="tcpServerStatus">TCP Server: <span id="tcpStatusText">Loading...</span></div>
+            <div class="status-card green" id="awsServerStatus">AWS Server: <span id="awsStatusText">Loading...</span></div>
+        </div>
+
+        <h1>Current Configuration TCP Server</h1>
+        <div class="data-section">
+            <h2>Facility Lists</h2>
+            <p>Total Entries: <span id="facilityCount">Loading...</span></p>
+            <table class = "facility-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Timezone</th>
+                        <th>TCP Server Name</th>
+                    </tr>
+                </thead>
+                <tbody id="facilityTableBody">
+                    <!-- Data will be inserted dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Facility ID Display -->
+        <div class="data-section">
+            <h2>Selected Facility ID</h2>
+            <p><strong>Facility ID:</strong> <span id="facilityIDDisplay">Loading...</span></p>
+        </div>
+
+        <!-- AWS IoT Endpoint Display -->
+        <div class="data-section">
+            <h2>AWS IoT Endpoint</h2>
+            <p><strong>Endpoint:</strong> <span id="awsEndpointDisplay">Loading...</span></p>
+        </div>
+        
+    </div>
+</body>
+</html>
