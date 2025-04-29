@@ -11,6 +11,7 @@ set (requires 00_app_data
               06_app_handle_wifi
               07_app_configuration
               08_app_user_button
+              09_app_ethernet
               driver
               NVS
               GPIO
