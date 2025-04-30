@@ -111,14 +111,27 @@ extern "C"
     LOCAL_DATABASE_SET_ROLE,
     LOCAL_DATABASE_FINGER_DELETE,
     LOCAL_DATABASE_FACEID_DELETE
-  } __attribute__((packed)) local_database;
+  } __attribute__((packed)) local_database_status_t;
+
+  typedef enum
+  {
+    SDCARD_USER_DATA = 0x00,
+    SDCARD_ENROLL_FACE,
+    SDCARD_ENROLL_FINGERPRINT,
+    SDCARD_ATTENDANCE,
+    SDCARD_DELETE_USER_DATA,
+    SDCARD_SET_ROLE,
+    SDCARD_DELETE_FINGER_USER,
+    SDCARD_DELETE_FACEID_USER,
+    SDCARD_UNKNOWN_CMD
+  }__attribute__((packed)) sdcard_cmd_t;
 
   typedef enum
   {
     FINGER_ENROLL = 0x00,
     FINGER_ATTENDANCE,
     FINGER_DELETE
-  } __attribute__((packed)) finger_cmd;
+  } __attribute__((packed)) finger_cmd_t;
 
   typedef enum
   {
@@ -141,6 +154,7 @@ extern "C"
     QueueHandle_t      s_data_mqtt_queue;
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_data_local_database_queue;
+    QueueHandle_t      s_data_sdcard_queue;
     SemaphoreHandle_t  s_spi_mutex;
     SemaphoreHandle_t  s_i2c_mutex;
     EventGroupHandle_t s_flag_time_event;

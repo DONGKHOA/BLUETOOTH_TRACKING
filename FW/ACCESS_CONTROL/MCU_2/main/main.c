@@ -227,6 +227,7 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_data_sdcard_queue = xQueueCreate(16, sizeof(sdcard_cmd_t));
 
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
