@@ -128,6 +128,11 @@ APP_MQTT_CLIENT_task (void *arg)
       s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
       xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
     }
+    else
+    {
+      vTaskDelay(100 / portTICK_PERIOD_MS);
+      continue;
+    }
 
     if ((s_mqtt_client_data.b_connected_server == false)
         && (s_mqtt_client_data.b_mqtt_client_connected == true))
