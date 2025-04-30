@@ -49,6 +49,12 @@ FIL     fil;
 UINT    bw;
 UINT    br;
 
+typedef enum
+{
+  SDCARD_VALID,
+  SDCARD_INVALID,
+} __attribute__((packed)) local_database_status_t;
+
 /******************************************************************************
  *    PRIVATE FUNCTIONS
  *****************************************************************************/
@@ -68,6 +74,8 @@ static void SDCard_ReadCSVFile(char     *p_namefile,
                                int      *finger,
                                char    **role,
                                uint16_t *user_len);
+
+static local_database_status_t APP_LOCAL_DATABASE_SDCard_CheckValid(void);
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -109,8 +117,9 @@ app_main (void)
 
   // SDCard_WriteCSV(user_name, user_id, face, finger, role, user_len);
 
-  SDCard_ReadCSVFile(
-      p_namefile, user_name, user_id, face, finger, role, &user_len);
+  // SDCard_ReadCSVFile(
+  //     p_namefile, user_name, user_id, face, finger, role, &user_len);
+  APP_LOCAL_DATABASE_SDCard_CheckValid();
 
   while (1)
   {
@@ -268,4 +277,18 @@ SDCard_ReadCSVFile (char     *p_namefile,
 
   f_close(&fil);
   f_mount(NULL, MOUNT_POINT, 1);
+}
+
+static local_database_status_t
+APP_LOCAL_DATABASE_SDCard_CheckValid (void)
+{
+  FRESULT fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return SDCARD_INVALID;
+  }
+
+  f_mount(NULL, MOUNT_POINT, 1);
+  return SDCARD_VALID;
 }

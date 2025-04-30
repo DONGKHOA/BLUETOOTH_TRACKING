@@ -96,6 +96,9 @@ APP_LOCAL_DATABASE_Init (void)
       = &s_data_system.s_data_local_database_queue;
   s_local_database.p_spi_mutex         = &s_data_system.s_spi_mutex;
   s_local_database.p_fingerprint_event = &s_data_system.s_fingerprint_event;
+
+  uint8_t sdcard_valid = APP_LOCAL_DATABASE_SDCard_CheckValid();
+  printf("SDCard valid: %d\n", sdcard_valid);
 }
 
 /******************************************************************************
@@ -632,7 +635,8 @@ APP_LOCAL_DATABASE_Delete_UserID (uint16_t user_id_delete)
   user_id[user_len - 1] = 0;
 }
 
-static local_database_status_t APP_LOCAL_DATABASE_SDCard_CheckValid(void)
+static local_database_status_t
+APP_LOCAL_DATABASE_SDCard_CheckValid (void)
 {
   FRESULT fr = f_mount(&fs, MOUNT_POINT, 1);
   if (fr != FR_OK)

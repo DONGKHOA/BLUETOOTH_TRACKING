@@ -128,7 +128,7 @@ BSP_spiWriteByte (spi_device_handle_t spi_handle, uint8_t data)
 uint8_t
 BSP_spiReadByte (spi_device_handle_t spi_handle)
 {
-  uint8_t           txData = 0x00, rxData = 0xFF;
+  uint8_t           txData = 0xFF, rxData = 0xFF;
   spi_transaction_t t;
   memset(&t, 0, sizeof(t));
   t.length    = 8;

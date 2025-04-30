@@ -80,6 +80,7 @@ app_main (void)
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();
   APP_MAIN_InitI2C();
+  APP_MAIN_InitSPI();
 
   // Main Initialization data system
 
