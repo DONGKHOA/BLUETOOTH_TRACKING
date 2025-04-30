@@ -1,0 +1,4 @@
+Record=DiagramHierarchy|SourceDocument=BluetoothTracking.MbsDoc|Kind=Multi-board Schematic Module|Designator=2|Source=AccessControl\AccessControl.PrjPcb
+Record=SubProject|SourceDocument=BluetoothTracking.MbsDoc|ProjectPath=AccessControl\AccessControl.PrjPcb
+Record=DiagramHierarchy|SourceDocument=BluetoothTracking.MbsDoc|Kind=Multi-board Schematic Module|Designator=1|Source=BluetoothGateway\BluetoothGateway.PrjPcb
+Record=SubProject|SourceDocument=BluetoothTracking.MbsDoc|ProjectPath=BluetoothGateway\BluetoothGateway.PrjPcb
