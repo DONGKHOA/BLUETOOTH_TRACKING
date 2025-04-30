@@ -25,7 +25,7 @@ async function openWifi() {
       const res = await fetch("/scan_wifi");
       let data = await res.json();
   
-      // 🔥 Remove duplicates using Set
+      // Remove duplicates using Set
       const uniqueSSIDs = [...new Set(data.filter(ssid => ssid && ssid.trim() !== ""))];
   
       list.innerHTML = "";

@@ -38,12 +38,8 @@ ENCODE_User_Data (char     *json_str,
     return;
   }
 
-  // Add command field
   cJSON_AddStringToObject(root, "command", "USER_DATA");
 
-  // Convert the cJSON object to a JSON string
-  // Use cJSON_PrintUnformatted for compact string (cJSON_Print can be used for
-  // pretty format)
   json_str = cJSON_PrintUnformatted(root);
   if (json_str == NULL)
   {
@@ -51,6 +47,5 @@ ENCODE_User_Data (char     *json_str,
     return;
   }
 
-  // Clean up the cJSON object hierarchy to free memory
   cJSON_Delete(root);
 }

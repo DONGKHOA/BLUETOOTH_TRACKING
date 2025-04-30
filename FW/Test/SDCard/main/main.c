@@ -33,8 +33,15 @@
 
 spi_device_handle_t spi_sdcard_handle;
 
-char *p_namefile = "test2.txt";
+char *p_namefile = "test2.csv";
 char *p_data     = "Hello";
+
+char   **user_name;
+int     *user_id;
+int     *face;
+int     *finger;
+char   **role;
+uint16_t user_len = 0;
 
 FRESULT fr;
 FATFS   fs;
@@ -48,6 +55,19 @@ UINT    br;
 
 static void SDCard_ReadFile(char *p_namefile);
 static void SDCard_WriteFile(char *p_namefile, char *p_data);
+static void SDCard_WriteCSV(char   **user_name,
+                            int     *user_id,
+                            int     *face,
+                            int     *finger,
+                            char   **role,
+                            uint16_t user_len);
+static void SDCard_ReadCSVFile(char     *p_namefile,
+                               char    **user_name,
+                               int      *user_id,
+                               int      *face,
+                               int      *finger,
+                               char    **role,
+                               uint16_t *user_len);
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -66,11 +86,31 @@ app_main (void)
   BSP_spiConfigMode(SPI_MODE);
   BSP_spiDMADriverInit(&spi_sdcard_handle, HSPI_HOST, 3);
 
-  // Write file to SD Card
-  SDCard_WriteFile(p_namefile, p_data);
+  // Init SD Card
+  user_len = 10;
 
-  // Read file from SD Card
-  SDCard_ReadFile(p_namefile);
+  char **user_name = malloc(user_len * sizeof(char *));
+  char **role      = malloc(user_len * sizeof(char *));
+  int   *user_id   = malloc(user_len * sizeof(int));
+  int   *face      = malloc(user_len * sizeof(int));
+  int   *finger    = malloc(user_len * sizeof(int));
+
+  // user_name[0] = strdup("Dong Thanh Khoa");
+  // user_id[0]   = 1;
+  // face[0]      = 1;
+  // finger[0]    = 1;
+  // role[0]      = strdup("user");
+
+  // user_name[1] = strdup("Nguyen Van A");
+  // user_id[1]   = 2;
+  // face[1]      = 0;
+  // finger[1]    = 1;
+  // role[1]      = strdup("admin");
+
+  // SDCard_WriteCSV(user_name, user_id, face, finger, role, user_len);
+
+  SDCard_ReadCSVFile(
+      p_namefile, user_name, user_id, face, finger, role, &user_len);
 
   while (1)
   {
@@ -83,87 +123,149 @@ app_main (void)
  *****************************************************************************/
 
 static void
-SDCard_ReadFile (char *p_namefile)
+SDCard_WriteCSV (char   **user_name,
+                 int     *user_id,
+                 int     *face,
+                 int     *finger,
+                 char   **role,
+                 uint16_t user_len)
 {
   char full_path[128];
-  char buffer[128];
+  char row_buffer[256];
 
   // Mount SD Card
   fr = f_mount(&fs, MOUNT_POINT, 1);
   if (fr != FR_OK)
   {
     printf("f_mount failed! error=%d\n", fr);
+    return;
   }
 
-  // Create a full path to the file
   snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
 
-  // Open the file at read mode (FA_READ)
-  fr = f_open(&fil, full_path, FA_READ);
-  if (fr != FR_OK)
-  {
-    printf("f_open failed! error=%d\n", fr);
-    f_mount(NULL, MOUNT_POINT, 1); // If not successful, unmount the SD card
-  }
-
-  // Reset the buffer
-  // Read the file with maximum size of buffer buffer - 1, reverse a place for
-  // null-terminator
-  memset(buffer, 0, sizeof(buffer));
-  fr = f_read(&fil, buffer, sizeof(buffer) - 1, &br);
-  if (fr == FR_OK)
-  {
-    buffer[br] = '\0'; // Null-terminate the string
-    printf("Read from file: %s\n", buffer);
-  }
-  else
-  {
-    printf("f_read failed! error=%d\n", fr);
-  }
-
-  f_close(&fil);
-
-  // Unmount the SD card
-  f_mount(NULL, MOUNT_POINT, 1);
-}
-
-static void
-SDCard_WriteFile (char *p_namefile, char *p_data)
-{
-  char full_path[128];
-
-  // Mount SD Card
-  fr = f_mount(&fs, MOUNT_POINT, 1);
-  if (fr != FR_OK)
-  {
-    printf("f_mount failed! error=%d\n", fr);
-  }
-
-  // Create a full path to the file
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
-
-  // Open the file at write mode (FA_WRITE) and create a new file if it does not
-  // exist (FA_CREATE_ALWAYS)
+  // Open file in write mode to overwrite or create
   fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
   if (fr != FR_OK)
   {
     printf("f_open failed! error=%d\n", fr);
     f_mount(NULL, MOUNT_POINT, 1);
+    return;
   }
 
-  // Write the data to the file
-  fr = f_write(&fil, p_data, strlen(p_data), &bw);
-  if (fr == FR_OK && bw == strlen(p_data))
+  for (int i = 0; i < user_len; i++)
   {
-    printf("Write file successfully: %s\n", full_path);
-  }
-  else
-  {
-    printf("Write file failed! error=%d, written=%u\n", fr, bw);
+    // Format each row into CSV
+    snprintf(row_buffer,
+             sizeof(row_buffer),
+             "\"%s\",%d,%d,%d,\"%s\",%d\n",
+             user_name[i],
+             user_id[i],
+             face[i],
+             finger[i],
+             role[i],
+             i);
+
+    fr = f_write(&fil, row_buffer, strlen(row_buffer), &bw);
+    if (fr != FR_OK || bw != strlen(row_buffer))
+    {
+      printf("Write failed for index %d! error=%d, written=%u\n", i, fr, bw);
+    }
   }
 
   f_close(&fil);
+  f_mount(NULL, MOUNT_POINT, 1);
 
-  // Unmount the SD card
+  printf("All user rows written to %s\n", full_path);
+}
+
+static void
+SDCard_ReadCSVFile (char     *p_namefile,
+                    char    **user_name,
+                    int      *user_id,
+                    int      *face,
+                    int      *finger,
+                    char    **role,
+                    uint16_t *p_user_len)
+{
+  char full_path[128];
+  char line[256];
+
+  int idx = 0;
+
+  // Mount the SD card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
+
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+
+  fr = f_open(&fil, full_path, FA_READ);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  // Read file line by line
+  while (f_gets(line, sizeof(line), &fil) != NULL)
+  {
+    // Get username
+    char *token = strtok(line, ",");
+    if (!token)
+    {
+      continue;
+    }
+    user_name[idx] = strdup(token);
+
+    // Get ID
+    token = strtok(NULL, ",");
+    if (!token)
+    {
+      continue;
+    }
+    user_id[idx] = atoi(token);
+
+    // Get face
+    token = strtok(NULL, ",");
+    if (!token)
+    {
+      continue;
+    }
+    face[idx] = atoi(token);
+
+    // Get finger
+    token = strtok(NULL, ",");
+    if (!token)
+    {
+      continue;
+    }
+    finger[idx] = atoi(token);
+
+    // Get role
+    token = strtok(NULL, ",");
+    if (!token)
+    {
+      continue;
+    }
+    role[idx] = strdup(token);
+
+    printf("Row %d: name=%s, id=%d, face=%d, finger=%d, role=%s\n",
+           idx,
+           user_name[idx],
+           user_id[idx],
+           face[idx],
+           finger[idx],
+           role[idx]);
+
+    idx++;
+  }
+  *p_user_len = idx;
+  printf("User length: %d\n", *p_user_len);
+
+  f_close(&fil);
   f_mount(NULL, MOUNT_POINT, 1);
 }
