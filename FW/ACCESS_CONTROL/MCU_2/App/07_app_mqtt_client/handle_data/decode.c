@@ -30,9 +30,9 @@ DECODE_Command (char *json_string)
   cJSON *cmd_item = cJSON_GetObjectItemCaseSensitive(root, "command");
   if (cJSON_IsString(cmd_item) && (cmd_item->valuestring != NULL))
   {
-    if (strcmp(cmd_item->valuestring, "USER_DATA") == 0)
+    if (strcmp(cmd_item->valuestring, "SYN") == 0)
     {
-      return USER_DATA_CMD;
+      return SYNC_CMD;
     }
     if (strcmp(cmd_item->valuestring, "ENROLL_FACE") == 0)
     {
@@ -67,80 +67,6 @@ DECODE_Command (char *json_string)
   cJSON_Delete(root);
 
   return UNKNOWN_CMD;
-}
-
-void
-DECODE_User_Data (char     *json_str,
-                  int      *user_id,
-                  int      *face,
-                  int      *finger,
-                  char    **role,
-                  char    **user_name,
-                  uint16_t *user_len)
-{
-  cJSON *root = cJSON_Parse(json_str);
-
-  if (!root)
-  {
-    ESP_LOGE(TAG, "Failed to parse JSON");
-    return;
-  }
-
-  // Get "user_len"
-  cJSON *user_len_item = cJSON_GetObjectItemCaseSensitive(root, "user_len");
-  if (!cJSON_IsNumber(user_len_item))
-  {
-    ESP_LOGE(TAG, "user_len is missing or not a number");
-    cJSON_Delete(root);
-    return;
-  }
-
-  *user_len = (uint16_t)user_len_item->valueint;
-
-  // Get "user_data" array
-  cJSON *user_data = cJSON_GetObjectItemCaseSensitive(root, "user_data");
-  if (!cJSON_IsArray(user_data))
-  {
-    ESP_LOGE(TAG, "user_data is missing or not an array");
-    cJSON_Delete(root);
-    return;
-  }
-
-  for (int i = 0; i < *user_len; i++)
-  {
-    cJSON *user = cJSON_GetArrayItem(user_data, i);
-    if (!cJSON_IsObject(user))
-    {
-      ESP_LOGE(TAG, "User %d is not an object", i);
-      continue;
-    }
-
-    // Extract fields
-    cJSON *id_item     = cJSON_GetObjectItemCaseSensitive(user, "id");
-    cJSON *name_item   = cJSON_GetObjectItemCaseSensitive(user, "name");
-    cJSON *face_item   = cJSON_GetObjectItemCaseSensitive(user, "face");
-    cJSON *finger_item = cJSON_GetObjectItemCaseSensitive(user, "finger");
-    cJSON *role_item   = cJSON_GetObjectItemCaseSensitive(user, "role");
-
-    // Copy user ID
-    user_id[i] = id_item->valueint;
-
-    // Allocate memory and copy user name
-    user_name[i] = (char *)heap_caps_malloc(MAX_NAME_LEN, MALLOC_CAP_SPIRAM);
-
-    strncpy(user_name[i], name_item->valuestring, MAX_NAME_LEN - 1);
-    user_name[i][MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
-
-    face[i]   = face_item->valueint;
-    finger[i] = finger_item->valueint;
-
-    // Allocate memory and copy role
-    role[i] = (char *)heap_caps_malloc(6, MALLOC_CAP_SPIRAM);
-    strncpy(role[i], role_item->valuestring, 5);
-    role[i][5] = '\0'; // Ensure null-termination
-  }
-
-  cJSON_Delete(root);
 }
 
 void
@@ -202,6 +128,31 @@ DECODE_User_ID (char *json_str, int *user_id)
   }
 
   *user_id = user_id_item->valueint;
+
+  cJSON_Delete(root);
+}
+
+void
+DECODE_Sync_Data (char *json_str, char *id_ac)
+{
+  cJSON *root = cJSON_Parse(json_str);
+
+  if (!root)
+  {
+    ESP_LOGE(TAG, "Failed to parse JSON");
+    return;
+  }
+
+  // Get "id_ac"
+  cJSON *id_ac_item = cJSON_GetObjectItemCaseSensitive(root, "id_ac");
+  if (!cJSON_IsString(id_ac_item) || (id_ac_item->valuestring == NULL))
+  {
+    ESP_LOGE(TAG, "id_ac is missing or not a string");
+    cJSON_Delete(root);
+    return;
+  }
+
+  strncpy(id_ac, id_ac_item->valuestring, strlen(id_ac_item->valuestring));
 
   cJSON_Delete(root);
 }

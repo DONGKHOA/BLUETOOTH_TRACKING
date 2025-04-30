@@ -40,6 +40,8 @@ typedef struct mqtt_client_data
   SemaphoreHandle_t        s_data_subscribe_sem;
   esp_mqtt_client_handle_t s_MQTT_Client;
   state_system_t          *p_state_system;
+  bool                     b_connected_server;
+  bool                     b_mqtt_client_connected;
 } mqtt_client_data_t;
 
 /******************************************************************************
@@ -55,11 +57,12 @@ static void mqtt_event_handler(void            *handler_args,
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
-static DATA_SYNC_t s_DATA_SYNC;
+static DATA_SYNC_t        s_DATA_SYNC;
 static mqtt_client_data_t s_mqtt_client_data;
 static char               data[1024 * 10];
 static int                status;
 static int                user_id_delete;
+static char               id_ac[8];
 static char *p_topic_request_server  = "ACCESS_CONTROL/Server/Request";
 static char *p_topic_request_client  = "ACCESS_CONTROL/Client/Request";
 static char *p_topic_response_server = "ACCESS_CONTROL/Server/Response";
@@ -88,6 +91,9 @@ APP_MQTT_CLIENT_Init (void)
 
   *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
+  s_mqtt_client_data.b_connected_server      = false;
+  s_mqtt_client_data.b_mqtt_client_connected = false;
+
   esp_mqtt_client_config_t mqtt_cfg = {
     .broker.address.uri = URL_DEFAULT,
   };
@@ -106,27 +112,35 @@ APP_MQTT_CLIENT_Init (void)
 static void
 APP_MQTT_CLIENT_task (void *arg)
 {
-  uint8_t     is_init = 0;
-
   char data_send[128];
 
   while (1)
   {
     if (WIFI_state_connect() == CONNECT_OK)
     {
-      if (is_init == 0)
-      {
-        is_init                            = 1;
-        *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
-        esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
+      *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
+      esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
 
-        // Send state wifi to MCU1
-        s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_CONNECTION_WIFI;
-        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
-        s_DATA_SYNC.u8_data_length    = 1;
-        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-        xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
-      }
+      // Send state wifi to MCU1
+      s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_CONNECTION_WIFI;
+      s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+      s_DATA_SYNC.u8_data_length    = 1;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+      xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
+    }
+
+    if ((s_mqtt_client_data.b_connected_server == false)
+        && (s_mqtt_client_data.b_mqtt_client_connected == true))
+    {
+      strcpy(data_send, "{\"command\" : \"SYN\"}");
+      esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                              p_topic_request_server,
+                              data_send,
+                              0,
+                              1,
+                              0);
+
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 
     if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
@@ -216,26 +230,34 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (DECODE_Command(data))
       {
-        case USER_DATA_CMD:
+          // case USER_DATA_CMD:
 
-          for (uint16_t i = 0; i < user_len; i++)
-          {
-            heap_caps_free(user_name[i]);
-            heap_caps_free(role[i]);
-          }
+          //   for (uint16_t i = 0; i < user_len; i++)
+          //   {
+          //     heap_caps_free(user_name[i]);
+          //     heap_caps_free(role[i]);
+          //   }
 
-          // Decode the user data from the server response
-          DECODE_User_Data(
-              data, user_id, face, finger, role, user_name, &user_len);
+          //   // Decode the user data from the server response
+          //   DECODE_User_Data(
+          //       data, user_id, face, finger, role, user_name, &user_len);
 
-          // Send user len to the queue local database
-          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
-          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          //   // Send user len to the queue local database
+          //   s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
+          //   s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          //   s_DATA_SYNC.u8_data_length    = 1;
+          //   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
-          xQueueSend(
-              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+          //   xQueueSend(
+          //       *s_mqtt_client_data.p_data_local_database_queue,
+          //       &s_DATA_SYNC, 0);
+
+        case SYNC_CMD:
+
+          s_mqtt_client_data.b_connected_server = true;
+          DECODE_Sync_Data(data, id_ac);
+
+          // Update Topic for MQTT Client
 
           break;
 
@@ -393,16 +415,12 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_CONNECTED:
 
       ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+      s_mqtt_client_data.b_mqtt_client_connected = true;
       esp_mqtt_client_subscribe_single(
           s_mqtt_client_data.s_MQTT_Client, p_topic_response_client, 0);
       esp_mqtt_client_subscribe_single(
           s_mqtt_client_data.s_MQTT_Client, p_topic_request_client, 0);
-      esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                              p_topic_request_server,
-                              "{\"command\" : \"USER_DATA\"}",
-                              0,
-                              1,
-                              0);
+
       break;
     case MQTT_EVENT_SUBSCRIBED:
 
@@ -424,6 +442,8 @@ mqtt_event_handler (void            *handler_args,
       break;
     case MQTT_EVENT_DISCONNECTED:
 
+      ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
+
       *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
       // Send state wifi to MCU1
@@ -433,7 +453,7 @@ mqtt_event_handler (void            *handler_args,
       s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
       xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
-      ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
+      s_mqtt_client_data.b_mqtt_client_connected = false;
 
       break;
     default:

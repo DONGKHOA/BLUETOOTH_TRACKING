@@ -15,6 +15,7 @@ extern "C"
   /****************************************************************************
    *   PUBLIC TYPEDEF
    ***************************************************************************/
+
   typedef enum
   {
     USER_DATA_CMD,
@@ -25,22 +26,27 @@ extern "C"
     SET_ROLE,
     DELETE_FINGER_USER,
     DELETE_FACEID_USER,
+    SYNC_CMD,
     UNKNOWN_CMD
   } CommandType;
+
   /****************************************************************************
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
   CommandType DECODE_Command(char *json_string);
-  void        DECODE_User_Data(char     *json_str,
-                               int      *user_id,
-                               int      *face,
-                               int      *finger,
-                               char    **role,
-                               char    **user_name,
-                               uint16_t *user_len);
   void        DECODE_Status(char *json_str, int *status);
   void        DECODE_User_ID(char *json_str, int *user_id);
+  void        DECODE_Sync_Data(char *json_str, char *id_ac);
+
+  void ENCODE_User_Data(char     *json_str,
+                        int      *user_id,
+                        int      *face,
+                        int      *finger,
+                        char    **role,
+                        char    **user_name,
+                        uint16_t *user_len);
+
 #ifdef __cplusplus
 }
 #endif
