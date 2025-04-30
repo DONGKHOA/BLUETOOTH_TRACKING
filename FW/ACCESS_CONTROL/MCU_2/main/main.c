@@ -80,7 +80,7 @@ app_main (void)
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();
   APP_MAIN_InitI2C();
-  APP_MAIN_InitSPI();
+  // APP_MAIN_InitSPI();
 
   // Main Initialization data system
 
@@ -112,6 +112,7 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
+      APP_RTC_Init();
       APP_FINGERPRINT_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
@@ -121,6 +122,7 @@ app_main (void)
 
       // App Create Task
 
+      APP_RTC_CreateTask();
       APP_HANDLE_WIFI_CreateTask();
       APP_FINGERPRINT_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();

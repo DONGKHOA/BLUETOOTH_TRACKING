@@ -97,8 +97,8 @@ APP_LOCAL_DATABASE_Init (void)
   s_local_database.p_spi_mutex         = &s_data_system.s_spi_mutex;
   s_local_database.p_fingerprint_event = &s_data_system.s_fingerprint_event;
 
-  uint8_t sdcard_valid = APP_LOCAL_DATABASE_SDCard_CheckValid();
-  printf("SDCard valid: %d\n", sdcard_valid);
+  // uint8_t sdcard_valid = APP_LOCAL_DATABASE_SDCard_CheckValid();
+  // printf("SDCard valid: %d\n", sdcard_valid);
 }
 
 /******************************************************************************
