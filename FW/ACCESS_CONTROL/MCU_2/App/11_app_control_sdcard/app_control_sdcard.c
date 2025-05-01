@@ -36,6 +36,9 @@ typedef enum
 {
   SDCARD_VALID,
   SDCARD_INVALID,
+  SDCARD_NEW,
+  SDCARD_OLD,
+  SDCARD_UNKNOWN
 } __attribute__((packed)) control_sdcard_status_t;
 
 /******************************************************************************
@@ -48,9 +51,12 @@ static FIL     fil;
 static UINT    bw;
 static UINT    br;
 
-char *p_namefile = "test2.csv";
+char *p_file_user_data  = "userData.csv";
+char *p_file_attendance = "attendance.csv";
 
 static control_sdcard_t s_control_sdcard;
+
+static bool b_get_data = false;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -59,8 +65,12 @@ static control_sdcard_t s_control_sdcard;
 static void APP_CONTROL_SDCARD_Task(void *arg);
 
 static control_sdcard_status_t APP_CONTROL_SDCARD_CheckValid(void);
-static void                    APP_CONTROL_SDCARD_WriteCSV(void);
-static void                    APP_CONTROL_SDCARD_ReadCSVFile(void);
+static control_sdcard_status_t APP_CONTROL_SDCARD_CheckNew(void);
+static void                    APP_CONTROL_SDCARD_CreateFile(void);
+static void                    APP_CONTROL_SDCARD_WriteUserData(void);
+static void                    APP_CONTROL_SDCARD_ReadUserData(void);
+static void                    APP_CONTROL_SDCARD_WriteAttendanceData(void);
+static void                    APP_CONTROL_SDCARD_ReadAttendanceData(void);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -89,19 +99,42 @@ APP_CONTROL_SDCARD_Task (void *arg)
   sdcard_cmd_t s_sdcard_cmd;
   while (1)
   {
+    taskENTER_CRITICAL(&spi_mux);
+    xSemaphoreTake(*s_control_sdcard.p_spi_mutex, portMAX_DELAY);
+
+    if (APP_CONTROL_SDCARD_CheckValid() == SDCARD_INVALID)
+    {
+      b_valid_sdcard = false;
+      ESP_LOGI(TAG, "SD Card is invalid!");
+      vTaskDelay(500 / portTICK_PERIOD_MS);
+      goto exit_critical_section;
+    }
+    else
+    {
+      b_valid_sdcard = true;
+      ESP_LOGI(TAG, "SD Card is valid!");
+      if (b_get_data == false)
+      {
+        b_get_data = true;
+        if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_NEW)
+        {
+          APP_CONTROL_SDCARD_CreateFile();
+        }
+        else if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_OLD)
+        {
+          APP_CONTROL_SDCARD_ReadUserData();
+        }
+      }
+    }
+
     if (xQueueReceive(*s_control_sdcard.p_data_sdcard_queue,
                       &s_sdcard_cmd,
-                      portMAX_DELAY)
+                      100 / portTICK_PERIOD_MS)
         == pdPASS)
     {
-      taskENTER_CRITICAL(&spi_mux);
-      xSemaphoreTake(*s_control_sdcard.p_spi_mutex, portMAX_DELAY);
 
       switch (s_sdcard_cmd)
       {
-        case SDCARD_USER_DATA:
-          break;
-
         case SDCARD_ENROLL_FACE:
           break;
 
@@ -126,10 +159,12 @@ APP_CONTROL_SDCARD_Task (void *arg)
         default:
           break;
       }
-
-      xSemaphoreGive(*s_control_sdcard.p_spi_mutex);
-      taskEXIT_CRITICAL(&spi_mux);
     }
+
+  exit_critical_section:
+
+    xSemaphoreGive(*s_control_sdcard.p_spi_mutex);
+    taskEXIT_CRITICAL(&spi_mux);
   }
 }
 
@@ -147,8 +182,38 @@ APP_CONTROL_SDCARD_CheckValid (void)
   return SDCARD_VALID;
 }
 
+static control_sdcard_status_t
+APP_CONTROL_SDCARD_CheckNew (void)
+{
+  FRESULT fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return SDCARD_INVALID;
+  }
+
+  // Check if the file exists
+  fr = f_open(&fil, p_file_user_data, FA_READ);
+  if (fr == FR_OK)
+  {
+    f_close(&fil);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return SDCARD_OLD;
+  }
+
+  f_mount(NULL, MOUNT_POINT, 1);
+  return SDCARD_NEW;
+}
+
 static void
-APP_CONTROL_SDCARD_WriteCSV (void)
+APP_CONTROL_SDCARD_CreateFile (void)
+{
+  // Create the file if it doesn't exist
+  // user data file, attendance file
+}
+
+static void
+APP_CONTROL_SDCARD_WriteUserData (void)
 {
   char full_path[128];
   char row_buffer[256];
@@ -161,7 +226,8 @@ APP_CONTROL_SDCARD_WriteCSV (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
 
   // Open file in write mode to overwrite or create
   fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
@@ -199,7 +265,7 @@ APP_CONTROL_SDCARD_WriteCSV (void)
 }
 
 static void
-APP_CONTROL_SDCARD_ReadCSVFile (void)
+APP_CONTROL_SDCARD_ReadUserData (void)
 {
   char full_path[128];
   char line[256];
@@ -214,7 +280,8 @@ APP_CONTROL_SDCARD_ReadCSVFile (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
 
   fr = f_open(&fil, full_path, FA_READ);
   if (fr != FR_OK)
@@ -282,4 +349,14 @@ APP_CONTROL_SDCARD_ReadCSVFile (void)
 
   f_close(&fil);
   f_mount(NULL, MOUNT_POINT, 1);
+}
+
+static void
+APP_CONTROL_SDCARD_WriteAttendanceData (void)
+{
+}
+
+static void
+APP_CONTROL_SDCARD_ReadAttendanceData (void)
+{
 }

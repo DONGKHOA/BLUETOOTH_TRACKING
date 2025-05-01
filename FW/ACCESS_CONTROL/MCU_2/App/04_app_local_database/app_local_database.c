@@ -87,6 +87,7 @@ static void
 APP_LOCAL_DATABASE_Task (void *arg)
 {
   DATA_SYNC_t   s_DATA_SYNC;
+  sdcard_cmd_t  s_sdcard_cmd;
   const uint8_t state_lookup[4] = {
     1, // face=0, finger=0
     3, // face=0, finger=1

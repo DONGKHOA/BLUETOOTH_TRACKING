@@ -10,6 +10,8 @@
 
 DATA_System_t s_data_system;
 
+bool b_valid_sdcard = false;
+
 char       **user_name;
 int         *user_id;
 int         *face;
