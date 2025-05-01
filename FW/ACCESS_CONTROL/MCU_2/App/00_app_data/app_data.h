@@ -6,6 +6,7 @@
  *****************************************************************************/
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
@@ -115,8 +116,7 @@ extern "C"
 
   typedef enum
   {
-    SDCARD_USER_DATA = 0x00,
-    SDCARD_ENROLL_FACE,
+    SDCARD_ENROLL_FACE = 0x00,
     SDCARD_ENROLL_FINGERPRINT,
     SDCARD_ATTENDANCE,
     SDCARD_DELETE_USER_DATA,
@@ -124,7 +124,7 @@ extern "C"
     SDCARD_DELETE_FINGER_USER,
     SDCARD_DELETE_FACEID_USER,
     SDCARD_UNKNOWN_CMD
-  }__attribute__((packed)) sdcard_cmd_t;
+  } __attribute__((packed)) sdcard_cmd_t;
 
   typedef enum
   {
@@ -168,6 +168,8 @@ extern "C"
    ***************************************************************************/
 
   extern DATA_System_t s_data_system;
+
+  extern bool b_valid_sdcard;
 
   extern char       **user_name;
   extern int         *user_id;

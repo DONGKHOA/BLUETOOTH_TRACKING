@@ -52,6 +52,7 @@ extern "C"
     DATA_SYNC_DELETE_FACE_ID,
     DATA_SYNC_STOP_ATTENDANCE,
     DATA_SYNC_STATE_CONNECTION_BLE,
+    DATA_SYNC_STATE_SDCARD,
     DATA_SYNC_LAST,
     DATA_STOP_FRAME = 0xFF
   } __attribute__((packed)) Data_Frame;

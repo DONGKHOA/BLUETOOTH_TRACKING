@@ -32,6 +32,7 @@
 #include "app_configuration.h"
 #include "app_local_database.h"
 #include "app_led_status.h"
+#include "app_control_sdcard.h"
 
 #include "environment.h"
 
@@ -112,23 +113,25 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
-      APP_RTC_Init();
-      // APP_FINGERPRINT_Init();
-      // APP_LOCAL_DATABASE_Init();
-      // APP_DATA_RECEIVE_Init();
-      // APP_MQTT_CLIENT_Init();
-      // APP_HANDLE_WIFI_Init();
-      // APP_TIMESTAMP_Init();
+      // App Initialization
+
+      APP_CONTROL_SDCARD_Init();
+      APP_FINGERPRINT_Init();
+      APP_LOCAL_DATABASE_Init();
+      APP_DATA_RECEIVE_Init();
+      APP_MQTT_CLIENT_Init();
+      APP_HANDLE_WIFI_Init();
+      APP_TIMESTAMP_Init();
 
       // App Create Task
 
-      APP_RTC_CreateTask();
-      // APP_HANDLE_WIFI_CreateTask();
-      // APP_FINGERPRINT_CreateTask();
-      // APP_LOCAL_DATABASE_CreateTask();
-      // APP_DATA_RECEIVE_CreateTask();
-      // APP_TIMESTAMP_CreateTask();
-      // APP_MQTT_CLIENT_CreateTask();
+      APP_CONTROL_SDCARD_CreateTask();
+      APP_HANDLE_WIFI_CreateTask();
+      APP_FINGERPRINT_CreateTask();
+      APP_LOCAL_DATABASE_CreateTask();
+      APP_DATA_RECEIVE_CreateTask();
+      APP_TIMESTAMP_CreateTask();
+      APP_MQTT_CLIENT_CreateTask();
 
       break;
     }
