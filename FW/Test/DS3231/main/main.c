@@ -80,10 +80,13 @@ TestMain_RTC_Task (void *pvParameter)
   while (1)
   {
     DEV_DS3231_Register_Read(&s_ds3231_data, I2C_NUM);
-    printf("Time: %02d:%02d:%02d\n",
+    printf("Time: %02d:%02d:%02d %02d/%02d/%02d\n",
            s_ds3231_data.u8_hour,
            s_ds3231_data.u8_minute,
-           s_ds3231_data.u8_second);
+           s_ds3231_data.u8_second,
+           s_ds3231_data.u8_date,
+           s_ds3231_data.u8_month,
+           s_ds3231_data.u8_year);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

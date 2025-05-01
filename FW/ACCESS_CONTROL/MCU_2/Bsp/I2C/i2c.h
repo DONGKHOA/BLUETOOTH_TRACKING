@@ -108,7 +108,7 @@ extern "C"
                                               TickType_t u32_timeout)
   {
     return i2c_master_write_to_device(
-        e_i2c_port, u8_device_address, p_data, sizeof(p_data), u32_timeout);
+        e_i2c_port, u8_device_address, p_data, u32_data_length, u32_timeout);
   }
   /**
    * @brief Read data from an I2C device.

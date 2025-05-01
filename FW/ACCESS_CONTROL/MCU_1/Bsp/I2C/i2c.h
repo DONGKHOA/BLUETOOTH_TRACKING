@@ -104,11 +104,11 @@ extern "C"
   static inline esp_err_t BSP_i2cWriteBuffer (i2c_port_t e_i2c_port,
                                               uint8_t    u8_device_address,
                                               uint8_t   *p_data,
-                                              uint32_t   u32_data_length,
+                                              size_t     u32_data_length,
                                               TickType_t u32_timeout)
   {
     return i2c_master_write_to_device(
-        e_i2c_port, u8_device_address, p_data, sizeof(p_data), u32_timeout);
+        e_i2c_port, u8_device_address, p_data, u32_data_length, u32_timeout);
   }
   /**
    * @brief Read data from an I2C device.

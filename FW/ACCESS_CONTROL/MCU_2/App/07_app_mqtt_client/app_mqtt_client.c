@@ -34,6 +34,7 @@
 
 typedef struct mqtt_client_data
 {
+  EventGroupHandle_t      *p_flag_time_event;
   QueueHandle_t           *p_data_mqtt_queue;
   QueueHandle_t           *p_send_data_queue;
   QueueHandle_t           *p_data_local_database_queue;
@@ -91,6 +92,8 @@ APP_MQTT_CLIENT_Init (void)
 
   *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
+  s_mqtt_client_data.p_flag_time_event = &s_data_system.s_flag_time_event;
+
   s_mqtt_client_data.b_connected_server      = false;
   s_mqtt_client_data.b_mqtt_client_connected = false;
 
@@ -113,11 +116,14 @@ static void
 APP_MQTT_CLIENT_task (void *arg)
 {
   char data_send[128];
+  bool is_init = false;
 
   while (1)
   {
-    if (WIFI_state_connect() == CONNECT_OK)
+    if (WIFI_state_connect() == CONNECT_OK && is_init == false)
     {
+      is_init = true;
+      
       *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
       esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
 
@@ -424,6 +430,10 @@ mqtt_event_handler (void            *handler_args,
       esp_mqtt_client_subscribe_single(
           s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
 
+      // Clear bit TIME_SOURCE_RTC_READY to stop reading time from RTC
+      xEventGroupClearBits(*s_mqtt_client_data.p_flag_time_event,
+                           TIME_SOURCE_RTC_READY);
+
       break;
     case MQTT_EVENT_SUBSCRIBED:
 
@@ -457,6 +467,11 @@ mqtt_event_handler (void            *handler_args,
       xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
 
       s_mqtt_client_data.b_mqtt_client_connected = false;
+
+      // Set bit TIME_SOURCE_RTC_READY to notify RTC task
+      // to read time from RTC
+      xEventGroupSetBits(*s_mqtt_client_data.p_flag_time_event,
+                         TIME_SOURCE_RTC_READY);
 
       break;
     default:

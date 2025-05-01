@@ -37,6 +37,7 @@ static void APP_TIMESTAMP_Task(void *arg);
  *    PRIVATE DATA
  *****************************************************************************/
 
+struct tm                 timeinfo;
 static handle_timestamp_t s_handle_timestamp;
 
 /******************************************************************************
@@ -75,6 +76,10 @@ APP_TIMESTAMP_Notification_cb (struct timeval *tv)
 
   xEventGroupSetBits(*s_handle_timestamp.p_flag_time_event,
                      TIME_SOURCE_SNTP_READY);
+  xEventGroupClearBits(*s_handle_timestamp.p_flag_time_event,
+                       TIME_SOURCE_RTC_READY);
+  xEventGroupSetBits(*s_handle_timestamp.p_flag_time_event,
+                     TIME_SOURCE_RTC_OFF);
 }
 
 static void
@@ -83,7 +88,6 @@ APP_TIMESTAMP_Task (void *arg)
   DATA_SYNC_t s_DATA_SYNC;
   EventBits_t uxBit;
   time_t      now;
-  struct tm   timeinfo;
 
   while (1)
   {

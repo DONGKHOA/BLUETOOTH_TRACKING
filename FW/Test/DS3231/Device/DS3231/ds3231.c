@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "ds3231.h"
+#include "driver/i2c.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -57,11 +58,11 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
     // Clear bit OSF
     status_reg &= ~(1 << 7);
     reg_addr = DS3231_STATUS;
-    BSP_i2cWriteBuffer(e_i2c_port,
-                       DS3231_ADDRESS,
-                       (uint8_t[]) { reg_addr, status_reg },
-                       2,
-                       1000 / portTICK_PERIOD_MS);
+    i2c_master_write_to_device(e_i2c_port,
+                               DS3231_ADDRESS,
+                               (uint8_t[]) { reg_addr, status_reg },
+                               2,
+                               1000 / portTICK_PERIOD_MS);
   }
   else
   {
@@ -76,14 +77,13 @@ esp_err_t
 DEV_DS3231_Register_Read (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
 {
   uint8_t reg_addr = SECOND_VALUE_ADDRESS;
-  int8_t  ret
-      = BSP_i2cWriteReadBuffer(e_i2c_port,
-                               DS3231_ADDRESS,
-                               &reg_addr,
-                               1,
-                               (uint8_t *)p_ds3231_data,
-                               7,
-                               1000 / portTICK_PERIOD_MS);
+  int8_t  ret      = BSP_i2cWriteReadBuffer(e_i2c_port,
+                                      DS3231_ADDRESS,
+                                      &reg_addr,
+                                      1,
+                                      (uint8_t *)p_ds3231_data,
+                                      7,
+                                      1000 / portTICK_PERIOD_MS);
 
   for (uint8_t i = 0; i < sizeof(ds3231_data_t); i++)
   {
@@ -103,11 +103,11 @@ DEV_DS3231_Register_Write (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
     tx_buf[i + 1] = DEC_To_BCD(*((uint8_t *)p_ds3231_data + i));
   }
   tx_buf[0] = SECOND_VALUE_ADDRESS;
-  ret       = BSP_i2cWriteBuffer(e_i2c_port,
-                           DS3231_ADDRESS,
-                           tx_buf,
-                           sizeof(tx_buf),
-                           1000 / portTICK_PERIOD_MS);
+  ret       = i2c_master_write_to_device(e_i2c_port,
+                                   DS3231_ADDRESS,
+                                   tx_buf,
+                                   sizeof(tx_buf),
+                                   1000 / portTICK_PERIOD_MS);
 
   return ret;
 }
