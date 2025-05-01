@@ -115,7 +115,7 @@ app_main (void)
     {
       // App Initialization
 
-      // APP_CONTROL_SDCARD_Init();
+      APP_CONTROL_SDCARD_Init();
       APP_FINGERPRINT_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
