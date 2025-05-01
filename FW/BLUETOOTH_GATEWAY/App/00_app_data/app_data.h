@@ -28,7 +28,7 @@ extern "C"
 
   /*** GPIO peripheral *******************************************************/
 
-#define BUTTON_USER_PIN GPIO_NUM_12
+#define BUTTON_USER_PIN GPIO_NUM_36
 #define LED_STATUS_PIN  GPIO_NUM_5
 
   /*** state system **********************************************************/
