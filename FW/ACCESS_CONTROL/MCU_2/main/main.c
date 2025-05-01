@@ -33,6 +33,7 @@
 #include "app_local_database.h"
 #include "app_led_status.h"
 #include "app_control_sdcard.h"
+#include "app_temp_humid.h"
 
 #include "environment.h"
 
