@@ -32,6 +32,7 @@
 #include "app_configuration.h"
 #include "app_local_database.h"
 #include "app_led_status.h"
+#include "app_control_sdcard.h"
 
 #include "environment.h"
 
@@ -112,6 +113,9 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
+      // App Initialization
+
+      APP_CONTROL_SDCARD_Init();
       APP_FINGERPRINT_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
@@ -121,6 +125,7 @@ app_main (void)
 
       // App Create Task
 
+      APP_CONTROL_SDCARD_CreateTask();
       APP_HANDLE_WIFI_CreateTask();
       APP_FINGERPRINT_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
