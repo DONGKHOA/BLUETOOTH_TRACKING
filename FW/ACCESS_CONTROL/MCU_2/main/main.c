@@ -113,22 +113,22 @@ app_main (void)
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
       APP_RTC_Init();
-      APP_FINGERPRINT_Init();
-      APP_LOCAL_DATABASE_Init();
-      APP_DATA_RECEIVE_Init();
-      APP_MQTT_CLIENT_Init();
-      APP_HANDLE_WIFI_Init();
-      APP_TIMESTAMP_Init();
+      // APP_FINGERPRINT_Init();
+      // APP_LOCAL_DATABASE_Init();
+      // APP_DATA_RECEIVE_Init();
+      // APP_MQTT_CLIENT_Init();
+      // APP_HANDLE_WIFI_Init();
+      // APP_TIMESTAMP_Init();
 
       // App Create Task
 
       APP_RTC_CreateTask();
-      APP_HANDLE_WIFI_CreateTask();
-      APP_FINGERPRINT_CreateTask();
-      APP_LOCAL_DATABASE_CreateTask();
-      APP_DATA_RECEIVE_CreateTask();
-      APP_TIMESTAMP_CreateTask();
-      APP_MQTT_CLIENT_CreateTask();
+      // APP_HANDLE_WIFI_CreateTask();
+      // APP_FINGERPRINT_CreateTask();
+      // APP_LOCAL_DATABASE_CreateTask();
+      // APP_DATA_RECEIVE_CreateTask();
+      // APP_TIMESTAMP_CreateTask();
+      // APP_MQTT_CLIENT_CreateTask();
 
       break;
     }
@@ -229,6 +229,7 @@ APP_MAIN_InitDataSystem (void)
   s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_data_sdcard_queue = xQueueCreate(16, sizeof(sdcard_cmd_t));
 
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();

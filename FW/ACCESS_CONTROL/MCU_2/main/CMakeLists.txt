@@ -13,6 +13,7 @@ set (requires 00_app_data
               08_app_led_status
               09_app_timestamp
               10_app_configuration
+              11_app_control_sdcard
               driver
               SN65HVD230DR
               AS608

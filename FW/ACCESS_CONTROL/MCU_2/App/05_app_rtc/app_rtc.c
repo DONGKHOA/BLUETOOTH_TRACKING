@@ -55,24 +55,7 @@ APP_RTC_Init (void)
 
   DEV_DS3231_Init(&s_handle_rtc.s_ds3231_data, I2C_NUM_0);
 
-  s_handle_rtc.s_ds3231_data.u8_hour   = 23;
-  s_handle_rtc.s_ds3231_data.u8_minute = 10;
-  s_handle_rtc.s_ds3231_data.u8_second = 0;
-  s_handle_rtc.s_ds3231_data.u8_day    = 4;
-  s_handle_rtc.s_ds3231_data.u8_date   = 30;
-  s_handle_rtc.s_ds3231_data.u8_month  = 4;
-  s_handle_rtc.s_ds3231_data.u8_year   = 25;
-  // DEV_DS3231_Register_Write(&s_handle_rtc.s_ds3231_data, I2C_NUM_0);
-  esp_err_t ret
-      = DEV_DS3231_Register_Write(&s_handle_rtc.s_ds3231_data, I2C_NUM_0);
-  if (ret != ESP_OK)
-  {
-    ESP_LOGE(TAG, "Failed to write time to DS3231! Error: %d", ret);
-  }
-  else
-  {
-    ESP_LOGI(TAG, "Time write successful");
-  }
+  
 }
 
 /******************************************************************************
