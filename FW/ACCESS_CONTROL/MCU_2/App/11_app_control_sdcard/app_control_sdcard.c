@@ -118,7 +118,6 @@ APP_CONTROL_SDCARD_Task (void *arg)
         b_get_data = true;
         if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_NEW)
         {
-          printf("SD Card is new!\n");
           APP_CONTROL_SDCARD_CreateFile();
         }
         else if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_OLD)
@@ -217,7 +216,8 @@ APP_CONTROL_SDCARD_CreateFile (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
 
   // Create user data file
   fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
@@ -228,7 +228,8 @@ APP_CONTROL_SDCARD_CreateFile (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
 
   // Create attendance file
   fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
@@ -326,21 +327,21 @@ APP_CONTROL_SDCARD_ReadUserData (void)
   // Read file line by line
   while (f_gets(line, sizeof(line), &fil) != NULL)
   {
-    // Get username
-    char *token = strtok(line, ",");
-    if (!token)
-    {
-      continue;
-    }
-    user_name[idx] = strdup(token);
-
     // Get ID
-    token = strtok(NULL, ",");
+    char *token = strtok(NULL, ",");
     if (!token)
     {
       continue;
     }
     user_id[idx] = atoi(token);
+
+    // Get username
+    token = strtok(line, ",");
+    if (!token)
+    {
+      continue;
+    }
+    user_name[idx] = strdup(token);
 
     // Get face
     token = strtok(NULL, ",");
