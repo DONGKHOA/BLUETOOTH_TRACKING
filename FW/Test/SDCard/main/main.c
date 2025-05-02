@@ -33,7 +33,8 @@
 
 spi_device_handle_t spi_sdcard_handle;
 
-char *p_namefile = "test2.csv";
+char *p_namefile = "attendance.csv";
+char *p_tempfile = "temp.csv";
 char *p_data     = "Hello";
 
 char   **user_name;
@@ -76,6 +77,10 @@ static void SDCard_ReadCSVFile(char     *p_namefile,
                                uint16_t *user_len);
 
 static local_database_status_t APP_LOCAL_DATABASE_SDCard_CheckValid(void);
+static void                    SDCard_WritePositionAttendanceCSV(int         id,
+                                                                 const char *new_name,
+                                                                 const char *new_date,
+                                                                 const char *new_time);
 
 /******************************************************************************
  *     MAIN FUNCTION
@@ -291,4 +296,100 @@ APP_LOCAL_DATABASE_SDCard_CheckValid (void)
 
   f_mount(NULL, MOUNT_POINT, 1);
   return SDCARD_VALID;
+}
+
+// Local database send ID, Name and Attendance time
+static void
+SDCard_WritePositionAttendanceCSV (int         id,
+                                   const char *new_name,
+                                   const char *new_date,
+                                   const char *new_time)
+{
+  FIL  fsrc, fdst;
+  char full_path[128];
+  char temp_path[128];
+  char line[256], new_line[256];
+  ;
+
+  int current_line_id;
+
+  // Mount SD Card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
+
+  // Open the source file for reading
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_namefile);
+  snprintf(temp_path, sizeof(temp_path), "%s/%s", MOUNT_POINT, p_tempfile);
+
+  // Open source file for reading
+  fr = f_open(&fsrc, full_path, FA_READ);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  // Open temporary file for writing
+  fr = f_open(&fdst, temp_path, FA_WRITE | FA_CREATE_ALWAYS);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  while (f_gets(line, sizeof(line), &fsrc))
+  {
+    char *id_str = strtok(line, ",\r\n");
+    char *name   = strtok(NULL, ",\r\n");
+    char *date   = strtok(NULL, ",\r\n");
+    char *time   = strtok(NULL, ",\r\n");
+
+    if (!id_str || !name || !date || !time)
+    {
+      continue;
+    }
+
+    current_line_id = atoi(id_str);
+
+    if (current_line_id == id)
+    {
+      const char *final_name = new_name ? new_name : name;
+      const char *final_date = new_date ? new_date : date;
+      const char *final_time = new_time ? new_time : time;
+
+      snprintf(new_line,
+               sizeof(new_line),
+               "%d,%s,%s,%s\n",
+               id,
+               final_name,
+               final_date,
+               final_time);
+    }
+    else
+    {
+      // Reconstruct original line
+      snprintf(new_line,
+               sizeof(new_line),
+               "%s,%s,%s,%s\n",
+               id_str,
+               name,
+               date,
+               time);
+    }
+
+    f_write(&fdst, new_line, strlen(new_line), &bw);
+  }
+
+  f_close(&fsrc);
+  f_close(&fdst);
+
+  // Replace old file
+  f_unlink(full_path);            // Delete original
+  f_rename(temp_path, full_path); // Rename temp to original
 }

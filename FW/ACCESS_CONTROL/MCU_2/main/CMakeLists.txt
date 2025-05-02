@@ -14,6 +14,7 @@ set (requires 00_app_data
               09_app_timestamp
               10_app_configuration
               11_app_control_sdcard
+              12_app_temp_humid
               driver
               SN65HVD230DR
               AS608

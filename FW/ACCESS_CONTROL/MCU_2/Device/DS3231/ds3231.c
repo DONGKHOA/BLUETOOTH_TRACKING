@@ -50,7 +50,7 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
                                      .u8_day    = 4,
                                      .u8_date   = 1,
                                      .u8_month  = 5,
-                                     .u8_year   = 25 };
+                                     .u8_year   = 125 };
 
   DEV_DS3231_Register_Write(p_ds3231_data, e_i2c_port);
 

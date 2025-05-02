@@ -71,6 +71,7 @@ extern "C"
 #define BUTTON_USER_PIN GPIO_NUM_45
 #define LED_STATUS_PIN  GPIO_NUM_1
 #define DAC_RDY         GPIO_NUM_38
+#define DHT22_PIN       GPIO_NUM_9
 
   /*** SPI2 peripheral *******************************************************/
 

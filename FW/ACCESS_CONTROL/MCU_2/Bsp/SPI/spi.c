@@ -41,13 +41,8 @@ BSP_spiConfigDefault (void)
 {
   buscfg.quadwp_io_num = -1;
   buscfg.quadhd_io_num = -1;
-}
 
-void
-BSP_spiConfigCommand (void)
-{
-  devcfg.command_bits = 8;
-  devcfg.address_bits = 0;
+  devcfg.flags      = 0; // Đảm bảo không bật DUMMY
   devcfg.dummy_bits = 0;
 }
 

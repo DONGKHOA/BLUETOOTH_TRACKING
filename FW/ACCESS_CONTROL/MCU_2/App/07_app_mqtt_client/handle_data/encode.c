@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 void
-ENCODE_User_Data (char     *json_str,
+ENCODE_User_Data (char    **json_str,
                   int      *user_id,
                   int      *face,
                   int      *finger,
@@ -30,18 +30,29 @@ ENCODE_User_Data (char     *json_str,
                   char    **user_name,
                   uint16_t *user_len)
 {
-  cJSON *root = cJSON_Parse(json_str);
+  cJSON *root = cJSON_CreateObject();
 
-  if (!root)
+  // Add command and user_len (CORRECTED FIELD)
+  cJSON_AddStringToObject(root, "command", "USER_DATA");
+  cJSON_AddNumberToObject(root, "user_len", *user_len);
+
+  cJSON *json_list = cJSON_CreateArray();
+  cJSON_AddItemToObject(root, "user_data", json_list);
+
+  for (uint16_t i = 0; i < *user_len; i++)
   {
-    ESP_LOGE(TAG, "Failed to parse JSON");
-    return;
+    cJSON *item = cJSON_CreateObject();
+    cJSON_AddNumberToObject(item, "id", user_id[i]);
+    cJSON_AddStringToObject(item, "name", user_name[i]);
+    cJSON_AddNumberToObject(item, "face", face[i]);
+    cJSON_AddNumberToObject(item, "finger", finger[i]);
+    cJSON_AddStringToObject(item, "role", role[i]);
+    cJSON_AddItemToArray(json_list, item);
   }
 
-  cJSON_AddStringToObject(root, "command", "USER_DATA");
+  *json_str = cJSON_PrintUnformatted(root);
 
-  json_str = cJSON_PrintUnformatted(root);
-  if (json_str == NULL)
+  if (*json_str == NULL)
   {
     cJSON_Delete(root);
     return;

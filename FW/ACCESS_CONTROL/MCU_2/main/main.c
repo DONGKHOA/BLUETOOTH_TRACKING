@@ -33,6 +33,7 @@
 #include "app_local_database.h"
 #include "app_led_status.h"
 #include "app_control_sdcard.h"
+#include "app_temp_humid.h"
 
 #include "environment.h"
 
@@ -78,10 +79,10 @@ app_main (void)
   // BSP Initialization
   APP_MAIN_InitGPIO();
   APP_MAIN_InitCan();
+  APP_MAIN_InitSPI();
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();
   APP_MAIN_InitI2C();
-  // APP_MAIN_InitSPI();
 
   // Main Initialization data system
 
@@ -115,25 +116,25 @@ app_main (void)
     {
       // App Initialization
 
-      APP_CONTROL_SDCARD_Init();
       APP_FINGERPRINT_Init();
+      APP_HANDLE_WIFI_Init();
+      APP_TIMESTAMP_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
       APP_MQTT_CLIENT_Init();
-      APP_HANDLE_WIFI_Init();
       APP_RTC_Init();
-      APP_TIMESTAMP_Init();
+      APP_CONTROL_SDCARD_Init();
 
       // App Create Task
 
-      // APP_CONTROL_SDCARD_CreateTask();
-      APP_HANDLE_WIFI_CreateTask();
       APP_FINGERPRINT_CreateTask();
+      APP_HANDLE_WIFI_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
       APP_DATA_RECEIVE_CreateTask();
       APP_RTC_CreateTask();
       APP_TIMESTAMP_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
+      APP_CONTROL_SDCARD_CreateTask();
 
       break;
     }
@@ -206,11 +207,12 @@ APP_MAIN_InitI2C (void)
 static inline void
 APP_MAIN_InitSPI (void)
 {
-  BSP_spiConfigDefault();
-  BSP_spiConfigMode(SPI3_SPI_MODE);
   BSP_spiConfigIO(SPI3_MISO_PIN, SPI3_MOSI_PIN, SPI3_SCLK_PIN);
+  BSP_spiConfigCS(SPI3_CS_SD_CARD_PIN);
   BSP_spiMaxTransferSize(SPI3_SPI_BUS_MAX_TRANSFER_SZ);
+  BSP_spiConfigDefault();
   BSP_spiClockSpeed(SPI3_CLOCK_SPEED_HZ);
+  BSP_spiConfigMode(SPI3_SPI_MODE);
   BSP_spiTransactionQueueSize(SPI3_QUEUE_SIZE);
 
   BSP_spiDMADriverInit(&spi_sdcard_handle, SPI3_HOST, SPI3_DMA_CHANNEL);

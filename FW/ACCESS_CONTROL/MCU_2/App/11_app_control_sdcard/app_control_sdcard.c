@@ -79,7 +79,7 @@ static void                    APP_CONTROL_SDCARD_ReadAttendanceData(void);
 void
 APP_CONTROL_SDCARD_CreateTask (void)
 {
-  xTaskCreate(APP_CONTROL_SDCARD_Task, "control sd", 1024 * 10, NULL, 11, NULL);
+  xTaskCreate(APP_CONTROL_SDCARD_Task, "control sd", 1024 * 20, NULL, 11, NULL);
 }
 
 void
@@ -99,8 +99,8 @@ APP_CONTROL_SDCARD_Task (void *arg)
   sdcard_cmd_t s_sdcard_cmd;
   while (1)
   {
-    taskENTER_CRITICAL(&spi_mux);
-    xSemaphoreTake(*s_control_sdcard.p_spi_mutex, portMAX_DELAY);
+    // taskENTER_CRITICAL(&spi_mux);
+    xSemaphoreTake(*s_control_sdcard.p_spi_mutex, 100 / portTICK_PERIOD_MS);
 
     if (APP_CONTROL_SDCARD_CheckValid() == SDCARD_INVALID)
     {
@@ -118,6 +118,7 @@ APP_CONTROL_SDCARD_Task (void *arg)
         b_get_data = true;
         if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_NEW)
         {
+          printf("SD Card is new!\n");
           APP_CONTROL_SDCARD_CreateFile();
         }
         else if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_OLD)
@@ -162,9 +163,8 @@ APP_CONTROL_SDCARD_Task (void *arg)
     }
 
   exit_critical_section:
-
     xSemaphoreGive(*s_control_sdcard.p_spi_mutex);
-    taskEXIT_CRITICAL(&spi_mux);
+    // taskEXIT_CRITICAL(&spi_mux);
   }
 }
 
@@ -208,8 +208,40 @@ APP_CONTROL_SDCARD_CheckNew (void)
 static void
 APP_CONTROL_SDCARD_CreateFile (void)
 {
-  // Create the file if it doesn't exist
-  // user data file, attendance file
+  char full_path[128];
+
+  FRESULT fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
+
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
+
+  // Create user data file
+  fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+
+  // Create attendance file
+  fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_close(&fil);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  f_close(&fil);
+  f_mount(NULL, MOUNT_POINT, 1);
 }
 
 static void

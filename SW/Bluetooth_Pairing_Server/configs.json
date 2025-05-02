@@ -12,8 +12,8 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "Tiger",
-    "password": "thanhTRI1972",
+    "ssid": "The Little Bean",
+    "password": "75Caothang",
     "mqtt_server": "192.168.1.103:1883",
     "topic": "bluetooth/GW1/data"
   },
