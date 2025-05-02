@@ -148,6 +148,7 @@ extern "C"
     uint32_t u32_time;
     uint16_t u16_user_id;
     char     user_name[32];
+    char     role[6];
   } sdcard_data_t; // Data structure for sdcard and local database
 
   /**

@@ -319,6 +319,9 @@ APP_LOCAL_DATABASE_Task (void *arg)
             break;
           }
 
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
+
           APP_LOCAL_DATABASE_Delete_UserName(u16_id);
           APP_LOCAL_DATABASE_Delete_UserRole(u16_id);
           APP_LOCAL_DATABASE_Delete_UserFace(u16_id);
