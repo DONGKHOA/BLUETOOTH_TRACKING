@@ -40,6 +40,7 @@ typedef struct
   QueueHandle_t      *p_data_local_database_queue;
   QueueHandle_t      *p_data_sdcard_queue;
   EventGroupHandle_t *p_fingerprint_event;
+  TimerHandle_t       s_attendance_timer;
 } local_database_t;
 
 /******************************************************************************
@@ -52,6 +53,7 @@ static local_database_t s_local_database;
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
+static void APP_LOCAL_DATABASE_Attendance_Callback(TimerHandle_t xTimer);
 static void APP_LOCAL_DATABASE_Task(void *arg);
 static void APP_LOCAL_DATABASE_Delete_UserName(uint16_t user_id_delete);
 static void APP_LOCAL_DATABASE_Delete_UserRole(uint16_t user_id_delete);
@@ -78,11 +80,24 @@ APP_LOCAL_DATABASE_Init (void)
       = &s_data_system.s_data_local_database_queue;
   s_local_database.p_fingerprint_event = &s_data_system.s_fingerprint_event;
   s_local_database.p_data_sdcard_queue = &s_data_system.s_data_sdcard_queue;
+
+  s_local_database.s_attendance_timer
+      = xTimerCreate("Attendance",
+                     30000 / portTICK_PERIOD_MS, // Period 30s
+                     pdFALSE,                    // Auto reload
+                     NULL,
+                     APP_LOCAL_DATABASE_Attendance_Callback // Callback function
+      );
 }
 
 /******************************************************************************
  *  PRIVATE FUNCTION
  *****************************************************************************/
+
+static void
+APP_LOCAL_DATABASE_Attendance_Callback (TimerHandle_t xTimer)
+{
+}
 
 static void
 APP_LOCAL_DATABASE_Task (void *arg)
@@ -293,6 +308,32 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
+        case DATA_SYNC_REQUEST_ATTENDANCE:
+
+          u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
+                   | s_DATA_SYNC.u8_data_packet[1];
+
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
+          break;
+
         case LOCAL_DATABASE_REQUEST_DELETE_USER_DATA:
 
           // Update data in psram
@@ -460,16 +501,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
           memcpy(s_sdcard_data.user_name, user_name[index], 32);
 
           xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
-
-          break;
-
-        case LOCAL_DATABASE_RESPONSE_ATTENDANCE:
-
-          // Update data in psram
-
-          s_DATA_SYNC.u8_data_start = DATA_SYNC_RESPONSE_ATTENDANCE;
-
-          xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
           break;
 

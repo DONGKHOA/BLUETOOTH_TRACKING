@@ -194,20 +194,6 @@ APP_MQTT_CLIENT_task (void *arg)
 
           break;
 
-        case DATA_SYNC_REQUEST_ATTENDANCE:
-
-          sprintf(data_send,
-                  "{\"command\" : \"ATTENDANCE\", \"id\": %d}",
-                  (s_DATA_SYNC.u8_data_packet[0] << 8)
-                      | s_DATA_SYNC.u8_data_packet[1]);
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
-
-          break;
         case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
 
           if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
@@ -313,22 +299,6 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case ATTENDANCE_CMD:
           DECODE_Status(data, &status);
-
-          // Send data to the queue for transmission to MCU1
-          s_DATA_SYNC.u8_data_start  = LOCAL_DATABASE_RESPONSE_ATTENDANCE;
-          s_DATA_SYNC.u8_data_length = 1;
-          s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
-          if (status == 1)
-          {
-            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
-          }
-          else
-          {
-            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
-          }
-          // Notify the status of response to transmit task via queue
-          xQueueSend(
-              *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
           break;
 
