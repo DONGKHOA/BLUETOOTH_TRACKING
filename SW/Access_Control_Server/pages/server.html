@@ -29,9 +29,18 @@
     <h4>USERS DATA LIST</h4>
 
     <form method="post" action="{{ url_for('append_blank') }}">
-        <div class="mb-2 text-end">
-            <button type="submit" class="btn btn-success">+ Add User</button>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="device_id" class="form-label">Select Device ID</label>
+          <select name="device_id" id="device_id" class="form-select" required disabled>
+            <option selected>Waiting for devices...</option>
+          </select>
         </div>
+        <div class="col-md-6 text-end d-flex align-items-end justify-content-end">
+          <button type="submit" class="btn btn-success" id="addUserBtn" disabled>+ Add User</button>
+          <button type="button" class="btn btn-outline-secondary ms-2" onclick="fetchDevices()"> Refresh Devices</button>
+        </div>
+      </div>
     </form>
 
     <table class="table table-bordered align-middle">
@@ -41,61 +50,67 @@
             <th>Name</th>
             <th>Employee ID</th>
             <th>Role</th>
+            <th>Device ID</th>
             <th>Face</th>
             <th>Finger</th>
             <th colspan="3">Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for user in users %}
-        <tr>
-          <form method="post" action="{{ url_for('update_users') }}">
-            <input type="hidden" name="id" value="{{ user.id }}">
-            <td>{{ user.id }}</td>
-            <td><input type="text" class="form-control" name="name" value="{{ user.name }}"></td>
-            <td><input type="text" class="form-control" name="employee_id" value="{{ user.employee_id }}"></td>
-            <td>
-              <select class="form-select" name="role" id="role_select_{{ user.id }}">
-                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
-                <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
-              </select>
-            </td>
-            <td>
-              {% if user.face == 1 %}
-                <form method="post" action="{{ url_for('delete_face', user_id=user.id) }}">
-                  <button type="submit" class="btn btn-warning btn-sm">Delete Face</button>
-                </form>
-              {% else %}
-                <span class="text-muted">Not Set</span>
-              {% endif %}
-            </td>
-            <td>
-              {% if user.finger == 1 %}
-                <form method="post" action="{{ url_for('delete_finger', user_id=user.id) }}">
-                  <button type="submit" class="btn btn-warning btn-sm">Delete Finger</button>
-                </form>
-              {% else %}
-                <span class="text-muted">Not Set</span>
-              {% endif %}
-            </td>
-            <td>
-              <button type="submit" class="btn btn-success action-btn">+</button>
-            </td>
-          </form>
-          <td>
-            <form method="post" action="{{ url_for('delete_user', index=loop.index0) }}">
-              <button type="submit" class="btn btn-danger action-btn">-</button>
+          {% for user in users %}
+          <tr>
+            <!-- Update User Form -->
+            <form method="post" action="{{ url_for('update_users') }}">
+              <input type="hidden" name="id" value="{{ user.id }}">
+              <input type="hidden" name="device_id" value="{{ user.device_id }}">
+              <td>{{ user.id }}</td>
+              <td><input type="text" class="form-control" name="name" value="{{ user.name }}"></td>
+              <td><input type="text" class="form-control" name="employee_id" value="{{ user.employee_id }}"></td>
+              <td>
+                <select class="form-select" name="role" id="role_select_{{ user.id }}">
+                  <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                  <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                </select>
+              </td>
+              <td>{{ user.device_id }}</td>
+              <td>
+                {% if user.face == 1 %}
+                  <button formaction="{{ url_for('delete_face', device_id=user.device_id, user_id=user.id) }}"
+                          formmethod="post" class="btn btn-warning btn-sm">Delete Face</button>
+                {% else %}
+                  <span class="text-muted">Not Set</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.finger == 1 %}
+                  <button formaction="{{ url_for('delete_finger', device_id=user.device_id, user_id=user.id) }}"
+                          formmethod="post" class="btn btn-warning btn-sm">Delete Finger</button>
+                {% else %}
+                  <span class="text-muted">Not Set</span>
+                {% endif %}
+              </td>
+              <td>
+                <button type="submit" class="btn btn-success action-btn">+</button>
+              </td>
             </form>
-          </td>
-          <td>
-            <form method="post" action="{{ url_for('set_role', user_id=user.id) }}"
-                  onsubmit="return prepareRoleForm({{ user.id }})">
-              <input type="hidden" name="role" id="hidden_role_{{ user.id }}">
-              <button type="submit" class="btn btn-primary btn-sm action-btn">Set Role</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
+          
+            <!-- Delete User -->
+            <td>
+              <form method="post" action="{{ url_for('delete_user', device_id=user.device_id, user_id=user.id) }}">
+                <button type="submit" class="btn btn-danger action-btn">-</button>
+              </form>
+            </td>
+          
+            <!-- Set Role -->
+            <td>
+              <form method="post" action="{{ url_for('set_role', device_id=user.device_id, user_id=user.id) }}"
+                    onsubmit="return prepareRoleForm({{ user.id }})">
+                <input type="hidden" name="role" id="hidden_role_{{ user.id }}">
+                <button type="submit" class="btn btn-primary btn-sm action-btn">Set Role</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}          
         </tbody>
     </table>
 </div>
@@ -106,6 +121,42 @@
       document.getElementById(`hidden_role_${userId}`).value = selected;
       return true;
   }
+
+  document.querySelector("form[action='{{ url_for('append_blank') }}']").addEventListener("submit", function () {
+    const selectedDevice = document.getElementById("device_id").value;
+    sessionStorage.setItem("selectedDevice", selectedDevice);
+  });
+
+  function fetchDevices() {
+    fetch("/available_devices")
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById("device_id");
+        const btn = document.getElementById("addUserBtn");
+        const saved = sessionStorage.getItem("selectedDevice");
+
+        select.innerHTML = "";
+        if (data.length > 0) {
+          data.forEach(id => {
+            const opt = document.createElement("option");
+            opt.value = id;
+            opt.text = id;
+            if (id === saved) {
+              opt.selected = true;
+            }
+            select.appendChild(opt);
+          });
+          select.disabled = false;
+          btn.disabled = false;
+        } else {
+          select.innerHTML = "<option selected>Waiting for devices...</option>";
+          select.disabled = true;
+          btn.disabled = true;
+        }
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', fetchDevices);
 </script>
 </body>
 </html>

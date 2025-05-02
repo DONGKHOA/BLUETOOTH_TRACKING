@@ -13,78 +13,58 @@ def load_attendance():
     with open("attendance.json", "r") as f:
         return json.load(f)
 
-def save_attendance(data):
+def save_attendance(attendance):
     with open("attendance.json", "w") as f:
-        json.dump(data, f, indent=2)
-    
-def reponse_user_data():
-    users = load_users()
-    
-    user_data = []
-    for idx, user in enumerate(users, start=1):
-        user_data.append({
-            "id": user.get("id", idx),
-            "name": user.get("name", ""),
-            "face": user.get("face", 0),
-            "finger": user.get("finger", 0),
-            "role": user.get("role", ""),
-        })
-    
+        json.dump(attendance, f, indent=2)
+        
+def get_users_for_device(device_id):
+    users_all = load_users()
+    return users_all.get(device_id, [])
+
+def response_sync():
+    users_all = load_users()
+    next_id_num = 1
+    while f"AC{next_id_num}" in users_all:
+        next_id_num += 1
+
+    new_id = f"AC{next_id_num}"
+    users_all[new_id] = []
+    save_users(users_all)
+
     return {
-        "command": "USER_DATA",
-        "user_len": len(user_data),
-        "user_data": user_data
+        "command": "SYN",
+        "id": new_id
     }
+  
+    
+def response_enroll_face(user_id, device_id):
+    users_all = load_users()
+    users = users_all.get(device_id, [])
 
-def reponse_enroll_face(user_id):
-    users = load_users()
-
-    # Find user with matching ID
     for user in users:
         if user.get("id") == user_id:
             user["face"] = 1
-            save_users(users)
-            return {
-                "command": "ENROLL_FACE",
-                "user_id": user_id,
-                "name": user.get("name"),
-                "response": "success",
-            }
+            save_users(users_all)
+            return {"command": "ENROLL_FACE", "user_id": user_id, "name": user.get("name"), "response": "success"}
 
-    # If not found
-    return {
-        "command": "ENROLL_FACE",
-        "user_id": user_id,
-        "name": user.get("name"),
-        "response": "fail"
-    }
+    return {"command": "ENROLL_FACE", "user_id": user_id, "response": "fail"}
 
+def response_enroll_finger(user_id, device_id):
+    users_all = load_users()
+    users = users_all.get(device_id, [])
 
-def reponse_enroll_finger(user_id):
-    users = load_users()
-
-    # Find user with matching ID
     for user in users:
         if user.get("id") == user_id:
             user["finger"] = 1
-            save_users(users)
-            return {
-                "command": "ENROLL_FINGERPRINT",
-                "user_id": user_id,
-                "name": user.get("name"),
-                "response": "success"
-            }
+            save_users(users_all)
+            return {"command": "ENROLL_FINGERPRINT", "user_id": user_id, "name": user.get("name"), "response": "success"}
 
-    # If not found
-    return {
-        "command": "ENROLL_FINGERPRINT",
-        "user_id": user_id,
-        "name": user.get("name"),
-        "response": "fail"
-    }
+    return {"command": "ENROLL_FINGERPRINT", "user_id": user_id, "response": "fail"}
 
-def reponse_attendance(user_id):
-    users = load_users()
+
+def response_attendance(user_id, device_id):
+    users_all = load_users()
+    users = users_all.get(device_id, [])
 
     now = datetime.now()
     date_str = now.strftime("%d/%m/%Y")
@@ -94,7 +74,8 @@ def reponse_attendance(user_id):
     for user in users:
         if user.get("id") == user_id:
             name = user.get("name")
-            attendance = load_attendance()
+            attendance_all = load_attendance()
+            attendance = attendance_all.setdefault(device_id, [])
 
             # Check if user already has an entry for today
             for row in attendance:
