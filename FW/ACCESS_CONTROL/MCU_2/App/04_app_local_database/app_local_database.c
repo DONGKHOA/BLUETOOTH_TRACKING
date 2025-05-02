@@ -381,6 +381,25 @@ APP_LOCAL_DATABASE_Task (void *arg)
           u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                    | s_DATA_SYNC.u8_data_packet[1];
 
+          index    = 0;
+          is_valid = true;
+          while (u16_id != user_id[index])
+          {
+
+            if (index >= user_len)
+            {
+              is_valid = false;
+              break;
+            }
+
+            index++;
+          }
+
+          if (!is_valid)
+          {
+            break;
+          }
+
           APP_LOCAL_DATABASE_Delete_UserFinger(u16_id);
           // Update in fingerprint hardware
 

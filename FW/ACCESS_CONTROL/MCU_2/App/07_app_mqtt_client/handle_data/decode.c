@@ -156,3 +156,8 @@ DECODE_Sync_Data (char *json_str, char *id_ac)
 
   cJSON_Delete(root);
 }
+
+void DECODE_Add_User_Data(char *json_str, int *user_id, char **user_name)
+{
+  
+}

@@ -19,6 +19,7 @@ extern "C"
   typedef enum
   {
     USER_DATA_CMD,
+    ADD_USER_DATA_CMD,
     ENROLL_FACE_CMD,
     ENROLL_FINGER_CMD,
     ATTENDANCE_CMD,
@@ -38,6 +39,7 @@ extern "C"
   void        DECODE_Status(char *json_str, int *status);
   void        DECODE_User_ID(char *json_str, int *user_id);
   void        DECODE_Sync_Data(char *json_str, char *id_ac);
+  void DECODE_Add_User_Data(char *json_str, int *user_id, char **user_name);
 
   void ENCODE_User_Data(char    **json_str,
                         int      *user_id,
