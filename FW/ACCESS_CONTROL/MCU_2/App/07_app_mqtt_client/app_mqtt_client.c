@@ -176,8 +176,7 @@ APP_MQTT_CLIENT_task (void *arg)
           sprintf(data_send,
                   "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
                   "%ld\"}",
-                  (s_DATA_SYNC.u8_data_packet[0] << 8)
-                      | s_DATA_SYNC.u8_data_packet[1],
+                  s_sdcard_data.u16_user_id,
                   s_sdcard_data.u32_time);
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   u32_topic_request_server,
@@ -389,6 +388,10 @@ APP_MQTT_CLIENT_task (void *arg)
 
           xQueueSend(
               *s_mqtt_client_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
+          break;
+
+        case ADD_USER_DATA_CMD:
+
           break;
 
         default:

@@ -109,9 +109,7 @@ APP_LOCAL_DATABASE_Attendance_Callback (TimerHandle_t xTimer)
 
   // Send attendance data to MQTT
   s_DATA_SYNC.u8_data_start = DATA_SYNC_REQUEST_ATTENDANCE;
-  s_DATA_SYNC.u8_data_packet[0]
-      = (s_sdcard_data.u16_user_id << 8) & 0xFF;                    // High
-  s_DATA_SYNC.u8_data_packet[1] = s_sdcard_data.u16_user_id & 0xFF; // Low
+  s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
   s_DATA_SYNC.u8_data_length    = 1;
   s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
@@ -407,7 +405,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
           s_DATA_SYNC.u8_data_start     = DATA_SYNC_DELETE_FACE_ID;
           s_DATA_SYNC.u8_data_packet[0] = (index << 8) & 0xFF; // High
           s_DATA_SYNC.u8_data_packet[1] = index & 0xFF;        // Low
-          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_length    = 2;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
@@ -531,6 +529,10 @@ APP_LOCAL_DATABASE_Task (void *arg)
           memcpy(s_sdcard_data.user_name, user_name[index], 32);
 
           xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
+          break;
+
+        case LOCAL_DATABASE_ADD_USER_DATA:
 
           break;
 

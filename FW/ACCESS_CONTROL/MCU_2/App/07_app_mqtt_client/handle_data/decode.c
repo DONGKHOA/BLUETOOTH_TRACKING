@@ -62,6 +62,10 @@ DECODE_Command (char *json_string)
     {
       return DELETE_FACEID_USER;
     }
+    if (strcmp(cmd_item->valuestring, "ADD_USER") == 0)
+    {
+      return ADD_USER_DATA_CMD;
+    }
   }
 
   cJSON_Delete(root);
@@ -157,7 +161,7 @@ DECODE_Sync_Data (char *json_str, char *id_ac)
   cJSON_Delete(root);
 }
 
-void DECODE_Add_User_Data(char *json_str, int *user_id, char **user_name)
+void DECODE_Add_User_Data(char *json_str, int *user_id, char *user_name)
 {
   
 }
