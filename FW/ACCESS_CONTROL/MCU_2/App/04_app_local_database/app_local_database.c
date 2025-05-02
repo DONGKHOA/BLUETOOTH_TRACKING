@@ -20,7 +20,8 @@
  *    PUBLIC DATA
  *****************************************************************************/
 
-extern uint16_t u16_finger_user_id;
+extern uint16_t      u16_finger_user_id;
+extern sdcard_data_t s_sdcard_data;
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -278,6 +279,12 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
+          s_sdcard_cmd = SDCARD_ENROLL_FINGERPRINT;
+
+          xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
           break;
 
         case LOCAL_DATABASE_REQUEST_DELETE_USER_DATA:
@@ -324,10 +331,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
-
-          break;
-
-        case LOCAL_DATABASE_USER_DATA:
 
           break;
 
