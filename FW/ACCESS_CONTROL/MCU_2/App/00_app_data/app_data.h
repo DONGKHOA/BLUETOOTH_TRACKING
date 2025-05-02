@@ -107,26 +107,15 @@ extern "C"
 
   typedef enum
   {
-    LOCAL_DATABASE_USER_DATA = DATA_SYNC_LAST + 1,
+    LOCAL_DATABASE_FIRST = DATA_SYNC_LAST + 1,
     LOCAL_DATABASE_RESPONSE_ATTENDANCE,
     LOCAL_DATABASE_REQUEST_DELETE_USER_DATA,
     LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA,
     LOCAL_DATABASE_SET_ROLE,
     LOCAL_DATABASE_FINGER_DELETE,
-    LOCAL_DATABASE_FACEID_DELETE
+    LOCAL_DATABASE_FACEID_DELETE,
+    LOCAL_DATABASE_LAST
   } __attribute__((packed)) local_database_status_t;
-
-  typedef enum
-  {
-    SDCARD_ENROLL_FACE = 0x00,
-    SDCARD_ENROLL_FINGERPRINT,
-    SDCARD_ATTENDANCE,
-    SDCARD_DELETE_USER_DATA,
-    SDCARD_SET_ROLE,
-    SDCARD_DELETE_FINGER_USER,
-    SDCARD_DELETE_FACEID_USER,
-    SDCARD_UNKNOWN_CMD
-  } __attribute__((packed)) sdcard_cmd_t;
 
   typedef enum
   {
@@ -141,6 +130,25 @@ extern "C"
     STATE_WIFI_DISCONNECTED,
     STATE_BLUETOOTH_CONFIG
   } __attribute__((packed)) state_system_t;
+
+  typedef enum
+  {
+    SDCARD_ENROLL_FACE = 0x00,
+    SDCARD_ENROLL_FINGERPRINT,
+    SDCARD_ATTENDANCE,
+    SDCARD_DELETE_USER_DATA,
+    SDCARD_SET_ROLE,
+    SDCARD_DELETE_FINGER_USER,
+    SDCARD_DELETE_FACEID_USER,
+    SDCARD_UNKNOWN_CMD
+  } __attribute__((packed)) sdcard_cmd_t;
+
+  typedef struct app_data
+  {
+    uint32_t u32_time;
+    uint16_t u16_user_id;
+    char     user_name[32];
+  } sdcard_data_t; // Data structure for sdcard and local database
 
   /**
    * @brief Data structure holding data of system

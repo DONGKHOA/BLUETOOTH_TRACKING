@@ -16,6 +16,12 @@
 #include "diskio.h"
 
 /******************************************************************************
+ *    PUBLIC DATA
+ *****************************************************************************/
+
+sdcard_data_t s_sdcard_data;
+
+/******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
@@ -217,7 +223,8 @@ APP_CONTROL_SDCARD_CreateFile (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
 
   // Create user data file
   fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
@@ -228,7 +235,8 @@ APP_CONTROL_SDCARD_CreateFile (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
 
   // Create attendance file
   fr = f_open(&fil, full_path, FA_CREATE_ALWAYS | FA_WRITE);
