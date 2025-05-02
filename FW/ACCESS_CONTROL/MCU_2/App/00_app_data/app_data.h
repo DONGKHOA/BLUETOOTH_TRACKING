@@ -148,7 +148,7 @@ extern "C"
     uint16_t u16_user_id;
     char     user_name[32];
     char     role[6];
-  } sdcard_data_t; // Data structure for sdcard and local database
+  } sdcard_data_t; // Data structure for sdcard, local database and mqtt
 
   /**
    * @brief Data structure holding data of system

@@ -21,6 +21,12 @@
 #include "nvs_rw.h"
 
 /******************************************************************************
+ *    PUBLIC DATA
+ *****************************************************************************/
+
+extern sdcard_data_t s_sdcard_data;
+
+/******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
@@ -123,7 +129,7 @@ APP_MQTT_CLIENT_task (void *arg)
     if (WIFI_state_connect() == CONNECT_OK && is_init == false)
     {
       is_init = true;
-      
+
       *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
       esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
 
@@ -165,6 +171,22 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
+        case DATA_SYNC_REQUEST_ATTENDANCE:
+
+          sprintf(data_send,
+                  "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
+                  "%ld\"}",
+                  (s_DATA_SYNC.u8_data_packet[0] << 8)
+                      | s_DATA_SYNC.u8_data_packet[1],
+                  s_sdcard_data.u32_time);
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  u32_topic_request_server,
+                                  data_send,
+                                  0,
+                                  1,
+                                  0);
+
+          break;
         case DATA_SYNC_ENROLL_FACE:
 
           sprintf(data_send,

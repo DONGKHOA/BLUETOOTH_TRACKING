@@ -22,6 +22,7 @@
 
 extern uint16_t      u16_finger_user_id;
 extern sdcard_data_t s_sdcard_data;
+extern time_t        now;
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -48,6 +49,8 @@ typedef struct
  *****************************************************************************/
 
 static local_database_t s_local_database;
+static sdcard_cmd_t     s_sdcard_cmd;
+static DATA_SYNC_t      s_DATA_SYNC;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -83,7 +86,7 @@ APP_LOCAL_DATABASE_Init (void)
 
   s_local_database.s_attendance_timer
       = xTimerCreate("Attendance",
-                     30000 / portTICK_PERIOD_MS, // Period 30s
+                     10000 / portTICK_PERIOD_MS, // Period 10s
                      pdFALSE,                    // Auto reload
                      NULL,
                      APP_LOCAL_DATABASE_Attendance_Callback // Callback function
@@ -97,13 +100,27 @@ APP_LOCAL_DATABASE_Init (void)
 static void
 APP_LOCAL_DATABASE_Attendance_Callback (TimerHandle_t xTimer)
 {
+  xTimerStop(s_local_database.s_attendance_timer, 0);
+
+  // Send attendance data to SD card
+  s_sdcard_cmd = SDCARD_ATTENDANCE;
+
+  xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
+  // Send attendance data to MQTT
+  s_DATA_SYNC.u8_data_start = DATA_SYNC_REQUEST_ATTENDANCE;
+  s_DATA_SYNC.u8_data_packet[0]
+      = (s_sdcard_data.u16_user_id << 8) & 0xFF;                    // High
+  s_DATA_SYNC.u8_data_packet[1] = s_sdcard_data.u16_user_id & 0xFF; // Low
+  s_DATA_SYNC.u8_data_length    = 1;
+  s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+  xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 }
 
 static void
 APP_LOCAL_DATABASE_Task (void *arg)
 {
-  DATA_SYNC_t   s_DATA_SYNC;
-  sdcard_cmd_t  s_sdcard_cmd;
   const uint8_t state_lookup[4] = {
     1, // face=0, finger=0
     3, // face=0, finger=1
@@ -331,6 +348,19 @@ APP_LOCAL_DATABASE_Task (void *arg)
           {
             break;
           }
+
+          if (xTimerIsTimerActive(s_local_database.s_attendance_timer)
+              == pdTRUE)
+          {
+            xTimerReset(s_local_database.s_attendance_timer, 0);
+          }
+          {
+            xTimerStart(s_local_database.s_attendance_timer, 0);
+          }
+
+          s_sdcard_data.u32_time    = (uint32_t)now;
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
 
           break;
 
