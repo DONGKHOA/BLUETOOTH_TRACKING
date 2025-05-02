@@ -247,6 +247,12 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
+          s_sdcard_cmd              = SDCARD_ENROLL_FACE;
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
+
+          xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
           break;
 
         case DATA_SYNC_ENROLL_FINGERPRINT:
@@ -279,9 +285,9 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           xQueueSend(*s_local_database.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
+          s_sdcard_cmd              = SDCARD_ENROLL_FINGERPRINT;
           s_sdcard_data.u16_user_id = u16_id;
           memcpy(s_sdcard_data.user_name, user_name[index], 32);
-          s_sdcard_cmd = SDCARD_ENROLL_FINGERPRINT;
 
           xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
@@ -332,6 +338,10 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
+          s_sdcard_cmd = SDCARD_DELETE_USER_DATA;
+
+          xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
           break;
 
         case LOCAL_DATABASE_SET_ROLE:
@@ -375,6 +385,12 @@ APP_LOCAL_DATABASE_Task (void *arg)
           xEventGroupSetBits(*s_local_database.p_fingerprint_event,
                              EVENT_DELETE_FINGERPRINT);
 
+          s_sdcard_cmd              = SDCARD_DELETE_FINGER_USER;
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
+
+          xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
           break;
 
         case LOCAL_DATABASE_FACEID_DELETE:
@@ -416,6 +432,12 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           // Notify the status of response to transmit task via queue
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
+
+          s_sdcard_cmd              = SDCARD_DELETE_FACEID_USER;
+          s_sdcard_data.u16_user_id = u16_id;
+          memcpy(s_sdcard_data.user_name, user_name[index], 32);
+
+          xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
           break;
 
