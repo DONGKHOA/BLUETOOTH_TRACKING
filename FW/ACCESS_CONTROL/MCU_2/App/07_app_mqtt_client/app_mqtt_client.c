@@ -474,7 +474,7 @@ mqtt_event_handler (void            *handler_args,
       esp_mqtt_client_subscribe_single(
           s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
 
-      Clear bit TIME_SOURCE_RTC_READY to stop reading time from RTC
+      // Clear bit TIME_SOURCE_RTC_READY to stop reading time from RTC
       xEventGroupClearBits(*s_mqtt_client_data.p_flag_time_event,
                            TIME_SOURCE_RTC_READY);
 
@@ -512,8 +512,8 @@ mqtt_event_handler (void            *handler_args,
 
       s_mqtt_client_data.b_mqtt_client_connected = false;
 
-      Set bit TIME_SOURCE_RTC_READY to notify RTC task
-      to read time from RTC
+      // Set bit TIME_SOURCE_RTC_READY to notify RTC task
+      // to read time from RTC
       xEventGroupSetBits(*s_mqtt_client_data.p_flag_time_event,
                          TIME_SOURCE_RTC_READY);
 
