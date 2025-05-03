@@ -155,6 +155,7 @@ APP_MQTT_CLIENT_task (void *arg)
                               0,
                               1,
                               0);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 
     if (s_mqtt_client_data.b_connected_server == true)
@@ -295,13 +296,10 @@ APP_MQTT_CLIENT_task (void *arg)
 
           // Subscribe to the new topics
           esp_mqtt_client_subscribe_single(
-              s_mqtt_client_data.s_MQTT_Client, u32_topic_request_server, 0);
-          esp_mqtt_client_subscribe_single(
               s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
           esp_mqtt_client_subscribe_single(
-              s_mqtt_client_data.s_MQTT_Client, u32_topic_response_server, 0);
-          esp_mqtt_client_subscribe_single(
               s_mqtt_client_data.s_MQTT_Client, u32_topic_response_client, 0);
+
           break;
 
         case ENROLL_FACE_CMD:
@@ -453,7 +451,6 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
       }
     }
-    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
 
