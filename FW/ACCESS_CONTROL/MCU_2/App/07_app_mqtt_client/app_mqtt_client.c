@@ -211,19 +211,21 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case LOCAL_DATABASE_USER_DATA:
 
-          char *user_data = NULL;
+          char *generated_str = ENCODE_User_Data(
+              user_id, face, finger, role, user_name, &user_len);
 
-          ENCODE_User_Data(
-              user_data, user_id, face, finger, role, user_name, &user_len);
+          if (generated_str)
+          {
+            strncpy(data_send, generated_str, strlen(generated_str) + 1);
+            free(generated_str); // Caller must free memory
+          }
 
           esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                   u32_topic_request_server,
-                                  user_data,
+                                  data_send,
                                   0,
                                   1,
                                   0);
-
-          free(user_data);
 
           break;
 

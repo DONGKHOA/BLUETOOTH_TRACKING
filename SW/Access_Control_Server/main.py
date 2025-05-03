@@ -70,9 +70,7 @@ async def process_request():
                 print("Sent SYN response:", json_data)
                 
             case "USER_DATA":
-                json_data = json.dumps(handle_data.reponse_user_data(device_id))
-                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
-                print("Sent response:", json_data)
+                json_data = json.dumps(handle_data.reponse_user_data(data, device_id))
             
             case "ENROLL_FACE":
                 user_id = data.get("id")

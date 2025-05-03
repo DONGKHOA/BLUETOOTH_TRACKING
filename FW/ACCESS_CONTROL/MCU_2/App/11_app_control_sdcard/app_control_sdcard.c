@@ -138,7 +138,6 @@ APP_CONTROL_SDCARD_Task (void *arg)
         }
         else if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_OLD)
         {
-          printf("111111111111111111\r\n");
           APP_CONTROL_SDCARD_ReadUserData();
         }
 
@@ -364,8 +363,10 @@ APP_CONTROL_SDCARD_ReadUserData (void)
   // Read file line by line
   while (f_gets(line, sizeof(line), &fil) != NULL)
   {
+    line[strcspn(line, "\r\n")] = '\0'; 
+
     // Get ID
-    char *token = strtok(NULL, ",");
+    char *token = strtok(line, ",");
     if (!token)
     {
       continue;
@@ -373,11 +374,12 @@ APP_CONTROL_SDCARD_ReadUserData (void)
     user_id[idx] = atoi(token);
 
     // Get username
-    token = strtok(line, ",");
+    token = strtok(NULL, ",");
     if (!token)
     {
       continue;
     }
+    APP_CONTROL_SDCARD_RemoveQuotes(token);
     user_name[idx] = strdup(token);
 
     // Get face
@@ -402,6 +404,7 @@ APP_CONTROL_SDCARD_ReadUserData (void)
     {
       continue;
     }
+    APP_CONTROL_SDCARD_RemoveQuotes(token);
     role[idx] = strdup(token);
 
     printf("Row %d: name=%s, id=%d, face=%d, finger=%d, role=%s\n",
@@ -529,9 +532,10 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
 static void
 APP_CONTROL_SDCARD_RemoveQuotes (char *str)
 {
-  if (str[0] == '"' && str[strlen(str) - 1] == '"')
+  uint32_t len = strlen(str);
+  if (len >= 2 && str[0] == '"' && str[len - 1] == '"')
   {
-    memmove(str, str + 1, strlen(str)); // remove first quote
-    str[strlen(str) - 1] = '\0';        // remove last quote
+    memmove(str, str + 1, len - 2); // shift left, keep inner content only
+    str[len - 2] = '\0';            // null-terminate after removing both quotes
   }
 }

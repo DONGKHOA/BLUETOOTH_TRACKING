@@ -251,7 +251,7 @@ SDCard_ReadUserData (char     *p_namefile,
   while (f_gets(line, sizeof(line), &fil) != NULL)
   {
     // Get ID
-    char *token = strtok(NULL, ",");
+    char *token = strtok(line, ",");
     if (!token)
     {
       continue;
@@ -259,7 +259,7 @@ SDCard_ReadUserData (char     *p_namefile,
     user_id[idx] = atoi(token);
 
     // Get username
-    token = strtok(line, ",");
+    token = strtok(NULL, ",");
     if (!token)
     {
       continue;
