@@ -7,17 +7,16 @@
 
 #define TAG "JSON_GENERATE"
 
-char    *json_output = NULL;
-uint16_t user_len    = 2;
-int      user_ids[]  = { 1, 2 };
-char    *names[]     = { "Dong Thanh Khoa", "Ho Le Quoc Thang" };
-int      faces[]     = { 1, 1 };
-int      fingers[]   = { 1, 1 };
-char    *roles[]     = { "user", "user" };
+char     json_output[10240];
+uint16_t user_len   = 2;
+int      user_ids[] = { 1, 2 };
+char    *names[]    = { "Dong Thanh Khoa", "Ho Le Quoc Thang" };
+int      faces[]    = { 1, 1 };
+int      fingers[]  = { 1, 1 };
+char    *roles[]    = { "user", "user" };
 
-void
-ENCODE_User_Data (char     **json_str,
-                  int      *user_id,
+char *
+ENCODE_User_Data (int      *user_id,
                   int      *face,
                   int      *finger,
                   char    **role,
@@ -45,27 +44,28 @@ ENCODE_User_Data (char     **json_str,
   }
 
   // Assign to caller's pointer (CORRECTED)
-  *json_str = cJSON_PrintUnformatted(root);
+  char *json_str = cJSON_PrintUnformatted(root);
 
-  if (*json_str == NULL)
+  if (json_str == NULL)
   {
     cJSON_Delete(root);
-    return;
+    return NULL;
   }
 
   cJSON_Delete(root);
+  return json_str;
 }
 
 void
 app_main ()
 {
-  ENCODE_User_Data(
-      &json_output, user_ids, faces, fingers, roles, names, &user_len);
+  char *generated_str
+      = ENCODE_User_Data(user_ids, faces, fingers, roles, names, &user_len);
 
-  if (json_output)
+  if (generated_str)
   {
-    printf("JSON: %s\n", json_output);
-    free(json_output); // Caller must free memory
+    strncpy(json_output, generated_str, strlen(generated_str) + 1);
+    free(generated_str); // Caller must free memory
   }
 
   printf("%s\r\n", json_output);
