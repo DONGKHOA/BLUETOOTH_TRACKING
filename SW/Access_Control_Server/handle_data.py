@@ -48,16 +48,6 @@ def reponse_user_data(data, device_id):
     save_users(users_all)
     
 def response_enroll_face(user_id, device_id):
-    users_all = load_users()
-    users = users_all.get(device_id, [])
-
-    for user in users:
-        if user.get("id") == user_id:
-            user["face"] = 1
-            save_users(users_all)
-            return {"command": "ENROLL_FACE", "user_id": user_id, "name": user.get("name"), "response": "success"}
-
-    return {"command": "ENROLL_FACE", "user_id": user_id, "response": "fail"}
 
 def response_enroll_finger(user_id, device_id):
     users_all = load_users()
