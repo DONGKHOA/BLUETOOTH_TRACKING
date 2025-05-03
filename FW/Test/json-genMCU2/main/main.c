@@ -16,7 +16,7 @@ int      fingers[]   = { 1, 1 };
 char    *roles[]     = { "user", "user" };
 
 void
-ENCODE_User_Data (char    **json_str,
+ENCODE_User_Data (char     *json_str,
                   int      *user_id,
                   int      *face,
                   int      *finger,
@@ -45,9 +45,9 @@ ENCODE_User_Data (char    **json_str,
   }
 
   // Assign to caller's pointer (CORRECTED)
-  *json_str = cJSON_PrintUnformatted(root);
+  json_str = cJSON_PrintUnformatted(root);
 
-  if (*json_str == NULL)
+  if (json_str == NULL)
   {
     cJSON_Delete(root);
     return;
@@ -60,7 +60,7 @@ void
 app_main ()
 {
   ENCODE_User_Data(
-      &json_output, user_ids, faces, fingers, roles, names, &user_len);
+      json_output, user_ids, faces, fingers, roles, names, &user_len);
 
   if (json_output)
   {

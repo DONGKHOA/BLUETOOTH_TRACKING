@@ -172,15 +172,6 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
-        case DATA_SYNC_REQUEST_USER_DATA:
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
-
-          break;
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
           sprintf(data_send,
