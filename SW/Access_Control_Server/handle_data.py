@@ -36,6 +36,16 @@ def response_sync():
         "id": new_id
     }
   
+def reponse_user_data(data, device_id):
+    users_all = load_users()
+
+    # Ensure the device_id key exists
+    if device_id not in users_all:
+        users_all[device_id] = []
+
+    users_all[device_id] = data.get("user_data", [])
+
+    save_users(users_all)
     
 def response_enroll_face(user_id, device_id):
     users_all = load_users()
