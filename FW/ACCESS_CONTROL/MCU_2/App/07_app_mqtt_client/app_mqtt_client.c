@@ -102,7 +102,8 @@ APP_MQTT_CLIENT_Init (void)
 
   *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
-  s_mqtt_client_data.p_flag_time_event = &s_data_system.s_flag_time_event;
+  s_mqtt_client_data.p_flag_time_event   = &s_data_system.s_flag_time_event;
+  s_mqtt_client_data.p_data_sdcard_queue = &s_data_system.s_data_sdcard_queue;
 
   s_mqtt_client_data.b_connected_server      = false;
   s_mqtt_client_data.b_mqtt_client_connected = false;
@@ -143,15 +144,11 @@ APP_MQTT_CLIENT_task (void *arg)
       s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
       xQueueSend(*s_mqtt_client_data.p_send_data_queue, &s_DATA_SYNC, 0);
     }
-    else
-    {
-      vTaskDelay(100 / portTICK_PERIOD_MS);
-      continue;
-    }
 
     if ((s_mqtt_client_data.b_connected_server == false)
         && (s_mqtt_client_data.b_mqtt_client_connected == true))
     {
+      s_mqtt_client_data.b_mqtt_client_connected = false;
       strcpy(data_send, "{\"command\" : \"SYN\"}");
       esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                               u32_topic_request_server,
@@ -159,12 +156,6 @@ APP_MQTT_CLIENT_task (void *arg)
                               0,
                               1,
                               0);
-
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    else
-    {
-      continue;
     }
 
     if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
@@ -296,6 +287,15 @@ APP_MQTT_CLIENT_task (void *arg)
                    "%s/Client/Response",
                    id_ac);
 
+          // Subscribe to the new topics
+          esp_mqtt_client_subscribe_single(
+              s_mqtt_client_data.s_MQTT_Client, u32_topic_request_server, 0);
+          esp_mqtt_client_subscribe_single(
+              s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
+          esp_mqtt_client_subscribe_single(
+              s_mqtt_client_data.s_MQTT_Client, u32_topic_response_server, 0);
+          esp_mqtt_client_subscribe_single(
+              s_mqtt_client_data.s_MQTT_Client, u32_topic_response_client, 0);
           break;
 
         case ENROLL_FACE_CMD:
@@ -447,6 +447,7 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
       }
     }
+    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
 

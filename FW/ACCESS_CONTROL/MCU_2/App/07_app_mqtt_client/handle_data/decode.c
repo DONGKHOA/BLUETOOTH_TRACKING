@@ -15,7 +15,7 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define TAG          "DECODE"
+#define TAG "DECODE"
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -147,7 +147,7 @@ DECODE_Sync_Data (char *json_str, char *id_ac)
   }
 
   // Get "id_ac"
-  cJSON *id_ac_item = cJSON_GetObjectItemCaseSensitive(root, "id_ac");
+  cJSON *id_ac_item = cJSON_GetObjectItemCaseSensitive(root, "id");
   if (!cJSON_IsString(id_ac_item) || (id_ac_item->valuestring == NULL))
   {
     ESP_LOGE(TAG, "id_ac is missing or not a string");
@@ -168,8 +168,9 @@ DECODE_Add_User_Data (char *json_str, int *user_id, char *user_name)
   cJSON *user_id_item   = cJSON_GetObjectItemCaseSensitive(root, "id");
   cJSON *user_name_item = cJSON_GetObjectItemCaseSensitive(root, "name");
 
+  *user_id = user_id_item->valueint;
   strncpy(user_name, user_name_item->valuestring, MAX_NAME_LEN - 1);
   user_name[MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
-  *user_id                    = user_id_item->valueint;
+
   cJSON_Delete(root);
 }

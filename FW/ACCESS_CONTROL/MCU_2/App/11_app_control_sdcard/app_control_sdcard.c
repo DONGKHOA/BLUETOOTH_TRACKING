@@ -54,18 +54,20 @@ typedef enum
 
 static FRESULT fr;
 static FATFS   fs;
-static FIL     fil;
 static UINT    bw;
 static UINT    br;
+static FIL     fil, fsrc, fdst;
 
 char *p_file_user_data  = "userData.csv";
 char *p_file_attendance = "attendance.csv";
+
+char *p_tempfile = "temp.csv";
 
 static control_sdcard_t s_control_sdcard;
 
 static bool b_get_data = false;
 
-static DATA_SYNC_t        s_DATA_SYNC;
+static DATA_SYNC_t s_DATA_SYNC;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -80,6 +82,10 @@ static void                    APP_CONTROL_SDCARD_WriteUserData(void);
 static void                    APP_CONTROL_SDCARD_ReadUserData(void);
 static void                    APP_CONTROL_SDCARD_WriteAttendanceData(void);
 static void                    APP_CONTROL_SDCARD_ReadAttendanceData(void);
+static void                    APP_CONTROL_SDCARD_RemoveQuotes(char *str);
+
+static void APP_CONTROL_SDCARD_ModifyInfoUserData(
+    char *new_name, int user_id, int new_face, int new_finger, char *new_role);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -96,6 +102,7 @@ APP_CONTROL_SDCARD_Init (void)
 {
   s_control_sdcard.p_spi_mutex         = &s_data_system.s_spi_mutex;
   s_control_sdcard.p_data_sdcard_queue = &s_data_system.s_data_sdcard_queue;
+  s_control_sdcard.p_data_mqtt_queue   = &s_data_system.s_data_mqtt_queue;
 }
 
 /******************************************************************************
@@ -136,7 +143,7 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
         s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
         s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-        s_DATA_SYNC.u8_data_length    = 1; 
+        s_DATA_SYNC.u8_data_length    = 1;
         s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
 
         xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
@@ -151,6 +158,10 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
       switch (s_sdcard_cmd)
       {
+        case SDCARD_ADD_USER_DATA:
+          APP_CONTROL_SDCARD_WriteUserData();
+          break;
+
         case SDCARD_ENROLL_FACE:
           break;
 
@@ -161,15 +172,20 @@ APP_CONTROL_SDCARD_Task (void *arg)
           break;
 
         case SDCARD_DELETE_USER_DATA:
+          APP_CONTROL_SDCARD_WriteUserData();
           break;
 
         case SDCARD_SET_ROLE:
           break;
 
         case SDCARD_DELETE_FINGER_USER:
+          APP_CONTROL_SDCARD_ModifyInfoUserData(
+              NULL, s_sdcard_data.u16_user_id, NULL, 0, NULL);
           break;
 
         case SDCARD_DELETE_FACEID_USER:
+          APP_CONTROL_SDCARD_ModifyInfoUserData(
+              NULL, s_sdcard_data.u16_user_id, 0, NULL, NULL);
           break;
 
         default:
@@ -292,13 +308,12 @@ APP_CONTROL_SDCARD_WriteUserData (void)
     // Format each row into CSV
     snprintf(row_buffer,
              sizeof(row_buffer),
-             "\"%s\",%d,%d,%d,\"%s\",%d\n",
-             user_name[i],
+             "%d,\"%s\",%d,%d,\"%s\"\n",
              user_id[i],
+             user_name[i],
              face[i],
              finger[i],
-             role[i],
-             i);
+             role[i]);
 
     fr = f_write(&fil, row_buffer, strlen(row_buffer), &bw);
     if (fr != FR_OK || bw != strlen(row_buffer))
@@ -401,6 +416,101 @@ APP_CONTROL_SDCARD_ReadUserData (void)
 }
 
 static void
+APP_CONTROL_SDCARD_ModifyInfoUserData (
+    char *new_name, int user_id, int new_face, int new_finger, char *new_role)
+{
+  char full_path[32];
+  char temp_path[32];
+
+  char line[128], new_line[128];
+  char face_buf[2], finger_buf[2];
+
+  // Mount the SD card
+  if (f_mount(&fs, MOUNT_POINT, 1) != FR_OK)
+  {
+    printf("f_mount failed!\n");
+    return;
+  }
+
+  // Open the source file for reading
+  // Open the temporary file for writing
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
+  snprintf(temp_path, sizeof(temp_path), "%s/%s", MOUNT_POINT, p_tempfile);
+
+  if (f_open(&fsrc, full_path, FA_READ) != FR_OK
+      || f_open(&fdst, temp_path, FA_WRITE | FA_CREATE_ALWAYS) != FR_OK)
+  {
+    printf("f_open failed!\n");
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+  // Read each line from the source file
+  while (f_gets(line, sizeof(line), &fsrc))
+  {
+    char *id_str = strtok(line, ",\r\n");
+    char *name   = strtok(NULL, ",\r\n");
+    char *face   = strtok(NULL, ",\r\n");
+    char *finger = strtok(NULL, ",\r\n");
+    char *role   = strtok(NULL, ",\r\n");
+
+    if (!id_str || !name || !face || !finger || !role)
+    {
+      printf("Invalid line format: %s\n", line);
+      continue;
+    }
+
+    int current_id = atoi(id_str);
+
+    APP_CONTROL_SDCARD_RemoveQuotes(name);
+    APP_CONTROL_SDCARD_RemoveQuotes(role);
+
+    // Check if the current line ID matches the user ID to be updated
+    // If it does, update the line with new values
+    if (current_id == user_id)
+    {
+      // If the new values are NULL, keep the original values
+      // Otherwise, use the new values
+      face_buf[0] = (new_face >= 0) ? ('0' + new_face) : face[0];
+      face_buf[1] = '\0';
+
+      finger_buf[0] = (new_finger >= 0) ? ('0' + new_finger) : finger[0];
+      finger_buf[1] = '\0';
+
+      // Format the new line with updated values
+      snprintf(new_line,
+               sizeof(new_line),
+               "%d,\"%s\",%s,%s,\"%s\"\n",
+               user_id,
+               new_name ? new_name : name,
+               face_buf,
+               finger_buf,
+               new_role ? new_role : role);
+    }
+    else
+    {
+      // If not new value, keep the original line
+      snprintf(new_line,
+               sizeof(new_line),
+               "%s,\"%s\",%s,%s,\"%s\"\n",
+               id_str,
+               name,
+               face,
+               finger,
+               role);
+    }
+    printf("Update line: %s", new_line);
+    f_write(&fdst, new_line, strlen(new_line), &bw);
+  }
+
+  f_close(&fsrc);
+  f_close(&fdst);
+
+  f_unlink(full_path);
+  f_rename(temp_path, full_path);
+}
+
+static void
 APP_CONTROL_SDCARD_WriteAttendanceData (void)
 {
 }
@@ -408,4 +518,14 @@ APP_CONTROL_SDCARD_WriteAttendanceData (void)
 static void
 APP_CONTROL_SDCARD_ReadAttendanceData (void)
 {
+}
+
+static void
+APP_CONTROL_SDCARD_RemoveQuotes (char *str)
+{
+  if (str[0] == '"' && str[strlen(str) - 1] == '"')
+  {
+    memmove(str, str + 1, strlen(str)); // remove first quote
+    str[strlen(str) - 1] = '\0';        // remove last quote
+  }
 }
