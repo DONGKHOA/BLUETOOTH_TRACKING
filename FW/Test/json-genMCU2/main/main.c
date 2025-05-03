@@ -16,7 +16,7 @@ int      fingers[]  = { 1, 1 };
 char    *roles[]    = { "user", "user" };
 
 char *
-ENCODE_User_Data (int      *user_id,
+ENCODE_Sync_Data (int      *user_id,
                   int      *face,
                   int      *finger,
                   char    **role,
@@ -60,7 +60,7 @@ void
 app_main ()
 {
   char *generated_str
-      = ENCODE_User_Data(user_ids, faces, fingers, roles, names, &user_len);
+      = ENCODE_Sync_Data(user_ids, faces, fingers, roles, names, &user_len);
 
   if (generated_str)
   {

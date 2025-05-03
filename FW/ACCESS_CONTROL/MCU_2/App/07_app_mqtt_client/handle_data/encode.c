@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 char *
-ENCODE_User_Data (int      *user_id,
+ENCODE_Sync_Data (int      *user_id,
                   int      *face,
                   int      *finger,
                   char    **role,

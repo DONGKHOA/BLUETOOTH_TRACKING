@@ -140,13 +140,6 @@ APP_CONTROL_SDCARD_Task (void *arg)
         {
           APP_CONTROL_SDCARD_ReadUserData();
         }
-
-        s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
-        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-        s_DATA_SYNC.u8_data_length    = 1;
-        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-        xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
       }
     }
 
@@ -158,6 +151,17 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
       switch (s_sdcard_cmd)
       {
+        case SDCARD_SYNC_DATA_SERVER:
+
+          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
+          break;
+
         case SDCARD_ADD_USER_DATA:
           APP_CONTROL_SDCARD_WriteUserData();
           break;
@@ -473,35 +477,29 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
     APP_CONTROL_SDCARD_RemoveQuotes(name);
     APP_CONTROL_SDCARD_RemoveQuotes(role);
 
-    // Check if the current line ID matches the user ID to be updated
-    // If it does, update the line with new values
-    if (current_id == user_id)
+    if (new_face == -1)
     {
-      if (new_face == -1)
-      {
-        new_face = atoi(face);
-      }
-
-      if (new_finger == -1)
-      {
-        new_finger = atoi(face);
-      }
-
-      if(strcmp(name, new_name) != 0)
-      {
-        free(user_name[current_id]);
-        user_name[current_id] = strdup(new_name);
-      }
+      new_face = atoi(face);
     }
+
+    if (new_finger == -1)
+    {
+      new_finger = atoi(face);
+    }
+
+    // Check if the current line ID matches the user ID to be updated
+    // if (current_id == user_id)
+    // {
+    // }
 
     snprintf(new_line,
              sizeof(new_line),
              "%d,\"%s\",%d,%d,\"%s\"\n",
              user_id,
-             new_name ? new_name : name,
+             new_name,
              new_face,
              new_finger,
-             new_role ? new_role : role);
+             new_role);
 
     printf("Update line: %s", new_line);
 

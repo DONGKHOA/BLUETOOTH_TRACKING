@@ -211,9 +211,9 @@ APP_MQTT_CLIENT_task (void *arg)
 
             break;
 
-          case LOCAL_DATABASE_USER_DATA:
+          case LOCAL_DATABASE_DATA:
 
-            char *generated_str = ENCODE_User_Data(
+            char *generated_str = ENCODE_Sync_Data(
                 user_id, face, finger, role, user_name, &user_len);
 
             if (generated_str)
@@ -299,6 +299,13 @@ APP_MQTT_CLIENT_task (void *arg)
               s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
           esp_mqtt_client_subscribe_single(
               s_mqtt_client_data.s_MQTT_Client, u32_topic_response_client, 0);
+
+          s_DATA_SYNC.u8_data_start     = SDCARD_SYNC_DATA_SERVER;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_DATA_SYNC, 0);
 
           break;
 
