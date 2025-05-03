@@ -21,9 +21,8 @@
  *   PUBLIC FUNCTION
  *****************************************************************************/
 
-void
-ENCODE_User_Data (char    *json_str,
-                  int      *user_id,
+char *
+ENCODE_User_Data (int      *user_id,
                   int      *face,
                   int      *finger,
                   char    **role,
@@ -50,13 +49,15 @@ ENCODE_User_Data (char    *json_str,
     cJSON_AddItemToArray(json_list, item);
   }
 
-  json_str = cJSON_PrintUnformatted(root);
+  // Assign to caller's pointer (CORRECTED)
+  char *json_str = cJSON_PrintUnformatted(root);
 
   if (json_str == NULL)
   {
     cJSON_Delete(root);
-    return;
+    return NULL;
   }
 
   cJSON_Delete(root);
+  return json_str;
 }

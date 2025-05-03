@@ -47,13 +47,12 @@ extern "C"
   void        DECODE_Sync_Data(char *json_str, char *id_ac);
   void DECODE_Add_User_Data(char *json_str, int *user_id, char *user_name);
 
-  void ENCODE_User_Data(char     *json_str,
-                        int      *user_id,
-                        int      *face,
-                        int      *finger,
-                        char    **role,
-                        char    **user_name,
-                        uint16_t *user_len);
+  char *ENCODE_User_Data(int      *user_id,
+                         int      *face,
+                         int      *finger,
+                         char    **role,
+                         char    **user_name,
+                         uint16_t *user_len);
 
 #ifdef __cplusplus
 }
