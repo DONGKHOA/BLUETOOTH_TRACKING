@@ -300,12 +300,8 @@ APP_MQTT_CLIENT_task (void *arg)
           esp_mqtt_client_subscribe_single(
               s_mqtt_client_data.s_MQTT_Client, u32_topic_response_client, 0);
 
-          s_DATA_SYNC.u8_data_start     = SDCARD_SYNC_DATA_SERVER;
-          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-          xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_DATA_SYNC, 0);
+          s_sdcard_cmd = SDCARD_SYNC_DATA_SERVER;
+          xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
           break;
 
