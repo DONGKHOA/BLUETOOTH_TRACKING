@@ -473,33 +473,43 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
     }
 
     int current_id = atoi(id_str);
+    int face_val   = atoi(face);
+    int finger_val = atoi(finger);
 
     APP_CONTROL_SDCARD_RemoveQuotes(name);
     APP_CONTROL_SDCARD_RemoveQuotes(role);
 
-    if (new_face == -1)
-    {
-      new_face = atoi(face);
-    }
+    char *final_name = name;
+    char *final_role = role;
 
-    if (new_finger == -1)
+    if (current_id == user_id)
     {
-      new_finger = atoi(face);
+      if (new_face != -1)
+      {
+        face_val = new_face;
+      }
+      if (new_finger != -1)
+      {
+        finger_val = new_finger;
+      }
+      if (new_name != NULL)
+      {
+        final_name = new_name;
+      }
+      if (new_role != NULL)
+      {
+        final_role = new_role;
+      }
     }
-
-    // Check if the current line ID matches the user ID to be updated
-    // if (current_id == user_id)
-    // {
-    // }
 
     snprintf(new_line,
              sizeof(new_line),
              "%d,\"%s\",%d,%d,\"%s\"\n",
-             user_id,
-             new_name,
-             new_face,
-             new_finger,
-             new_role);
+             current_id,
+             final_name,
+             face_val,
+             finger_val,
+             final_role);
 
     printf("Update line: %s", new_line);
 
