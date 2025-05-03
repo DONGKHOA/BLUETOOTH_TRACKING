@@ -216,7 +216,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
           break;
 
-        case LOCAL_DATABASE_ADD_USER_DATA:
+        case LOCAL_DATABASE_USER_DATA:
 
           char *user_data = NULL;
 
