@@ -58,7 +58,7 @@ async def process_request():
                 syn_response = handle_data.response_sync()
                 device_id = syn_response["id"]
 
-                # Register 2 topics for the new device
+                # Register 4 topics for the new device
                 mqtt_client.subscribe(f"{device_id}/Server/Request")
                 mqtt_client.subscribe(f"{device_id}/Server/Response")
                 mqtt_client.subscribe(f"{device_id}/Client/Request")

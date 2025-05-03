@@ -138,6 +138,7 @@ APP_CONTROL_SDCARD_Task (void *arg)
         }
         else if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_OLD)
         {
+          printf("111111111111111111\r\n");
           APP_CONTROL_SDCARD_ReadUserData();
         }
 
@@ -216,6 +217,8 @@ APP_CONTROL_SDCARD_CheckValid (void)
 static control_sdcard_status_t
 APP_CONTROL_SDCARD_CheckNew (void)
 {
+  char full_path[32];
+
   FRESULT fr = f_mount(&fs, MOUNT_POINT, 1);
   if (fr != FR_OK)
   {
@@ -223,8 +226,11 @@ APP_CONTROL_SDCARD_CheckNew (void)
     return SDCARD_INVALID;
   }
 
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_user_data);
+
   // Check if the file exists
-  fr = f_open(&fil, p_file_user_data, FA_READ);
+  fr = f_open(&fil, full_path, FA_READ);
   if (fr == FR_OK)
   {
     f_close(&fil);
@@ -331,8 +337,8 @@ APP_CONTROL_SDCARD_WriteUserData (void)
 static void
 APP_CONTROL_SDCARD_ReadUserData (void)
 {
-  char full_path[128];
-  char line[256];
+  char full_path[32];
+  char line[128];
 
   int idx = 0;
 
