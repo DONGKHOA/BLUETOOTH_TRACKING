@@ -163,5 +163,12 @@ DECODE_Sync_Data (char *json_str, char *id_ac)
 
 void DECODE_Add_User_Data(char *json_str, int *user_id, char *user_name)
 {
-  
+  cJSON *root = cJSON_Parse(json_str);
+
+  if (!root)
+  {
+    ESP_LOGE(TAG, "Failed to parse JSON");
+    return;
+  }
+
 }

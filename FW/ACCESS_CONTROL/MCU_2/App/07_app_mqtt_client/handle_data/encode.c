@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 void
-ENCODE_User_Data (char    **json_str,
+ENCODE_User_Data (char    *json_str,
                   int      *user_id,
                   int      *face,
                   int      *finger,
@@ -50,9 +50,9 @@ ENCODE_User_Data (char    **json_str,
     cJSON_AddItemToArray(json_list, item);
   }
 
-  *json_str = cJSON_PrintUnformatted(root);
+  json_str = cJSON_PrintUnformatted(root);
 
-  if (*json_str == NULL)
+  if (json_str == NULL)
   {
     cJSON_Delete(root);
     return;

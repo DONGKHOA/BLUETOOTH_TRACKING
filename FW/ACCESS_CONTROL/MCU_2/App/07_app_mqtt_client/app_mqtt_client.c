@@ -64,9 +64,11 @@ static void mqtt_event_handler(void            *handler_args,
 /******************************************************************************
  *    PRIVATE DATA
  *****************************************************************************/
+
 static DATA_SYNC_t        s_DATA_SYNC;
 static mqtt_client_data_t s_mqtt_client_data;
 static char               data[1024 * 10];
+static char               data_send[1024 * 10];
 static int                status;
 static int                user_id_delete;
 static char               id_ac[8];
@@ -121,7 +123,6 @@ APP_MQTT_CLIENT_Init (void)
 static void
 APP_MQTT_CLIENT_task (void *arg)
 {
-  char data_send[128];
   bool is_init = false;
 
   while (1)
@@ -171,6 +172,15 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (s_DATA_SYNC.u8_data_start)
       {
+        case DATA_SYNC_REQUEST_USER_DATA:
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  u32_topic_request_server,
+                                  data_send,
+                                  0,
+                                  1,
+                                  0);
+
+          break;
         case DATA_SYNC_REQUEST_ATTENDANCE:
 
           sprintf(data_send,
@@ -212,6 +222,24 @@ APP_MQTT_CLIENT_task (void *arg)
                                   0,
                                   1,
                                   0);
+
+          break;
+
+        case LOCAL_DATABASE_ADD_USER_DATA:
+
+          char *user_data = NULL;
+
+          ENCODE_User_Data(
+              user_data, user_id, face, finger, role, user_name, &user_len);
+
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  u32_topic_request_server,
+                                  user_data,
+                                  0,
+                                  1,
+                                  0);
+
+          free(user_data);
 
           break;
 
