@@ -148,7 +148,6 @@ APP_MQTT_CLIENT_task (void *arg)
     if ((s_mqtt_client_data.b_connected_server == false)
         && (s_mqtt_client_data.b_mqtt_client_connected == true))
     {
-      s_mqtt_client_data.b_mqtt_client_connected = false;
       strcpy(data_send, "{\"command\" : \"SYN\"}");
       esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                               u32_topic_request_server,
@@ -158,105 +157,110 @@ APP_MQTT_CLIENT_task (void *arg)
                               0);
     }
 
-    if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
-                      &s_DATA_SYNC,
-                      100 / portTICK_PERIOD_MS)
-        == pdPASS)
+    if (s_mqtt_client_data.b_connected_server == true)
     {
-      switch (s_DATA_SYNC.u8_data_start)
+      if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
+                        &s_DATA_SYNC,
+                        100 / portTICK_PERIOD_MS)
+          == pdPASS)
       {
-        case DATA_SYNC_REQUEST_ATTENDANCE:
+        switch (s_DATA_SYNC.u8_data_start)
+        {
+          case DATA_SYNC_REQUEST_ATTENDANCE:
 
-          sprintf(data_send,
-                  "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
-                  "%ld\"}",
-                  s_sdcard_data.u16_user_id,
-                  s_sdcard_data.u32_time);
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
+            sprintf(data_send,
+                    "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
+                    "%ld\"}",
+                    s_sdcard_data.u16_user_id,
+                    s_sdcard_data.u32_time);
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_request_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
 
-          break;
-        case DATA_SYNC_ENROLL_FACE:
+            break;
+          case DATA_SYNC_ENROLL_FACE:
 
-          sprintf(data_send,
-                  "{\"command\" : \"ENROLL_FACE\", \"id\": %d}",
-                  (s_DATA_SYNC.u8_data_packet[0] << 8)
-                      | s_DATA_SYNC.u8_data_packet[1]);
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
+            sprintf(data_send,
+                    "{\"command\" : \"ENROLL_FACE\", \"id\": %d}",
+                    (s_DATA_SYNC.u8_data_packet[0] << 8)
+                        | s_DATA_SYNC.u8_data_packet[1]);
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_request_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
 
-          break;
-        case DATA_SYNC_ENROLL_FINGERPRINT:
+            break;
+          case DATA_SYNC_ENROLL_FINGERPRINT:
 
-          sprintf(data_send,
-                  "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
-                  (s_DATA_SYNC.u8_data_packet[0] << 8)
-                      | s_DATA_SYNC.u8_data_packet[1]);
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
+            sprintf(data_send,
+                    "{\"command\" : \"ENROLL_FINGERPRINT\", \"id\": %d}",
+                    (s_DATA_SYNC.u8_data_packet[0] << 8)
+                        | s_DATA_SYNC.u8_data_packet[1]);
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_request_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
 
-          break;
+            break;
 
-        case LOCAL_DATABASE_USER_DATA:
+          case LOCAL_DATABASE_USER_DATA:
 
-          char *generated_str = ENCODE_User_Data(
-              user_id, face, finger, role, user_name, &user_len);
+            char *generated_str = ENCODE_User_Data(
+                user_id, face, finger, role, user_name, &user_len);
 
-          if (generated_str)
-          {
-            strncpy(data_send, generated_str, strlen(generated_str) + 1);
-            free(generated_str); // Caller must free memory
-          }
+            if (generated_str)
+            {
+              strncpy(data_send, generated_str, strlen(generated_str) + 1);
+              free(generated_str); // Caller must free memory
+            }
 
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_request_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_request_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
 
-          break;
+            break;
 
-        case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
+          case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
 
-          if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
-          {
-            memcpy(data_send,
-                   "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
-                   "\"success\"}",
-                   sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
-                          "\"success\"}"));
-          }
-          else
-          {
-            memcpy(data_send,
-                   "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
-                   "\"fail\"}",
-                   sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
-                          "\"fail\"}"));
-          }
+            if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
+            {
+              memcpy(
+                  data_send,
+                  "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                  "\"success\"}",
+                  sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                         "\"success\"}"));
+            }
+            else
+            {
+              memcpy(
+                  data_send,
+                  "{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                  "\"fail\"}",
+                  sizeof("{\"command\" : \"DELETE_USER_DATA\", \"response\": "
+                         "\"fail\"}"));
+            }
 
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  u32_topic_response_server,
-                                  data_send,
-                                  0,
-                                  1,
-                                  0);
-          break;
-        default:
-          break;
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_response_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
+            break;
+          default:
+            break;
+        }
       }
     }
 
