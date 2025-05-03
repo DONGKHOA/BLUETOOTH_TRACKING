@@ -180,12 +180,12 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
         case SDCARD_DELETE_FINGER_USER:
           APP_CONTROL_SDCARD_ModifyInfoUserData(
-              NULL, s_sdcard_data.u16_user_id, NULL, 0, NULL);
+              NULL, s_sdcard_data.u16_user_id, -1, 0, NULL);
           break;
 
         case SDCARD_DELETE_FACEID_USER:
           APP_CONTROL_SDCARD_ModifyInfoUserData(
-              NULL, s_sdcard_data.u16_user_id, 0, NULL, NULL);
+              NULL, s_sdcard_data.u16_user_id, 0, -1, NULL);
           break;
 
         default:
@@ -363,7 +363,7 @@ APP_CONTROL_SDCARD_ReadUserData (void)
   // Read file line by line
   while (f_gets(line, sizeof(line), &fil) != NULL)
   {
-    line[strcspn(line, "\r\n")] = '\0'; 
+    line[strcspn(line, "\r\n")] = '\0';
 
     // Get ID
     char *token = strtok(line, ",");
@@ -477,39 +477,34 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
     // If it does, update the line with new values
     if (current_id == user_id)
     {
-      if(new_face == -1)
+      if (new_face == -1)
       {
         new_face = atoi(face);
       }
 
-      if(new_finger == -1)
+      if (new_finger == -1)
       {
         new_finger = atoi(face);
       }
 
-      // Format the new line with updated values
-      snprintf(new_line,
-               sizeof(new_line),
-               "%d,\"%s\",%d,%d,\"%s\"\n",
-               user_id,
-               new_name ? new_name : name,
-               new_face,
-               new_finger,
-               new_role ? new_role : role);
+      if(strcmp(name, new_name) != 0)
+      {
+        free(user_name[current_id]);
+        user_name[current_id] = strdup(new_name);
+      }
     }
-    else
-    {
-      // If not new value, keep the original line
-      snprintf(new_line,
-               sizeof(new_line),
-               "%s,\"%s\",%s,%s,\"%s\"\n",
-               id_str,
-               name,
-               face,
-               finger,
-               role);
-    }
+
+    snprintf(new_line,
+             sizeof(new_line),
+             "%d,\"%s\",%d,%d,\"%s\"\n",
+             user_id,
+             new_name ? new_name : name,
+             new_face,
+             new_finger,
+             new_role ? new_role : role);
+
     printf("Update line: %s", new_line);
+
     f_write(&fdst, new_line, strlen(new_line), &bw);
   }
 
