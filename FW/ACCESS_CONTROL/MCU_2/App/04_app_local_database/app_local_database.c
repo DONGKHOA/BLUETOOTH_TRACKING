@@ -532,10 +532,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           break;
 
-        case LOCAL_DATABASE_ADD_USER_DATA:
-
-          break;
-
         default:
           break;
       }

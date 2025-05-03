@@ -43,6 +43,7 @@ typedef struct mqtt_client_data
   EventGroupHandle_t      *p_flag_time_event;
   QueueHandle_t           *p_data_mqtt_queue;
   QueueHandle_t           *p_send_data_queue;
+  QueueHandle_t           *p_data_sdcard_queue;
   QueueHandle_t           *p_data_local_database_queue;
   SemaphoreHandle_t        s_data_subscribe_sem;
   esp_mqtt_client_handle_t s_MQTT_Client;
@@ -67,6 +68,7 @@ static void mqtt_event_handler(void            *handler_args,
 
 static DATA_SYNC_t        s_DATA_SYNC;
 static mqtt_client_data_t s_mqtt_client_data;
+static sdcard_cmd_t       s_sdcard_cmd;
 static char               data[1024 * 10];
 static char               data_send[1024 * 10];
 static int                status;
@@ -410,6 +412,34 @@ APP_MQTT_CLIENT_task (void *arg)
           break;
 
         case ADD_USER_DATA_CMD:
+
+          DECODE_Add_User_Data(
+              data, (int *)&s_sdcard_data.u16_user_id, s_sdcard_data.user_name);
+
+          // Copy user ID
+          user_id[user_len] = s_sdcard_data.u16_user_id;
+
+          // Allocate memory and copy user name
+          user_name[user_len]
+              = (char *)heap_caps_malloc(MAX_NAME_LEN, MALLOC_CAP_SPIRAM);
+
+          strncpy(
+              user_name[user_len], s_sdcard_data.user_name, MAX_NAME_LEN - 1);
+          user_name[user_len][MAX_NAME_LEN - 1]
+              = '\0'; // Ensure null-termination
+
+          // Allocate memory and copy role
+          role[user_len] = (char *)heap_caps_malloc(6, MALLOC_CAP_SPIRAM);
+          strncpy(role[user_len], "user", 5);
+          role[user_len][5] = '\0'; // Ensure null-termination
+
+          face[user_len]   = 0;
+          finger[user_len] = 0;
+
+          user_len++;
+
+          s_sdcard_cmd = SDCARD_ADD_USER_DATA;
+          xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
           break;
 

@@ -16,7 +16,6 @@
  *****************************************************************************/
 
 #define TAG          "DECODE"
-#define MAX_NAME_LEN 32
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -161,14 +160,16 @@ DECODE_Sync_Data (char *json_str, char *id_ac)
   cJSON_Delete(root);
 }
 
-void DECODE_Add_User_Data(char *json_str, int *user_id, char *user_name)
+void
+DECODE_Add_User_Data (char *json_str, int *user_id, char *user_name)
 {
   cJSON *root = cJSON_Parse(json_str);
 
-  if (!root)
-  {
-    ESP_LOGE(TAG, "Failed to parse JSON");
-    return;
-  }
+  cJSON *user_id_item   = cJSON_GetObjectItemCaseSensitive(root, "id");
+  cJSON *user_name_item = cJSON_GetObjectItemCaseSensitive(root, "name");
 
+  strncpy(user_name, user_name_item->valuestring, MAX_NAME_LEN - 1);
+  user_name[MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
+  *user_id                    = user_id_item->valueint;
+  cJSON_Delete(root);
 }
