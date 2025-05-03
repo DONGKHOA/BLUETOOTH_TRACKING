@@ -32,7 +32,7 @@ ENCODE_Sync_Data (int      *user_id,
   cJSON *root = cJSON_CreateObject();
 
   // Add command and user_len (CORRECTED FIELD)
-  cJSON_AddStringToObject(root, "command", "USER_DATA");
+  cJSON_AddStringToObject(root, "command", "SYNC_DATA");
   cJSON_AddNumberToObject(root, "user_len", *user_len);
 
   cJSON *json_list = cJSON_CreateArray();
