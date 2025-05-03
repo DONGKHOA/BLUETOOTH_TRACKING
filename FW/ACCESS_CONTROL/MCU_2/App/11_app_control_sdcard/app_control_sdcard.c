@@ -432,7 +432,6 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
   char temp_path[32];
 
   char line[128], new_line[128];
-  char face_buf[2], finger_buf[2];
 
   // Mount the SD card
   if (f_mount(&fs, MOUNT_POINT, 1) != FR_OK)
@@ -478,22 +477,24 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
     // If it does, update the line with new values
     if (current_id == user_id)
     {
-      // If the new values are NULL, keep the original values
-      // Otherwise, use the new values
-      face_buf[0] = (new_face >= 0) ? ('0' + new_face) : face[0];
-      face_buf[1] = '\0';
+      if(new_face == -1)
+      {
+        new_face = atoi(face);
+      }
 
-      finger_buf[0] = (new_finger >= 0) ? ('0' + new_finger) : finger[0];
-      finger_buf[1] = '\0';
+      if(new_finger == -1)
+      {
+        new_finger = atoi(face);
+      }
 
       // Format the new line with updated values
       snprintf(new_line,
                sizeof(new_line),
-               "%d,\"%s\",%s,%s,\"%s\"\n",
+               "%d,\"%s\",%d,%d,\"%s\"\n",
                user_id,
                new_name ? new_name : name,
-               face_buf,
-               finger_buf,
+               new_face,
+               new_finger,
                new_role ? new_role : role);
     }
     else
