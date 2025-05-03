@@ -140,13 +140,6 @@ APP_CONTROL_SDCARD_Task (void *arg)
         {
           APP_CONTROL_SDCARD_ReadUserData();
         }
-
-        s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_USER_DATA;
-        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-        s_DATA_SYNC.u8_data_length    = 1;
-        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-        xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
       }
     }
 
@@ -158,6 +151,17 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
       switch (s_sdcard_cmd)
       {
+        case SDCARD_SYNC_DATA_SERVER:
+
+          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+          
+          break;
+
         case SDCARD_ADD_USER_DATA:
           APP_CONTROL_SDCARD_WriteUserData();
           break;
@@ -363,7 +367,7 @@ APP_CONTROL_SDCARD_ReadUserData (void)
   // Read file line by line
   while (f_gets(line, sizeof(line), &fil) != NULL)
   {
-    line[strcspn(line, "\r\n")] = '\0'; 
+    line[strcspn(line, "\r\n")] = '\0';
 
     // Get ID
     char *token = strtok(line, ",");
