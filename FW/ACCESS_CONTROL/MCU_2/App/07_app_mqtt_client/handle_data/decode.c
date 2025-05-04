@@ -174,3 +174,18 @@ DECODE_Add_User_Data (char *json_str, int *user_id, char *user_name)
 
   cJSON_Delete(root);
 }
+
+void
+DECODE_Set_Role_Data (char *json_str, int *user_id, char *role)
+{
+  cJSON *root = cJSON_Parse(json_str);
+
+  cJSON *user_id_item   = cJSON_GetObjectItemCaseSensitive(root, "id");
+  cJSON *role_item = cJSON_GetObjectItemCaseSensitive(root, "role");
+
+  *user_id = user_id_item->valueint;
+  strncpy(role, role_item->valuestring, MAX_NAME_LEN - 1);
+  role[MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
+
+  cJSON_Delete(root);
+}

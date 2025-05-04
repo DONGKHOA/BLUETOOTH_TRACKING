@@ -38,10 +38,14 @@ def index():
     all_users = load_users()
     merged_users = []
     new_user_id = session.pop('new_user_id', None)
+    
     for device_id, users in all_users.items():
         for user in users:
             user["device_id"] = device_id
             merged_users.append(user)
+
+    merged_users.sort(key=lambda x: (x["device_id"], x.get("id", 0)))
+
     return render_template('server.html', users=merged_users, new_user_id=new_user_id)
 
 @app.route('/append_blank', methods=['POST'])
@@ -51,8 +55,9 @@ def append_blank():
     if device_id not in users:
         users[device_id] = []
 
-    last_id = max([u.get("id", 0) for u in users[device_id]], default=0)
-    new_user_id = last_id + 1
+    used_ids = {u.get("id") for u in users[device_id]}
+    new_user_id = next(i for i in range(1, 10000) if i not in used_ids)
+    
     users[device_id].append({
         "id": new_user_id,
         "name": "",
@@ -80,7 +85,9 @@ def update_users():
     users = users_all.setdefault(device_id, [])
 
     id_raw = request.form.get('id')
-    user_id = int(id_raw) if id_raw else max([u.get("id", 0) for u in users], default=0) + 1
+    used_ids = {u.get("id") for u in users}
+    user_id = int(id_raw) if id_raw else next(i for i in range(1, 10000) if i not in used_ids)
+
 
     updated = False
     for user in users:
@@ -212,8 +219,18 @@ def available_devices():
 
 @app.route('/attendance')
 def show_attendance():
-    attendance = load_attendance()
-    return render_template('attendance.html', attendance_data=attendance)
+    attendance_all = load_attendance()
+
+    merged = []
+    for device_id, records in attendance_all.items():
+        for record in records:
+            record["device_id"] = device_id  # Add device_id to each record
+            merged.append(record)
+
+    # Optional: sort by date or device ID
+    merged.sort(key=lambda x: (x["date"], x["device_id"], x["id"]))
+
+    return render_template('attendance.html', records=merged)
 
 
 if __name__ == '__main__':

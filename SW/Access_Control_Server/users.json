@@ -3,8 +3,8 @@
     {
       "id": 1,
       "name": "Ho Le Quoc Thang",
-      "face": 0,
-      "finger": 0,
+      "face": 1,
+      "finger": 1,
       "role": "user"
     },
     {
@@ -12,7 +12,7 @@
       "name": "Dong Thanh Khoa",
       "face": 0,
       "finger": 0,
-      "role": "user"
+      "role": "admin"
     }
   ]
 }

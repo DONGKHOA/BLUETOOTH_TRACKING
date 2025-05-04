@@ -55,7 +55,6 @@ typedef enum
 static FRESULT fr;
 static FATFS   fs;
 static UINT    bw;
-static UINT    br;
 static FIL     fil, fsrc, fdst;
 
 char *p_file_user_data  = "userData.csv";
@@ -167,9 +166,13 @@ APP_CONTROL_SDCARD_Task (void *arg)
           break;
 
         case SDCARD_ENROLL_FACE:
+          APP_CONTROL_SDCARD_ModifyInfoUserData(
+              NULL, s_sdcard_data.u16_user_id, 1, -1, NULL);
           break;
 
         case SDCARD_ENROLL_FINGERPRINT:
+          APP_CONTROL_SDCARD_ModifyInfoUserData(
+              NULL, s_sdcard_data.u16_user_id, -1, 1, NULL);
           break;
 
         case SDCARD_ATTENDANCE:
@@ -180,6 +183,8 @@ APP_CONTROL_SDCARD_Task (void *arg)
           break;
 
         case SDCARD_SET_ROLE:
+          APP_CONTROL_SDCARD_ModifyInfoUserData(
+              NULL, s_sdcard_data.u16_user_id, -1, -1, s_sdcard_data.role);
           break;
 
         case SDCARD_DELETE_FINGER_USER:

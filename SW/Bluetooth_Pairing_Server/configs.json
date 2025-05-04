@@ -12,8 +12,8 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "47.47",
-    "password": "0902900086",
+    "ssid": "Thuc Coffee",
+    "password": "18006230",
     "mqtt_server": "192.168.1.103:1883",
     "topic": "bluetooth/GW1/data"
   },

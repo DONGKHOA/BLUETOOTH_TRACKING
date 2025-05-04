@@ -116,6 +116,10 @@
 </div>
 
 <script>
+  setTimeout(() => {
+    location.reload();
+  }, 10000);
+
   function prepareRoleForm(userId) {
       const selected = document.getElementById(`role_select_${userId}`).value;
       document.getElementById(`hidden_role_${userId}`).value = selected;

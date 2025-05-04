@@ -46,6 +46,7 @@ extern "C"
   void        DECODE_User_ID(char *json_str, int *user_id);
   void        DECODE_Sync_Data(char *json_str, char *id_ac);
   void DECODE_Add_User_Data(char *json_str, int *user_id, char *user_name);
+  void DECODE_Set_Role_Data(char *json_str, int *user_id, char *role);
 
   char *ENCODE_Sync_Data(int      *user_id,
                          int      *face,

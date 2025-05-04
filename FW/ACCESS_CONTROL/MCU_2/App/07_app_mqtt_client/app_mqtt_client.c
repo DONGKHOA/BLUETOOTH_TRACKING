@@ -73,6 +73,7 @@ static char               data[1024 * 10];
 static char               data_send[1024 * 10];
 static int                status;
 static int                user_id_delete;
+static int                user_id_set_role;
 static char               id_ac[8];
 static char u32_topic_request_server[32]  = "ACCESS_CONTROL/Server/Request";
 static char u32_topic_request_client[32]  = "ACCESS_CONTROL/Client/Request";
@@ -371,12 +372,13 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case SET_ROLE:
 
-          DECODE_User_ID(data, &user_id_delete);
+          DECODE_Set_Role_Data(data, &user_id_set_role, s_sdcard_data.role);
 
           s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_SET_ROLE;
 
-          s_DATA_SYNC.u8_data_packet[0] = (user_id_delete >> 8) & 0xFF; // High
-          s_DATA_SYNC.u8_data_packet[1] = user_id_delete & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_packet[0]
+              = (user_id_set_role >> 8) & 0xFF;                    // High
+          s_DATA_SYNC.u8_data_packet[1] = user_id_set_role & 0xFF; // Low
           s_DATA_SYNC.u8_data_length    = 2;
 
           s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;

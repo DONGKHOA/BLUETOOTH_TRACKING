@@ -73,14 +73,24 @@ async def process_request():
             case "ENROLL_FACE":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.response_enroll_face(user_id, device_id))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
+                print("Sent response:", json_data)
 
             case "ENROLL_FINGERPRINT":
                 user_id = data.get("id")
                 json_data = json.dumps(handle_data.response_enroll_finger(user_id, device_id))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
+                print("Sent response:", json_data)
 
             case "ATTENDANCE":
                 user_id = data.get("id")
-                json_data = json.dumps(handle_data.response_attendance(user_id, device_id))
+                time = data.get("timestamp")
+                json_data = json.dumps(handle_data.response_attendance(user_id, device_id, time))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
+                print("Sent response:", json_data)
 
             case "ADD_USER_DATA":
                 print("Adding user data")
