@@ -62,7 +62,7 @@ extern "C"
 
   typedef struct DATA_SYNC
   {
-    uint8_t u8_data_packet[5];
+    uint8_t u8_data_packet[8];
     uint8_t u8_data_start;
     uint8_t u8_data_length;
     uint8_t u8_data_stop;
