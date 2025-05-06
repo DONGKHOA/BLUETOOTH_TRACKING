@@ -47,19 +47,25 @@
         </tr>
         </thead>
         <tbody>
-        {% for user in users %}
-        <tr>
-          <form method="post" action="{{ url_for('update_users') }}">
-            <input type="hidden" name="id" value="{{ user.id }}">
+          {% for user in users %}
+          <tr>
             <td>{{ user.id }}</td>
-            <td><input type="text" class="form-control" name="name" value="{{ user.name }}"></td>
-            <td><input type="text" class="form-control" name="employee_id" value="{{ user.employee_id }}"></td>
+          
             <td>
-              <select class="form-select" name="role" id="role_select_{{ user.id }}">
+              <input type="text" class="form-control" id="name_{{ user.id }}" value="{{ user.name }}">
+            </td>
+          
+            <td>
+              <input type="text" class="form-control" id="employee_id_{{ user.id }}" value="{{ user.employee_id }}">
+            </td>
+          
+            <td>
+              <select class="form-select" id="role_select_{{ user.id }}">
                 <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
                 <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
               </select>
             </td>
+          
             <td>
               {% if user.face == 1 %}
                 <form method="post" action="{{ url_for('delete_face', user_id=user.id) }}">
@@ -69,6 +75,7 @@
                 <span class="text-muted">Not Set</span>
               {% endif %}
             </td>
+          
             <td>
               {% if user.finger == 1 %}
                 <form method="post" action="{{ url_for('delete_finger', user_id=user.id) }}">
@@ -78,25 +85,33 @@
                 <span class="text-muted">Not Set</span>
               {% endif %}
             </td>
+          
             <td>
-              <button type="submit" class="btn btn-success action-btn">+</button>
+              <form method="post" action="{{ url_for('update_users') }}">
+                <input type="hidden" name="id" value="{{ user.id }}">
+                <input type="hidden" name="name" id="hidden_name_{{ user.id }}">
+                <input type="hidden" name="employee_id" id="hidden_employee_id_{{ user.id }}">
+                <input type="hidden" name="role" id="hidden_role_{{ user.id }}">
+                <button type="submit" class="btn btn-success action-btn" onclick="prepareUpdateForm({{ user.id }})">+</button>
+              </form>
             </td>
-          </form>
-          <td>
-            <form method="post" action="{{ url_for('delete_user', index=loop.index0) }}">
-              <button type="submit" class="btn btn-danger action-btn">-</button>
-            </form>
-          </td>
-          <td>
-            <form method="post" action="{{ url_for('set_role', user_id=user.id) }}"
-                  onsubmit="return prepareRoleForm({{ user.id }})">
-              <input type="hidden" name="role" id="hidden_role_{{ user.id }}">
-              <button type="submit" class="btn btn-primary btn-sm action-btn">Set Role</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-        </tbody>
+          
+            <td>
+              <form method="post" action="{{ url_for('delete_user', index=loop.index0) }}">
+                <button type="submit" class="btn btn-danger action-btn">-</button>
+              </form>
+            </td>
+          
+            <td>
+              <form method="post" action="{{ url_for('set_role', user_id=user.id) }}"
+                    onsubmit="return prepareRoleForm({{ user.id }})">
+                <input type="hidden" name="role" id="hidden_role_set_{{ user.id }}">
+                <button type="submit" class="btn btn-primary btn-sm action-btn">Set Role</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>          
     </table>
 </div>
 
