@@ -1,5 +1,5 @@
-#ifndef APP_TIMESTAMP_H_
-#define APP_TIMESTAMP_H_
+#ifndef APP_TIME_SYSTEM_H_
+#define APP_TIME_SYSTEM_H_
 
 /******************************************************************************
  *      INCLUDES
@@ -16,11 +16,11 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void APP_TIMESTAMP_CreateTask(void);
-  void APP_TIMESTAMP_Init(void);
+  void APP_TIME_SYSTEM_CreateTask(void);
+  void APP_TIME_SYSTEM_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* APP_TIMESTAMP_H_ */
+#endif /* APP_TIME_SYSTEM_H_ */

@@ -41,6 +41,7 @@ typedef struct
   QueueHandle_t      *p_data_local_database_queue;
   QueueHandle_t      *p_data_sdcard_queue;
   EventGroupHandle_t *p_fingerprint_event;
+  SemaphoreHandle_t  *p_time_mutex;
   TimerHandle_t       s_attendance_timer;
 } local_database_t;
 
@@ -83,6 +84,7 @@ APP_LOCAL_DATABASE_Init (void)
       = &s_data_system.s_data_local_database_queue;
   s_local_database.p_fingerprint_event = &s_data_system.s_fingerprint_event;
   s_local_database.p_data_sdcard_queue = &s_data_system.s_data_sdcard_queue;
+  s_local_database.p_time_mutex        = &s_data_system.s_time_mutex;
 
   s_local_database.s_attendance_timer
       = xTimerCreate("Attendance",
@@ -356,7 +358,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
             xTimerStart(s_local_database.s_attendance_timer, 0);
           }
 
-          s_sdcard_data.u32_time    = (uint32_t)now;
+          xSemaphoreTake(*s_local_database.p_time_mutex,
+                         100 / portTICK_PERIOD_MS);
+
+          s_sdcard_data.u32_time = (uint32_t)now;
+
+          xSemaphoreGive(*s_local_database.p_time_mutex);
+
           s_sdcard_data.u16_user_id = u16_id;
           memcpy(s_sdcard_data.user_name, user_name[index], 32);
 
