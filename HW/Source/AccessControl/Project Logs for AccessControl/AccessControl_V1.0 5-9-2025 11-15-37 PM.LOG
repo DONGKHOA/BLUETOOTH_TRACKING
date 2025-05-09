@@ -1,0 +1,46 @@
+Removed Pin From Net: NetName=GND Pin=J5-SH1
+Removed Pin From Net: NetName=GND Pin=J5-SH2
+Change Component Footprint: Designator=J5 Old Footprint=JST_SH_BM03B-SRSS-TB_1x03-1MP_P1.00mm_horizontal New Footprint=Terminal_Block_3.81mm_3P
+Change Component Comment : Designator=J5 Old Comment=DHT22 New Comment=3.81mm_3P
+Change Component Designator: OldDesignator=C36 NewDesignator=C37
+Change Component Designator: OldDesignator=C37 NewDesignator=C38
+Change Component Designator: OldDesignator=C38 NewDesignator=C36
+Change Component Designator: OldDesignator=R25 NewDesignator=R29
+Change Component Designator: OldDesignator=R26 NewDesignator=R30
+Change Component Designator: OldDesignator=R27 NewDesignator=R28
+Change Component Designator: OldDesignator=R28 NewDesignator=R26
+Change Component Designator: OldDesignator=R29 NewDesignator=R27
+Change Component Designator: OldDesignator=R30 NewDesignator=R25
+Change Component Designator: OldDesignator=R101 NewDesignator=R109
+Change Component Designator: OldDesignator=R102 NewDesignator=R101
+Change Component Designator: OldDesignator=R103 NewDesignator=R102
+Change Component Designator: OldDesignator=R104 NewDesignator=R103
+Change Component Designator: OldDesignator=R105 NewDesignator=R104
+Change Component Designator: OldDesignator=R106 NewDesignator=R105
+Change Component Designator: OldDesignator=R107 NewDesignator=R106
+Change Component Designator: OldDesignator=R108 NewDesignator=R107
+Change Component Designator: OldDesignator=R109 NewDesignator=R108
+Change Component Designator: OldDesignator=SW4 NewDesignator=SW5
+Change Component Designator: OldDesignator=SW5 NewDesignator=SW6
+Change Component Designator: OldDesignator=SW6 NewDesignator=SW4
+Change component parameters: Designator = "J5" ("J5"); Footprint = "JST_SH_BM03B-SRSS-TB_1x03-1MP_P1.00mm_horizontal"; UniqueID = "\EVHBKNOC\QOTJFQLV" ("\EVHBKNOC\QOTJFQLV")
+Change component parameters (AddParameter): Name = "Datasheet"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Name"; Value = "Thegioiic"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply Part Number"; Value = "UL-3.81-3-R Terminal Block Plug-in Hàn PCB 3 Chân Cong 3.81mm 300V 10A ULO"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supply URL"; Value = "https://www.thegioiic.com/ul-3-81-3-r-terminal-block-plug-in-han-pcb-3-chan-cong-3-81mm-300v-10a-ulo"; VariantName = "[No Variations]"
+Change Net Name : Old Net Name=NetR102_1 New Net Name=NetR101_1
+Change Net Name : Old Net Name=NetR103_1 New Net Name=NetR102_1
+Change Net Name : Old Net Name=NetR106_1 New Net Name=NetR105_1
+Change Net Name : Old Net Name=NetR107_1 New Net Name=NetR106_1
+Change Net Name : Old Net Name=NetR108_1 New Net Name=NetR107_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

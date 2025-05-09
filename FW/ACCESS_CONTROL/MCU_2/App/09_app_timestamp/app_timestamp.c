@@ -39,7 +39,7 @@ typedef struct
  *  PRIVATE PROTOTYPE FUNCTION
  *****************************************************************************/
 
-void        APP_TIMESTAMP_Notification_cb(struct timeval *tv);
+static void APP_TIMESTAMP_Notification_cb(struct timeval *tv);
 static void APP_TIMESTAMP_Task(void *arg);
 
 /******************************************************************************
@@ -77,7 +77,7 @@ APP_TIMESTAMP_Init (void)
  *  PRIVATE FUNCTION
  *****************************************************************************/
 
-void
+static void
 APP_TIMESTAMP_Notification_cb (struct timeval *tv)
 {
   ESP_LOGI(TAG, "Time synchronized\n");
