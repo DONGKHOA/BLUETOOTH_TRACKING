@@ -44,6 +44,7 @@ static handle_rtc_t s_handle_rtc;
  *****************************************************************************/
 
 static void APP_RTC_Task(void *arg);
+static void convert_ds3231_to_tm(const ds3231_data_t *src, struct tm *dest);
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -130,4 +131,18 @@ APP_RTC_Task (void *arg)
     }
     vTaskDelay(10000 / portTICK_PERIOD_MS);
   }
+}
+
+static void
+convert_ds3231_to_tm (const ds3231_data_t *src, struct tm *dest)
+{
+  dest->tm_sec   = src->u8_second;     // 0-59
+  dest->tm_min   = src->u8_minute;     // 0-59
+  dest->tm_hour  = src->u8_hour;       // 0-23 (assumes 24-hour format)
+  dest->tm_mday  = src->u8_date;       // 1-31
+  dest->tm_mon   = src->u8_month - 1;  // Adjust to 0-11
+  dest->tm_year  = src->u8_year + 100; // Years since 1900 (2000-2099)
+  dest->tm_wday  = src->u8_day - 1;    // Adjust to 0-6 (Sunday=0)
+  dest->tm_yday  = 0;                  // Not provided by DS3231
+  dest->tm_isdst = -1;                 // No daylight saving time info
 }
