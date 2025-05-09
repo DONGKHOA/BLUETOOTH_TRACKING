@@ -419,7 +419,6 @@ APP_LOCAL_DATABASE_Task (void *arg)
         case LOCAL_DATABASE_SET_ROLE:
 
           // Update data in psram
-
           u16_id = (s_DATA_SYNC.u8_data_packet[0] << 8)
                    | s_DATA_SYNC.u8_data_packet[1];
 
@@ -439,13 +438,19 @@ APP_LOCAL_DATABASE_Task (void *arg)
 
           if (!is_valid)
           {
-            break;
+            break;  
           }
 
-          memcpy(role[index], s_sdcard_data.role, 6);
+          printf("111111111111111111\r\n");
+
+          strcpy(role[index], (char *)&s_DATA_SYNC.u8_data_packet[2]);
+
+          printf("Role: %s\n", role[index]);
 
           s_sdcard_cmd              = SDCARD_SET_ROLE;
           s_sdcard_data.u16_user_id = u16_id;
+
+          memcpy(s_sdcard_data.role, role[index], 6);
 
           xQueueSend(*s_local_database.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
