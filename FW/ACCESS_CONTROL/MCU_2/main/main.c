@@ -27,8 +27,7 @@
 #include "app_data_transmit.h"
 #include "app_handle_wifi.h"
 #include "app_fingerprint.h"
-#include "app_timestamp.h"
-#include "app_rtc.h"
+#include "app_time_system.h"
 #include "app_configuration.h"
 #include "app_local_database.h"
 #include "app_led_status.h"
@@ -118,11 +117,10 @@ app_main (void)
 
       APP_FINGERPRINT_Init();
       APP_HANDLE_WIFI_Init();
-      APP_TIMESTAMP_Init();
+      APP_TIME_SYSTEM_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
       APP_MQTT_CLIENT_Init();
-      APP_RTC_Init();
       APP_CONTROL_SDCARD_Init();
 
       // App Create Task
@@ -131,8 +129,7 @@ app_main (void)
       APP_HANDLE_WIFI_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
       APP_DATA_RECEIVE_CreateTask();
-      APP_RTC_CreateTask();
-      APP_TIMESTAMP_CreateTask();
+      APP_TIME_SYSTEM_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
       APP_CONTROL_SDCARD_CreateTask();
 
@@ -240,6 +237,7 @@ APP_MAIN_InitDataSystem (void)
 
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
+  s_data_system.s_time_mutex          = xSemaphoreCreateMutex();
   s_data_system.s_flag_time_event     = xEventGroupCreate();
   s_data_system.s_configuration_event = xEventGroupCreate();
   s_data_system.s_fingerprint_event   = xEventGroupCreate();
