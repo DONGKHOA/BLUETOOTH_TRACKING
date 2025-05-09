@@ -333,11 +333,13 @@ APP_LOCAL_DATABASE_Task (void *arg)
           xEventGroupSetBits(*s_local_database.p_fingerprint_event,
                              EVENT_DELETE_FINGERPRINT);
 
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_DELETE_FACE_ID;
-          s_DATA_SYNC.u8_data_packet[0] = (index << 8) & 0xFF; // High
-          s_DATA_SYNC.u8_data_packet[1] = index & 0xFF;        // Low
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          s_DATA_SYNC.u8_data_start = DATA_SYNC_DELETE_FACE_ID;
+
+          s_DATA_SYNC.u8_data_packet[0] = (u16_id >> 8) & 0xFF; // High
+          s_DATA_SYNC.u8_data_packet[1] = u16_id & 0xFF;        // Low
+          s_DATA_SYNC.u8_data_length    = 2;
+
+          s_DATA_SYNC.u8_data_stop = DATA_STOP_FRAME;
 
           xQueueSend(*s_local_database.p_send_data_queue, &s_DATA_SYNC, 0);
 
