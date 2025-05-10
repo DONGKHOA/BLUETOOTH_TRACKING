@@ -136,31 +136,6 @@ DECODE_User_ID (char *json_str, int *user_id)
 }
 
 void
-DECODE_Sync_Data (char *json_str, char *id_ac)
-{
-  cJSON *root = cJSON_Parse(json_str);
-
-  if (!root)
-  {
-    ESP_LOGE(TAG, "Failed to parse JSON");
-    return;
-  }
-
-  // Get "id_ac"
-  cJSON *id_ac_item = cJSON_GetObjectItemCaseSensitive(root, "id");
-  if (!cJSON_IsString(id_ac_item) || (id_ac_item->valuestring == NULL))
-  {
-    ESP_LOGE(TAG, "id_ac is missing or not a string");
-    cJSON_Delete(root);
-    return;
-  }
-
-  strncpy(id_ac, id_ac_item->valuestring, strlen(id_ac_item->valuestring));
-
-  cJSON_Delete(root);
-}
-
-void
 DECODE_Add_User_Data (char *json_str, int *user_id, char *user_name)
 {
   cJSON *root = cJSON_Parse(json_str);
