@@ -271,7 +271,7 @@ APP_CONFIGURATION_CreateTask (void)
 void
 APP_CONFIGURATION_Init (void)
 {
-  p_state_system = &s_data_system.s_state_system;
+  p_state_system    = &s_data_system.s_state_system;
   p_send_data_queue = &s_data_system.s_send_data_queue;
 
   *p_state_system = STATE_BLUETOOTH_CONFIG;
@@ -338,6 +338,21 @@ APP_CONFIGURATION_ProcessData (
     WIFI_SetPass(u8_pass, 1);
 
     WIFI_SetNumSSID(1);
+  }
+  else if (memcmp(
+               s_configuration_data_event->u8_data, "ROOM", sizeof("ROOM") - 1)
+           == 0)
+  {
+    char    room_name[8];
+    uint8_t i;
+    for (i = 0; s_configuration_data_event->u8_data[sizeof("ROOM") + i] != '\n';
+         i++)
+    {
+      room_name[i] = s_configuration_data_event->u8_data[sizeof("ROOM") + i];
+    }
+    room_name[i] = '\0';
+
+    NVS_WriteString("ROOM", ROOM_NVS, room_name);
   }
 }
 

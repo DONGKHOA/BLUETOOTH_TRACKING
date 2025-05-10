@@ -74,7 +74,6 @@ static char               data_send[1024 * 10];
 static int                status;
 static int                user_id_delete;
 static int                user_id_set_role;
-static char               id_ac[8];
 static char u32_topic_request_server[32]  = "ACCESS_CONTROL/Server/Request";
 static char u32_topic_request_client[32]  = "ACCESS_CONTROL/Client/Request";
 static char u32_topic_response_server[32] = "ACCESS_CONTROL/Server/Response";
@@ -108,6 +107,28 @@ APP_MQTT_CLIENT_Init (void)
 
   s_mqtt_client_data.b_connected_server      = false;
   s_mqtt_client_data.b_mqtt_client_connected = false;
+
+  char room_name[8];
+  if (NVS_ReadString("ROOM", ROOM_NVS, room_name, 8) == ESP_OK)
+  {
+    // Update Topic for MQTT Client
+    snprintf(u32_topic_request_server,
+             sizeof(u32_topic_request_server),
+             "%s/Server/Request",
+             room_name);
+    snprintf(u32_topic_request_client,
+             sizeof(u32_topic_request_client),
+             "%s/Client/Request",
+             room_name);
+    snprintf(u32_topic_response_server,
+             sizeof(u32_topic_response_server),
+             "%s/Server/Response",
+             room_name);
+    snprintf(u32_topic_response_client,
+             sizeof(u32_topic_response_client),
+             "%s/Client/Response",
+             room_name);
+  }
 
   esp_mqtt_client_config_t mqtt_cfg = {
     .broker.address.uri = URL_DEFAULT,
@@ -275,31 +296,7 @@ APP_MQTT_CLIENT_task (void *arg)
         case SYNC_CMD:
 
           s_mqtt_client_data.b_connected_server = true;
-          DECODE_Sync_Data(data, id_ac);
-
-          // Update Topic for MQTT Client
-          snprintf(u32_topic_request_server,
-                   sizeof(u32_topic_request_server),
-                   "%s/Server/Request",
-                   id_ac);
-          snprintf(u32_topic_request_client,
-                   sizeof(u32_topic_request_client),
-                   "%s/Client/Request",
-                   id_ac);
-          snprintf(u32_topic_response_server,
-                   sizeof(u32_topic_response_server),
-                   "%s/Server/Response",
-                   id_ac);
-          snprintf(u32_topic_response_client,
-                   sizeof(u32_topic_response_client),
-                   "%s/Client/Response",
-                   id_ac);
-
-          // Subscribe to the new topics
-          esp_mqtt_client_subscribe_single(
-              s_mqtt_client_data.s_MQTT_Client, u32_topic_request_client, 0);
-          esp_mqtt_client_subscribe_single(
-              s_mqtt_client_data.s_MQTT_Client, u32_topic_response_client, 0);
+          DECODE_Status(data, &status);
 
           s_sdcard_cmd = SDCARD_SYNC_DATA_SERVER;
           xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_sdcard_cmd, 0);
