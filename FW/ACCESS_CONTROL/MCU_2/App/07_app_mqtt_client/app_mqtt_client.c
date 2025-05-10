@@ -131,10 +131,24 @@ APP_MQTT_CLIENT_Init (void)
              room_name);
   }
 
-  esp_mqtt_client_config_t mqtt_cfg = {
-    .broker.address.uri = URL_DEFAULT,
-  };
-  s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  char mqtt_server[64];
+
+  if (NVS_ReadString("MQTT", MQTTSERVER_NVS, mqtt_server, 64) == ESP_OK)
+  {
+    memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
+    memcpy(mqtt_server, "mqtt://", 7);
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = mqtt_server,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
+  else
+  {
+    esp_mqtt_client_config_t mqtt_cfg = {
+      .broker.address.uri = URL_DEFAULT,
+    };
+    s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
+  }
 
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
                                  ESP_EVENT_ANY_ID,
@@ -349,9 +363,9 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           // Send to MCU1 to notify that the status of attendance
-          s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ATTENDANCE;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ATTENDANCE;
+          s_DATA_SYNC.u8_data_length = 1;
+          s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
 
           if (status == 1)
           {
