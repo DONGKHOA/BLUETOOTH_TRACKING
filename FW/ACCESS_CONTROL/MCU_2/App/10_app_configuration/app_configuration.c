@@ -326,7 +326,7 @@ APP_CONFIGURATION_ProcessData (
 
     for (i = 0; s_configuration_data_event
                     ->u8_data[sizeof("WIFI") + strlen((char *)u8_wifi) + 1 + i]
-                != '\0';
+                != '\n';
          i++)
     {
       u8_pass[i]

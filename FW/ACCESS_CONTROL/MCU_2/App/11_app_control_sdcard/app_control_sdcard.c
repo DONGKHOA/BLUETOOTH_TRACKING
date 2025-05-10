@@ -79,9 +79,11 @@ static control_sdcard_status_t APP_CONTROL_SDCARD_CheckNew(void);
 static void                    APP_CONTROL_SDCARD_CreateFile(void);
 static void                    APP_CONTROL_SDCARD_WriteUserData(void);
 static void                    APP_CONTROL_SDCARD_ReadUserData(void);
-static void                    APP_CONTROL_SDCARD_WriteAttendanceData(void);
-static void                    APP_CONTROL_SDCARD_ReadAttendanceData(void);
-static void                    APP_CONTROL_SDCARD_RemoveQuotes(char *str);
+static void APP_CONTROL_SDCARD_WriteAttendanceData(char    *new_name,
+                                                   int      user_id,
+                                                   uint32_t timestamp);
+static void APP_CONTROL_SDCARD_ReadAttendanceData(void);
+static void APP_CONTROL_SDCARD_RemoveQuotes(char *str);
 
 static void APP_CONTROL_SDCARD_ModifyInfoUserData(
     char *new_name, int user_id, int new_face, int new_finger, char *new_role);
@@ -176,6 +178,9 @@ APP_CONTROL_SDCARD_Task (void *arg)
           break;
 
         case SDCARD_ATTENDANCE:
+          APP_CONTROL_SDCARD_WriteAttendanceData(s_sdcard_data.user_name,
+                                                 s_sdcard_data.u16_user_id,
+                                                 s_sdcard_data.u32_time);
           break;
 
         case SDCARD_DELETE_USER_DATA:
@@ -529,10 +534,15 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
 }
 
 static void
-APP_CONTROL_SDCARD_WriteAttendanceData (void)
+APP_CONTROL_SDCARD_WriteAttendanceData (char    *new_name,
+                                        int      user_id,
+                                        uint32_t timestamp)
 {
-  char full_path[128];
-  char row_buffer[256];
+  char full_path[32];
+  char temp_path[32];
+  char line[128], new_line[128];
+
+  int updated = 0;
 
   // Mount SD Card
   fr = f_mount(&fs, MOUNT_POINT, 1);
@@ -542,33 +552,135 @@ APP_CONTROL_SDCARD_WriteAttendanceData (void)
     return;
   }
 
+  // Open the source file for reading
+  // Open the temporary file for writing
   snprintf(
       full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+  snprintf(temp_path, sizeof(temp_path), "%s/%s", MOUNT_POINT, p_tempfile);
 
-  // Open file in write mode to overwrite or create
-  fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
+  // Open file in read mode to check if the user ID already exists
+  if (f_open(&fsrc, full_path, FA_READ) != FR_OK
+      || f_open(&fdst, temp_path, FA_WRITE | FA_CREATE_ALWAYS) != FR_OK)
+  {
+    printf("f_open failed!\n");
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  // Read the exist line
+  while (f_gets(line, sizeof(line), &fsrc))
+  {
+    line[strcspn(line, "\r\n")] = '\0';
+
+    char *id_str = strtok(line, ",\r\n");
+    char *name   = strtok(NULL, ",\r\n");
+    char *time   = strtok(NULL, ",\r\n");
+
+    if (!id_str || !name || !time)
+    {
+      printf("Invalid line format: %s\n", line);
+      continue;
+    }
+
+    int      current_id = atoi(id_str);
+    uint32_t final_time = strtoul(time, NULL, 10);
+
+    APP_CONTROL_SDCARD_RemoveQuotes(new_name);
+    APP_CONTROL_SDCARD_RemoveQuotes(name);
+
+    char *final_name = name;
+
+    if (current_id == user_id)
+    {
+      final_time = timestamp;
+      updated    = 1;
+    }
+
+    // Write attendance
+    snprintf(new_line,
+             sizeof(new_line),
+             "%d, \"%s\",%lu\n",
+             current_id,
+             final_name,
+             final_time);
+
+    printf("Update line: %s\n", new_line);
+
+    f_write(&fdst, new_line, strlen(new_line), &bw);
+  }
+
+  // Write new attendance data
+  if (updated == 0)
+  {
+    snprintf(new_line,
+             sizeof(new_line),
+             "%d, \"%s\",%lu\n",
+             user_id,
+             new_name,
+             timestamp);
+    printf("New attendance line: %s\n", new_line);
+    f_write(&fdst, new_line, strlen(new_line), &bw);
+  }
+
+  f_close(&fsrc);
+  f_close(&fdst);
+
+  f_unlink(full_path);
+  f_rename(temp_path, full_path);
+}
+
+static void
+APP_CONTROL_SDCARD_ReadAttendanceData (void)
+{
+  char full_path[32];
+  char line[128];
+
+  // Mount SD Card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
+
+  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+
+  fr = f_open(&fil, full_path, FA_READ);
   if (fr != FR_OK)
   {
     printf("f_open failed! error=%d\n", fr);
     f_mount(NULL, MOUNT_POINT, 1);
     return;
   }
-
-  
-}
-
-static void
-APP_CONTROL_SDCARD_ReadAttendanceData (void)
-{
+  // Read file line by line
+  while (f_gets(line, sizeof(line), &fil))
+  {
+    line[strcspn(line, "\r\n")] = '\0';
+    
+    
+  }
 }
 
 static void
 APP_CONTROL_SDCARD_RemoveQuotes (char *str)
 {
+  // Remove space at the beginning and end of the string
+  while (*str == ' ')
+  {
+    memmove(str, str + 1, strlen(str));
+  }
+
   uint32_t len = strlen(str);
+  while (len > 0 && str[len - 1] == ' ')
+  {
+    str[--len] = '\0';
+  }
+
+  // Remove surrounding quotes
+  len = strlen(str);
   if (len >= 2 && str[0] == '"' && str[len - 1] == '"')
   {
-    memmove(str, str + 1, len - 2); // shift left, keep inner content only
-    str[len - 2] = '\0';            // null-terminate after removing both quotes
+    memmove(str, str + 1, len - 2);
+    str[len - 2] = '\0';
   }
 }

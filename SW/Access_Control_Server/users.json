@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Ho Le Quoc Thang",
-      "face": 0,
+      "face": 1,
       "finger": 1,
       "role": "admin"
     },
@@ -11,7 +11,151 @@
       "id": 2,
       "name": "Dong Thanh Khoa",
       "face": 0,
-      "finger": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC2": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC3": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC4": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC5": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC6": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC7": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC8": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC9": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "admin"
+    }
+  ],
+  "AC10": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
       "role": "admin"
     }
   ]
