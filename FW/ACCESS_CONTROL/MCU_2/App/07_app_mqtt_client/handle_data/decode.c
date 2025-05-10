@@ -184,8 +184,8 @@ DECODE_Set_Role_Data (char *json_str, int *user_id, char *role)
   cJSON *role_item = cJSON_GetObjectItemCaseSensitive(root, "role");
 
   *user_id = user_id_item->valueint;
-  strncpy(role, role_item->valuestring, MAX_NAME_LEN - 1);
-  role[MAX_NAME_LEN - 1] = '\0'; // Ensure null-termination
+  strncpy(role, role_item->valuestring, 5);
+  role[5] = '\0'; // Ensure null-termination
 
   cJSON_Delete(root);
 }

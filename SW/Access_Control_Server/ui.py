@@ -230,7 +230,7 @@ def show_attendance():
     # Optional: sort by date or device ID
     merged.sort(key=lambda x: (x["date"], x["device_id"], x["id"]))
 
-    return render_template('attendance.html', records=merged)
+    return render_template('attendance.html', attendance_data=merged)
 
 
 if __name__ == '__main__':

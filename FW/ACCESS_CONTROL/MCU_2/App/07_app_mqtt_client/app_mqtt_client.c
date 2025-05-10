@@ -173,7 +173,7 @@ APP_MQTT_CLIENT_task (void *arg)
 
             sprintf(data_send,
                     "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
-                    "%ld\"}",
+                    "%ld}",
                     s_sdcard_data.u16_user_id,
                     s_sdcard_data.u32_time);
             esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
@@ -350,6 +350,18 @@ APP_MQTT_CLIENT_task (void *arg)
 
         case ATTENDANCE_CMD:
           DECODE_Status(data, &status);
+
+          s_DATA_SYNC.u8_data_start  = DATA_SYNC_RESPONSE_ENROLL_FINGERPRINT;
+          s_DATA_SYNC.u8_data_length = 1;
+          s_DATA_SYNC.u8_data_stop   = DATA_STOP_FRAME;
+          if (status == 1)
+          {
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+          }
+          else
+          {
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+          }
 
           break;
 

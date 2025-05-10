@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 def load_users():
     with open("users.json", "r") as f:
@@ -76,14 +77,11 @@ def response_attendance(user_id, device_id, timestamp):
     users_all = load_users()
     users = users_all.get(device_id, [])
 
-    if isinstance(timestamp, (int, float, str)):
-        try:
-            timestamp = int(timestamp)
-            now = datetime.fromtimestamp(timestamp)
-        except Exception:
-            now = datetime.now()
-    else:
-        now = datetime.now()
+    try:
+        timestamp = int(timestamp)
+        now = datetime.utcfromtimestamp(timestamp)
+    except Exception:
+        now = datetime.utcnow()
 
     date_str = now.strftime("%d/%m/%Y")
     time_str = now.strftime("%H:%M:%S")
@@ -95,14 +93,11 @@ def response_attendance(user_id, device_id, timestamp):
             attendance_all = load_attendance()
             attendance = attendance_all.setdefault(device_id, [])
 
-            # Check if already logged today
             for row in attendance:
                 if row["id"] == user_id and row["date"] == date_str:
-                    # Just update the latest time
                     row["check"] = time_str
                     break
             else:
-                # Add new row
                 attendance.append({
                     "id": user_id,
                     "name": name,

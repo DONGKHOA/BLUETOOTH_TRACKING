@@ -451,11 +451,7 @@ APP_LOCAL_DATABASE_Task (void *arg)
             break;  
           }
 
-          printf("111111111111111111\r\n");
-
           strcpy(role[index], (char *)&s_DATA_SYNC.u8_data_packet[2]);
-
-          printf("Role: %s\n", role[index]);
 
           s_sdcard_cmd              = SDCARD_SET_ROLE;
           s_sdcard_data.u16_user_id = u16_id;

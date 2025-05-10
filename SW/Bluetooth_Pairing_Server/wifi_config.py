@@ -56,7 +56,12 @@ class WiFiConfigManager:
             if client and write_char:
                 
                 try:
-                    payload = f"WIFI:{ssid}|{password}"
+                    payload = f"WIFI:{ssid}|{password}\n"
+
+                    # Check the length of the payload
+                    if len(payload) < 20:
+                        payload += "\n" * (20 - len(payload))
+                    
                     await client.write_gatt_char(write_char, payload.encode())
                     
                     self.save_config(mac, ssid=ssid, password=password)

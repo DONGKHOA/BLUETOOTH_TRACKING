@@ -531,6 +531,30 @@ APP_CONTROL_SDCARD_ModifyInfoUserData (
 static void
 APP_CONTROL_SDCARD_WriteAttendanceData (void)
 {
+  char full_path[128];
+  char row_buffer[256];
+
+  // Mount SD Card
+  fr = f_mount(&fs, MOUNT_POINT, 1);
+  if (fr != FR_OK)
+  {
+    printf("f_mount failed! error=%d\n", fr);
+    return;
+  }
+
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+
+  // Open file in write mode to overwrite or create
+  fr = f_open(&fil, full_path, FA_WRITE | FA_CREATE_ALWAYS);
+  if (fr != FR_OK)
+  {
+    printf("f_open failed! error=%d\n", fr);
+    f_mount(NULL, MOUNT_POINT, 1);
+    return;
+  }
+
+  
 }
 
 static void
