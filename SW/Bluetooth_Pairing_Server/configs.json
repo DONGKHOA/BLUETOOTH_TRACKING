@@ -15,7 +15,8 @@
     "ssid": "47.47",
     "password": "0902900086",
     "mqtt_server": "192.168.1.103:1883",
-    "topic": "bluetooth/GW1/data"
+    "topic": "bluetooth/GW1/data",
+    "room": "Room1"
   },
   "24:58:7C:E2:C3:A6": {
     "ssid": "47.47",

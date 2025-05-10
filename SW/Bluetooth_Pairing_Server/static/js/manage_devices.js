@@ -147,6 +147,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       mqttTopicSpan.textContent = mqttData.topic;
     }
 
+    const roomSpan = document.getElementById("roomDisplay");
+    if (roomSpan && mqttData.room) {
+      roomSpan.textContent = mqttData.room;
+    }
+
   } catch (err) {
     console.error("Failed to load previous WiFi config:", err);
   }
@@ -207,5 +212,34 @@ function applyMQTTTopic() {
       alert("Error: " + JSON.stringify(data));
     }
     closeMQTTTopicModal();
+  });
+}
+
+function openRoomModal() {
+  document.getElementById("roomModal").style.display = "block";
+  document.getElementById("roomInput").value = document.getElementById("roomDisplay").textContent;
+}
+
+function closeRoomModal() {
+  document.getElementById("roomModal").style.display = "none";
+}
+
+function applyRoom() {
+  const room = document.getElementById("roomInput").value;
+  const mac = sessionStorage.getItem("connectedMac");
+  fetch("/send_room", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ room, mac })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.saved) {
+      document.getElementById("roomDisplay").textContent = room;
+      alert("Room updated!");
+    } else {
+      alert("Error: " + JSON.stringify(data));
+    }
+    closeRoomModal();
   });
 }

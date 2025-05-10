@@ -2,7 +2,7 @@ import asyncio
 from config_stored import configs, save_configs
 
 class MQTTConfigManager:
-    def save_config(self, mac, mqtt_server=None, topic=None):
+    def save_config(self, mac, mqtt_server=None, topic=None, room=None):
         if mac not in configs:
             configs[mac] = {}
 
@@ -12,13 +12,17 @@ class MQTTConfigManager:
         if topic is not None:
             configs[mac]["topic"] = topic
 
+        if room is not None:
+            configs[mac]["room"] = room
+
         save_configs()
 
     def get_config(self, mac):
         data = configs.get(mac, {})
         return {
             "mqtt_server": data.get("mqtt_server", ""),
-            "topic": data.get("topic", "")
+            "topic": data.get("topic", ""),
+            "room": data.get("room", "")
         }
 
 
@@ -67,5 +71,31 @@ class MQTTConfigManager:
             return {"sent": False, "error": "Not connected or writable characteristic missing"}
 
         return asyncio.run_coroutine_threadsafe(do_send(), ble_loop).result()
+    
+    def send_room(self, client, write_char, ble_loop, room, mac):
+        
+        async def do_send():
+            if client and write_char:
+                
+                try:
+                    payload = f"ROOM:{room}\n"
+                    
+                    if len(payload) < 20:
+                        payload += "\n" * (20 - len(payload))
+                        
+                    await client.write_gatt_char(write_char, payload.encode())
+                    
+                    server = self.get_config(mac).get("room", "")
+                    self.save_config(mac, room=room)
+                    
+                    return {"sent": True}
+                
+                except Exception as e:
+                    return {"sent": False, "error": str(e)}
+            
+            return {"sent": False, "error": "Not connected or writable characteristic missing"}
+
+        return asyncio.run_coroutine_threadsafe(do_send(), ble_loop).result()
+                    
 
     

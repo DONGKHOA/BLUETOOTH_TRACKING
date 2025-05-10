@@ -120,6 +120,27 @@ def send_mqtt_topic():
 
     return jsonify({"saved": True})
 
+@app.route("/send_room", methods=["POST"])
+def send_room():
+    global client, write_char, ble_loop
+
+    data = request.json
+    room = data.get("room")
+    mac = data.get('mac')
+
+    if not room:
+        return jsonify({"error": "Missing room"}), 400
+        
+    result = mqtt_config.send_room(
+        bluetooth.client,
+        bluetooth.write_char,
+        bluetooth.ble_loop,
+        room,
+        mac
+    )
+
+    return jsonify({"saved": True})
+
 @app.route("/get_mqtt_config/<mac>")
 def get_mqtt_config(mac):
     return jsonify(mqtt_config.get_config(mac))

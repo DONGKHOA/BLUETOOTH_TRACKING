@@ -39,6 +39,9 @@
         <div class="info-row clickable" onclick="openMQTTTopicModal()">
           <strong>Topic:</strong> <span id="mqttTopicDisplay"></span>
         </div>
+        <div class="info-row clickable" onclick="openRoomModal()">
+          <strong>Room:</strong> <span id="roomDisplay"></span>
+        </div>
       </div>
     </div>
 
@@ -76,6 +79,17 @@
         <label for="mqttTopicInput">Topic (e.g., GL-IoT/dataTopic/...):</label>
         <input type="text" id="mqttTopicInput" />
         <button onclick="applyMQTTTopic()">Apply</button>
+      </div>
+    </div>
+
+    <!-- Room Modal -->
+    <div id="roomModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeRoomModal()">&times;</button>
+        <h3>Set Room</h3>
+        <label for="roomInput">Room Name:</label>
+        <input type="text" id="roomInput" />
+        <button onclick="applyRoom()">Apply</button>
       </div>
     </div>
 

@@ -21,6 +21,9 @@ def on_connect(client, userdata, flags, rc):
         print(f"Connected to {BROKER}:{PORT}")
         mqtt_client.subscribe(REQUEST_SERVER_TOPIC)
         mqtt_client.subscribe(RESPONSE_SERVER_TOPIC)
+        
+        client.subscribe("+/Server/Request")
+        client.subscribe("+/Server/Response")
     else:   
         print(f"Connection failed with code {rc}")
 
@@ -55,17 +58,13 @@ async def process_request():
         # Process the request
         match command:
             case "SYN":
-                syn_response = handle_data.response_sync()
-                device_id = syn_response["id"]
-
-                # Register 4 topics for the new device
-                mqtt_client.subscribe(f"{device_id}/Server/Request")
-                mqtt_client.subscribe(f"{device_id}/Server/Response")
-
-                json_data = json.dumps(syn_response)
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
-                
-                print("Sent SYN response:", json_data)
+                print("SYNC Command")
+                json_data = json.dumps({
+                    "command": "SYN",
+                    "response": "success"
+                })
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
+                print("Sent response:", json_data)
                 
             case "SYNC_DATA":
                 json_data = json.dumps(handle_data.reponse_user_data(data, device_id))
