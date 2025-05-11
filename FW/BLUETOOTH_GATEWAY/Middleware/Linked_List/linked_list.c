@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "linked_list.h"
+#include "esp_heap_caps.h"
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -15,8 +16,8 @@
 Node_t *
 LINKED_LIST_CreateNode (void *p_value, uint8_t u8_dataSize)
 {
-  Node_t *newNode = (Node_t *)malloc(sizeof(Node_t));
-  newNode->p_data = malloc(u8_dataSize); // Allocate memory for the data
+  Node_t *newNode = (Node_t *)heap_caps_malloc(sizeof(Node_t), MALLOC_CAP_SPIRAM);
+  newNode->p_data = heap_caps_malloc(u8_dataSize, MALLOC_CAP_SPIRAM); // Allocate memory for the data
   if (newNode->p_data != NULL)
   {
     memcpy(newNode->p_data, p_value, u8_dataSize); // Copy data to node
@@ -67,8 +68,8 @@ LINKED_LIST_DeleteNode (Node_t *p_head, uint32_t position)
   if (position == 1)
   {
     p_head = p_temp->p_next;
-    free(p_temp->p_data);
-    free(p_temp);
+    heap_caps_free(p_temp->p_data);
+    heap_caps_free(p_temp);
     return p_head;
   }
 
@@ -84,8 +85,8 @@ LINKED_LIST_DeleteNode (Node_t *p_head, uint32_t position)
   if (p_temp != NULL)
   {
     prev->p_next = p_temp->p_next;
-    free(p_temp->p_data);
-    free(p_temp);
+    heap_caps_free(p_temp->p_data);
+    heap_caps_free(p_temp);
   }
   else
   {
