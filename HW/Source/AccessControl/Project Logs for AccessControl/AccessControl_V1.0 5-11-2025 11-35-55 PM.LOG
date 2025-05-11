@@ -1,0 +1,26 @@
+Added Component: Designator=U1(SOIC-8E)
+Add component (AddParameter): Name = "Datasheet"; Value = "https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/MP1584EN-LF-Z/document_id/204/?srsltid=AfmBOopCyUDyOs-uLll4YtNPir4o4STehG4B04EkgGGTflYW96m-OPS4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Name"; Value = "tme"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply Part Number"; Value = "MP1584EN-LF-Z"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supply URL"; Value = "http://www.tme.vn/Product.aspx?id=2070#page=pro_info"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetC1_2 Pin=U1-1
+Added Pin To Net: NetName=NetR3_1 Pin=U1-2
+Added Pin To Net: NetName=NetC9_2 Pin=U1-3
+Added Pin To Net: NetName=NetR1_1 Pin=U1-4
+Added Pin To Net: NetName=GND Pin=U1-5
+Added Pin To Net: NetName=NetR7_2 Pin=U1-6
+Added Pin To Net: NetName=VCC Pin=U1-7
+Added Pin To Net: NetName=NetC1_1 Pin=U1-8
+Added Pin To Net: NetName=GND Pin=U1-9
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Added Member To Class: ClassName=Designator Member=Component U1 MP1584EN-LF-Z
