@@ -12,10 +12,13 @@ set (requires 00_app_data
               07_app_configuration
               08_app_user_button
               09_app_ethernet
+              10_app_display
               driver
               NVS
+              I2C
               GPIO
-              EXTI)
+              EXTI
+              UART)
 
 idf_component_register(SRCS ${sources}
                        INCLUDE_DIRS ${includes}

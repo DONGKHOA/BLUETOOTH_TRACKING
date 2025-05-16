@@ -90,7 +90,7 @@ APP_USER_BUTTON_Init (void)
 static void
 APP_USER_BUTTON_Func_cb (gpio_num_t e_pin)
 {
-  if (e_pin != BUTTON_USER_PIN)
+  if (e_pin != USER_BUTTON_1_PIN)
   {
     return;
   }
@@ -106,7 +106,7 @@ APP_USER_BUTTON_Func_cb (gpio_num_t e_pin)
 static void
 APP_USER_BUTTON_Timer_Debouncing ()
 {
-  uint8_t u8_state = BSP_gpioGetState(BUTTON_USER_PIN);
+  uint8_t u8_state = BSP_gpioGetState(USER_BUTTON_1_PIN);
 
   if (u8_state == 0)
   {

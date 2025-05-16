@@ -1,5 +1,5 @@
-#ifndef APP_ETHERNET_H_
-#define APP_ETHERNET_H_
+#ifndef APP_DISPLAY_H_
+#define APP_DISPLAY_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -10,11 +10,11 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void APP_ETHERNET_CreateTask(void);
-  void APP_ETHERNET_Init(void);
+  void APP_DISPLAY_CreateTask(void);
+  void APP_DISPLAY_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* APP_ETHERNET_H_ */
+#endif /* APP_DISPLAY_H_ */

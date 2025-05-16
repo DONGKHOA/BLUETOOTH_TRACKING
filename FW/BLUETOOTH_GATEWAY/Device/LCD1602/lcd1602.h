@@ -1,5 +1,5 @@
-#ifndef APP_ETHERNET_H_
-#define APP_ETHERNET_H_
+#ifndef LCD1602_H_
+#define LCD1602_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -10,11 +10,12 @@ extern "C"
    *   PUBLIC FUNCTION
    ***************************************************************************/
 
-  void APP_ETHERNET_CreateTask(void);
-  void APP_ETHERNET_Init(void);
+  void LCD1602_Init(void);
+  void LCD1602_SetCursor(uint8_t row, uint8_t col);
+  void LCD1602_PrintString(const char *str);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* APP_ETHERNET_H_ */
+#endif /* LCD1602_H_ */

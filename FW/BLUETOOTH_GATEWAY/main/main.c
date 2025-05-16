@@ -120,7 +120,7 @@ APP_MAIN_InitGPIO (void)
 static inline void
 APP_MAIN_InitEXTI (void)
 {
-  BSP_EXIT_Init(BUTTON_USER_PIN, EXTI_EDGE_ALL, GPIO_PULL_UP);
+  BSP_EXIT_Init(USER_BUTTON_1_PIN, EXTI_EDGE_ALL, GPIO_PULL_UP);
 }
 
 static inline void
@@ -150,7 +150,7 @@ static void
 APP_MAIN_Loading_Callback (TimerHandle_t xTimer)
 {
   xTimerStop(s_loading_timer, 0);
-  if (BSP_gpioGetState(BUTTON_USER_PIN) == 1)
+  if (BSP_gpioGetState(USER_BUTTON_1_PIN) == 1)
   {
     xEventGroupSetBits(s_data_system.s_configuration_event,
                        APP_CONFIGURATION_DISABLE);

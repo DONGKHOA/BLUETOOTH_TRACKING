@@ -28,8 +28,40 @@ extern "C"
 
   /*** GPIO peripheral *******************************************************/
 
-#define BUTTON_USER_PIN GPIO_NUM_36
-#define LED_STATUS_PIN  GPIO_NUM_5
+#define USER_BUTTON_1_PIN GPIO_NUM_36
+#define USER_BUTTON_2_PIN GPIO_NUM_34
+#define ROTARY_A_PIN      GPIO_NUM_39
+#define ROTARY_B_PIN      GPIO_NUM_35
+#define LED_STATUS_PIN    GPIO_NUM_5
+#define RE_RS485_PIN      GPIO_NUM_25
+
+  /*** I2C peripheral ********************************************************/
+
+#define I2C_NUM        0
+#define I2C_MODE       I2C_MODE_MASTER
+#define I2C_SDA        GPIO_NUM_27
+#define I2C_SCL        GPIO_NUM_14
+#define I2C_SDA_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_CLK_SPEED  100000
+
+  /*** RMII peripheral *******************************************************/
+
+#define RMII_MDC_PIN    GPIO_NUM_19
+#define RMII_MDIO_PIN   GPIO_NUM_21
+#define RMII_TXD0_PIN   GPIO_NUM_4
+#define RMII_TXD1_PIN   GPIO_NUM_15
+#define RMII_TX_EN_PIN  GPIO_NUM_18
+#define RMII_RXD0_PIN   GPIO_NUM_23
+#define RMII_RXD1_PIN   GPIO_NUM_13
+#define RMII_CRS_DV_PIN GPIO_NUM_2
+
+  /*** UART1 peripheral *******************************************************/
+
+#define UART_RS485_TXD       GPIO_NUM_32
+#define UART_RS485_RXD       GPIO_NUM_26
+#define UART_RS485_NUM       UART_NUM_1
+#define UART_RS485_BAUD_RATE 115200
 
   /*** state system **********************************************************/
 
