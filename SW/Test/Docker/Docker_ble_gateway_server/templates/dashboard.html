@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h1>System Dashboard</h1>
+    <div id="system-status">
+        <h2>System Status</h2>
+        <table>
+            <tr><th>Gateways</th><td id="gateways"></td></tr>
+            <tr><th>Gateways Online</th><td id="gateways-online"></td></tr>
+            <tr><th>Beacons Detected</th><td id="beacons-detected"></td></tr>
+            <tr><th>Broker</th><td id="broker"></td></tr>
+            <tr><th>Redis</th><td id="redis"></td></tr>
+            <!-- <tr><th>Alerts</th><td id="alerts"></td></tr> -->
+        </table>
+    </div>
+    <!-- <canvas id="msgChart"></canvas> -->
+    <script>
+        const socket = io();
+        // const ctx = document.getElementById('msgChart').getContext('2d');
+        // const chart = new Chart(ctx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: [],
+        //         datasets: [
+        //             { label: 'Messages/Second', data: [], borderColor: '#3498db', fill: false },
+        //             { label: 'AWS Updates/Second', data: [], borderColor: '#e74c3c', fill: false }
+        //         ]
+        //     },
+        //     options: { scales: { y: { beginAtZero: true } } }
+        // });
+
+        socket.on('update_dashboard', function(data) {
+            document.getElementById('gateways').innerText = data.status.gateways;
+            document.getElementById('gateways-online').innerText = data.status.gateways_online;
+            document.getElementById('beacons-detected').innerText = data.status.beacons_detected;
+            document.getElementById('broker').innerText = data.status.broker;
+            document.getElementById('redis').innerText = data.status.redis;
+            // document.getElementById('alerts').innerText = data.status.alerts.join(', ') || 'None';
+            
+            // chart.data.labels.push(new Date().toLocaleTimeString());
+            // chart.data.datasets[0].data.push(data.msg_rate);
+            // chart.data.datasets[1].data.push(data.aws_rate);
+            // if (chart.data.labels.length > 20) {
+            //     chart.data.labels.shift();
+            //     chart.data.datasets[0].data.shift();
+            //     chart.data.datasets[1].data.shift();
+            // }
+            // chart.update();
+        });
+    </script>
+{% endblock %}

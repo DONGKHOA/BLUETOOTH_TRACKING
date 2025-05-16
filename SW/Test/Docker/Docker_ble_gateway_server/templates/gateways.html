@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Gateways{% endblock %}
+{% block content %}
+    <h1>Gateways</h1>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+        <div>
+            <input type="text" id="idFilter" placeholder="Filter by ID" onkeyup="fetchGateways()">
+            <select id="statusFilter" onchange="fetchGateways()">
+                <option value="">All Status</option>
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+            </select>
+        </div>
+        <button onclick="deleteAllGateways()" style="background-color: #e74c3c; color: white; padding: 10px; border: none; border-radius: 5px; width: 180px; height: 40px; font-size: 1.1rem; cursor: pointer;">
+            Delete All Gateways
+        </button>
+    </div>
+
+    <table id="gatewayTable">
+        <thead>
+            <tr><th>ID</th><th>IP</th><th>Status</th><th>Beacons</th><th>Control</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function fetchGateways() {
+            const idFilter = document.getElementById('idFilter').value.trim();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            let url = '/api/gateways';
+            let params = [];
+            if (idFilter) params.push(`id=${idFilter}`);
+            if (statusFilter) params.push(`status=${statusFilter}`);
+            if (params.length > 0) url += '?' + params.join('&');
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#gatewayTable tbody');
+                    tbody.innerHTML = ''; // Clear previous table rows
+
+                    data.forEach(gw => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${gw.id}</td>
+                            <td>${gw.ip || 'N/A'}</td>
+                            <td>${gw.status}</td>
+                            <td>${gw.beacons}</td>
+                            <td>
+                                <button class="${gw.status === 'Online' ? 'off' : 'on'}" 
+                                        onclick="controlGateway('${gw.id}', '${gw.status === 'Online' ? 'off' : 'on'}')">
+                                    ${gw.status === 'Online' ? 'Turn Off' : 'Turn On'}
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Error fetching gateways:', error));
+        }
+
+        function controlGateway(id, action) {
+            fetch(`/api/gateways/control/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: action })
+            }).then(() => fetchGateways());
+        }
+
+        function deleteAllGateways() {
+            if (confirm("Are you sure you want to delete all gateways?")) {
+                fetch('/api/gateways/delete_all', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchGateways();  // Refresh the table
+                })
+                .catch(error => console.error('Error deleting gateways:', error));
+            }
+        }
+
+        // Auto-refresh every 5 seconds
+        setInterval(fetchGateways, 5000);
+        fetchGateways();
+    </script>
+{% endblock %}

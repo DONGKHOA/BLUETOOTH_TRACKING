@@ -1,0 +1,291 @@
+2025-05-16 04:25:27,152 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000
+2025-05-16 04:25:27,152 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-16 04:25:28,458 - INFO - 127.0.0.1 - - [16/May/2025 04:25:28] "GET / HTTP/1.1" 200 -
+2025-05-16 04:25:28,485 - INFO - 127.0.0.1 - - [16/May/2025 04:25:28] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-16 04:25:28,490 - INFO - 127.0.0.1 - - [16/May/2025 04:25:28] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+2025-05-16 04:25:28,520 - INFO - 127.0.0.1 - - [16/May/2025 04:25:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-16 04:25:31,071 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "POST /login HTTP/1.1" 200 -
+2025-05-16 04:25:31,089 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "GET /server_management HTTP/1.1" 200 -
+2025-05-16 04:25:31,105 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "[36mGET /static/css/server_management.css HTTP/1.1[0m" 304 -
+2025-05-16 04:25:31,111 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "[36mGET /static/js/server_management.js HTTP/1.1[0m" 304 -
+2025-05-16 04:25:31,123 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "GET /check_status_server HTTP/1.1" 200 -
+2025-05-16 04:25:31,124 - INFO - 127.0.0.1 - - [16/May/2025 04:25:31] "GET /get_current_config HTTP/1.1" 200 -
+2025-05-16 04:25:32,328 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "GET /server_configuration HTTP/1.1" 200 -
+2025-05-16 04:25:32,349 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "[36mGET /static/css/server_configuration.css HTTP/1.1[0m" 304 -
+2025-05-16 04:25:32,350 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "GET /static/js/server_configuration.js HTTP/1.1" 200 -
+2025-05-16 04:25:32,366 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:25:32,368 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:25:32,368 - INFO - 127.0.0.1 - - [16/May/2025 04:25:32] "GET /get_existing_files HTTP/1.1" 200 -
+2025-05-16 04:25:33,021 - INFO - 127.0.0.1 - - [16/May/2025 04:25:33] "GET /facility_list HTTP/1.1" 200 -
+2025-05-16 04:25:37,378 - INFO - 127.0.0.1 - - [16/May/2025 04:25:37] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:25:43,229 - INFO - 127.0.0.1 - - [16/May/2025 04:25:43] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:25:48,227 - INFO - 127.0.0.1 - - [16/May/2025 04:25:48] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:25:52,464 - INFO - 127.0.0.1 - - [16/May/2025 04:25:52] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:25:58,230 - INFO - 127.0.0.1 - - [16/May/2025 04:25:58] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:25:59,601 - INFO - [INFO] Received authenticate request - Username: iotteam@devcburst.com, Password: **************
+2025-05-16 04:26:00,622 - INFO - 127.0.0.1 - - [16/May/2025 04:26:00] "POST /authenticate HTTP/1.1" 200 -
+2025-05-16 04:26:01,637 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "GET /server_configuration HTTP/1.1" 200 -
+2025-05-16 04:26:01,656 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "[36mGET /static/js/server_configuration.js HTTP/1.1[0m" 304 -
+2025-05-16 04:26:01,656 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "[36mGET /static/css/server_configuration.css HTTP/1.1[0m" 304 -
+2025-05-16 04:26:01,674 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:26:01,675 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "GET /get_existing_files HTTP/1.1" 200 -
+2025-05-16 04:26:01,676 - INFO - 127.0.0.1 - - [16/May/2025 04:26:01] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:26:02,355 - INFO - 127.0.0.1 - - [16/May/2025 04:26:02] "GET /facility_list HTTP/1.1" 200 -
+2025-05-16 04:26:06,672 - INFO - 127.0.0.1 - - [16/May/2025 04:26:06] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:11,674 - INFO - 127.0.0.1 - - [16/May/2025 04:26:11] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:16,673 - INFO - 127.0.0.1 - - [16/May/2025 04:26:16] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:21,672 - INFO - 127.0.0.1 - - [16/May/2025 04:26:21] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:26,672 - INFO - 127.0.0.1 - - [16/May/2025 04:26:26] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:31,672 - INFO - 127.0.0.1 - - [16/May/2025 04:26:31] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:36,674 - INFO - 127.0.0.1 - - [16/May/2025 04:26:36] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:41,674 - INFO - 127.0.0.1 - - [16/May/2025 04:26:41] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:46,672 - INFO - 127.0.0.1 - - [16/May/2025 04:26:46] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:52,230 - INFO - 127.0.0.1 - - [16/May/2025 04:26:52] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:26:57,228 - INFO - 127.0.0.1 - - [16/May/2025 04:26:57] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:02,229 - INFO - 127.0.0.1 - - [16/May/2025 04:27:02] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:07,229 - INFO - 127.0.0.1 - - [16/May/2025 04:27:07] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:12,229 - INFO - 127.0.0.1 - - [16/May/2025 04:27:12] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:16,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:16] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:21,672 - INFO - 127.0.0.1 - - [16/May/2025 04:27:21] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:26,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:26] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:31,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:31] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:36,672 - INFO - 127.0.0.1 - - [16/May/2025 04:27:36] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:41,672 - INFO - 127.0.0.1 - - [16/May/2025 04:27:41] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:46,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:46] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:51,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:51] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:27:56,673 - INFO - 127.0.0.1 - - [16/May/2025 04:27:56] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:01,672 - INFO - 127.0.0.1 - - [16/May/2025 04:28:01] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:07,229 - INFO - 127.0.0.1 - - [16/May/2025 04:28:07] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:12,230 - INFO - 127.0.0.1 - - [16/May/2025 04:28:12] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:17,231 - INFO - 127.0.0.1 - - [16/May/2025 04:28:17] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:22,231 - INFO - 127.0.0.1 - - [16/May/2025 04:28:22] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:27,232 - INFO - 127.0.0.1 - - [16/May/2025 04:28:27] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:32,228 - INFO - 127.0.0.1 - - [16/May/2025 04:28:32] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:37,240 - INFO - 127.0.0.1 - - [16/May/2025 04:28:37] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:42,229 - INFO - 127.0.0.1 - - [16/May/2025 04:28:42] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:47,229 - INFO - 127.0.0.1 - - [16/May/2025 04:28:47] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:52,231 - INFO - 127.0.0.1 - - [16/May/2025 04:28:52] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:28:57,229 - INFO - 127.0.0.1 - - [16/May/2025 04:28:57] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:02,231 - INFO - 127.0.0.1 - - [16/May/2025 04:29:02] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:07,230 - INFO - 127.0.0.1 - - [16/May/2025 04:29:07] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:19,229 - INFO - 127.0.0.1 - - [16/May/2025 04:29:19] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:49,027 - INFO - 127.0.0.1 - - [16/May/2025 04:29:49] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:51,672 - INFO - 127.0.0.1 - - [16/May/2025 04:29:51] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:29:55,276 - INFO - 127.0.0.1 - - [16/May/2025 04:29:55] "POST /update_aws_endpoint HTTP/1.1" 200 -
+2025-05-16 04:29:55,290 - INFO - 127.0.0.1 - - [16/May/2025 04:29:55] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:29:56,673 - INFO - 127.0.0.1 - - [16/May/2025 04:29:56] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:00,757 - INFO - 127.0.0.1 - - [16/May/2025 04:30:00] "GET /check_aws_connection HTTP/1.1" 200 -
+2025-05-16 04:30:00,814 - INFO - 127.0.0.1 - - [16/May/2025 04:30:00] "GET /check_aws_connection HTTP/1.1" 200 -
+2025-05-16 04:30:01,671 - INFO - 127.0.0.1 - - [16/May/2025 04:30:01] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:06,673 - INFO - 127.0.0.1 - - [16/May/2025 04:30:06] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:11,672 - INFO - 127.0.0.1 - - [16/May/2025 04:30:11] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:16,674 - INFO - 127.0.0.1 - - [16/May/2025 04:30:16] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:21,673 - INFO - 127.0.0.1 - - [16/May/2025 04:30:21] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:26,673 - INFO - 127.0.0.1 - - [16/May/2025 04:30:26] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:32,230 - INFO - 127.0.0.1 - - [16/May/2025 04:30:32] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:36,671 - INFO - 127.0.0.1 - - [16/May/2025 04:30:36] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:38,453 - INFO - 127.0.0.1 - - [16/May/2025 04:30:38] "GET /system_log HTTP/1.1" 200 -
+2025-05-16 04:30:38,471 - INFO - 127.0.0.1 - - [16/May/2025 04:30:38] "[36mGET /static/css/system_log.css HTTP/1.1[0m" 304 -
+2025-05-16 04:30:38,474 - INFO - 127.0.0.1 - - [16/May/2025 04:30:38] "[36mGET /static/js/system_log.js HTTP/1.1[0m" 304 -
+2025-05-16 04:30:38,488 - INFO - 127.0.0.1 - - [16/May/2025 04:30:38] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:38,488 - INFO - 127.0.0.1 - - [16/May/2025 04:30:38] "GET /get_logging_config HTTP/1.1" 200 -
+2025-05-16 04:30:39,489 - INFO - 127.0.0.1 - - [16/May/2025 04:30:39] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:40,489 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:40,604 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "GET /server_configuration HTTP/1.1" 200 -
+2025-05-16 04:30:40,625 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "[36mGET /static/css/server_configuration.css HTTP/1.1[0m" 304 -
+2025-05-16 04:30:40,627 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "[36mGET /static/js/server_configuration.js HTTP/1.1[0m" 304 -
+2025-05-16 04:30:40,648 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:30:40,648 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "GET /get_existing_files HTTP/1.1" 200 -
+2025-05-16 04:30:40,649 - INFO - 127.0.0.1 - - [16/May/2025 04:30:40] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:30:41,400 - INFO - 127.0.0.1 - - [16/May/2025 04:30:41] "GET /facility_list HTTP/1.1" 200 -
+2025-05-16 04:30:45,455 - INFO - 127.0.0.1 - - [16/May/2025 04:30:45] "POST /start_server HTTP/1.1" 200 -
+2025-05-16 04:30:45,463 - INFO - 127.0.0.1 - - [16/May/2025 04:30:45] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:30:45,618 - INFO - [INFO] Starting TCP Server...
+2025-05-16 04:30:45,619 - INFO - [Async] TCP Server is running on ('0.0.0.0', 8899)
+2025-05-16 04:30:45,645 - INFO - 127.0.0.1 - - [16/May/2025 04:30:45] "GET /check_session HTTP/1.1" 200 -
+2025-05-16 04:30:46,266 - INFO - 127.0.0.1 - - [16/May/2025 04:30:46] "GET /system_log HTTP/1.1" 200 -
+2025-05-16 04:30:46,282 - INFO - 127.0.0.1 - - [16/May/2025 04:30:46] "[36mGET /static/css/system_log.css HTTP/1.1[0m" 304 -
+2025-05-16 04:30:46,283 - INFO - 127.0.0.1 - - [16/May/2025 04:30:46] "[36mGET /static/js/system_log.js HTTP/1.1[0m" 304 -
+2025-05-16 04:30:46,302 - INFO - 127.0.0.1 - - [16/May/2025 04:30:46] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:46,303 - INFO - 127.0.0.1 - - [16/May/2025 04:30:46] "GET /get_logging_config HTTP/1.1" 200 -
+2025-05-16 04:30:47,303 - INFO - 127.0.0.1 - - [16/May/2025 04:30:47] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:48,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:48] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:49,305 - INFO - 127.0.0.1 - - [16/May/2025 04:30:49] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:50,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:50] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:51,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:51] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:52,305 - INFO - 127.0.0.1 - - [16/May/2025 04:30:52] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:53,305 - INFO - 127.0.0.1 - - [16/May/2025 04:30:53] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:54,305 - INFO - 127.0.0.1 - - [16/May/2025 04:30:54] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:55,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:55] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:56,305 - INFO - 127.0.0.1 - - [16/May/2025 04:30:56] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:57,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:57] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:58,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:58] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:30:59,304 - INFO - 127.0.0.1 - - [16/May/2025 04:30:59] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:00,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:00] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:01,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:01] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:02,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:02] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:03,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:03] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:04,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:04] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:05,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:05] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:06,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:06] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:07,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:07] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:08,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:08] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:09,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:09] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:10,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:10] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:11,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:11] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:12,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:12] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:13,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:13] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:14,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:14] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:15,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:15] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:16,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:16] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:17,306 - INFO - 127.0.0.1 - - [16/May/2025 04:31:17] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:18,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:18] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:19,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:20,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:20] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:21,306 - INFO - 127.0.0.1 - - [16/May/2025 04:31:21] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:22,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:22] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:23,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:23] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:24,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:24] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:25,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:25] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:26,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:26] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:27,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:27] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:28,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:28] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:29,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:29] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:30,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:30] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:31,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:31] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:32,302 - INFO - 127.0.0.1 - - [16/May/2025 04:31:32] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:33,306 - INFO - 127.0.0.1 - - [16/May/2025 04:31:33] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:34,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:34] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:35,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:35] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:36,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:36] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:37,306 - INFO - 127.0.0.1 - - [16/May/2025 04:31:37] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:38,073 - INFO - [Async] Handling new client from IP=192.168.1.44
+2025-05-16 04:31:38,074 - INFO - Received data (hex): 1301010100000001000a000000140001010200001d2cb1b08ea72c54eb886b37dd01
+2025-05-16 04:31:38,074 - INFO - [Parsed] function=0x0001, content_len=20, content_data=010200001d2cb1b08ea72c54eb886b37dd01
+2025-05-16 04:31:38,076 - INFO - a1lvnt250s0jlf-ats.iot.ap-southeast-1.amazonaws.com
+2025-05-16 04:31:38,076 - INFO - 8883
+2025-05-16 04:31:38,306 - INFO - 127.0.0.1 - - [16/May/2025 04:31:38] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:39,011 - INFO - [Server] Device successfully registered: {'message': 'Device created successfully.', 'device': {'name': 'AerosenseDevice', 'id': '2cb1b08ea72c54eb886b37dd01', 'serial_number': None, 'is_online': None, 'room_number': None, 'facility_id': None, 'offline_timing_threshold': 0, 'last_subscribe_time': None}}
+2025-05-16 04:31:39,011 - INFO - [Server] (1) Registered new: IP=192.168.1.44, ID=2cb1b08ea72c54eb886b37dd01. count=1
+2025-05-16 04:31:39,012 - INFO - [Server] Sent response for function=1 with count=1
+2025-05-16 04:31:39,012 - INFO - Received data (hex): 1301020100000002000a0000001e03e895374820519683740256830194756283019475638291047563829104
+2025-05-16 04:31:39,012 - INFO - [Parsed] function=0x03e8, content_len=30, content_data=95374820519683740256830194756283019475638291047563829104
+2025-05-16 04:31:39,013 - INFO - {
+    "device_id": "2cb1b08ea72c54eb886b37dd01",
+    "current_time": 1747369899,
+    "breath_bpm": 0,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 0,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188,
+    "out_of_bed": true
+}
+2025-05-16 04:31:39,013 - INFO - [Before Publish] Preparing to publish data for device 2cb1b08ea72c54eb886b37dd01
+2025-05-16 04:31:39,013 - INFO - Message successfully sent!
+2025-05-16 04:31:39,074 - INFO - [MQTT] Successfully published message ID=1
+2025-05-16 04:31:39,302 - INFO - 127.0.0.1 - - [16/May/2025 04:31:39] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:40,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:40] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:41,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:41] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:42,016 - INFO - Received data (hex): 1301020100000003000a0000001e03e895374820519683740256830194756283019475638291047563829104
+2025-05-16 04:31:42,017 - INFO - {
+    "device_id": "2cb1b08ea72c54eb886b37dd01",
+    "current_time": 1747369902,
+    "breath_bpm": 0,
+    "breath_curve": 80806313984.0,
+    "heart_bpm": 0,
+    "heart_rate_curve": -1.2388767004772466e-26,
+    "target_distance": 5.45350554061365e-38,
+    "signal_strength": -2.1308393319130432e-37,
+    "valid_bit_id": 1669501188,
+    "out_of_bed": true
+}
+2025-05-16 04:31:42,101 - INFO - [MQTT] Successfully published message ID=2
+2025-05-16 04:31:42,304 - INFO - 127.0.0.1 - - [16/May/2025 04:31:42] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:42,625 - INFO - [Async] Client 192.168.1.44 disconnected.
+2025-05-16 04:31:42,626 - INFO - [Async] Removed IP=192.168.1.44 from ip_to_id_map.
+2025-05-16 04:31:42,626 - INFO - [Async] Ended for 192.168.1.44.
+2025-05-16 04:31:43,305 - INFO - 127.0.0.1 - - [16/May/2025 04:31:43] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:44,303 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:44,559 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "GET /server_configuration HTTP/1.1" 200 -
+2025-05-16 04:31:44,583 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "[36mGET /static/css/server_configuration.css HTTP/1.1[0m" 304 -
+2025-05-16 04:31:44,588 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "[36mGET /static/js/server_configuration.js HTTP/1.1[0m" 304 -
+2025-05-16 04:31:44,608 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:31:44,611 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:31:44,611 - INFO - 127.0.0.1 - - [16/May/2025 04:31:44] "GET /get_existing_files HTTP/1.1" 200 -
+2025-05-16 04:31:45,317 - INFO - 127.0.0.1 - - [16/May/2025 04:31:45] "GET /facility_list HTTP/1.1" 200 -
+2025-05-16 04:31:48,986 - INFO - 127.0.0.1 - - [16/May/2025 04:31:48] "GET /system_log HTTP/1.1" 200 -
+2025-05-16 04:31:49,002 - INFO - 127.0.0.1 - - [16/May/2025 04:31:49] "[36mGET /static/css/system_log.css HTTP/1.1[0m" 304 -
+2025-05-16 04:31:49,006 - INFO - 127.0.0.1 - - [16/May/2025 04:31:49] "[36mGET /static/js/system_log.js HTTP/1.1[0m" 304 -
+2025-05-16 04:31:49,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:49] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:49,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:49] "GET /get_logging_config HTTP/1.1" 200 -
+2025-05-16 04:31:50,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:50] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:51,027 - INFO - 127.0.0.1 - - [16/May/2025 04:31:51] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:52,026 - INFO - 127.0.0.1 - - [16/May/2025 04:31:52] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:53,027 - INFO - 127.0.0.1 - - [16/May/2025 04:31:53] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:54,026 - INFO - 127.0.0.1 - - [16/May/2025 04:31:54] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:55,026 - INFO - 127.0.0.1 - - [16/May/2025 04:31:55] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:56,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:56] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:57,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:57] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:58,028 - INFO - 127.0.0.1 - - [16/May/2025 04:31:58] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:31:59,027 - INFO - 127.0.0.1 - - [16/May/2025 04:31:59] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:00,028 - INFO - 127.0.0.1 - - [16/May/2025 04:32:00] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:01,027 - INFO - 127.0.0.1 - - [16/May/2025 04:32:01] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:02,026 - INFO - 127.0.0.1 - - [16/May/2025 04:32:02] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:03,028 - INFO - 127.0.0.1 - - [16/May/2025 04:32:03] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:04,027 - INFO - 127.0.0.1 - - [16/May/2025 04:32:04] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:05,028 - INFO - 127.0.0.1 - - [16/May/2025 04:32:05] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:06,025 - INFO - 127.0.0.1 - - [16/May/2025 04:32:06] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:07,027 - INFO - 127.0.0.1 - - [16/May/2025 04:32:07] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:08,026 - INFO - 127.0.0.1 - - [16/May/2025 04:32:08] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:09,026 - INFO - 127.0.0.1 - - [16/May/2025 04:32:09] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:09,954 - INFO - 127.0.0.1 - - [16/May/2025 04:32:09] "GET /server_configuration HTTP/1.1" 200 -
+2025-05-16 04:32:09,978 - INFO - 127.0.0.1 - - [16/May/2025 04:32:09] "[36mGET /static/css/server_configuration.css HTTP/1.1[0m" 304 -
+2025-05-16 04:32:09,982 - INFO - 127.0.0.1 - - [16/May/2025 04:32:09] "[36mGET /static/js/server_configuration.js HTTP/1.1[0m" 304 -
+2025-05-16 04:32:10,000 - INFO - 127.0.0.1 - - [16/May/2025 04:32:10] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:32:10,000 - INFO - 127.0.0.1 - - [16/May/2025 04:32:10] "GET /get_existing_files HTTP/1.1" 200 -
+2025-05-16 04:32:10,002 - INFO - 127.0.0.1 - - [16/May/2025 04:32:10] "GET /get_uploaded_files HTTP/1.1" 200 -
+2025-05-16 04:32:10,690 - INFO - 127.0.0.1 - - [16/May/2025 04:32:10] "GET /facility_list HTTP/1.1" 200 -
+2025-05-16 04:32:12,484 - INFO - 127.0.0.1 - - [16/May/2025 04:32:12] "GET /stop_server HTTP/1.1" 200 -
+2025-05-16 04:32:12,490 - INFO - 127.0.0.1 - - [16/May/2025 04:32:12] "GET /button_server_status HTTP/1.1" 200 -
+2025-05-16 04:32:12,781 - INFO - [INFO] Stopping TCP Server...
+2025-05-16 04:32:12,782 - INFO - [INFO] TCP Server stopped.
+2025-05-16 04:32:13,409 - INFO - 127.0.0.1 - - [16/May/2025 04:32:13] "GET /system_log HTTP/1.1" 200 -
+2025-05-16 04:32:13,428 - INFO - 127.0.0.1 - - [16/May/2025 04:32:13] "[36mGET /static/css/system_log.css HTTP/1.1[0m" 304 -
+2025-05-16 04:32:13,432 - INFO - 127.0.0.1 - - [16/May/2025 04:32:13] "[36mGET /static/js/system_log.js HTTP/1.1[0m" 304 -
+2025-05-16 04:32:13,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:13] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:13,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:13] "GET /get_logging_config HTTP/1.1" 200 -
+2025-05-16 04:32:14,448 - INFO - 127.0.0.1 - - [16/May/2025 04:32:14] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:15,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:15] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:15,747 - INFO - 127.0.0.1 - - [16/May/2025 04:32:15] "POST /clear_logs HTTP/1.1" 200 -
+2025-05-16 04:32:16,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:16] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:17,448 - INFO - 127.0.0.1 - - [16/May/2025 04:32:17] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:18,448 - INFO - 127.0.0.1 - - [16/May/2025 04:32:18] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:19,450 - INFO - 127.0.0.1 - - [16/May/2025 04:32:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:20,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:20] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:21,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:21] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:32:22,449 - INFO - 127.0.0.1 - - [16/May/2025 04:32:22] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:34:50,282 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000
+2025-05-16 04:34:50,282 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-16 04:34:54,071 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000
+2025-05-16 04:34:54,071 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-16 04:35:19,229 - INFO - 127.0.0.1 - - [16/May/2025 04:35:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:36:19,232 - INFO - 127.0.0.1 - - [16/May/2025 04:36:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:37:19,230 - INFO - 127.0.0.1 - - [16/May/2025 04:37:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:38:19,229 - INFO - 127.0.0.1 - - [16/May/2025 04:38:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:39:19,231 - INFO - 127.0.0.1 - - [16/May/2025 04:39:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:40:19,230 - INFO - 127.0.0.1 - - [16/May/2025 04:40:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:41:19,228 - INFO - 127.0.0.1 - - [16/May/2025 04:41:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:42:19,230 - INFO - 127.0.0.1 - - [16/May/2025 04:42:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:43:19,232 - INFO - 127.0.0.1 - - [16/May/2025 04:43:19] "GET /get_logs HTTP/1.1" 200 -
+2025-05-16 04:44:19,229 - INFO - 127.0.0.1 - - [16/May/2025 04:44:19] "GET /get_logs HTTP/1.1" 200 -
