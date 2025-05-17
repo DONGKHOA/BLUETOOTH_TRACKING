@@ -135,11 +135,11 @@ LCD1602_SendCommand (i2c_port_t e_i2c_port, uint8_t command)
   data_buf[3] = ((command << 4) & 0xF0) | 0x08;
 
   // Send all 4 bytes in a single I2C transaction
-  BSP_i2cWriteBuffer(e_i2c_port,
-                     LCD1602_I2C_ADDR,
-                     data_buf,
-                     sizeof(data_buf),
-                     LCD1602_I2C_TIMEOUT);
+  i2c_master_write_to_device(e_i2c_port,
+                             LCD1602_I2C_ADDR,
+                             data_buf,
+                             sizeof(data_buf),
+                             LCD1602_I2C_TIMEOUT);
 }
 
 /**
@@ -166,9 +166,9 @@ LCD1602_SendData (i2c_port_t e_i2c_port, uint8_t data)
   data_buf[3] = ((data << 4) & 0xF0) | 0x09;
 
   // Send all 4 bytes in a single I2C transaction
-  BSP_i2cWriteBuffer(e_i2c_port,
-                     LCD1602_I2C_ADDR,
-                     data_buf,
-                     sizeof(data_buf),
-                     LCD1602_I2C_TIMEOUT);
+  i2c_master_write_to_device(e_i2c_port,
+                             LCD1602_I2C_ADDR,
+                             data_buf,
+                             sizeof(data_buf),
+                             LCD1602_I2C_TIMEOUT);
 }
