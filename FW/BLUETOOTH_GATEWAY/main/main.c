@@ -13,6 +13,7 @@
 #include "gpio.h"
 #include "exti.h"
 #include "nvs_rw.h"
+#include "i2c.h"
 
 /*** device ******************************************************************/
 
@@ -50,6 +51,7 @@ static TimerHandle_t s_loading_timer;
  *****************************************************************************/
 
 static inline void APP_MAIN_InitGPIO(void);
+static inline void APP_MAIN_InitI2C(void);
 static inline void APP_MAIN_InitEXTI(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
@@ -67,6 +69,7 @@ app_main (void)
   APP_MAIN_InitGPIO();
   APP_MAIN_InitEXTI();
   APP_MAIN_InitNVS();
+  APP_MAIN_InitI2C();
 
   // Main Initialization data system
 
@@ -115,6 +118,16 @@ static inline void
 APP_MAIN_InitGPIO (void)
 {
   BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
+}
+
+static inline void
+APP_MAIN_InitI2C (void)
+{
+  BSP_i2cConfigMode(I2C_NUM, I2C_MODE);
+  BSP_i2cConfigSDA(I2C_NUM, I2C_SDA, I2C_SDA_PULLUP);
+  BSP_i2cConfigSCL(I2C_NUM, I2C_SCL, I2C_SCL_PULLUP);
+  BSP_i2cConfigClockSpeed(I2C_NUM, I2C_CLK_SPEED);
+  BSP_i2cDriverInit(I2C_NUM);
 }
 
 static inline void

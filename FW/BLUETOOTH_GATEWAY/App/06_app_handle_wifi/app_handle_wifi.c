@@ -3,6 +3,7 @@
  *****************************************************************************/
 
 #include <string.h>
+#include <stdio.h>
 
 #include "app_handle_wifi.h"
 #include "app_data.h"
