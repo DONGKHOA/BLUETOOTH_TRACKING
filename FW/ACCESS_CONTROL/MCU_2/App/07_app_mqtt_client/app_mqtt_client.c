@@ -45,6 +45,7 @@ typedef struct mqtt_client_data
   QueueHandle_t           *p_send_data_queue;
   QueueHandle_t           *p_data_sdcard_queue;
   QueueHandle_t           *p_data_local_database_queue;
+  QueueHandle_t           *p_data_attendance_queue;
   state_system_t          *p_state_system;
   SemaphoreHandle_t        s_data_subscribe_sem;
   esp_mqtt_client_handle_t s_MQTT_Client;
@@ -67,6 +68,7 @@ static void mqtt_event_handler(void            *handler_args,
  *****************************************************************************/
 
 static DATA_SYNC_t        s_DATA_SYNC;
+static attendance_data_t  s_attendance_data;
 static mqtt_client_data_t s_mqtt_client_data;
 static sdcard_cmd_t       s_sdcard_cmd;
 static char               data[1024 * 10];
@@ -95,6 +97,8 @@ APP_MQTT_CLIENT_Init (void)
 {
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_data_mqtt_queue;
   s_mqtt_client_data.p_send_data_queue = &s_data_system.s_send_data_queue;
+  s_mqtt_client_data.p_data_attendance_queue
+      = &s_data_system.s_data_attendance_queue;
   s_mqtt_client_data.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
   s_mqtt_client_data.s_data_subscribe_sem = xSemaphoreCreateBinary();
@@ -268,6 +272,27 @@ APP_MQTT_CLIENT_task (void *arg)
 
             break;
 
+          case LOCAL_DATABASE_DATA_ATTENDANCE:
+
+            xQueueReceive(*s_mqtt_client_data.p_data_attendance_queue,
+                          &s_attendance_data,
+                          0);
+
+            sprintf(data_send,
+                    "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
+                    "%ld}",
+                    s_attendance_data.u16_user_id,
+                    s_attendance_data.u32_time[0]);
+
+            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                    u32_topic_request_server,
+                                    data_send,
+                                    0,
+                                    1,
+                                    0);
+
+            break;
+
           case LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA:
 
             if (s_DATA_SYNC.u8_data_packet[0] == LOCAL_DATABASE_SUCCESS)
@@ -308,7 +333,7 @@ APP_MQTT_CLIENT_task (void *arg)
     {
       switch (DECODE_Command(data))
       {
-        case SYNC_CMD:
+        case SYNCHRONIZE_CMD:
 
           s_mqtt_client_data.b_connected_server = true;
           DECODE_Status(data, &status);

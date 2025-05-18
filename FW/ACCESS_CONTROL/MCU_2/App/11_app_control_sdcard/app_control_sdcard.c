@@ -36,6 +36,7 @@ typedef struct
 {
   QueueHandle_t     *p_data_sdcard_queue;
   QueueHandle_t     *p_data_mqtt_queue;
+  QueueHandle_t     *p_data_attendance_queue;
   SemaphoreHandle_t *p_spi_mutex;
 } control_sdcard_t;
 
@@ -104,6 +105,8 @@ APP_CONTROL_SDCARD_Init (void)
   s_control_sdcard.p_spi_mutex         = &s_data_system.s_spi_mutex;
   s_control_sdcard.p_data_sdcard_queue = &s_data_system.s_data_sdcard_queue;
   s_control_sdcard.p_data_mqtt_queue   = &s_data_system.s_data_mqtt_queue;
+  s_control_sdcard.p_data_attendance_queue
+      = &s_data_system.s_data_attendance_queue;
 }
 
 /******************************************************************************
@@ -114,6 +117,7 @@ static void
 APP_CONTROL_SDCARD_Task (void *arg)
 {
   sdcard_cmd_t s_sdcard_cmd;
+  attendance_data_t s_attendance_data;
   while (1)
   {
     // taskENTER_CRITICAL(&spi_mux);
@@ -155,6 +159,25 @@ APP_CONTROL_SDCARD_Task (void *arg)
         case SDCARD_SYNC_DATA_SERVER:
 
           s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA;
+          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+          s_DATA_SYNC.u8_data_length    = 1;
+          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
+
+          break;
+
+        case SDCARD_ATTENDANCE_DATA:
+
+          APP_CONTROL_SDCARD_ReadAttendanceData();
+
+          // send data to mqtt
+
+          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_attendance_data, 0);
+
+          // send command to mqtt
+
+          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA_ATTENDANCE;
           s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
           s_DATA_SYNC.u8_data_length    = 1;
           s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
@@ -643,7 +666,8 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
     return;
   }
 
-  snprintf(full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
+  snprintf(
+      full_path, sizeof(full_path), "%s/%s", MOUNT_POINT, p_file_attendance);
 
   fr = f_open(&fil, full_path, FA_READ);
   if (fr != FR_OK)
@@ -656,8 +680,6 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
   while (f_gets(line, sizeof(line), &fil))
   {
     line[strcspn(line, "\r\n")] = '\0';
-    
-    
   }
 }
 
