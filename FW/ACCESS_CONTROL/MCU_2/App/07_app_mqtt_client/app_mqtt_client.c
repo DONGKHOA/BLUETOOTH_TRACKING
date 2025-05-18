@@ -45,9 +45,9 @@ typedef struct mqtt_client_data
   QueueHandle_t           *p_send_data_queue;
   QueueHandle_t           *p_data_sdcard_queue;
   QueueHandle_t           *p_data_local_database_queue;
+  state_system_t          *p_state_system;
   SemaphoreHandle_t        s_data_subscribe_sem;
   esp_mqtt_client_handle_t s_MQTT_Client;
-  state_system_t          *p_state_system;
   bool                     b_connected_server;
   bool                     b_mqtt_client_connected;
 } mqtt_client_data_t;
