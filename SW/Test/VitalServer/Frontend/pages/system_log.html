@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/system_log.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/system_log.js') }}" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="logo">TCP<span>SERVER</span></h2>
+        <ul class="menu">
+            <li class="menu-item"><a href="{{ url_for('server_management.server_management') }}">Server Status</a></li>
+            <li class="menu-item"><a href="{{ url_for('server_configuration.server_configuration') }}">Configuration <br> TCP Server</a></li>
+            <li class="active"><a href="{{ url_for('system_log.system_log_home') }}">System Log</a></li>
+            <li class="menu-item"><a href="{{ url_for('login.logout') }}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="log-container">
+
+        <!-- System Log Configuration Display -->
+        <div class="config-display">
+            <h1>Current System Log Configuration</h1>
+            <p><strong>Max File Size:</strong> <span id="currentMaxBytes">Loading...</span> MB</p>
+            <p><strong>Max Log Files:</strong> <span id="currentBackupCount">Loading...</span></p>
+        </div>
+
+        <!-- 🔹 Logging Configuration Section -->
+        <div class="config-section">
+            <h1>Update Logging Configuration</h1>
+            <form id="configForm">
+                <label for="maxBytes">Max File Size (MB):</label>
+                <input type="number" id="maxBytes" name="maxBytes" required><br><br>
+        
+                <label for="backupCount">Max Log Files:</label>
+                <input type="number" id="backupCount" name="backupCount" required><br><br>
+        
+                <button type="submit">Save Settings</button>
+            </form>
+        
+            <!-- Log Message INSIDE the rectangle -->
+            <p id="configMessage"></p>
+        </div>
+
+        <div class="data-section">
+            <h1>System Logs</h1>
+            <button id="refreshLogs">Refresh Logs</button>
+            <button id="clearLogs">Clear Logs</button>
+    
+            <div id="logMessages"></div>
+        </div>
+    </div>
+
+
+</body>
+</html>
