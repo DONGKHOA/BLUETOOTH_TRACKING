@@ -44,6 +44,10 @@ ip_to_writer_map = {}
 server = None  # Stores the running TCP server task
 server_task = None  # Stores the running TCP server task
 
+mqtt_client = None
+
+data_queue = None
+
 r = redis.Redis(host='localhost', port=6379, db=0)
 
 # -----------------------------------------------
@@ -169,6 +173,15 @@ async def refresh_auth_token():
         except Exception as e:
             system_log.log_to_redis(f"[Auth Refresh] Exception while refreshing token: {e}")
             print(f"[Auth Refresh] Exception while refreshing token: {e}")
+# -----------------------------------------------
+# Callback for logging connection
+# -----------------------------------------------
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Connected to ThingsBoard!")
+        client.connected_flag = True
+    else:
+        print("Connection failed with code", rc)
 
 # -----------------------------------------------
 # Handle MQTT Publish
@@ -181,14 +194,22 @@ def on_publish(client, userdata, mid):
     system_log.log_to_redis(f"[MQTT] Successfully published message ID={mid}")
 
 # -----------------------------------------------
+# Function to publish data to MQTT
+# ----------------------------------------------- 
+async def publish_to_mqtt():
+    global data_queue
+    while True:
+        json_data = await data_queue.get()
+        result = mqtt_client.publish(environment.TOPIC, json_data, qos=1)
+        result.wait_for_publish()
+    
+# -----------------------------------------------
 # Function to handle client connections
 # -----------------------------------------------        
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-    global count
+    global count, mqtt_client, data_queue
 
     condition_regis_mqtt = True
-
-    mqtt_client = None
 
     client_address = writer.get_extra_info('peername')
     if not client_address:
@@ -257,27 +278,9 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 else:
                     new_id_hex = "TooShort"
 
-
-                # ---------------- MQTT Setup ----------------
+                # ---------------- Register Devices ----------------
                 if condition_regis_mqtt == True:
                     condition_regis_mqtt = False
-                    mqtt_client = mqtt.Client(client_id=client_ip)
-
-                    mqtt_client.on_publish = on_publish
-
-                    # Configure SSL for secure connections to AWS IoT
-                    mqtt_client.tls_set(ca_certs=r.get("root_ca_path").decode(),
-                                        certfile=r.get("cert_path").decode(),
-                                        keyfile=r.get("private_key_path").decode(),
-                                        tls_version=ssl.PROTOCOL_TLSv1_2)
-
-                    system_log.log_to_redis(r.get("aws_iot_endpoint").decode())
-                    system_log.log_to_redis(environment.MQTT_PORT)
-                    # Connect to broker
-                    mqtt_client.connect(r.get("aws_iot_endpoint").decode(), environment.MQTT_PORT, 60)
-
-                    # Start a background thread to handle the network loop
-                    mqtt_client.loop_start()
 
                     new_device = await http_client.register_device(new_id_hex)
 
@@ -350,14 +353,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
                         system_log.log_to_redis(f"[Before Publish] Preparing to publish data for device {client_id}")
                         
-                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=1)
-                        
-                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
-                            print(f"Message successfully sent with {client_id}!")
-                            system_log.log_to_redis("Message successfully sent!")
-                        else:
-                            print(f"Failed to send message with {client_id}:", info.rc)
-                            system_log.log_to_redis("Failed to send message")
+                        await data_queue.put(json_data)
 
                     elif len(content_data) == 36:
                         parsed = handle_data.parse_36_byte_content(content_data)
@@ -379,14 +375,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
                         system_log.log_to_redis(f"[Before Publish] Preparing to publish data for device {client_id}")
 
-                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=1)
-                        
-                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
-                            print(f"Message successfully sent with {client_id}!")
-                            system_log.log_to_redis("Message successfully sent!")
-                        else:
-                            print(f"Failed to send message with {client_id}:", info.rc)
-                            system_log.log_to_redis("Failed to send message:")
+                        await data_queue.put(json_data)
 
                     else:
                         print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
@@ -396,26 +385,9 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 new_id_hex = content_data[-13:].hex()
                 ip_to_id_map[client_ip] = new_id_hex
 
-                # ---------------- MQTT Setup ----------------
+                # ---------------- Register Devices ----------------
                 if condition_regis_mqtt == True:
                     condition_regis_mqtt = False
-                    mqtt_client = mqtt.Client(client_id=client_ip)
-
-                    mqtt_client.on_publish = on_publish
-
-                    # Configure SSL for secure connections to AWS IoT
-                    mqtt_client.tls_set(ca_certs=r.get("root_ca_path").decode(),
-                                        certfile=r.get("cert_path").decode(),
-                                        keyfile=r.get("private_key_path").decode(),
-                                        tls_version=ssl.PROTOCOL_TLSv1_2)
-
-                    system_log.log_to_redis(r.get("aws_iot_endpoint").decode())
-                    system_log.log_to_redis(environment.MQTT_PORT)
-                    # Connect to broker
-                    mqtt_client.connect(r.get("aws_iot_endpoint").decode(), environment.MQTT_PORT, 60)
-
-                    # Start a background thread to handle the network loop
-                    mqtt_client.loop_start()
 
                     new_device = await http_client.register_device(new_id_hex)
 
@@ -450,17 +422,44 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         count = count - 1
      
 async def main():
+    global mqtt_client, data_queue
+    
     try:
         r.flushall()
 
         initialize_redis()
+        
+        data_queue = asyncio.Queue()
 
         auth_token = http_client.login_access_token(r.get("username").decode(),r.get("password").decode())
 
         if auth_token:
             r.set("auth_token", auth_token)
             asyncio.create_task(refresh_auth_token())
+            
+        # ---------------- MQTT Setup ----------------
+        # Setup client
+        mqtt.Client.connected_flag = False
+        mqtt_client = mqtt.Client()
+        mqtt_client.username_pw_set(environment.ACCESS_TOKEN)
+        mqtt_client.on_connect = on_connect
+        mqtt_client.on_publish = on_publish
 
+        # Connect to broker
+        mqtt_client.connect(environment.MQTT_BROKER, environment.MQTT_PORT, 60)
+
+        # Start a background thread to handle the network loop
+        mqtt_client.loop_start()
+        
+        # Create a publish task
+        asyncio.create_task(publish_to_mqtt())
+        
+        for i in range(10):
+            if mqtt_client.connected_flag:
+                break
+            print("Waiting for connection...")
+            time.sleep(1)
+        
         while True:
             status = r.get("tcp_server_status").decode()
             if status == "running":
@@ -469,6 +468,7 @@ async def main():
                 await stop_tcp_server()
 
             await asyncio.sleep(1)
+            
     except asyncio.CancelledError:
         print("[INFO] Tasks were cancelled.")
         system_log.log_to_redis("[INFO] Tasks were cancelled.")

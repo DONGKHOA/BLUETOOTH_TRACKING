@@ -33,14 +33,17 @@ private_key_path = "Backend/app/upload/tcp-server.private.key"
 # Path to tới certificate  
 cert_path = "Backend/app/upload/tcp-server.cert.pem"
 
-MQTT_PORT = 8883  # Port MQTT SSL
+MQTT_BROKER = "demo.thingsboard.io"
+MQTT_PORT = 1883
+ACCESS_TOKEN = "7vcz73vvcu7TuvXoCrMg"
+TOPIC = "v1/devices/me/telemetry"
 
 # TCP_SERVER
 TCP_SERVER_HOST = '0.0.0.0'
 TCP_SERVER_PORT = 8899
 
 # Facility list
-FACILITY_LIST = {'data': [{'name': 'Bene St.Paul', 'address': 'St.Paul', 'timezone': 'Australia/Sydney', 'tcp_server_name': 'another-tcp-server', 'id': 1, 'created_at': '2025-03-05T12:58:28.316924', 'updated_at': '2025-03-05T12:58:28.316940'}, {'name': 'Rob_Test', 'address': '', 'timezone': 'Australia/Sydney', 'tcp_server_name': 'another-tcp-server', 'id': 6, 'created_at': '2025-03-05T11:31:50.493161', 'updated_at': '2025-03-06T04:04:02.621634'}, {'name': 'facility123', 'address': '123 somewhere', 'timezone': 'UTC+10:00 - AEST - Australian Eastern Standard Time', 'tcp_server_name': None, 'id': 12, 'created_at': '2025-03-19T06:23:55.485983', 'updated_at': '2025-03-19T06:25:17.553137'}, {'name': 'UAT-Facility', 'address': '123 Fake Street', 'timezone': 'UTC+10:00 - AEST - Australian Eastern Standard Time', 'tcp_server_name': 'another-tcp-server', 'id': 11, 'created_at': '2025-03-19T01:06:07.328601', 'updated_at': '2025-03-19T07:05:17.264383'}], 'count': 4}
+FACILITY_LIST = {'data': [{'name': 'Bene St.Paul', 'address': 'St.Paul', 'timezone': 'Australia/Sydney', 'tcp_server_name': 'another-tcp-server', 'id': 1, 'created_at': '2025-03-05T12:58:28.316924', 'updated_at': '2025-03-05T12:58:28.316940'}, {'name': 'Rob_Test', 'address': '', 'timezone': 'Australia/Sydney', 'tcp_server_name': 'another-tcp-server', 'id': 6, 'created_at': '2025-03-05T11:31:50.493161', 'updated_at': '2025-03-06T04:04:02.621634'}, {'name': 'facility123', 'address': '123 somewhere', 'timezone': 'UTC+10:00 - AEST - Australian Eastern Standard Time', 'tcp_server_name': None, 'id': 12, 'created_at': '2025-03-19T06:23:55.485983', 'updated_at': '2025-03-19T06:25:17.553137'}, {'name': 'UAT-Facility', 'address': '123 Fake Street', 'timezone': 'UTC+10:00 - AEST - Australian Eastern Standard Time', 'tcp_server_name': 'another-tcp-server', 'id': 11, 'created_at': '2025-04-28T01:24:24.383025', 'updated_at': '2025-04-28T01:24:24.383049'}, {'name': 'UAT-2', 'address': '0000', 'timezone': 'UTC+10:00 - AEST - Australian Eastern Standard Time', 'tcp_server_name': 'another-tcp-server', 'id': 13, 'created_at': '2025-04-29T00:54:20.837850', 'updated_at': '2025-04-29T00:54:20.837873'}], 'count': 5}
 
 # Logging Configuration
 MAX_BYTES = 1048576
