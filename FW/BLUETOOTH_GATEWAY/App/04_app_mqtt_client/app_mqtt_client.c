@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 #include <stdbool.h>
 
@@ -22,9 +23,14 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define TAG           "APP_MQTT_CLIENT"
+#define TAG "APP_MQTT_CLIENT"
+
 #define URL_DEFAULT   "mqtt://broker.emqx.io"
 #define TOPIC_DEFAULT "01020304/data"
+
+#define SIZE_DATA_MQTT_PUBLISH      10240
+#define SIZE_TOPIC_MQTT_PUBLISH     64
+#define SIZE_DEV_INFOR_MQTT_PUBLISH 256
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -32,11 +38,9 @@
 
 typedef struct mqtt_client_data
 {
-  char                     c_data_pub[10240];
-  char                     c_topic_pub[64];
-  dev_info_t               s_dev_infor[256];
-  uint8_t                  u8_num_dev;
   QueueHandle_t           *p_data_mqtt_queue;
+  state_system_t          *p_state_system;
+  uint8_t                  u8_num_dev;
   esp_mqtt_client_handle_t s_MQTT_Client;
 } mqtt_client_data_t;
 
@@ -58,6 +62,9 @@ static void mqtt_event_handler(void            *handler_args,
 
 static mqtt_client_data_t s_mqtt_client_data;
 static bool               b_mqtt_client_connected = false; //
+static char              *p_data_pub;
+static char              *p_topic_pub;
+static dev_info_t        *p_dev_infor;
 
 /******************************************************************************
  *   PUBLIC FUNCTION
@@ -72,15 +79,22 @@ APP_MQTT_CLIENT_CreateTask (void)
 void
 APP_MQTT_CLIENT_Init (void)
 {
+  s_mqtt_client_data.p_state_system = &s_data_system.s_state_system;
+
+  *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
+
   s_mqtt_client_data.u8_num_dev = 0;
-  memset(
-      s_mqtt_client_data.c_data_pub, 0, sizeof(s_mqtt_client_data.c_data_pub));
-  memset(s_mqtt_client_data.c_topic_pub,
-         0,
-         sizeof(s_mqtt_client_data.c_topic_pub));
-  memset(s_mqtt_client_data.s_dev_infor,
-         0,
-         sizeof(s_mqtt_client_data.s_dev_infor));
+
+  p_data_pub
+      = (char *)heap_caps_malloc(SIZE_DATA_MQTT_PUBLISH, MALLOC_CAP_SPIRAM);
+  p_topic_pub
+      = (char *)heap_caps_malloc(SIZE_TOPIC_MQTT_PUBLISH, MALLOC_CAP_SPIRAM);
+  p_dev_infor = (dev_info_t *)heap_caps_malloc(SIZE_DEV_INFOR_MQTT_PUBLISH,
+                                               MALLOC_CAP_SPIRAM);
+
+  memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
+  memset(p_topic_pub, 0, SIZE_TOPIC_MQTT_PUBLISH);
+  memset(p_dev_infor, 0, SIZE_DEV_INFOR_MQTT_PUBLISH);
 
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_location_tag_queue;
 
@@ -103,10 +117,9 @@ APP_MQTT_CLIENT_Init (void)
     s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
   }
 
-  if (NVS_ReadString("MQTT", MQTTTOPIC_NVS, s_mqtt_client_data.c_topic_pub, 64)
-      != ESP_OK)
+  if (NVS_ReadString("MQTT", MQTTTOPIC_NVS, p_topic_pub, 64) != ESP_OK)
   {
-    strcpy(s_mqtt_client_data.c_topic_pub, TOPIC_DEFAULT);
+    strcpy(p_topic_pub, TOPIC_DEFAULT);
   }
 
   esp_mqtt_client_register_event(s_mqtt_client_data.s_MQTT_Client,
@@ -159,30 +172,25 @@ APP_MQTT_CLIENT_Task (void *arg)
       char *generated_str
           = create_device_json(c_gateway_id,
                                tracking_infor_tag.c_gateway_version,
-                               s_mqtt_client_data.s_dev_infor,
+                               p_dev_infor,
                                s_mqtt_client_data.u8_num_dev);
 
       // Check validity before copying
       if (generated_str)
       {
-        strncpy(s_mqtt_client_data.c_data_pub,
-                generated_str,
-                sizeof(s_mqtt_client_data.c_data_pub) - 1);
-        s_mqtt_client_data.c_data_pub[sizeof(s_mqtt_client_data.c_data_pub) - 1]
-            = '\0'; // Ensure null-termination
+        strncpy(p_data_pub, generated_str, sizeof(p_data_pub) - 1);
+        p_data_pub[sizeof(p_data_pub) - 1] = '\0'; // Ensure null-termination
 
         esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                s_mqtt_client_data.c_topic_pub,
-                                (const char *)&s_mqtt_client_data.c_data_pub,
+                                p_topic_pub,
+                                (const char *)&p_data_pub,
                                 0,
                                 1,
                                 0);
 
         s_mqtt_client_data.u8_num_dev = 0;
-        memset(s_mqtt_client_data.c_data_pub,
-               0,
-               sizeof(s_mqtt_client_data.c_data_pub));
-               
+        memset(p_data_pub, 0, sizeof(p_data_pub));
+
         free(generated_str); // Free the original allocated string
       }
     }
@@ -195,17 +203,16 @@ APP_MQTT_CLIENT_UpdateDataDev (tracking_infor_tag_t *p_tracking_infor_tag)
   for (uint8_t i = 0; i < 6; i++)
   {
     // "%02X" ensures 2 uppercase hex digits
-    snprintf(&s_mqtt_client_data.s_dev_infor[s_mqtt_client_data.u8_num_dev]
-                  .mac[i * 2],
+    snprintf(&p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[i * 2],
              3,
              "%02X",
              p_tracking_infor_tag->u8_beacon_addr[i]);
   }
 
   // Null-terminate the string
-  s_mqtt_client_data.s_dev_infor[s_mqtt_client_data.u8_num_dev].mac[12] = '\0';
+  p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[12] = '\0';
 
-  s_mqtt_client_data.s_dev_infor[s_mqtt_client_data.u8_num_dev].rssi
+  p_dev_infor[s_mqtt_client_data.u8_num_dev].rssi
       = p_tracking_infor_tag->i8_filtered_rssi;
 }
 

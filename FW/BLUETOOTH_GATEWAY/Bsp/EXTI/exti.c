@@ -17,7 +17,7 @@ static uint8_t                  u8_is_initialize       = 0;
  *   PRIVATE FUNCTIONS
  *****************************************************************************/
 
-static void IRAM_ATTR
+static void
 BSP_EXTI_Handler (void *argument)
 {
   uint32_t u32_io_pin = (uint32_t)argument;

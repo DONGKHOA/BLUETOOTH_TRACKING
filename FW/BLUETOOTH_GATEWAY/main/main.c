@@ -28,6 +28,7 @@
 #include "app_timestamp.h"
 #include "app_configuration.h"
 #include "app_user_button.h"
+#include "app_display.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -79,6 +80,8 @@ app_main (void)
 
   xTimerStart(s_loading_timer, 0);
 
+  APP_STATUS_LED_Init();
+
   while (1)
   {
     EventBits_t uxBits = xEventGroupWaitBits(
@@ -100,11 +103,13 @@ app_main (void)
       APP_BLE_TRACKING_Init();
       APP_HANDLE_WIFI_Init();
       APP_MQTT_CLIENT_Init();
+      APP_DISPLAY_Init();
 
       APP_HANDLE_WIFI_CreateTask();
       APP_BLE_IBEACON_CreateTask();
       APP_BLE_TRACKING_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
+      APP_DISPLAY_CreateTask();
       break;
     }
   }

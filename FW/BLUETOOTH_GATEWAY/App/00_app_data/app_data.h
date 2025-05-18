@@ -20,8 +20,8 @@ extern "C"
    *    PUBLIC DEFINES
    ***************************************************************************/
 
-#define APP_CONFIGURATION_ENABLE  BIT2
-#define APP_CONFIGURATION_DISABLE BIT3
+#define APP_CONFIGURATION_ENABLE  BIT0
+#define APP_CONFIGURATION_DISABLE BIT1
 
 #define MQTTSERVER_NVS "MQTTSERVER_NVS"
 #define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
@@ -63,17 +63,16 @@ extern "C"
 #define UART_RS485_NUM       UART_NUM_1
 #define UART_RS485_BAUD_RATE 115200
 
-  /*** state system **********************************************************/
-
-#define STATUS_WIFI_CONNECTED    BIT0
-#define STATUS_WIFI_DISCONNECTED BIT1
-#define STATUS_MQTT_CONNECTED    BIT2
-#define STATUS_MQTT_DISCONNECTED BIT3
-#define STATUS_BLE_CONFIGURATION BIT4
-
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
+
+  typedef enum
+  {
+    STATE_WIFI_CONNECTED = 0x00,
+    STATE_WIFI_DISCONNECTED,
+    STATE_BLUETOOTH_CONFIG
+  } __attribute__((packed)) state_system_t;
 
   /**
    * @brief Data structure holding data of system
@@ -91,6 +90,7 @@ extern "C"
     QueueHandle_t      s_rssi_ibeacon_queue;
     QueueHandle_t      s_location_tag_queue;
     EventGroupHandle_t s_configuration_event;
+    state_system_t     s_state_system;
   } DATA_System_t;
 
   /**

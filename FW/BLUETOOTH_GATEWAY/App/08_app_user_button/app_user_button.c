@@ -87,7 +87,7 @@ APP_USER_BUTTON_Init (void)
  *   PRIVATE FUNCTIONS
  *****************************************************************************/
 
-static void
+static void IRAM_ATTR
 APP_USER_BUTTON_Func_cb (gpio_num_t e_pin)
 {
   if (e_pin != USER_BUTTON_1_PIN)

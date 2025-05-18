@@ -95,7 +95,8 @@ typedef struct
 
 typedef struct
 {
-  QueueHandle_t s_configuration_data_queue;
+  QueueHandle_t   s_configuration_data_queue;
+  state_system_t *p_state_system;
 } configuration_data_t;
 
 /******************************************************************************
@@ -266,8 +267,12 @@ APP_CONFIGURATION_CreateTask (void)
 void
 APP_CONFIGURATION_Init (void)
 {
+  s_configuration_data.p_state_system = &s_data_system.s_state_system;
+
   s_configuration_data.s_configuration_data_queue
       = xQueueCreate(2, sizeof(configuration_data_event_t));
+
+  *s_configuration_data.p_state_system = STATE_BLUETOOTH_CONFIG;
 
   ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
