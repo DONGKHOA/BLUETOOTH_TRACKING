@@ -11,7 +11,7 @@
  *    PRIVATE DEFINES
  *****************************************************************************/
 
-#define I2C_NUM        0
+#define I2C_NUM        I2C_NUM_0
 #define I2C_MODE       I2C_MODE_MASTER
 #define I2C_SDA        GPIO_NUM_27
 #define I2C_SCL        GPIO_NUM_14
