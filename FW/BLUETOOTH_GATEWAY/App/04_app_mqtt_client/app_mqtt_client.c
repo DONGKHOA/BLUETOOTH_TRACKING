@@ -140,13 +140,12 @@ APP_MQTT_CLIENT_Task (void *arg)
 
   while (1)
   {
-    if (WIFI_state_connect() == CONNECT_OK)
+    if (WIFI_state_connect() == CONNECT_OK && is_init == false)
     {
-      if (is_init == 0)
-      {
-        is_init = 1;
-        esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
-      }
+      is_init = true;
+
+      *s_mqtt_client_data.p_state_system = STATE_WIFI_CONNECTED;
+      esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
     }
 
     if (xQueueReceive(
@@ -245,6 +244,7 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_DISCONNECTED:
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
       b_mqtt_client_connected = false;
+      *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
       break;
     default:
       ESP_LOGI(TAG, "Other event");

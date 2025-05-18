@@ -162,6 +162,10 @@ APP_MAIN_InitDataSystem (void)
       = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
   s_data_system.s_location_tag_queue
       = xQueueCreate(16, sizeof(tracking_infor_tag_t));
+
+  s_data_system.s_addr_tag_queue = xQueueCreate(4, sizeof(addr_tag_t));
+
+  s_data_system.s_mutex_num_tag = xSemaphoreCreateMutex();
 }
 
 static void
