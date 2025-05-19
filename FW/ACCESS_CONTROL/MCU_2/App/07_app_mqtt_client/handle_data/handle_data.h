@@ -55,6 +55,11 @@ extern "C"
                          char    **user_name,
                          uint16_t *user_len);
 
+  char *ENCODE_Attendance_Data(int      user_id,
+                               char    *data_time,
+                               uint8_t  number_checkin,
+                               uint32_t index_packet);
+
 #ifdef __cplusplus
 }
 #endif

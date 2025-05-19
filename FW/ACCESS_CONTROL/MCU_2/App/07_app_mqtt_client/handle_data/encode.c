@@ -61,3 +61,30 @@ ENCODE_Sync_Data (int      *user_id,
   cJSON_Delete(root);
   return json_str;
 }
+
+char *
+ENCODE_Attendance_Data (int      user_id,
+                        char    *data_time,
+                        uint8_t  number_checkin,
+                        uint32_t index_packet)
+{
+  cJSON *root = cJSON_CreateObject();
+
+  cJSON_AddStringToObject(root, "command", "ATTENDANCE_DATA");
+  cJSON_AddNumberToObject(root, "id", (int)user_id);
+  cJSON_AddNumberToObject(root, "index", (int)index_packet);
+  cJSON_AddNumberToObject(root, "number_checkin", (int)number_checkin);
+  cJSON_AddStringToObject(root, "timestamp", data_time);
+
+  // Assign to caller's pointer (CORRECTED)
+  char *json_str = cJSON_PrintUnformatted(root);
+
+  if (json_str == NULL)
+  {
+    cJSON_Delete(root);
+    return NULL;
+  }
+
+  cJSON_Delete(root);
+  return json_str;
+}
