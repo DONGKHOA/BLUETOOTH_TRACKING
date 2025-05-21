@@ -44,24 +44,24 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
     // Reset bit OSF
     status_reg &= ~(1 << 7);
 
-  *p_ds3231_data = (ds3231_data_t) { .u8_hour   = 21,
-                                     .u8_minute = 40,
-                                     .u8_second = 0,
-                                     .u8_day    = 4,
-                                     .u8_date   = 1,
-                                     .u8_month  = 5,
-                                     .u8_year   = 125 };
+    *p_ds3231_data = (ds3231_data_t) { .u8_hour   = 21,
+                                       .u8_minute = 40,
+                                       .u8_second = 0,
+                                       .u8_day    = 4,
+                                       .u8_date   = 1,
+                                       .u8_month  = 5,
+                                       .u8_year   = 125 };
 
-  DEV_DS3231_Register_Write(p_ds3231_data, e_i2c_port);
+    DEV_DS3231_Register_Write(p_ds3231_data, e_i2c_port);
 
-  // Clear bit OSF
-  status_reg &= ~(1 << 7);
-  reg_addr = DS3231_STATUS;
-  BSP_i2cWriteBuffer(e_i2c_port,
-                     DS3231_ADDRESS,
-                     (uint8_t[]) { reg_addr, status_reg },
-                     2,
-                     1000 / portTICK_PERIOD_MS);
+    // Clear bit OSF
+    status_reg &= ~(1 << 7);
+    reg_addr = DS3231_STATUS;
+    BSP_i2cWriteBuffer(e_i2c_port,
+                       DS3231_ADDRESS,
+                       (uint8_t[]) { reg_addr, status_reg },
+                       2,
+                       1000 / portTICK_PERIOD_MS);
   }
   else
   {
@@ -102,11 +102,11 @@ DEV_DS3231_Register_Write (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
     tx_buf[i + 1] = DEC_To_BCD(*((uint8_t *)p_ds3231_data + i));
   }
   tx_buf[0] = SECOND_VALUE_ADDRESS;
-  ret       = i2c_master_write_to_device(e_i2c_port,
-                                   DS3231_ADDRESS,
-                                   tx_buf,
-                                   sizeof(tx_buf),
-                                   1000 / portTICK_PERIOD_MS);
+  ret       = BSP_i2cWriteBuffer(e_i2c_port,
+                           DS3231_ADDRESS,
+                           tx_buf,
+                           sizeof(tx_buf),
+                           1000 / portTICK_PERIOD_MS);
 
   return ret;
 }
