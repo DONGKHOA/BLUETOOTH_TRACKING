@@ -14,4 +14,4 @@ HW/Source/BluetoothGateway/Project\ Outputs\ for\ BluetoothGateway/
 **/sdkconfig
 **/sdkconfig.old
 
-system_logs_*
+**/system_logs_*.txt
