@@ -279,16 +279,32 @@ APP_MQTT_CLIENT_task (void *arg)
                               0)
                 == pdPASS)
             {
+              // for (int i = 0; i < s_attendance_data.u8_number_checkin; i++)
+              // {
+              //   for (uint8_t i = 0; i < 3; i++)
+              //   {
+              //     char str[12];
+              //     itoa(s_attendance_data.u32_time[i], str, 10);
+              //     memcpy(data_time + strlen(data_time), str, strlen(str));
+              //     data_time[strlen(data_time)] = '|';
+              //   }
+              // }
               char data_time[1024];
               memset(data_time, 0, sizeof(data_time));
               for (int i = 0; i < s_attendance_data.u8_number_checkin; i++)
               {
-                for (uint8_t i = 0; i < 3; i++)
+                char str[12];
+                snprintf(
+                    str, sizeof(str), "%lu", s_attendance_data.u32_time[i]);
+
+                strncat(
+                    data_time, str, sizeof(data_time) - strlen(data_time) - 1);
+
+                if (i < s_attendance_data.u8_number_checkin - 1)
                 {
-                  char str[12];
-                  itoa(s_attendance_data.u32_time[i], str, 10);
-                  memcpy(data_time + strlen(data_time), str, strlen(str));
-                  data_time[strlen(data_time)] = '|';
+                  strncat(data_time,
+                          "|",
+                          sizeof(data_time) - strlen(data_time) - 1);
                 }
               }
 
@@ -360,6 +376,9 @@ APP_MQTT_CLIENT_task (void *arg)
           DECODE_Status(data, &status);
 
           s_sdcard_cmd = SDCARD_SYNC_DATA_SERVER;
+          xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_sdcard_cmd, 0);
+
+          s_sdcard_cmd = SDCARD_ATTENDANCE_DATA;
           xQueueSend(*s_mqtt_client_data.p_data_sdcard_queue, &s_sdcard_cmd, 0);
 
           break;
@@ -448,8 +467,6 @@ APP_MQTT_CLIENT_task (void *arg)
 
           DECODE_Set_Role_Data(data, &user_id_set_role, user_role);
 
-          printf("User Role: %s\n", user_role);
-
           s_DATA_SYNC.u8_data_start = LOCAL_DATABASE_SET_ROLE;
 
           s_DATA_SYNC.u8_data_packet[0]
@@ -459,7 +476,6 @@ APP_MQTT_CLIENT_task (void *arg)
           for (int i = 0; i < strlen(user_role) + 1; i++)
           {
             s_DATA_SYNC.u8_data_packet[2 + i] = user_role[i];
-            printf("Data Sync: %d\n", s_DATA_SYNC.u8_data_packet[2 + i]);
           }
           s_DATA_SYNC.u8_data_length = 2 + strlen(user_role) + 1;
 

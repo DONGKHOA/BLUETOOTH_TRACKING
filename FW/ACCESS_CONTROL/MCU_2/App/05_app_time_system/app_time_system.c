@@ -67,7 +67,7 @@ APP_TIME_SYSTEM_Init (void)
   s_time_system.p_flag_time_event = &s_data_system.s_flag_time_event;
   s_time_system.p_time_mutex      = &s_data_system.s_time_mutex;
 
-  DEV_DS3231_Init(&s_time_system.s_ds3231_data, I2C_NUM_0);
+  DEV_DS3231_Init(&s_time_system.s_ds3231_data, I2C_NUM);
 
   esp_sntp_setoperatingmode(SNTP_OPMODE_POLL);
   esp_sntp_setservername(0, "pool.ntp.org");
@@ -86,22 +86,12 @@ APP_TIME_SYSTEM_Notification_cb (struct timeval *tv)
 {
   ESP_LOGI(TAG, "Time synchronized\n");
 
+  time(&now);
+  now += 7 * 3600;
+  localtime_r(&now, &timeinfo);
+
   xEventGroupClearBits(*s_time_system.p_flag_time_event, TIME_SOURCE_RTC_READY);
   xEventGroupSetBits(*s_time_system.p_flag_time_event, TIME_SOURCE_RTC_OFF);
-}
-
-static void
-convert_ds3231_to_tm (const ds3231_data_t *src, struct tm *dest)
-{
-  dest->tm_sec   = src->u8_second;     // 0-59
-  dest->tm_min   = src->u8_minute;     // 0-59
-  dest->tm_hour  = src->u8_hour;       // 0-23 (assumes 24-hour format)
-  dest->tm_mday  = src->u8_date;       // 1-31
-  dest->tm_mon   = src->u8_month - 1;  // Adjust to 0-11
-  dest->tm_year  = src->u8_year + 100; // Years since 1900 (2000-2099)
-  dest->tm_wday  = src->u8_day - 1;    // Adjust to 0-6 (Sunday=0)
-  dest->tm_yday  = 0;                  // Not provided by DS3231
-  dest->tm_isdst = -1;                 // No daylight saving time info
 }
 
 static void
@@ -123,7 +113,6 @@ APP_TIME_SYSTEM_Task (void *arg)
       xSemaphoreTake(*s_time_system.p_time_mutex, 100 / portTICK_PERIOD_MS);
 
       DEV_DS3231_Register_Read(&s_time_system.s_ds3231_data, I2C_NUM);
-      convert_ds3231_to_tm(&s_time_system.s_ds3231_data, &timeinfo);
 
       xSemaphoreGive(*s_time_system.p_time_mutex);
 
@@ -159,15 +148,6 @@ APP_TIME_SYSTEM_Task (void *arg)
 
     else if (uxBit & TIME_SOURCE_SNTP_READY)
     {
-      xSemaphoreTake(*s_time_system.p_time_mutex, 100 / portTICK_PERIOD_MS);
-
-      time(&now);
-      now += 7 * 3600;
-
-      localtime_r(&now, &timeinfo);
-
-      xSemaphoreGive(*s_time_system.p_time_mutex);
-
       s_DATA_SYNC.u8_data_start     = DATA_SYNC_TIME;
       s_DATA_SYNC.u8_data_packet[0] = (uint8_t)timeinfo.tm_min;
       s_DATA_SYNC.u8_data_packet[1] = (uint8_t)timeinfo.tm_hour;

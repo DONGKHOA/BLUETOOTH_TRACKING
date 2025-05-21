@@ -36,7 +36,7 @@ def response_sync():
         "command": "SYN",
         "id": new_id
     }
-  
+
 def reponse_user_data(data, device_id):
     users_all = load_users()
 
@@ -47,6 +47,56 @@ def reponse_user_data(data, device_id):
     users_all[device_id] = data.get("user_data", [])
 
     save_users(users_all)
+    
+def response_attendance_data(data, device_id):
+    attendance_all = load_attendance()
+    attendance = attendance_all.setdefault(device_id, [])
+
+    index = data.get("index", 0)
+    timestamps_str = data.get("timestamp", "")
+    user_id = data.get("id")
+
+    if not isinstance(user_id, int) or not timestamps_str:
+        return {"command": "ATTENDANCE_DATA", "response": "fail"}
+
+    timestamps = timestamps_str.split("|")
+    timestamps = [int(ts) for ts in timestamps if ts.isdigit()]
+
+    users_all = load_users()
+    users = users_all.get(device_id, [])
+    name = next((u.get("name") for u in users if u.get("id") == user_id), "")
+
+    for ts in timestamps:
+        dt = datetime.utcfromtimestamp(ts).astimezone(ZoneInfo("Asia/Ho_Chi_Minh"))
+        date_str = dt.strftime("%d/%m/%Y")
+        time_str = dt.strftime("%H:%M:%S")
+
+        # Find existing record
+        existing_record = next((r for r in attendance if r["id"] == user_id and r["date"] == date_str), None)
+
+        if existing_record:
+            # Find next available check field
+            i = 1
+            while f"check{i}" in existing_record:
+                if existing_record[f"check{i}"] == time_str:
+                    break  # already stored
+                i += 1
+            else:
+                existing_record[f"check{i}"] = time_str
+        else:
+            # Create a new record with check1
+            new_record = {
+                "id": user_id,
+                "name": name,
+                "device_id": device_id,
+                "date": date_str,
+                "check1": time_str
+            }
+            attendance.append(new_record)
+
+    save_attendance(attendance_all)
+
+    return {"command": "ATTENDANCE_DATA", "response": "success"}
     
 def response_enroll_face(user_id, device_id):
     users_all = load_users()
@@ -79,9 +129,9 @@ def response_attendance(user_id, device_id, timestamp):
 
     try:
         timestamp = int(timestamp)
-        now = datetime.utcfromtimestamp(timestamp)
+        now = datetime.utcfromtimestamp(timestamp).astimezone(ZoneInfo("Asia/Ho_Chi_Minh"))
     except Exception:
-        now = datetime.utcnow()
+        now = datetime.utcnow().astimezone(ZoneInfo("Asia/Ho_Chi_Minh"))
 
     date_str = now.strftime("%d/%m/%Y")
     time_str = now.strftime("%H:%M:%S")
@@ -93,17 +143,25 @@ def response_attendance(user_id, device_id, timestamp):
             attendance_all = load_attendance()
             attendance = attendance_all.setdefault(device_id, [])
 
-            for row in attendance:
-                if row["id"] == user_id and row["date"] == date_str:
-                    row["check"] = time_str
-                    break
+            existing_record = next((r for r in attendance if r["id"] == user_id and r["date"] == date_str), None)
+
+            if existing_record:
+                # Add to next checkN if not already present
+                i = 1
+                while f"check{i}" in existing_record:
+                    if existing_record[f"check{i}"] == time_str:
+                        break  # already stored
+                    i += 1
+                else:
+                    existing_record[f"check{i}"] = time_str
             else:
+                # First record of the day
                 attendance.append({
                     "id": user_id,
                     "name": name,
                     "device_id": device_id,
                     "date": date_str,
-                    "check": time_str
+                    "check1": time_str
                 })
 
             save_attendance(attendance_all)

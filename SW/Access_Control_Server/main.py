@@ -68,6 +68,9 @@ async def process_request():
                 
             case "SYNC_DATA":
                 json_data = json.dumps(handle_data.reponse_user_data(data, device_id))
+                
+            case "ATTENDANCE_DATA":
+                json_data = json.dumps(handle_data.response_attendance_data(data, device_id))
             
             case "ENROLL_FACE":
                 user_id = data.get("id")

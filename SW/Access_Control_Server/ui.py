@@ -220,18 +220,28 @@ def available_devices():
 @app.route('/attendance')
 def show_attendance():
     attendance_all = load_attendance()
-
     merged = []
+
     for device_id, records in attendance_all.items():
         for record in records:
-            record["device_id"] = device_id  # Add device_id to each record
+            record["device_id"] = device_id  # ensure device_id is always present
+
+            # Collect all checkN fields
+            check_times = [v for k, v in record.items() if k.startswith("check")]
+
+            if check_times:
+                # Get latest check-in time (by sorting time string)
+                latest_time = sorted(check_times)[-1]
+                record["check"] = latest_time
+            else:
+                record["check"] = "—"  # fallback if no check-in
+
             merged.append(record)
 
-    # Optional: sort by date or device ID
+    # Sort by date, device, and user ID
     merged.sort(key=lambda x: (x["date"], x["device_id"], x["id"]))
 
     return render_template('attendance.html', attendance_data=merged)
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9000, debug=True)

@@ -70,7 +70,8 @@ static DATA_SYNC_t s_DATA_SYNC;
 
 static uint8_t  attendance_number_checkin[16] = { 0 };
 static uint32_t attendance_time[16][16]       = { 0 };
-static uint16_t attendance_user_id            = 0;
+static uint16_t attendance_user_id[16]        = { 0 };
+static uint8_t  packet_user_id[16]            = { 0 };
 static uint32_t attendance_index              = 0;
 
 /******************************************************************************
@@ -175,30 +176,30 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
           APP_CONTROL_SDCARD_ReadAttendanceData();
 
-          for (int i = 0; i < attendance_index; i++)
+          for (int j = 0; j < attendance_index; j++)
           {
-            for (int j = 0; j < attendance_number_checkin[i]; j++)
+            for (int k = 0; k < attendance_number_checkin[j]; k++)
             {
-              s_attendance_data.u32_time[j] = attendance_time[i][j];
+              s_attendance_data.u32_time[k] = attendance_time[j][k];
             }
 
-            s_attendance_data.u16_user_id       = attendance_user_id;
-            s_attendance_data.u8_number_checkin = attendance_number_checkin[i];
-            s_attendance_data.u32_index_packet  = i;
+            int temp                            = packet_user_id[j];
+            s_attendance_data.u16_user_id       = attendance_user_id[temp];
+            s_attendance_data.u8_number_checkin = attendance_number_checkin[j];
+            s_attendance_data.u32_index_packet  = j;
 
             xQueueSend(*s_control_sdcard.p_data_attendance_queue,
                        &s_attendance_data,
                        0);
+
+            // send command to mqtt
+            s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA_ATTENDANCE;
+            s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
+            s_DATA_SYNC.u8_data_length    = 1;
+            s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+
+            xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
           }
-
-          // send command to mqtt
-
-          s_DATA_SYNC.u8_data_start     = LOCAL_DATABASE_DATA_ATTENDANCE;
-          s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;
-          s_DATA_SYNC.u8_data_length    = 1;
-          s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
-
-          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_DATA_SYNC, 0);
 
           break;
 
@@ -579,7 +580,7 @@ APP_CONTROL_SDCARD_WriteAttendanceData (char    *new_name,
 {
   char full_path[32];
   char temp_path[32];
-  char line[128], new_line[128];
+  char line[1024], new_line[1024];
 
   int updated = 0;
 
@@ -621,38 +622,49 @@ APP_CONTROL_SDCARD_WriteAttendanceData (char    *new_name,
       continue;
     }
 
-    int      current_id = atoi(id_str);
-    uint32_t final_time = strtoul(time, NULL, 10);
+    int current_id = atoi(id_str);
 
     APP_CONTROL_SDCARD_RemoveQuotes(new_name);
     APP_CONTROL_SDCARD_RemoveQuotes(name);
 
-    char *final_name = name;
-
     if (current_id == user_id)
     {
       updated = 1;
-      snprintf(new_line,
-               sizeof(new_line),
-               "%d, \"%s\",%lu,%lu\n",
-               current_id,
-               final_name,
-               final_time,
-               timestamp);
+      snprintf(new_line, sizeof(new_line), "%d,\"%s\"", current_id, new_name);
+
+      while (time != NULL)
+      {
+        strncat(new_line, ",", sizeof(new_line) - strlen(new_line) - 1);
+        strncat(new_line, time, sizeof(new_line) - strlen(new_line) - 1);
+        time = strtok(NULL, ",\r\n");
+      }
+
+      char temp[20];
+      snprintf(temp, sizeof(temp), ",%lu\n", timestamp);
+      strncat(new_line, temp, sizeof(new_line) - strlen(new_line) - 1);
+
+      strncat(new_line, "\n", sizeof(new_line) - strlen(new_line) - 1);
+      memset(temp, 0, sizeof(temp));
     }
     else
     {
-      snprintf(new_line,
-               sizeof(new_line),
-               "%d, \"%s\",%lu\n",
-               current_id,
-               final_name,
-               final_time);
+      snprintf(new_line, sizeof(new_line), "%d,\"%s\"", current_id, name);
+
+      while (time != NULL)
+      {
+        strncat(new_line, ",", sizeof(new_line) - strlen(new_line) - 1);
+        strncat(new_line, time, sizeof(new_line) - strlen(new_line) - 1);
+        time = strtok(NULL, ",\r\n");
+      }
+
+      strncat(new_line, "\n", sizeof(new_line) - strlen(new_line) - 1);
     }
 
     printf("Update line: %s\n", new_line);
-
-    f_write(&fdst, new_line, strlen(new_line), &bw);
+    if (strlen(new_line) > 0)
+    {
+      f_write(&fdst, new_line, strlen(new_line), &bw);
+    }
   }
 
   // Write new attendance data
@@ -660,12 +672,15 @@ APP_CONTROL_SDCARD_WriteAttendanceData (char    *new_name,
   {
     snprintf(new_line,
              sizeof(new_line),
-             "%d, \"%s\",%lu\n",
+             "%d,\"%s\",%lu\n",
              user_id,
              new_name,
              timestamp);
     printf("New attendance line: %s\n", new_line);
-    f_write(&fdst, new_line, strlen(new_line), &bw);
+    if (strlen(new_line) > 0)
+    {
+      f_write(&fdst, new_line, strlen(new_line), &bw);
+    }
   }
 
   f_close(&fsrc);
@@ -679,9 +694,10 @@ static void
 APP_CONTROL_SDCARD_ReadAttendanceData (void)
 {
   char full_path[32];
-  char line[128];
+  char line[1024];
 
-  uint8_t checkin_count = 0;
+  uint8_t  user_index    = 0;
+  uint32_t checkin_count = 0;
 
   attendance_index = 0;
   memset(attendance_number_checkin, 0, sizeof(attendance_number_checkin));
@@ -715,9 +731,9 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
     {
       continue;
     }
-    attendance_user_id = atoi(token);
+    attendance_user_id[user_index] = atoi(token);
 
-    // Skip name
+    // Skip username
     token = strtok(NULL, ",");
     if (!token)
     {
@@ -729,10 +745,11 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
     // Get time
     while ((token = strtok(NULL, ",")) != NULL)
     {
-      // Check if the packet is full -> increase index
+      // Check if the packet is full -> Increase attendance index
       if (checkin_count == 16)
       {
         attendance_number_checkin[attendance_index] = checkin_count;
+        packet_user_id[attendance_index]            = user_index;
         attendance_index++;
 
         // Prevent overflow
@@ -747,15 +764,13 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
 
       attendance_time[attendance_index][checkin_count++]
           = strtoul(token, NULL, 10);
-
-      printf("Attendance time: %lu\n",
-             attendance_time[attendance_index][checkin_count - 1]);
     }
 
     // Increase the attendance index after checkin complete
     if (checkin_count > 0 && attendance_index < 16)
     {
       attendance_number_checkin[attendance_index] = checkin_count;
+      packet_user_id[attendance_index]            = user_index;
       attendance_index++;
     }
 
@@ -763,6 +778,8 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
     {
       break;
     }
+
+    user_index++;
   }
 
   f_close(&fil);
