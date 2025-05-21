@@ -260,36 +260,57 @@ APP_MQTT_CLIENT_task (void *arg)
             if (generated_str)
             {
               strncpy(data_send, generated_str, strlen(generated_str) + 1);
-              free(generated_str); // Caller must free memory
-            }
+              free(generated_str);
 
-            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                    u32_topic_request_server,
-                                    data_send,
-                                    0,
-                                    1,
-                                    0);
+              esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                      u32_topic_request_server,
+                                      data_send,
+                                      0,
+                                      1,
+                                      0);
+            }
 
             break;
 
           case LOCAL_DATABASE_DATA_ATTENDANCE:
 
-            xQueueReceive(*s_mqtt_client_data.p_data_attendance_queue,
-                          &s_attendance_data,
-                          0);
+            if (xQueueReceive(*s_mqtt_client_data.p_data_attendance_queue,
+                              &s_attendance_data,
+                              0)
+                == pdPASS)
+            {
+              char data_time[1024];
+              memset(data_time, 0, sizeof(data_time));
+              for (int i = 0; i < s_attendance_data.u8_number_checkin; i++)
+              {
+                for (uint8_t i = 0; i < 3; i++)
+                {
+                  char str[12];
+                  itoa(s_attendance_data.u32_time[i], str, 10);
+                  memcpy(data_time + strlen(data_time), str, strlen(str));
+                  data_time[strlen(data_time)] = '|';
+                }
+              }
 
-            sprintf(data_send,
-                    "{\"command\" : \"ATTENDANCE\", \"id\": %d, \"timestamp\": "
-                    "%ld}",
-                    s_attendance_data.u16_user_id,
-                    s_attendance_data.u32_time[0]);
+              char *generated_str
+                  = ENCODE_Attendance_Data(s_attendance_data.u16_user_id,
+                                           data_time,
+                                           s_attendance_data.u8_number_checkin,
+                                           s_attendance_data.u32_index_packet);
 
-            esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                    u32_topic_request_server,
-                                    data_send,
-                                    0,
-                                    1,
-                                    0);
+              if (generated_str)
+              {
+                strncpy(data_send, generated_str, strlen(generated_str) + 1);
+                free(generated_str);
+
+                esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                        u32_topic_request_server,
+                                        data_send,
+                                        0,
+                                        1,
+                                        0);
+              }
+            }
 
             break;
 
