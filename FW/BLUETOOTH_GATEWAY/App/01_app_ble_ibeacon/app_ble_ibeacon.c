@@ -21,6 +21,12 @@
 #include "freertos/timers.h"
 
 /******************************************************************************
+ *    PUBLIC DATA
+ *****************************************************************************/
+
+uint32_t u32_number_tag = 0;
+
+/******************************************************************************
  *    PRIVATE DEFINES
  *****************************************************************************/
 
@@ -69,9 +75,10 @@ typedef struct
  */
 typedef struct ble_ibeacon_data
 {
-  TimerHandle_t  s_timeout_delete_node;
-  QueueHandle_t  s_queue_ble_inf;
-  QueueHandle_t *p_rssi_ibeacon_queue;
+  TimerHandle_t      s_timeout_delete_node;
+  QueueHandle_t      s_queue_ble_inf;
+  QueueHandle_t     *p_rssi_ibeacon_queue;
+  SemaphoreHandle_t *p_mutex_num_tag;
 } ble_ibeacon_data_t;
 
 esp_ble_ibeacon_head_t ibeacon_common_head = { .flags  = { 0x02, 0x01, 0x06 },
@@ -98,7 +105,6 @@ static bool esp_ble_is_ibeacon_packet(uint8_t *adv_data, uint8_t adv_data_len);
 
 static ble_ibeacon_data_t    s_ble_ibeacon_data;
 static Node_t               *p_head_linked_list_ble_inf = NULL;
-static uint32_t              u32_number_node            = 0;
 static esp_ble_scan_params_t ble_scan_params
     = { .scan_type          = BLE_SCAN_TYPE_ACTIVE,
         .own_addr_type      = BLE_ADDR_TYPE_PUBLIC,
@@ -122,6 +128,7 @@ void
 APP_BLE_IBEACON_Init (void)
 {
   s_ble_ibeacon_data.p_rssi_ibeacon_queue = &s_data_system.s_rssi_ibeacon_queue;
+  s_ble_ibeacon_data.p_mutex_num_tag      = &s_data_system.s_mutex_num_tag;
 
   s_ble_ibeacon_data.s_timeout_delete_node
       = xTimerCreate("timeout delete node",
@@ -176,7 +183,10 @@ APP_BLE_IBEACON_TimerCallback (TimerHandle_t s_Timer)
       p_head_linked_list_ble_inf
           = LINKED_LIST_DeleteNode(p_head_linked_list_ble_inf, u32_index);
 
-      u32_number_node--;
+      xSemaphoreTake(*s_ble_ibeacon_data.p_mutex_num_tag, portMAX_DELAY);
+      u32_number_tag--;
+      xSemaphoreGive(*s_ble_ibeacon_data.p_mutex_num_tag);
+
       u32_index = 1;
       p_temp    = p_head_linked_list_ble_inf;
       continue;
@@ -200,13 +210,13 @@ APP_BLE_IBEACON_Task (void *arg)
                       portMAX_DELAY)
         == pdPASS)
     {
-      printf("\r\nNumber of Tag: %ld\r\n", u32_number_node);
+      printf("\r\nNumber of Tag: %ld\r\n", u32_number_tag);
       memcpy(s_beacon_data_task.u8_beacon_addr,
              s_beacon_data_cb.u8_beacon_addr,
              6);
       s_beacon_data_task.rssi = s_beacon_data_cb.rssi;
 
-      if ((u32_number_node == 0)
+      if ((u32_number_tag == 0)
           || (APP_BLE_IBEACON_CheckAddressDevice(&s_beacon_data_task) == 0))
       {
         printf("Create Node:");
@@ -216,7 +226,7 @@ APP_BLE_IBEACON_Task (void *arg)
         }
         printf("\r\n");
 
-        if (u32_number_node == 0)
+        if (u32_number_tag == 0)
         {
           xTimerStart(s_ble_ibeacon_data.s_timeout_delete_node, 0);
           LINKED_LIST_InsertAtHead(&p_head_linked_list_ble_inf,
@@ -232,7 +242,7 @@ APP_BLE_IBEACON_Task (void *arg)
 
         p_temp = p_head_linked_list_ble_inf;
 
-        for (uint32_t i = 0; i < u32_number_node; i++)
+        for (uint32_t i = 0; i < u32_number_tag; i++)
         {
           p_temp = p_temp->p_next;
         }
@@ -244,7 +254,10 @@ APP_BLE_IBEACON_Task (void *arg)
             0.001,
             -50);
         ((beacon_data_t *)(p_temp->p_data))->flag_timeout = 0;
-        u32_number_node++;
+
+        xSemaphoreTake(*s_ble_ibeacon_data.p_mutex_num_tag, portMAX_DELAY);
+        u32_number_tag++;
+        xSemaphoreGive(*s_ble_ibeacon_data.p_mutex_num_tag);
       }
 
       APP_BLE_IBEACON_UpdateDataDevice(&s_beacon_data_task);
@@ -331,8 +344,7 @@ APP_BLE_IBEACON_GAP_Callback (esp_gap_ble_cb_event_t  event,
   switch (event)
   {
     case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT:
-      // uint32_t duration = 0;
-      esp_ble_gap_start_scanning((uint32_t) 0);
+      esp_ble_gap_start_scanning((uint32_t)0);
       break;
 
     case ESP_GAP_BLE_SCAN_START_COMPLETE_EVT:

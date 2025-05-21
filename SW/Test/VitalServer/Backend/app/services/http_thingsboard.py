@@ -1,17 +1,19 @@
 import requests
-import environment
-import asyncio
 import json
 import aiohttp
+import redis
 
-new_device = None
-access_token = None
+import app.environment.environment as environment
+
+# Connect to Redis
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 # Function to get headers for the request
 def get_headers():
+    auth_token = r.get("auth_token").decode()
     return {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {environment.AUTH_TOKEN}",
+        "Authorization": f"Bearer {auth_token}",
     }
 
 def login_auth_token(user_name, password):
@@ -75,7 +77,7 @@ async def register_device(device_name):
                     new_device = await response.json()
                     print("Device created:")
                     print(json.dumps(new_device, indent=4, ensure_ascii=False))
-                    return new_device['id']['id']
+                    return new_device['id']['id'], True 
                 
                 elif response.status == 400:
                     # Try to parse error
@@ -83,7 +85,9 @@ async def register_device(device_name):
                     
                     if "already exists" in error_msg:
                         print("Device already exists. Fetching ID by name...")
-                        return await get_device_id_by_name(device_name)
+                    
+                        existing_device_id = await get_device_id_by_name(device_name)
+                        return existing_device_id, False 
                 else:
                     print(f" Status: {response.status}")
                     print(f" Text: {await response.text()}")
@@ -111,18 +115,3 @@ async def get_access_token(device_id):
     except Exception as e:
         print(f"Error getting access token: {e}")
         return None
-
-async def main():
-    device_name = "Aerosense-Device-12345"
-    
-    environment.AUTH_TOKEN = login_auth_token(environment.USER_NAME, environment.PASSWORD)
-    
-    device_id = await register_device(device_name)
-    
-    if device_id:
-        token = await get_access_token(device_id)
-        if token:
-            print(f" Access token for {device_name}: {token}")
-        
-if __name__ == "__main__":
-    asyncio.run(main())

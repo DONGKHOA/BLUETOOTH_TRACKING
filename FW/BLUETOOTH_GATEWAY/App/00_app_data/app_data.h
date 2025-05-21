@@ -67,6 +67,9 @@ extern "C"
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
 
+  /**
+   * @brief Structure defining the state of system and show it by led
+   */
   typedef enum
   {
     STATE_WIFI_CONNECTED = 0x00,
@@ -89,9 +92,16 @@ extern "C"
   {
     QueueHandle_t      s_rssi_ibeacon_queue;
     QueueHandle_t      s_location_tag_queue;
+    QueueHandle_t      s_addr_tag_queue;
     EventGroupHandle_t s_configuration_event;
+    SemaphoreHandle_t  s_mutex_num_tag;
     state_system_t     s_state_system;
   } DATA_System_t;
+
+  /**
+   * @brief Structure defining the address of tag
+   */
+  typedef uint8_t addr_tag_t[6];
 
   /**
    * @brief Structure defining the data sync between the app_ble_ibeacon and
@@ -99,8 +109,8 @@ extern "C"
    */
   typedef struct
   {
-    uint8_t u8_beacon_addr[6]; // 6 Bytes Address
-    int8_t  i8_filtered_rssi;
+    addr_tag_t u8_beacon_addr;
+    int8_t     i8_filtered_rssi;
   } ibeacon_infor_tag_t;
 
   /**
@@ -109,10 +119,10 @@ extern "C"
    */
   typedef struct
   {
-    uint8_t  u8_beacon_addr[6]; // 6 Bytes Address
-    uint32_t u32_gateway_ID;
-    char     c_gateway_version[6];
-    int8_t   i8_filtered_rssi;
+    addr_tag_t u8_beacon_addr;
+    uint32_t   u32_gateway_ID;
+    char       c_gateway_version[6];
+    int8_t     i8_filtered_rssi;
   } tracking_infor_tag_t;
 
   /****************************************************************************

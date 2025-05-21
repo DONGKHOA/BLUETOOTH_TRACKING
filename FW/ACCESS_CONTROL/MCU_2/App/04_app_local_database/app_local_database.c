@@ -12,6 +12,7 @@
 #include "environment.h"
 
 #include "esp_log.h"
+#include <sys/time.h>
 
 #include "ff.h"
 #include "diskio.h"

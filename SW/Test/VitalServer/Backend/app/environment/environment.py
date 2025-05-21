@@ -2,10 +2,10 @@
 ALLOWED_EXTENSIONS = {".crt", ".private.key", ".cert.pem"}
 
 # Authentication Token
-AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDI0NDg3MDgsInN1YiI6IjMifQ.P7pMkHz2zOfRXDBV-F308JN54LgCVJT2D8V8E_xHzcc"
+# AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDI0NDg3MDgsInN1YiI6IjMifQ.P7pMkHz2zOfRXDBV-F308JN54LgCVJT2D8V8E_xHzcc"
 
-#IP for DreamsEdge API
-BASE_URL = "http://54.252.196.164:8000"
+# IP for DreamsEdge API
+# BASE_URL = "http://54.252.196.164:8000"
 # BASE_URL = "https://api-jcac-prod.dreamsedge.com.au"
 # IP_API = "api-jcac-prod.dreamsedge.com.au"
 
@@ -21,8 +21,8 @@ LOGIN_USERNAME = "admin"
 LOGIN_PASSWORD = "123"
 
 # Information USER
-USERNAME = "iotteam@devcburst.com"
-PASSWORD = "dreamsiot@2025"
+# USERNAME = "iotteam@devcburst.com"
+# PASSWORD = "dreamsiot@2025"
 
 AWS_IOT_ENDPOINT = "a1lvnt250s0jlf-ats.iot.ap-southeast-1.amazonaws.com"
 
@@ -49,4 +49,11 @@ FACILITY_LIST = {'data': [{'name': 'Bene St.Paul', 'address': 'St.Paul', 'timezo
 MAX_BYTES = 1048576
 BACKUP_COUNT = 10
 
+# Thingsboard
+BASE_URL = "https://demo.thingsboard.io"
 
+# Authentication Token
+AUTH_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdnRuLmJsZWdhdGV3YXlAZ21haWwuY29tIiwidXNlcklkIjoiOWNhMDQ3NTAtMzNmMS0xMWYwLTk2NjQtZmYxM2VjY2I0N2ZmIiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJzZXNzaW9uSWQiOiJjOGIzZWNlZC1hYmNlLTRhM2YtYTEzZC1jMDdiMGIzZTdjMTEiLCJleHAiOjE3NDkzNzczMzgsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNzQ3NTc3MzM4LCJmaXJzdE5hbWUiOiJUb3QgTmdoaWVwIiwibGFzdE5hbWUiOiJMdWFuIFZhbiIsImVuYWJsZWQiOnRydWUsInByaXZhY3lQb2xpY3lBY2NlcHRlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjljODY3ZGMwLTMzZjEtMTFmMC05NjY0LWZmMTNlY2NiNDdmZiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.xczUlfzjGPBM8ScN-DkaQXSTz7iyh_pdmVYSM3YRlGFbjJtg8yW_FDaOKIAHqnuVvqRazOsSR4jEOinIyDtbKA"
+
+USERNAME = "lvtn.blegateway@gmail.com"
+PASSWORD = "lvtnblegateway@06"

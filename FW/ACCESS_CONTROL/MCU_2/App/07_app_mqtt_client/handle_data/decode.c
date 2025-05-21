@@ -31,7 +31,7 @@ DECODE_Command (char *json_string)
   {
     if (strcmp(cmd_item->valuestring, "SYN") == 0)
     {
-      return SYNC_CMD;
+      return SYNCHRONIZE_CMD;
     }
     if (strcmp(cmd_item->valuestring, "ENROLL_FACE") == 0)
     {

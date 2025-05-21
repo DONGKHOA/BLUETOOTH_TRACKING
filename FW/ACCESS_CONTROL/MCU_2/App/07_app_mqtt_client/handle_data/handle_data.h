@@ -25,6 +25,7 @@ extern "C"
   typedef enum
   {
     USER_DATA_CMD,
+    ATTENDANCE_DATA_CMD,
     ADD_USER_DATA_CMD,
     ENROLL_FACE_CMD,
     ENROLL_FINGER_CMD,
@@ -33,8 +34,8 @@ extern "C"
     SET_ROLE,
     DELETE_FINGER_USER,
     DELETE_FACEID_USER,
-    SYNC_CMD,
-    UNKNOWN_CMD
+    SYNCHRONIZE_CMD,
+    UNKNOWN_CMD,
   } CommandType;
 
   /****************************************************************************

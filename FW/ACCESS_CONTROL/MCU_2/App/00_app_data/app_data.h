@@ -32,7 +32,7 @@ extern "C"
 
 #define MQTTSERVER_NVS "MQTTSERVER_NVS"
 #define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
-#define ROOM_NVS  "ROOM_NVS"
+#define ROOM_NVS       "ROOM_NVS"
 
 #define TIME_SOURCE_SNTP_READY BIT0
 #define TIME_SOURCE_RTC_READY  BIT1
@@ -112,6 +112,7 @@ extern "C"
     LOCAL_DATABASE_REQUEST_DELETE_USER_DATA,
     LOCAL_DATABASE_RESPONSE_DELETE_USER_DATA,
     LOCAL_DATABASE_DATA,
+    LOCAL_DATABASE_DATA_ATTENDANCE,
     LOCAL_DATABASE_SET_ROLE,
     LOCAL_DATABASE_FINGER_DELETE,
     LOCAL_DATABASE_FACEID_DELETE,
@@ -138,12 +139,13 @@ extern "C"
     SDCARD_ENROLL_FINGERPRINT,
     SDCARD_ATTENDANCE,
     SDCARD_SYNC_DATA_SERVER,
+    SDCARD_ATTENDANCE_DATA,
     SDCARD_ADD_USER_DATA,
     SDCARD_DELETE_USER_DATA,
     SDCARD_SET_ROLE,
     SDCARD_DELETE_FINGER_USER,
-    SDCARD_DELETE_FACEID_USER,
-    SDCARD_UNKNOWN_CMD
+    SDCARD_DELETE_FACEID_USER,  
+    SDCARD_UNKNOWN_CMD,
   } __attribute__((packed)) sdcard_cmd_t;
 
   typedef struct app_data
@@ -153,6 +155,14 @@ extern "C"
     char     user_name[32];
     char     role[6];
   } sdcard_data_t; // Data structure for sdcard, local database and mqtt
+
+  typedef struct attendance_data
+  {
+    uint32_t u32_index_packet;
+    uint32_t u32_time[16];
+    uint16_t u16_user_id;
+    uint8_t  u8_number_checkin;
+  } attendance_data_t;
 
   /**
    * @brief Data structure holding data of system
@@ -169,6 +179,7 @@ extern "C"
     QueueHandle_t      s_send_data_queue;
     QueueHandle_t      s_data_local_database_queue;
     QueueHandle_t      s_data_sdcard_queue;
+    QueueHandle_t      s_data_attendance_queue;
     SemaphoreHandle_t  s_spi_mutex;
     SemaphoreHandle_t  s_i2c_mutex;
     SemaphoreHandle_t  s_time_mutex;

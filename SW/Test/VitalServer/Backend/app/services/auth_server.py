@@ -101,7 +101,9 @@ def logout_user():
 # --------------------------------------------------
 def authenticate_user(username, password):
 
-    auth_token = http_client.login_access_token(username, password)
+    # auth_token = http_client.login_access_token(username, password)
+    
+    auth_token = http_thingsboard.login_auth_token(username, password)
 
     if auth_token:
 
