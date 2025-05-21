@@ -60,14 +60,18 @@ static FIL     fil, fsrc, fdst;
 
 char *p_file_user_data  = "userData.csv";
 char *p_file_attendance = "attendance.csv";
-
-char *p_tempfile = "temp.csv";
+char *p_tempfile        = "temp.csv";
 
 static control_sdcard_t s_control_sdcard;
 
 static bool b_get_data = false;
 
 static DATA_SYNC_t s_DATA_SYNC;
+
+static uint8_t  attendance_number_checkin[16] = { 0 };
+static uint32_t attendance_time[16][16]       = { 0 };
+static uint16_t attendance_user_id            = 0;
+static uint32_t attendance_index              = 0;
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -116,7 +120,7 @@ APP_CONTROL_SDCARD_Init (void)
 static void
 APP_CONTROL_SDCARD_Task (void *arg)
 {
-  sdcard_cmd_t s_sdcard_cmd;
+  sdcard_cmd_t      s_sdcard_cmd;
   attendance_data_t s_attendance_data;
   while (1)
   {
@@ -171,9 +175,21 @@ APP_CONTROL_SDCARD_Task (void *arg)
 
           APP_CONTROL_SDCARD_ReadAttendanceData();
 
-          // send data to mqtt
+          for (int i = 0; i < attendance_index; i++)
+          {
+            for (int j = 0; j < attendance_number_checkin[i]; j++)
+            {
+              s_attendance_data.u32_time[j] = attendance_time[i][j];
+            }
 
-          xQueueSend(*s_control_sdcard.p_data_mqtt_queue, &s_attendance_data, 0);
+            s_attendance_data.u16_user_id       = attendance_user_id;
+            s_attendance_data.u8_number_checkin = attendance_number_checkin[i];
+            s_attendance_data.u32_index_packet  = i;
+
+            xQueueSend(*s_control_sdcard.p_data_attendance_queue,
+                       &s_attendance_data,
+                       0);
+          }
 
           // send command to mqtt
 
@@ -615,17 +631,24 @@ APP_CONTROL_SDCARD_WriteAttendanceData (char    *new_name,
 
     if (current_id == user_id)
     {
-      final_time = timestamp;
-      updated    = 1;
+      updated = 1;
+      snprintf(new_line,
+               sizeof(new_line),
+               "%d, \"%s\",%lu,%lu\n",
+               current_id,
+               final_name,
+               final_time,
+               timestamp);
     }
-
-    // Write attendance
-    snprintf(new_line,
-             sizeof(new_line),
-             "%d, \"%s\",%lu\n",
-             current_id,
-             final_name,
-             final_time);
+    else
+    {
+      snprintf(new_line,
+               sizeof(new_line),
+               "%d, \"%s\",%lu\n",
+               current_id,
+               final_name,
+               final_time);
+    }
 
     printf("Update line: %s\n", new_line);
 
@@ -658,6 +681,11 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
   char full_path[32];
   char line[128];
 
+  uint8_t checkin_count = 0;
+
+  attendance_index = 0;
+  memset(attendance_number_checkin, 0, sizeof(attendance_number_checkin));
+
   // Mount SD Card
   fr = f_mount(&fs, MOUNT_POINT, 1);
   if (fr != FR_OK)
@@ -680,7 +708,65 @@ APP_CONTROL_SDCARD_ReadAttendanceData (void)
   while (f_gets(line, sizeof(line), &fil))
   {
     line[strcspn(line, "\r\n")] = '\0';
+
+    // Get ID
+    char *token = strtok(line, ",");
+    if (!token)
+    {
+      continue;
+    }
+    attendance_user_id = atoi(token);
+
+    // Skip name
+    token = strtok(NULL, ",");
+    if (!token)
+    {
+      continue;
+    }
+
+    checkin_count = 0;
+
+    // Get time
+    while ((token = strtok(NULL, ",")) != NULL)
+    {
+      // Check if the packet is full -> increase index
+      if (checkin_count == 16)
+      {
+        attendance_number_checkin[attendance_index] = checkin_count;
+        attendance_index++;
+
+        // Prevent overflow
+        if (attendance_index >= 16)
+        {
+          break;
+        }
+
+        // Reset checkin number
+        checkin_count = 0;
+      }
+
+      attendance_time[attendance_index][checkin_count++]
+          = strtoul(token, NULL, 10);
+
+      printf("Attendance time: %lu\n",
+             attendance_time[attendance_index][checkin_count - 1]);
+    }
+
+    // Increase the attendance index after checkin complete
+    if (checkin_count > 0 && attendance_index < 16)
+    {
+      attendance_number_checkin[attendance_index] = checkin_count;
+      attendance_index++;
+    }
+
+    if (attendance_index >= 16)
+    {
+      break;
+    }
   }
+
+  f_close(&fil);
+  f_mount(NULL, MOUNT_POINT, 1);
 }
 
 static void
