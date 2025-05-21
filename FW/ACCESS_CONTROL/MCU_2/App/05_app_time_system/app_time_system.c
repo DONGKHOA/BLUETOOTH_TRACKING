@@ -86,10 +86,6 @@ APP_TIME_SYSTEM_Notification_cb (struct timeval *tv)
 {
   ESP_LOGI(TAG, "Time synchronized\n");
 
-  time(&now);
-  now += 7 * 3600;
-  localtime_r(&now, &timeinfo);
-
   xEventGroupClearBits(*s_time_system.p_flag_time_event, TIME_SOURCE_RTC_READY);
   xEventGroupSetBits(*s_time_system.p_flag_time_event, TIME_SOURCE_RTC_OFF);
 }
@@ -130,6 +126,14 @@ APP_TIME_SYSTEM_Task (void *arg)
 
     else if (uxBit & TIME_SOURCE_RTC_OFF)
     {
+      xSemaphoreTake(*s_time_system.p_time_mutex, 100 / portTICK_PERIOD_MS);
+
+      time(&now);
+      now += 7 * 3600;
+      localtime_r(&now, &timeinfo);
+
+      xSemaphoreGive(*s_time_system.p_time_mutex);
+
       // Sync SNTP time to RTC
       s_time_system.s_ds3231_data.u8_hour   = timeinfo.tm_hour;
       s_time_system.s_ds3231_data.u8_minute = timeinfo.tm_min;
@@ -148,6 +152,14 @@ APP_TIME_SYSTEM_Task (void *arg)
 
     else if (uxBit & TIME_SOURCE_SNTP_READY)
     {
+      xSemaphoreTake(*s_time_system.p_time_mutex, 100 / portTICK_PERIOD_MS);
+
+      time(&now);
+      now += 7 * 3600;
+      localtime_r(&now, &timeinfo);
+
+      xSemaphoreGive(*s_time_system.p_time_mutex);
+
       s_DATA_SYNC.u8_data_start     = DATA_SYNC_TIME;
       s_DATA_SYNC.u8_data_packet[0] = (uint8_t)timeinfo.tm_min;
       s_DATA_SYNC.u8_data_packet[1] = (uint8_t)timeinfo.tm_hour;
