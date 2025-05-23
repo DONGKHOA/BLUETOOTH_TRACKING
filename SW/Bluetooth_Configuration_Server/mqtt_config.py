@@ -38,6 +38,11 @@ class MQTTConfigManager:
                 
                 try:
                     payload = f"MQTTSERVER:{mqtt_server}"
+                    
+                    # Check the length of the payload
+                    if len(payload) < 20:
+                        payload += "\n" * (20 - len(payload))
+                        
                     await client.write_gatt_char(write_char, payload.encode())
                     
                     topic = self.get_config(mac).get("topic", "")
@@ -58,6 +63,11 @@ class MQTTConfigManager:
                 
                 try:
                     payload = f"MQTTTOPIC:{topic}"
+                    
+                    # Check the length of the payload
+                    if len(payload) < 20:
+                        payload += "\n" * (20 - len(payload))
+                        
                     await client.write_gatt_char(write_char, payload.encode())
                     
                     server = self.get_config(mac).get("mqtt_server", "")
@@ -80,6 +90,7 @@ class MQTTConfigManager:
                 try:
                     payload = f"ROOM:{room}\n"
                     
+                    # Check the length of the payload
                     if len(payload) < 20:
                         payload += "\n" * (20 - len(payload))
                         

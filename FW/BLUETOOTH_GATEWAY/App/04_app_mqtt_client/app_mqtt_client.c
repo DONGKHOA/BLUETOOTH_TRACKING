@@ -177,8 +177,11 @@ APP_MQTT_CLIENT_Task (void *arg)
       // Check validity before copying
       if (generated_str)
       {
-        strncpy(p_data_pub, generated_str, sizeof(p_data_pub) - 1);
-        p_data_pub[sizeof(p_data_pub) - 1] = '\0'; // Ensure null-termination
+        // strncpy(p_data_pub, generated_str, sizeof(p_data_pub) - 1);
+        // p_data_pub[sizeof(p_data_pub) - 1] = '\0'; // Ensure null-termination
+
+        strncpy(p_data_pub, generated_str, SIZE_DATA_MQTT_PUBLISH - 1);
+        p_data_pub[SIZE_DATA_MQTT_PUBLISH - 1] = '\0';
 
         esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
                                 p_topic_pub,
@@ -188,7 +191,9 @@ APP_MQTT_CLIENT_Task (void *arg)
                                 0);
 
         s_mqtt_client_data.u8_num_dev = 0;
-        memset(p_data_pub, 0, sizeof(p_data_pub));
+        // memset(p_data_pub, 0, sizeof(p_data_pub));
+
+        memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
 
         free(generated_str); // Free the original allocated string
       }
@@ -243,7 +248,7 @@ mqtt_event_handler (void            *handler_args,
       break;
     case MQTT_EVENT_DISCONNECTED:
       ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
-      b_mqtt_client_connected = false;
+      b_mqtt_client_connected            = false;
       *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
       break;
     default:
