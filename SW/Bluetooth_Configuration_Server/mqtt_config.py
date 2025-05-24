@@ -37,7 +37,7 @@ class MQTTConfigManager:
             if client and write_char:
                 
                 try:
-                    payload = f"MQTTSERVER:{mqtt_server}"
+                    payload = f"MQTTSERVER:{mqtt_server}\n"
                     
                     # Check the length of the payload
                     if len(payload) < 20:
@@ -62,7 +62,7 @@ class MQTTConfigManager:
             if client and write_char:
                 
                 try:
-                    payload = f"MQTTTOPIC:{topic}"
+                    payload = f"MQTTTOPIC:{topic}\n"
                     
                     # Check the length of the payload
                     if len(payload) < 20:
