@@ -103,13 +103,13 @@ app_main (void)
       APP_BLE_TRACKING_Init();
       APP_HANDLE_WIFI_Init();
       APP_MQTT_CLIENT_Init();
-      APP_DISPLAY_Init();
+      // APP_DISPLAY_Init();
 
       APP_HANDLE_WIFI_CreateTask();
       APP_BLE_IBEACON_CreateTask();
       APP_BLE_TRACKING_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
-      APP_DISPLAY_CreateTask();
+      // APP_DISPLAY_CreateTask();
       break;
     }
   }

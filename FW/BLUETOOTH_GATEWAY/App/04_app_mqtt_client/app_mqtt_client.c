@@ -38,6 +38,7 @@
 
 typedef struct mqtt_client_data
 {
+  SemaphoreHandle_t        mqtt_publish_semaphore;
   QueueHandle_t           *p_data_mqtt_queue;
   state_system_t          *p_state_system;
   uint8_t                  u8_num_dev;
@@ -98,9 +99,13 @@ APP_MQTT_CLIENT_Init (void)
 
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_location_tag_queue;
 
+  s_mqtt_client_data.mqtt_publish_semaphore
+      = xSemaphoreCreateBinary(&s_data_system.s_mqtt_publish_semaphore);
+
   char mqtt_server[64];
 
-  if (NVS_ReadString("MQTT", MQTTSERVER_NVS, mqtt_server, 64) == ESP_OK)
+  if (NVS_ReadString("MQTTSERVER_NVS", MQTTSERVER_NVS, mqtt_server, 64)
+      == ESP_OK)
   {
     memmove(mqtt_server + 7, mqtt_server, strlen(mqtt_server) + 1);
     memcpy(mqtt_server, "mqtt://", 7);
@@ -117,7 +122,7 @@ APP_MQTT_CLIENT_Init (void)
     s_mqtt_client_data.s_MQTT_Client = esp_mqtt_client_init(&mqtt_cfg);
   }
 
-  if (NVS_ReadString("MQTT", MQTTTOPIC_NVS, p_topic_pub, 64) != ESP_OK)
+  if (NVS_ReadString("MQTTTOPIC_NVS", MQTTTOPIC_NVS, p_topic_pub, 64) != ESP_OK)
   {
     strcpy(p_topic_pub, TOPIC_DEFAULT);
   }
@@ -148,54 +153,55 @@ APP_MQTT_CLIENT_Task (void *arg)
       esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
     }
 
-    if (xQueueReceive(
-            *s_mqtt_client_data.p_data_mqtt_queue, &tracking_infor_tag, 1000)
-        == pdPASS)
+    if (xSemaphoreTake(s_mqtt_client_data.mqtt_publish_semaphore,
+                       100 / portTICK_PERIOD_MS)
+        == pdTRUE)
     {
-
-      if (!b_mqtt_client_connected)
+      if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
+                        &tracking_infor_tag,
+                        1000 / portTICK_PERIOD_MS)
+          == pdPASS)
       {
-        continue;
-      }
 
-      APP_MQTT_CLIENT_UpdateDataDev(&tracking_infor_tag);
-      s_mqtt_client_data.u8_num_dev++;
+        if (!b_mqtt_client_connected)
+        {
+          continue;
+        }
 
-      char c_gateway_id[9];
+        APP_MQTT_CLIENT_UpdateDataDev(&tracking_infor_tag);
+        s_mqtt_client_data.u8_num_dev++;
 
-      snprintf(c_gateway_id,
-               sizeof(c_gateway_id),
-               "%08" PRIx32,
-               tracking_infor_tag.u32_gateway_ID);
+        char c_gateway_id[9];
 
-      char *generated_str
-          = create_device_json(c_gateway_id,
-                               tracking_infor_tag.c_gateway_version,
-                               p_dev_infor,
-                               s_mqtt_client_data.u8_num_dev);
+        snprintf(c_gateway_id,
+                 sizeof(c_gateway_id),
+                 "%08" PRIx32,
+                 tracking_infor_tag.u32_gateway_ID);
 
-      // Check validity before copying
-      if (generated_str)
-      {
-        // strncpy(p_data_pub, generated_str, sizeof(p_data_pub) - 1);
-        // p_data_pub[sizeof(p_data_pub) - 1] = '\0'; // Ensure null-termination
+        char *generated_str
+            = create_device_json(c_gateway_id,
+                                 tracking_infor_tag.c_gateway_version,
+                                 p_dev_infor,
+                                 s_mqtt_client_data.u8_num_dev);
 
-        strncpy(p_data_pub, generated_str, SIZE_DATA_MQTT_PUBLISH - 1);
-        p_data_pub[SIZE_DATA_MQTT_PUBLISH - 1] = '\0';
+        if (generated_str)
+        {
+          strncpy(p_data_pub, generated_str, SIZE_DATA_MQTT_PUBLISH - 1);
+          p_data_pub[SIZE_DATA_MQTT_PUBLISH - 1] = '\0';
 
-        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                p_topic_pub,
-                                (const char *)&p_data_pub,
-                                0,
-                                1,
-                                0);
+          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                  p_topic_pub,
+                                  (const char *)&p_data_pub,
+                                  0,
+                                  1,
+                                  0);
 
-        s_mqtt_client_data.u8_num_dev = 0;
-        // memset(p_data_pub, 0, sizeof(p_data_pub));
+          s_mqtt_client_data.u8_num_dev = 0;
 
-        memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
+          memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
 
-        free(generated_str); // Free the original allocated string
+          free(generated_str);
+        }
       }
     }
   }
@@ -206,14 +212,12 @@ APP_MQTT_CLIENT_UpdateDataDev (tracking_infor_tag_t *p_tracking_infor_tag)
 {
   for (uint8_t i = 0; i < 6; i++)
   {
-    // "%02X" ensures 2 uppercase hex digits
     snprintf(&p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[i * 2],
              3,
              "%02X",
              p_tracking_infor_tag->u8_beacon_addr[i]);
   }
 
-  // Null-terminate the string
   p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[12] = '\0';
 
   p_dev_infor[s_mqtt_client_data.u8_num_dev].rssi
@@ -236,6 +240,7 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_CONNECTED:
       ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
       b_mqtt_client_connected = true;
+      xSemaphoreGive(s_mqtt_client_data.mqtt_publish_semaphore);
       break;
     case MQTT_EVENT_SUBSCRIBED:
       ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED");

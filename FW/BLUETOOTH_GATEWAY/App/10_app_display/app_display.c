@@ -94,11 +94,11 @@ APP_DISPLAY_Task (void *arg)
             *s_display_data.p_addr_tag_queue, &addr_tag, 100 / portTICK_PERIOD_MS)
         == pdPASS)
     { 
-      sprintf(s_display_data.c_content, "Tag: %02X:%02X:%02X:%02X:%02X:%02X",
+      sprintf(s_display_data.c_content, "%02X%02X%02X%02X%02X%02X",
               addr_tag[0], addr_tag[1], addr_tag[2], addr_tag[3], addr_tag[4],
               addr_tag[5]);
 
-      LCD1602_SetCursor(I2C_NUM, 0, 1);
+      LCD1602_SetCursor(I2C_NUM, 1, 0);
       LCD1602_PrintString(I2C_NUM, s_display_data.c_content);
     }
   }

@@ -88,6 +88,12 @@ APP_BLE_TRACKING_Task (void *arg)
                       portMAX_DELAY)
         == pdPASS)
     {
+      memcpy(addr_tag, s_beacon_infor_tag.u8_beacon_addr, 6);
+
+      xQueueSend(*s_ble_tracking_data.p_addr_tag_queue,
+                 (void *)&addr_tag,
+                 (TickType_t)0);
+
       if (WIFI_state_connect() != CONNECT_OK)
       {
         continue;
@@ -100,10 +106,6 @@ APP_BLE_TRACKING_Task (void *arg)
 
       xQueueSend(*s_ble_tracking_data.p_location_tag_queue,
                  (void *)&tracking_infor_tag,
-                 (TickType_t)0);
-
-      xQueueSend(*s_ble_tracking_data.p_addr_tag_queue,
-                 (void *)&addr_tag,
                  (TickType_t)0);
     }
   }

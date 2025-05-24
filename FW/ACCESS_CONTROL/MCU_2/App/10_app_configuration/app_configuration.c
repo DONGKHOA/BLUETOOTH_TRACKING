@@ -360,13 +360,18 @@ APP_CONFIGURATION_ProcessData (
                   sizeof("MQTTSERVER") - 1)
            == 0)
   {
-    printf("MQTTSERVER\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTSERVER_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
+    char    mqtt_server[64];
+    uint8_t i;
+
+    for (i = 0;
+         s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i] != '\n';
+         i++)
+    {
+      mqtt_server[i]
+          = s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i];
+    }
+    mqtt_server[i] = '\0';
+    NVS_WriteString("MQTT", MQTTSERVER_NVS, mqtt_server);
   }
 }
 
