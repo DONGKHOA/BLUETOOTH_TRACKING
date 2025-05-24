@@ -26,6 +26,7 @@ extern "C"
 
 #define MQTTSERVER_NVS "MQTTSERVER_NVS"
 #define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
+#define ROOM_NVS       "ROOM_NVS"
 
   /*** GPIO peripheral *******************************************************/
 

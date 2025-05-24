@@ -333,26 +333,35 @@ APP_CONFIGURATION_ProcessData (
                   sizeof("MQTTSERVER") - 1)
            == 0)
   {
-    printf("MQTTSERVER\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTSERVER_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
+    char mqtt_server[64];
+    uint8_t i;
+
+    for (i = 0;
+         s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i] != '\n';
+         i++)
+    {
+      mqtt_server[i]
+          = s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i];
+    }
+    mqtt_server[i] = '\0';
+
+    NVS_WriteString("MQTTSERVER_NVS", MQTTSERVER_NVS, mqtt_server);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTTOPIC",
                   sizeof("MQTTTOPIC") - 1)
            == 0)
   {
-    printf("MQTTTOPIC\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTTOPIC_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
+    char mqtt_topic[64];
+    uint8_t i;
+    for (i = 0;
+         s_configuration_data_event->u8_data[sizeof("MQTTTOPIC") + i] != '\n';
+         i++)
+    {
+      mqtt_topic[i]
+          = s_configuration_data_event->u8_data[sizeof("MQTTTOPIC") + i];
+    }
+    NVS_WriteString("MQTTTOPIC_NVS", MQTTTOPIC_NVS, mqtt_topic);
   }
 }
 
@@ -375,6 +384,8 @@ APP_CONFIGURATION_Task (void *arg)
                          s_configuration_data_event.u8_len);
 
       APP_CONFIGURATION_ProcessData(&s_configuration_data_event);
+
+      vTaskDelay(1 / portTICK_PERIOD_MS);
     }
   }
 }
