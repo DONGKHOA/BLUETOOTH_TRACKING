@@ -27,14 +27,20 @@
     "password": "0902900086"
   },
   "94:54:C5:88:86:F6": {
-    "ssid": "47.47",
-    "password": "0902900086"
-  },
-  "94:54:C5:88:7B:EE": {
     "ssid": "Thang",
     "password": "17122003",
     "mqtt_server": "broker.emqx.io:1883",
+    "topic": "bluetooth/GW1/data"
+  },
+  "94:54:C5:88:7B:EE": {
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "broker.emqx.io:1883",
     "topic": "bluetooth/GW1/data",
     "room": "Room1"
+  },
+  "98:3D:AE:9F:B5:BE": {
+    "ssid": "47.47",
+    "password": "0902900086"
   }
 }

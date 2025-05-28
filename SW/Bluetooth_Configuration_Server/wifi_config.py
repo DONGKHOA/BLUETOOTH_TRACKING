@@ -31,19 +31,19 @@ class WiFiConfigManager:
 
     def scan_wifi(self):
         try:
-            result = subprocess.check_output(
-                ["nmcli", "-t", "-f", "SSID", "dev", "wifi"],
-                text=True
-            )
-            
             # result = subprocess.check_output(
-            #     ["netsh", "wlan", "show", "networks", "mode=Bssid"],
-            #     text=True,
-            #     encoding="utf-8"
+            #     ["nmcli", "-t", "-f", "SSID", "dev", "wifi"],
+            #     text=True
             # )
+            
+            result = subprocess.check_output(
+                ["netsh", "wlan", "show", "networks", "mode=Bssid"],
+                text=True,
+                encoding="utf-8"
+            )
 
-            raw_ssids = result.strip().split("\n")
-            # raw_ssids = re.findall(r"SSID \d+ : (.*)", result)
+            # raw_ssids = result.strip().split("\n")
+            raw_ssids = re.findall(r"SSID \d+ : (.*)", result)
             unique_ssids = sorted(set(ssid.strip() for ssid in raw_ssids if ssid.strip()))
             
             return unique_ssids
