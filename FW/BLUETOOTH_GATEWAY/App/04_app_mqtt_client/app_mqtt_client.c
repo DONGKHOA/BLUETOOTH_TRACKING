@@ -30,7 +30,7 @@
 
 #define SIZE_DATA_MQTT_PUBLISH      10240
 #define SIZE_TOPIC_MQTT_PUBLISH     64
-#define SIZE_DEV_INFOR_MQTT_PUBLISH 256
+#define SIZE_DEV_INFOR_MQTT_PUBLISH 1
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -41,7 +41,6 @@ typedef struct mqtt_client_data
   SemaphoreHandle_t        mqtt_publish_semaphore;
   QueueHandle_t           *p_data_mqtt_queue;
   state_system_t          *p_state_system;
-  uint8_t                  u8_num_dev;
   esp_mqtt_client_handle_t s_MQTT_Client;
 } mqtt_client_data_t;
 
@@ -74,7 +73,7 @@ static dev_info_t        *p_dev_infor;
 void
 APP_MQTT_CLIENT_CreateTask (void)
 {
-  xTaskCreate(APP_MQTT_CLIENT_Task, "mqtt task", 1024 * 2, NULL, 10, NULL);
+  xTaskCreate(APP_MQTT_CLIENT_Task, "mqtt task", 1024 * 10, NULL, 10, NULL);
 }
 
 void
@@ -84,14 +83,12 @@ APP_MQTT_CLIENT_Init (void)
 
   *s_mqtt_client_data.p_state_system = STATE_WIFI_DISCONNECTED;
 
-  s_mqtt_client_data.u8_num_dev = 0;
-
   p_data_pub
-      = (char *)heap_caps_malloc(SIZE_DATA_MQTT_PUBLISH, MALLOC_CAP_SPIRAM);
+      = (char *)heap_caps_malloc(SIZE_DATA_MQTT_PUBLISH, MALLOC_CAP_DEFAULT);
   p_topic_pub
-      = (char *)heap_caps_malloc(SIZE_TOPIC_MQTT_PUBLISH, MALLOC_CAP_SPIRAM);
+      = (char *)heap_caps_malloc(SIZE_TOPIC_MQTT_PUBLISH, MALLOC_CAP_DEFAULT);
   p_dev_infor = (dev_info_t *)heap_caps_malloc(SIZE_DEV_INFOR_MQTT_PUBLISH,
-                                               MALLOC_CAP_SPIRAM);
+                                               MALLOC_CAP_DEFAULT);
 
   memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
   memset(p_topic_pub, 0, SIZE_TOPIC_MQTT_PUBLISH);
@@ -99,8 +96,7 @@ APP_MQTT_CLIENT_Init (void)
 
   s_mqtt_client_data.p_data_mqtt_queue = &s_data_system.s_location_tag_queue;
 
-  s_mqtt_client_data.mqtt_publish_semaphore
-      = xSemaphoreCreateBinary(&s_data_system.s_mqtt_publish_semaphore);
+  s_mqtt_client_data.mqtt_publish_semaphore = xSemaphoreCreateBinary();
 
   char mqtt_server[64];
 
@@ -153,55 +149,44 @@ APP_MQTT_CLIENT_Task (void *arg)
       esp_mqtt_client_start(s_mqtt_client_data.s_MQTT_Client);
     }
 
-    if (xSemaphoreTake(s_mqtt_client_data.mqtt_publish_semaphore,
-                       100 / portTICK_PERIOD_MS)
-        == pdTRUE)
+    if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
+                      &tracking_infor_tag,
+                      1000 / portTICK_PERIOD_MS)
+        == pdPASS)
     {
-      if (xQueueReceive(*s_mqtt_client_data.p_data_mqtt_queue,
-                        &tracking_infor_tag,
-                        1000 / portTICK_PERIOD_MS)
-          == pdPASS)
+
+      if (!b_mqtt_client_connected)
       {
+        continue;
+      }
 
-        if (!b_mqtt_client_connected)
-        {
-          continue;
-        }
+      APP_MQTT_CLIENT_UpdateDataDev(&tracking_infor_tag);
 
-        APP_MQTT_CLIENT_UpdateDataDev(&tracking_infor_tag);
-        s_mqtt_client_data.u8_num_dev++;
+      char c_gateway_id[9];
 
-        char c_gateway_id[9];
+      snprintf(c_gateway_id,
+               sizeof(c_gateway_id),
+               "%08" PRIx32,
+               tracking_infor_tag.u32_gateway_ID);
 
-        snprintf(c_gateway_id,
-                 sizeof(c_gateway_id),
-                 "%08" PRIx32,
-                 tracking_infor_tag.u32_gateway_ID);
+      char *generated_str = create_device_json(
+          c_gateway_id, tracking_infor_tag.c_gateway_version, p_dev_infor);
 
-        char *generated_str
-            = create_device_json(c_gateway_id,
-                                 tracking_infor_tag.c_gateway_version,
-                                 p_dev_infor,
-                                 s_mqtt_client_data.u8_num_dev);
+      if (generated_str)
+      {
+        strncpy(p_data_pub, generated_str, SIZE_DATA_MQTT_PUBLISH - 1);
+        p_data_pub[SIZE_DATA_MQTT_PUBLISH - 1] = '\0';
 
-        if (generated_str)
-        {
-          strncpy(p_data_pub, generated_str, SIZE_DATA_MQTT_PUBLISH - 1);
-          p_data_pub[SIZE_DATA_MQTT_PUBLISH - 1] = '\0';
+        esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
+                                p_topic_pub,
+                                p_data_pub,
+                                0,
+                                1,
+                                0);
 
-          esp_mqtt_client_publish(s_mqtt_client_data.s_MQTT_Client,
-                                  p_topic_pub,
-                                  (const char *)&p_data_pub,
-                                  0,
-                                  1,
-                                  0);
+        memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
 
-          s_mqtt_client_data.u8_num_dev = 0;
-
-          memset(p_data_pub, 0, SIZE_DATA_MQTT_PUBLISH);
-
-          free(generated_str);
-        }
+        free(generated_str);
       }
     }
   }
@@ -212,16 +197,14 @@ APP_MQTT_CLIENT_UpdateDataDev (tracking_infor_tag_t *p_tracking_infor_tag)
 {
   for (uint8_t i = 0; i < 6; i++)
   {
-    snprintf(&p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[i * 2],
+    snprintf(&p_dev_infor[0].mac[i * 2],
              3,
              "%02X",
              p_tracking_infor_tag->u8_beacon_addr[i]);
   }
 
-  p_dev_infor[s_mqtt_client_data.u8_num_dev].mac[12] = '\0';
-
-  p_dev_infor[s_mqtt_client_data.u8_num_dev].rssi
-      = p_tracking_infor_tag->i8_filtered_rssi;
+  p_dev_infor[0].mac[12] = '\0';
+  p_dev_infor[0].rssi = p_tracking_infor_tag->i8_filtered_rssi;
 }
 
 static void
@@ -240,7 +223,7 @@ mqtt_event_handler (void            *handler_args,
     case MQTT_EVENT_CONNECTED:
       ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
       b_mqtt_client_connected = true;
-      xSemaphoreGive(s_mqtt_client_data.mqtt_publish_semaphore);
+      // xSemaphoreGive(s_mqtt_client_data.mqtt_publish_semaphore);
       break;
     case MQTT_EVENT_SUBSCRIBED:
       ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED");

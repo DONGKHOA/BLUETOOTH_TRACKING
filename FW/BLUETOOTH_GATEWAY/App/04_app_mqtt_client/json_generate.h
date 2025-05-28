@@ -18,9 +18,9 @@ extern "C"
 
   typedef struct
   {
-    char   mac[13]; // Device MAC address (string)
-    int8_t rssi;    // RSSI value (integer)
-  } dev_info_t;
+    char   mac[13];
+    int8_t rssi;
+  } __attribute__((packed)) dev_info_t;
 
   /****************************************************************************
    *   PUBLIC FUNCTION
@@ -37,27 +37,21 @@ extern "C"
    *        {
    *            "mac": <MAC address string>,
    *            "rssi": <RSSI integer>,
-   *            "ad": <advertising data string>,
-   *            "ts": <timestamp integer>
    *        },
-   *        ...  // more entries
    *    ],
-   *   "dev_list_len": <number of entries>
    * }
    *
    * @param dev_id            Device identifier string.
    * @param dev_version       Device firmware/version string.
-   * @param dev_list          Array of dev_info_t structs containing device list
-   * entries.
-   * @param dev_list_len      Number of elements in dev_list array.
+   * @param p_dev_list        Array of dev_info_t structs containing device
+   * list entries.
    * @return char* Pointer to the generated JSON string (must be freed by the
    * caller), or NULL on failure.
    */
 
   char *create_device_json(char       *dev_id,
                            char       *dev_version,
-                           dev_info_t *dev_list,
-                           uint8_t     dev_list_len);
+                           dev_info_t *p_dev_list);
 
 #ifdef __cplusplus
 }

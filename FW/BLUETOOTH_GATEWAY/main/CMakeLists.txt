@@ -7,11 +7,9 @@ set (requires 00_app_data
               02_app_ble_tracking 
               03_app_led_status
               04_app_mqtt_client
-              05_app_timestamp
               06_app_handle_wifi
               07_app_configuration
               08_app_user_button
-              09_app_ethernet
               10_app_display
               driver
               NVS

@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/FreeRTOSConfig.h"
 #include "freertos/queue.h"
 #include "freertos/event_groups.h"
 #include "freertos/semphr.h"
@@ -34,7 +35,7 @@ extern "C"
 #define USER_BUTTON_2_PIN GPIO_NUM_34
 #define ROTARY_A_PIN      GPIO_NUM_39
 #define ROTARY_B_PIN      GPIO_NUM_35
-#define LED_STATUS_PIN    GPIO_NUM_5
+#define LED_STATUS_PIN    GPIO_NUM_12
 #define RE_RS485_PIN      GPIO_NUM_25
 
   /*** I2C peripheral ********************************************************/

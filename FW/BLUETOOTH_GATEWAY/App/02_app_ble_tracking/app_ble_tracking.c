@@ -16,7 +16,7 @@
 #define TAG "APP_BLE_TRACKING"
 
 #define GATEWAY_ID      0x01020304
-#define GATEWAY_VERSION "1.0.0"
+#define GATEWAY_VERSION "1.0.1"
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -29,7 +29,6 @@ typedef struct ble_ibeacon_data
 {
   QueueHandle_t *p_rssi_ibeacon_queue;
   QueueHandle_t *p_location_tag_queue;
-  QueueHandle_t *p_addr_tag_queue;
 } ble_tracking_data_t;
 
 /******************************************************************************
@@ -58,8 +57,6 @@ APP_BLE_TRACKING_CreateTask (void)
 void
 APP_BLE_TRACKING_Init (void)
 {
-  s_ble_tracking_data.p_addr_tag_queue = &s_data_system.s_addr_tag_queue;
-
   s_ble_tracking_data.p_rssi_ibeacon_queue
       = &s_data_system.s_rssi_ibeacon_queue;
 
@@ -76,7 +73,6 @@ APP_BLE_TRACKING_Task (void *arg)
 {
   ibeacon_infor_tag_t  s_beacon_infor_tag;
   tracking_infor_tag_t tracking_infor_tag;
-  addr_tag_t           addr_tag;
 
   tracking_infor_tag.u32_gateway_ID = GATEWAY_ID;
   strcpy(tracking_infor_tag.c_gateway_version, GATEWAY_VERSION);
@@ -88,12 +84,6 @@ APP_BLE_TRACKING_Task (void *arg)
                       portMAX_DELAY)
         == pdPASS)
     {
-      memcpy(addr_tag, s_beacon_infor_tag.u8_beacon_addr, 6);
-
-      xQueueSend(*s_ble_tracking_data.p_addr_tag_queue,
-                 (void *)&addr_tag,
-                 (TickType_t)0);
-
       if (WIFI_state_connect() != CONNECT_OK)
       {
         continue;

@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include "driver/i2c.h"
+#include "driver/i2c_master.h"
 
 #ifdef __cplusplus
 extern "C"
