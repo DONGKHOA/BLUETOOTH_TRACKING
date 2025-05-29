@@ -16,8 +16,8 @@
 Node_t *
 LINKED_LIST_CreateNode (void *p_value, uint8_t u8_dataSize)
 {
-  Node_t *newNode = (Node_t *)heap_caps_malloc(sizeof(Node_t), MALLOC_CAP_SPIRAM);
-  newNode->p_data = heap_caps_malloc(u8_dataSize, MALLOC_CAP_SPIRAM); // Allocate memory for the data
+  Node_t *newNode = (Node_t *)heap_caps_malloc(sizeof(Node_t), MALLOC_CAP_DEFAULT);
+  newNode->p_data = heap_caps_malloc(u8_dataSize, MALLOC_CAP_DEFAULT); // Allocate memory for the data
   if (newNode->p_data != NULL)
   {
     memcpy(newNode->p_data, p_value, u8_dataSize); // Copy data to node

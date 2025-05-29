@@ -25,7 +25,6 @@
 #include "app_mqtt_client.h"
 #include "app_handle_wifi.h"
 #include "app_led_status.h"
-#include "app_timestamp.h"
 #include "app_configuration.h"
 #include "app_user_button.h"
 #include "app_display.h"
@@ -81,6 +80,9 @@ app_main (void)
   xTimerStart(s_loading_timer, 0);
 
   APP_STATUS_LED_Init();
+  APP_DISPLAY_Init();
+
+  APP_DISPLAY_CreateTask();
 
   while (1)
   {
@@ -103,13 +105,11 @@ app_main (void)
       APP_BLE_TRACKING_Init();
       APP_HANDLE_WIFI_Init();
       APP_MQTT_CLIENT_Init();
-      // APP_DISPLAY_Init();
 
       APP_HANDLE_WIFI_CreateTask();
       APP_BLE_IBEACON_CreateTask();
       APP_BLE_TRACKING_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
-      // APP_DISPLAY_CreateTask();
       break;
     }
   }
@@ -122,7 +122,16 @@ app_main (void)
 static inline void
 APP_MAIN_InitGPIO (void)
 {
-  BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
+  gpio_config_t io_config = {
+    .pin_bit_mask = 1ULL << LED_STATUS_PIN,
+    .mode         = GPIO_MODE_OUTPUT,
+    .pull_up_en   = GPIO_PULLUP_ENABLE,
+    .pull_down_en = GPIO_PULLDOWN_DISABLE,
+  };
+
+  gpio_config(&io_config);
+
+  BSP_gpioSetState(LED_STATUS_PIN, 1);
 }
 
 static inline void

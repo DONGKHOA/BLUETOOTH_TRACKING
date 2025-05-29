@@ -33,15 +33,8 @@ APP_STATUS_LED_Init (void)
 {
   p_state_system = &s_data_system.s_state_system;
 
-  LED_ON();
-
-  TimerHandle_t led_status_timer
-      = xTimerCreate("Led Status Timer",
-                     pdMS_TO_TICKS(100), // Period 100ms
-                     pdTRUE,             // Auto reload
-                     NULL,
-                     APP_Timer_Callback // Callback function
-      );
+  TimerHandle_t led_status_timer = xTimerCreate(
+      "Led Status Timer", pdMS_TO_TICKS(100), pdTRUE, NULL, APP_Timer_Callback);
 
   xTimerStart(led_status_timer, 0);
 }

@@ -42,6 +42,13 @@
       "check2": "10:29:32",
       "check3": "12:32:51",
       "check4": "12:33:31"
+    },
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "device_id": "Room1",
+      "date": "29/05/2025",
+      "check1": "18:52:22"
     }
   ]
 }

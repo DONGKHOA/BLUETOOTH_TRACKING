@@ -3,23 +3,16 @@
     {
       "id": 1,
       "name": "Ho Le Quoc Thang",
-      "face": 1,
+      "face": 0,
       "finger": 1,
-      "role": "user"
+      "role": "admin"
     },
     {
       "id": 2,
       "name": "Dong Thanh Khoa",
       "face": 0,
       "finger": 0,
-      "role": "admin"
-    },
-    {
-      "id": 3,
-      "name": "Pham Ho Anh Tuan",
-      "face": 0,
-      "finger": 0,
-      "role": "admin"
+      "role": "user"
     }
   ]
 }
