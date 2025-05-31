@@ -48,7 +48,6 @@ static handle_rtc_t s_time_system;
 
 static void APP_TIME_SYSTEM_Task(void *arg);
 static void APP_TIME_SYSTEM_Notification_cb(struct timeval *tv);
-static void convert_ds3231_to_tm(const ds3231_data_t *src, struct tm *dest);
 
 /******************************************************************************
  *   PUBLIC FUNCTION

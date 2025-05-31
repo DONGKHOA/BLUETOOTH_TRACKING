@@ -25,6 +25,7 @@ time_data_t s_time_data = { 0 };
 LV_IMG_DECLARE(ui_img_1052123464);
 LV_IMG_DECLARE(ui_img_1985633929);
 LV_IMG_DECLARE(ui_img_694049672);
+LV_IMG_DECLARE(ui_img_988180266); // SD card icon
 
 /******************************************************************************
  *  PRIVATE PROTOTYPE FUNCTION
@@ -44,6 +45,7 @@ static lv_obj_t   *ui_HomeDay;
 static lv_timer_t *timer_home;
 static lv_obj_t   *ui_ImageWifi;
 static lv_obj_t   *ui_ImageBluetooth;
+static lv_obj_t   *ui_ImageSDCard;
 
 static QueueHandle_t *p_receive_data_event_queue;
 
@@ -64,20 +66,29 @@ EVENT_Home_Before (lv_event_t *e)
     ui_ImageWifi = lv_img_create(ui_Home);
     lv_obj_set_width(ui_ImageWifi, LV_SIZE_CONTENT);  /// 1
     lv_obj_set_height(ui_ImageWifi, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_ImageWifi, -23);
+    lv_obj_set_x(ui_ImageWifi, 130);
     lv_obj_set_y(ui_ImageWifi, -105);
-    lv_obj_set_align(ui_ImageWifi, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_align(ui_ImageWifi, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_ImageWifi, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
     lv_obj_clear_flag(ui_ImageWifi, LV_OBJ_FLAG_SCROLLABLE); /// Flags
 
     ui_ImageBluetooth = lv_img_create(ui_Home);
     lv_obj_set_width(ui_ImageBluetooth, LV_SIZE_CONTENT);  /// 1
     lv_obj_set_height(ui_ImageBluetooth, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_ImageBluetooth, 99);
+    lv_obj_set_x(ui_ImageBluetooth, 70);
     lv_obj_set_y(ui_ImageBluetooth, -105);
     lv_obj_set_align(ui_ImageBluetooth, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_ImageBluetooth, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
     lv_obj_clear_flag(ui_ImageBluetooth, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+
+    ui_ImageSDCard = lv_img_create(ui_Home);
+    lv_obj_set_width(ui_ImageSDCard, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_ImageSDCard, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_ImageSDCard, 100);
+    lv_obj_set_y(ui_ImageSDCard, -105);
+    lv_obj_set_align(ui_ImageSDCard, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_ImageSDCard, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
+    lv_obj_clear_flag(ui_ImageSDCard, LV_OBJ_FLAG_SCROLLABLE); /// Flags
 
     ui_HomeTime = lv_label_create(ui_POPUPHomePanel);
     lv_obj_set_width(ui_HomeTime, LV_SIZE_CONTENT);  /// 1
@@ -189,6 +200,15 @@ EVENT_PROCESS_HOME_DATA_Task (void *arg)
                    s_time_data.u8_month + 1,
                    s_time_data.u8_year + 1900);
 
+          break;
+
+          case DATA_SYNC_STATE_SDCARD:
+          // Handle WiFi connection state response
+          if (s_DATA_SYNC.u8_data_packet[0] == DATA_SYNC_SUCCESS)
+          {
+            // Bluetooth connected
+            lv_img_set_src(ui_ImageSDCard, &ui_img_988180266);
+          }
           break;
 
         default:

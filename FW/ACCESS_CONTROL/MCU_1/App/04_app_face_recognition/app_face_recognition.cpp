@@ -176,6 +176,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
             stable_face_count_attendance = 0;
             is_face_recognized           = false;
 
+            *p_state_system = STATE_ATTENDANCE_SUCCESS;
+
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_REQUEST_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = (userid << 8) & 0xFF;
             s_DATA_SYNC.u8_data_packet[1] = userid & 0xFF;
@@ -191,6 +193,8 @@ Face::APP_FACE_RECOGNITION_Task (void *pvParameters)
 
             stable_face_count_attendance = 0;
             is_face_recognized           = false;
+
+            *p_state_system = STATE_ATTENDANCE_FAIL;
 
             s_DATA_SYNC.u8_data_start     = DATA_SYNC_STOP_ATTENDANCE;
             s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_DUMMY;

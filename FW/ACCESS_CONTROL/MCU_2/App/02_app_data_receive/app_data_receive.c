@@ -39,7 +39,6 @@ extern uint16_t u16_finger_user_id;
  */
 typedef struct ble_ibeacon_data
 {
-  QueueHandle_t      *p_data_mqtt_queue;
   QueueHandle_t      *p_data_local_database_queue;
   EventGroupHandle_t *p_fingerprint_event;
 } data_receive_data_t;
@@ -70,7 +69,6 @@ void
 APP_DATA_RECEIVE_Init (void)
 {
   s_data_receive_data.p_fingerprint_event = &s_data_system.s_fingerprint_event;
-  s_data_receive_data.p_data_mqtt_queue   = &s_data_system.s_data_mqtt_queue;
   s_data_receive_data.p_data_local_database_queue
       = &s_data_system.s_data_local_database_queue;
 }

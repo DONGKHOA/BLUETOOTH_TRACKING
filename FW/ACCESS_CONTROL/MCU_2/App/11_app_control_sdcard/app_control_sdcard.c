@@ -37,6 +37,7 @@ typedef struct
   QueueHandle_t     *p_data_sdcard_queue;
   QueueHandle_t     *p_data_mqtt_queue;
   QueueHandle_t     *p_data_attendance_queue;
+  QueueHandle_t     *p_send_data_queue;
   SemaphoreHandle_t *p_spi_mutex;
 } control_sdcard_t;
 
@@ -112,6 +113,7 @@ APP_CONTROL_SDCARD_Init (void)
   s_control_sdcard.p_data_mqtt_queue   = &s_data_system.s_data_mqtt_queue;
   s_control_sdcard.p_data_attendance_queue
       = &s_data_system.s_data_attendance_queue;
+  s_control_sdcard.p_send_data_queue = &s_data_system.s_send_data_queue;
 }
 
 /******************************************************************************
@@ -132,6 +134,14 @@ APP_CONTROL_SDCARD_Task (void *arg)
     {
       b_valid_sdcard = false;
       ESP_LOGI(TAG, "SD Card is invalid!");
+
+      // Send command to MCU1 the state of SD Card
+      s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_SDCARD;
+      s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_FAIL;
+      s_DATA_SYNC.u8_data_length    = 1;
+      s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+      xQueueSend(*s_control_sdcard.p_send_data_queue, &s_DATA_SYNC, 0);
+
       vTaskDelay(500 / portTICK_PERIOD_MS);
       goto exit_critical_section;
     }
@@ -142,6 +152,14 @@ APP_CONTROL_SDCARD_Task (void *arg)
       if (b_get_data == false)
       {
         b_get_data = true;
+
+        // Send command to MCU1 the state of SD Card
+        s_DATA_SYNC.u8_data_start     = DATA_SYNC_STATE_SDCARD;
+        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+        s_DATA_SYNC.u8_data_length    = 1;
+        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+        xQueueSend(*s_control_sdcard.p_send_data_queue, &s_DATA_SYNC, 0);
+
         if (APP_CONTROL_SDCARD_CheckNew() == SDCARD_NEW)
         {
           APP_CONTROL_SDCARD_CreateFile();

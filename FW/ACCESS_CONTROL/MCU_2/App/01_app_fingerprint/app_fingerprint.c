@@ -280,6 +280,12 @@ APP_FINGERPRINT_task (void *arg)
         xQueueSend(
             *s_fingerprint_data.p_data_local_database_queue, &s_DATA_SYNC, 0);
 
+        s_DATA_SYNC.u8_data_start     = DATA_SYNC_RESPONSE_ATTENDANCE;
+        s_DATA_SYNC.u8_data_packet[0] = DATA_SYNC_SUCCESS;
+        s_DATA_SYNC.u8_data_length    = 1;
+        s_DATA_SYNC.u8_data_stop      = DATA_STOP_FRAME;
+        xQueueSend(*s_fingerprint_data.p_send_data_queue, &s_DATA_SYNC, 0);
+
         xEventGroupClearBits(*s_fingerprint_data.p_fingerprint_event,
                              EVENT_ATTENDANCE_FINGERPRINT);
       }
