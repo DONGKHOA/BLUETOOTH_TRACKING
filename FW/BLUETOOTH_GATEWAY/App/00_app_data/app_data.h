@@ -8,8 +8,10 @@
 #include <stdio.h>
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/FreeRTOSConfig.h"
 #include "freertos/queue.h"
 #include "freertos/event_groups.h"
+#include "freertos/semphr.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -20,28 +22,63 @@ extern "C"
    *    PUBLIC DEFINES
    ***************************************************************************/
 
-#define APP_CONFIGURATION_ENABLE  BIT2
-#define APP_CONFIGURATION_DISABLE BIT3
+#define APP_CONFIGURATION_ENABLE  BIT0
+#define APP_CONFIGURATION_DISABLE BIT1
 
 #define MQTTSERVER_NVS "MQTTSERVER_NVS"
 #define MQTTTOPIC_NVS  "MQTTTOPIC_NVS"
+#define ROOM_NVS       "ROOM_NVS"
 
   /*** GPIO peripheral *******************************************************/
 
-#define BUTTON_USER_PIN GPIO_NUM_36
-#define LED_STATUS_PIN  GPIO_NUM_5
+#define USER_BUTTON_1_PIN GPIO_NUM_36
+#define USER_BUTTON_2_PIN GPIO_NUM_34
+#define ROTARY_A_PIN      GPIO_NUM_39
+#define ROTARY_B_PIN      GPIO_NUM_35
+#define LED_STATUS_PIN    GPIO_NUM_12
+#define RE_RS485_PIN      GPIO_NUM_25
 
-  /*** state system **********************************************************/
+  /*** I2C peripheral ********************************************************/
 
-#define STATUS_WIFI_CONNECTED    BIT0
-#define STATUS_WIFI_DISCONNECTED BIT1
-#define STATUS_MQTT_CONNECTED    BIT2
-#define STATUS_MQTT_DISCONNECTED BIT3
-#define STATUS_BLE_CONFIGURATION BIT4
+#define I2C_NUM        0
+#define I2C_MODE       I2C_MODE_MASTER
+#define I2C_SDA        GPIO_NUM_27
+#define I2C_SCL        GPIO_NUM_14
+#define I2C_SDA_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_SCL_PULLUP GPIO_PULLUP_ENABLE
+#define I2C_CLK_SPEED  100000
+
+  /*** RMII peripheral *******************************************************/
+
+#define RMII_MDC_PIN    GPIO_NUM_19
+#define RMII_MDIO_PIN   GPIO_NUM_21
+#define RMII_TXD0_PIN   GPIO_NUM_4
+#define RMII_TXD1_PIN   GPIO_NUM_15
+#define RMII_TX_EN_PIN  GPIO_NUM_18
+#define RMII_RXD0_PIN   GPIO_NUM_23
+#define RMII_RXD1_PIN   GPIO_NUM_13
+#define RMII_CRS_DV_PIN GPIO_NUM_2
+
+  /*** UART1 peripheral *******************************************************/
+
+#define UART_RS485_TXD       GPIO_NUM_32
+#define UART_RS485_RXD       GPIO_NUM_26
+#define UART_RS485_NUM       UART_NUM_1
+#define UART_RS485_BAUD_RATE 115200
 
   /****************************************************************************
    *   PUBLIC TYPEDEFS
    ***************************************************************************/
+
+  /**
+   * @brief Structure defining the state of system and show it by led
+   */
+  typedef enum
+  {
+    STATE_WIFI_CONNECTED = 0x00,
+    STATE_WIFI_DISCONNECTED,
+    STATE_BLUETOOTH_CONFIG
+  } __attribute__((packed)) state_system_t;
 
   /**
    * @brief Data structure holding data of system
@@ -58,8 +95,16 @@ extern "C"
   {
     QueueHandle_t      s_rssi_ibeacon_queue;
     QueueHandle_t      s_location_tag_queue;
+    QueueHandle_t      s_addr_tag_queue;
     EventGroupHandle_t s_configuration_event;
+    SemaphoreHandle_t  s_mutex_num_tag;
+    state_system_t     s_state_system;
   } DATA_System_t;
+
+  /**
+   * @brief Structure defining the address of tag
+   */
+  typedef uint8_t addr_tag_t[6];
 
   /**
    * @brief Structure defining the data sync between the app_ble_ibeacon and
@@ -67,8 +112,8 @@ extern "C"
    */
   typedef struct
   {
-    uint8_t u8_beacon_addr[6]; // 6 Bytes Address
-    int8_t  i8_filtered_rssi;
+    addr_tag_t u8_beacon_addr;
+    int8_t     i8_filtered_rssi;
   } ibeacon_infor_tag_t;
 
   /**
@@ -77,10 +122,10 @@ extern "C"
    */
   typedef struct
   {
-    uint8_t  u8_beacon_addr[6]; // 6 Bytes Address
-    uint32_t u32_gateway_ID;
-    char     c_gateway_version[6];
-    int8_t   i8_filtered_rssi;
+    addr_tag_t u8_beacon_addr;
+    uint32_t   u32_gateway_ID;
+    char       c_gateway_version[6];
+    int8_t     i8_filtered_rssi;
   } tracking_infor_tag_t;
 
   /****************************************************************************

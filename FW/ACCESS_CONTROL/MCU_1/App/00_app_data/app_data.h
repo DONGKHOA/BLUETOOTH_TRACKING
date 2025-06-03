@@ -51,7 +51,7 @@ extern "C"
 #define SPI3_SCLK_PIN GPIO_NUM_45
 #define SPI3_CS_PIN   GPIO_NUM_41
 
-#define SPI3_CLOCK_SPEED_HZ          SPI_CLOCK_100KHz
+#define SPI3_CLOCK_SPEED_HZ          SPI_CLOCK_400KHz
 #define SPI3_SPI_BUS_MAX_TRANSFER_SZ 0
 #define SPI3_DMA_CHANNEL             SPI_DMA_CH_AUTO
 #define SPI3_SPI_MODE                0

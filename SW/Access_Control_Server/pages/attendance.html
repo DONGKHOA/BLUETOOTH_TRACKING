@@ -29,13 +29,9 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Device ID</th>
                 <th>Date</th>
-                <th>Check1</th>
-                <th>Check2</th>
-                <th>Check3</th>
-                <th>Check4</th>
-                <th>Check5</th>
-                <th>Check6</th>
+                <th>Check</th>
             </tr>
         </thead>
         <tbody>
@@ -43,13 +39,9 @@
             <tr>
                 <td>{{ row.id }}</td>
                 <td>{{ row.name }}</td>
+                <td>{{ row.device_id }}</td>
                 <td>{{ row.date }}</td>
-                <td>{{ row.check1 or '' }}</td>
-                <td>{{ row.check2 or '' }}</td>
-                <td>{{ row.check3 or '' }}</td>
-                <td>{{ row.check4 or '' }}</td>
-                <td>{{ row.check5 or '' }}</td>
-                <td>{{ row.check6 or '' }}</td>
+                <td>{{ row.check}}</td>
             </tr>
             {% endfor %}
         </tbody>

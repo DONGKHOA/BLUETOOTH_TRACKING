@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 
 # from main import enqueue_internal_command
 
@@ -6,9 +6,11 @@ import json
 import os
 import redis
 
-redis_client = redis.Redis(host="127.0.0.1", port=6379, db=0)
+redis_client = redis.Redis(host="127.0.0.1", port=6381, db=0)
 
 app = Flask(__name__, template_folder='pages')
+
+app.secret_key = 'your-secret-key'
 
 DATA_FILE = 'users.json'
 ATTENDANCE_FILE = 'attendance.json'
@@ -33,146 +35,213 @@ def save_users(users):
 
 @app.route('/')
 def index():
-    users = load_users()
-    return render_template('server.html', users=users)
+    all_users = load_users()
+    merged_users = []
+    new_user_id = session.pop('new_user_id', None)
+    
+    for device_id, users in all_users.items():
+        for user in users:
+            user["device_id"] = device_id
+            merged_users.append(user)
+
+    merged_users.sort(key=lambda x: (x["device_id"], x.get("id", 0)))
+
+    return render_template('server.html', users=merged_users, new_user_id=new_user_id)
 
 @app.route('/append_blank', methods=['POST'])
 def append_blank():
+    device_id = request.form.get('device_id')
     users = load_users()
-    last_id = max([u.get("id", 0) for u in users], default=0)
-    users.append({
-        "id": last_id + 1,
+    if device_id not in users:
+        users[device_id] = []
+
+    used_ids = {u.get("id") for u in users[device_id]}
+    new_user_id = next(i for i in range(1, 10000) if i not in used_ids)
+    
+    users[device_id].append({
+        "id": new_user_id,
         "name": "",
         "employee_id": "",
-        "role": "User",
+        "role": "user",
         "face": 0,
         "finger": 0
     })
-    return render_template('server.html', users=users)
+
+    save_users(users)
+    session['new_user_id'] = new_user_id
+    return redirect(url_for('index'))
 
 @app.route('/update', methods=['POST'])
 def update_users():
-    name = request.form.get('name')
-    employee_id = request.form.get('employee_id')
-    role = request.form.get('role')
+    name = request.form.get('name', '').strip()
+    employee_id = request.form.get('employee_id', '').strip()
+    role = request.form.get('role', 'user').strip()
+    device_id = request.form.get('device_id', '').strip()
 
-    users = load_users()
+    if not device_id:
+        return "Device ID is missing.", 400
 
-    if name and employee_id:
-        # Find the highest current ID, or start from 0
-        last_id = max([u.get("id", 0) for u in users], default=0)
+    users_all = load_users()
+    users = users_all.setdefault(device_id, [])
 
-        # Append new user with next ID
-        users.append({
-            "id": last_id + 1,
+    id_raw = request.form.get('id')
+    used_ids = {u.get("id") for u in users}
+    user_id = int(id_raw) if id_raw else next(i for i in range(1, 10000) if i not in used_ids)
+
+
+    updated = False
+    for user in users:
+        if user.get("id") == user_id:
+            user["name"] = name
+            user["employee_id"] = employee_id
+            user["role"] = role
+            updated = True
+            print(f"Updated user {user_id} in device {device_id}")
+            redis_client.rpush("mqtt_queue", json.dumps({
+                "command": "ADD_USER_DATA",
+                "id": user_id,
+                "name": name,
+                "device_id": device_id
+            }))
+            break
+
+    if not updated:
+        new_user = {
+            "id": user_id,
             "name": name,
             "employee_id": employee_id,
             "role": role,
             "face": 0,
             "finger": 0
-        })
-
-        # Send a ADD_USER_DATA command to the queue
-        print(f"Adding user data for ID: {last_id + 1}")
-
+        }
+        users.append(new_user)
+        print(f"Added new user {user_id} to device {device_id}")
         redis_client.rpush("mqtt_queue", json.dumps({
             "command": "ADD_USER_DATA",
-            "id": last_id + 1,
+            "id": user_id,
             "name": name,
+            "device_id": device_id
         }))
+        session['new_user_id'] = user_id
 
-    save_users(users)
+    save_users(users_all)
     return redirect(url_for('index'))
 
-@app.route('/delete/<int:index>', methods=['POST'])
-def delete_user(index):
+@app.route('/set_role/<device_id>/<int:user_id>', methods=['POST'])
+def set_role(device_id, user_id):
+    new_role = request.form['role']
     users = load_users()
+    if device_id in users:
+        for user in users[device_id]:
+            if user['id'] == user_id:
+                user['role'] = new_role
+                save_users(users)
+                print(f"Set new role of user ID {user_id} in {device_id}")
+                redis_client.rpush("mqtt_queue", json.dumps({
+                    "command": "SET_ROLE",
+                    "id": user_id,
+                    "role": new_role,
+                    "device_id": device_id
+                }))
+                break
+    return redirect(url_for('index'))
 
-    if 0 <= index < len(users):
-        delete_id_user = users.pop(index)
-        user_id = delete_id_user.get("id")
 
-        save_users(users)
+@app.route('/delete/<device_id>/<int:user_id>', methods=['POST'])
+def delete_user(device_id, user_id):
+    users_all = load_users()
+    
+    if device_id in users_all:
+        original_len = len(users_all[device_id])
+        users_all[device_id] = [u for u in users_all[device_id] if u.get("id") != user_id]
 
-        if user_id:
-            # Send a DELETE_USER_DATA command to the queue
-            print(f"Deleting user data for ID: {user_id}")
+        if len(users_all[device_id]) < original_len:
+            print(f"Deleted user {user_id} from device {device_id}")
+
+            if not users_all[device_id]:
+                users_all[device_id] = []
+
+            save_users(users_all)
 
             redis_client.rpush("mqtt_queue", json.dumps({
                 "command": "DELETE_USER_DATA",
-                "id": user_id
-            }))
-
-    return redirect(url_for('index'))
-
-@app.route('/delete_face/<int:user_id>', methods=['POST'])
-def delete_face(user_id):
-    users = load_users()  # Đọc từ file users.json
-    for user in users:
-        if user['id'] == user_id:
-            user['face'] = 0
-
-            save_users(users)
-
-            # Send a DELETE_FACEID_USER command to the queue
-            print(f"Deleting faceid user data for ID: {user_id}")
-
-            redis_client.rpush("mqtt_queue", json.dumps({
-                "command": "DELETE_FACEID_USER",
-                "id": user_id
-            }))
-
-            break
-
-    return redirect(url_for('index'))
-
-@app.route('/delete_finger/<int:user_id>', methods=['POST'])
-def delete_finger(user_id):
-    users = load_users()
-    for user in users:
-        if user['id'] == user_id:
-            user['finger'] = 0
-
-            save_users(users)
-
-            # Send a DELETE_FINGER_USER command to the queue
-            print(f"Deleting finger user data for ID: {user_id}")
-
-            redis_client.rpush("mqtt_queue", json.dumps({
-                "command": "DELETE_FINGER_USER",
-                "id": user_id
-            }))
-            
-            break
-
-    return redirect(url_for('index'))
-
-@app.route('/set_role/<int:user_id>', methods=['POST'])
-def set_role(user_id):
-    new_role = request.form['role']
-    users = load_users()
-
-    for user in users:
-        if user['id'] == user_id:
-            user['role'] = new_role
-
-            save_users(users)
-
-            # Send a SET_ROLE command to the queue
-            print(f"Set new role of user data with ID: {user_id}")
-
-            redis_client.rpush("mqtt_queue", json.dumps({
-                "command": "SET_ROLE",
                 "id": user_id,
-                "role": new_role
+                "device_id": device_id
             }))
+
     return redirect(url_for('index'))
+
+@app.route('/delete_face/<device_id>/<int:user_id>', methods=['POST'])
+def delete_face(device_id, user_id):
+    users = load_users()
+    if device_id in users:
+        for user in users[device_id]:
+            if user['id'] == user_id:
+                user['face'] = 0
+                save_users(users)
+
+                print(f"Deleted face for user ID {user_id} on device {device_id}")
+
+                redis_client.rpush("mqtt_queue", json.dumps({
+                    "command": "DELETE_FACEID_USER",
+                    "id": user_id,
+                    "device_id": device_id
+                }))
+                break
+
+    return redirect(url_for('index'))
+
+@app.route('/delete_finger/<device_id>/<int:user_id>', methods=['POST'])
+def delete_finger(device_id, user_id):
+    users = load_users()
+    if device_id in users:
+        for user in users[device_id]:
+            if user['id'] == user_id:
+                user['finger'] = 0
+                save_users(users)
+
+                print(f"Deleted finger for user ID {user_id} on device {device_id}")
+
+                redis_client.rpush("mqtt_queue", json.dumps({
+                    "command": "DELETE_FINGER_USER",
+                    "id": user_id,
+                    "device_id": device_id
+                }))
+                break
+
+    return redirect(url_for('index'))
+
+@app.route("/available_devices")
+def available_devices():
+    users = load_users()
+    return jsonify(list(users.keys()))
+
 
 @app.route('/attendance')
 def show_attendance():
-    attendance = load_attendance()
-    return render_template('attendance.html', attendance_data=attendance)
+    attendance_all = load_attendance()
+    merged = []
 
+    for device_id, records in attendance_all.items():
+        for record in records:
+            record["device_id"] = device_id  # ensure device_id is always present
+
+            # Collect all checkN fields
+            check_times = [v for k, v in record.items() if k.startswith("check")]
+
+            if check_times:
+                # Get latest check-in time (by sorting time string)
+                latest_time = sorted(check_times)[-1]
+                record["check"] = latest_time
+            else:
+                record["check"] = "—"  # fallback if no check-in
+
+            merged.append(record)
+
+    # Sort by date, device, and user ID
+    merged.sort(key=lambda x: (x["date"], x["device_id"], x["id"]))
+
+    return render_template('attendance.html', attendance_data=merged)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9000, debug=True)

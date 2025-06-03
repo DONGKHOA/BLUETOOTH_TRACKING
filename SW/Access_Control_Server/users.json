@@ -1,18 +1,18 @@
-[
-  {
-    "id": 1,
-    "name": "Ho Le Quoc Thang",
-    "employee_id": "2114826",
-    "role": "admin",
-    "face": 1,
-    "finger": 1
-  },
-  {
-    "id": 2,
-    "name": "Dong Thanh Khoa",
-    "employee_id": "12312312",
-    "role": "admin",
-    "face": 0,
-    "finger": 0
-  }
-]
+{
+  "Room1": [
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "face": 1,
+      "finger": 1,
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "face": 0,
+      "finger": 1,
+      "role": "user"
+    }
+  ]
+}

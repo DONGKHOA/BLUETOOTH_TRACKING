@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis-tcpserver
+    network_mode: host
+    volumes:
+      - redis-data:/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    working_dir: /app/Backend
+    command: python main.py
+    depends_on:
+      - redis
+    env_file: .env
+    volumes:
+      - ./logs:/app/logs
+    network_mode: host
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend
+    working_dir: /app/Frontend
+    command: python ui.py
+    depends_on:
+      - redis
+      - backend
+    env_file: .env
+    volumes:
+      - ./logs:/app/logs
+    network_mode: host
+    command: ["/app/wait-for-redis.sh", "python", "ui.py"]
+
+volumes:
+  redis-data:

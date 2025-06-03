@@ -39,18 +39,18 @@ DEV_DS3231_Init (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
                          1000 / portTICK_PERIOD_MS);
 
   if (status_reg & (1 << 7))
-  { // Cehck bit OSF (bit 7)
+  { // Check bit OSF (bit 7)
     printf("Oscillator stopped. Initializing RTC...\n");
     // Reset bit OSF
     status_reg &= ~(1 << 7);
 
-    *p_ds3231_data = (ds3231_data_t) { .u8_hour   = 15,
-                                       .u8_minute = 44,
+    *p_ds3231_data = (ds3231_data_t) { .u8_hour   = 21,
+                                       .u8_minute = 40,
                                        .u8_second = 0,
-                                       .u8_day    = 1,
-                                       .u8_date   = 7,
-                                       .u8_month  = 2,
-                                       .u8_year   = 25 };
+                                       .u8_day    = 4,
+                                       .u8_date   = 1,
+                                       .u8_month  = 5,
+                                       .u8_year   = 125 };
 
     DEV_DS3231_Register_Write(p_ds3231_data, e_i2c_port);
 
@@ -76,14 +76,13 @@ esp_err_t
 DEV_DS3231_Register_Read (ds3231_data_t *p_ds3231_data, i2c_port_t e_i2c_port)
 {
   uint8_t reg_addr = SECOND_VALUE_ADDRESS;
-  int8_t  ret
-      = BSP_i2cWriteReadBuffer(e_i2c_port,
-                               DS3231_ADDRESS,
-                               &reg_addr,
-                               1,
-                               (uint8_t *)p_ds3231_data,
-                               7,
-                               1000 / portTICK_PERIOD_MS);
+  int8_t  ret      = BSP_i2cWriteReadBuffer(e_i2c_port,
+                                      DS3231_ADDRESS,
+                                      &reg_addr,
+                                      1,
+                                      (uint8_t *)p_ds3231_data,
+                                      7,
+                                      1000 / portTICK_PERIOD_MS);
 
   for (uint8_t i = 0; i < sizeof(ds3231_data_t); i++)
   {

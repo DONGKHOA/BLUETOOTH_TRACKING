@@ -4,6 +4,9 @@ import paho.mqtt.client as mqtt
 import handle_data
 import redis
 
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
 # MQTT broker details
 BROKER = "broker.emqx.io"
 PORT = 1883
@@ -14,13 +17,16 @@ RESPONSE_SERVER_TOPIC = 'ACCESS_CONTROL/Server/Response'
 REQUEST_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Request'
 RESPONSE_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Response'
 
-redis_client = redis.Redis(host="127.0.0.1", port=6379, db=0)
+redis_client = redis.Redis(host="127.0.0.1", port=6381, db=0)
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print(f"Connected to {BROKER}:{PORT}")
         mqtt_client.subscribe(REQUEST_SERVER_TOPIC)
         mqtt_client.subscribe(RESPONSE_SERVER_TOPIC)
+        
+        client.subscribe("+/Server/Request")
+        client.subscribe("+/Server/Response")
     else:   
         print(f"Connection failed with code {rc}")
 
@@ -28,8 +34,13 @@ def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     print(f"Received message on {msg.topic}: {payload}")
 
-    # Notify the request handler via redis queue
-    redis_client.rpush("mqtt_queue", payload)
+    try:
+        device_id = msg.topic.split('/')[0] # Extract device ID from topic
+        data = json.loads(payload)
+        data["device_id"] = device_id
+        redis_client.rpush("mqtt_queue", json.dumps(data))
+    except Exception as e:
+        print(f"Failed to process message: {e}")
 
 async def process_request():
     loop = asyncio.get_event_loop()
@@ -40,34 +51,83 @@ async def process_request():
 
         try:
             data = json.loads(payload_str)
+            device_id = data.get("device_id")
             command = data.get("command")
-            print(f"Processing command: {command}")
+            print(f"Processing command: {command} from {device_id}")
         except Exception as e:
             print(f"Error while parsing JSON: {e}")
+            continue
 
         # Process the request
         match command:
-            case "USER_DATA":
-                json_data = json.dumps(handle_data.reponse_user_data())
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
+            case "SYN":
+                print("SYNC Command")
+                json_data = json.dumps({
+                    "command": "SYN",
+                    "response": "success"
+                })
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
+                
+            case "SYNC_DATA":
+                json_data = json.dumps(handle_data.reponse_user_data(data, device_id))
+                
+            case "ATTENDANCE_DATA":
+                # json_data = json.dumps(handle_data.response_attendance_data(data, device_id))
+                
+                result = handle_data.response_attendance_data(data, device_id)
+
+                if result.get("response") == "success":
+                    user_id = data.get("id")
+                    attendance_all = handle_data.load_attendance()
+                    attendance = attendance_all.get(device_id, [])
+
+                    last_ts = handle_data.get_latest_attendance_timestamp(attendance, user_id)
+                    print(f"Last timestamp for user {user_id} in device {device_id}: {last_ts}")
+
+                    if last_ts:
+                        # Convert timestamp to local time (UTC+7)
+                        dt_local = datetime.utcfromtimestamp(last_ts) + timedelta(hours=7)
+                        formatted_time = dt_local.strftime("%Y-%m-%d %H:%M:%S")
+                
+                        redis_client.rpush("thingsboard_queue", json.dumps({
+                            "device_id": device_id,
+                            "user_id": user_id,
+                            "timestamp": formatted_time,
+                            "user_name": handle_data.get_user_data(user_id, device_id)
+                        }))
             
             case "ENROLL_FACE":
                 user_id = data.get("id")
-                json_data = json.dumps(handle_data.reponse_enroll_face(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
+                json_data = json.dumps(handle_data.response_enroll_face(user_id, device_id))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ENROLL_FINGERPRINT":
                 user_id = data.get("id")
-                json_data = json.dumps(handle_data.reponse_enroll_finger(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
+                json_data = json.dumps(handle_data.response_enroll_finger(user_id, device_id))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ATTENDANCE":
                 user_id = data.get("id")
-                json_data = json.dumps(handle_data.reponse_attendance(user_id))
-                mqtt_client.publish(RESPONSE_CLIENT_TOPIC, json_data, qos=1)
+                time = data.get("timestamp")
+                json_data = json.dumps(handle_data.response_attendance(user_id, device_id))
+                
+                dt_local = datetime.now(ZoneInfo("Asia/Ho_Chi_Minh"))
+                formatted_time = dt_local.strftime("%Y-%m-%d %H:%M:%S")
+                
+                # Create a JSON object to send to ThingsBoard and send it to the Redis queue
+                redis_client.rpush("thingsboard_queue", json.dumps({
+                    "device_id": device_id,
+                    "user_id": user_id,
+                    "timestamp": formatted_time,
+                    "user_name": handle_data.get_user_data(user_id, device_id)
+                }))
+                
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "ADD_USER_DATA":
@@ -77,7 +137,7 @@ async def process_request():
                     "id": data.get("id"),
                     "name": data.get("name"),
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
                 
             case "DELETE_USER_DATA":
@@ -86,7 +146,7 @@ async def process_request():
                     "command": "DELETE_USER_DATA",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "SET_ROLE":
@@ -96,7 +156,7 @@ async def process_request():
                     "id": data.get("id"),
                     "role": data.get("role")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
             case "DELETE_FINGER_USER":
@@ -105,16 +165,16 @@ async def process_request():
                     "command": "DELETE_FINGER_USER",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
-
+                
             case "DELETE_FACEID_USER":
                 print("Deleting faceid user data")
                 json_data = json.dumps({
                     "command": "DELETE_FACEID_USER",
                     "id": data.get("id")
                 })
-                mqtt_client.publish(REQUEST_CLIENT_TOPIC, json_data, qos=1)
+                mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)
 
 

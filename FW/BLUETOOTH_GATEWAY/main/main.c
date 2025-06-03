@@ -13,6 +13,7 @@
 #include "gpio.h"
 #include "exti.h"
 #include "nvs_rw.h"
+#include "i2c.h"
 
 /*** device ******************************************************************/
 
@@ -24,9 +25,9 @@
 #include "app_mqtt_client.h"
 #include "app_handle_wifi.h"
 #include "app_led_status.h"
-#include "app_timestamp.h"
 #include "app_configuration.h"
 #include "app_user_button.h"
+#include "app_display.h"
 
 /******************************************************************************
  *    PRIVATE DEFINES
@@ -50,6 +51,7 @@ static TimerHandle_t s_loading_timer;
  *****************************************************************************/
 
 static inline void APP_MAIN_InitGPIO(void);
+static inline void APP_MAIN_InitI2C(void);
 static inline void APP_MAIN_InitEXTI(void);
 static inline void APP_MAIN_InitNVS(void);
 static inline void APP_MAIN_InitDataSystem(void);
@@ -67,6 +69,7 @@ app_main (void)
   APP_MAIN_InitGPIO();
   APP_MAIN_InitEXTI();
   APP_MAIN_InitNVS();
+  APP_MAIN_InitI2C();
 
   // Main Initialization data system
 
@@ -75,6 +78,11 @@ app_main (void)
   // App Initialization
 
   xTimerStart(s_loading_timer, 0);
+
+  APP_STATUS_LED_Init();
+  APP_DISPLAY_Init();
+
+  APP_DISPLAY_CreateTask();
 
   while (1)
   {
@@ -114,13 +122,32 @@ app_main (void)
 static inline void
 APP_MAIN_InitGPIO (void)
 {
-  BSP_gpioSetDirection(LED_STATUS_PIN, GPIO_MODE_OUTPUT, GPIO_NO_PULL);
+  gpio_config_t io_config = {
+    .pin_bit_mask = 1ULL << LED_STATUS_PIN,
+    .mode         = GPIO_MODE_OUTPUT,
+    .pull_up_en   = GPIO_PULLUP_ENABLE,
+    .pull_down_en = GPIO_PULLDOWN_DISABLE,
+  };
+
+  gpio_config(&io_config);
+
+  BSP_gpioSetState(LED_STATUS_PIN, 1);
+}
+
+static inline void
+APP_MAIN_InitI2C (void)
+{
+  BSP_i2cConfigMode(I2C_NUM, I2C_MODE);
+  BSP_i2cConfigSDA(I2C_NUM, I2C_SDA, I2C_SDA_PULLUP);
+  BSP_i2cConfigSCL(I2C_NUM, I2C_SCL, I2C_SCL_PULLUP);
+  BSP_i2cConfigClockSpeed(I2C_NUM, I2C_CLK_SPEED);
+  BSP_i2cDriverInit(I2C_NUM);
 }
 
 static inline void
 APP_MAIN_InitEXTI (void)
 {
-  BSP_EXIT_Init(BUTTON_USER_PIN, EXTI_EDGE_ALL, GPIO_PULL_UP);
+  BSP_EXIT_Init(USER_BUTTON_1_PIN, EXTI_EDGE_ALL, GPIO_PULL_UP);
 }
 
 static inline void
@@ -144,13 +171,17 @@ APP_MAIN_InitDataSystem (void)
       = xQueueCreate(16, sizeof(ibeacon_infor_tag_t));
   s_data_system.s_location_tag_queue
       = xQueueCreate(16, sizeof(tracking_infor_tag_t));
+
+  s_data_system.s_addr_tag_queue = xQueueCreate(4, sizeof(addr_tag_t));
+
+  s_data_system.s_mutex_num_tag = xSemaphoreCreateMutex();
 }
 
 static void
 APP_MAIN_Loading_Callback (TimerHandle_t xTimer)
 {
   xTimerStop(s_loading_timer, 0);
-  if (BSP_gpioGetState(BUTTON_USER_PIN) == 1)
+  if (BSP_gpioGetState(USER_BUTTON_1_PIN) == 1)
   {
     xEventGroupSetBits(s_data_system.s_configuration_event,
                        APP_CONFIGURATION_DISABLE);

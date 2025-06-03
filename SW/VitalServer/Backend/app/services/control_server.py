@@ -3,7 +3,7 @@
 # -----------------------------------------------
 import app.services.http_client as http_client
 import app.services.handle_data as handle_data
-
+import app.services.http_thingsboard as http_thingsboard
 
 import asyncio
 import numpy as np
@@ -44,7 +44,13 @@ ip_to_writer_map = {}
 server = None  # Stores the running TCP server task
 server_task = None  # Stores the running TCP server task
 
+data_queue = None
+
+mqtt_clients = {}
+
 r = redis.Redis(host='localhost', port=6379, db=0)
+
+connected_clients = set()
 
 # -----------------------------------------------
 # Function to initialize the Redis
@@ -148,6 +154,15 @@ async def stop_tcp_server():
 
         server = None
         server_task = None
+            
+        for device_id, client in mqtt_clients.items():
+            try:
+                client.loop_stop()
+                client.disconnect()
+                print(f"[MQTT] Disconnected client for device {device_id}")
+            except Exception as e:
+                print(f"[WARNING] Failed to disconnect client {device_id}: {e}")
+        mqtt_clients.clear()
 
         r.set("tcp_server_status", "stopped")
     
@@ -162,13 +177,31 @@ async def refresh_auth_token():
     while True:
         await asyncio.sleep(10800)  # 3 hours in seconds
         try:
-            auth_token = http_client.login_access_token(r.get("username").decode(), r.get("password").decode())
+            # auth_token = http_client.login_access_token(r.get("username").decode(), r.get("password").decode())
+            auth_token = http_thingsboard.login_auth_token(r.get("username").decode(), r.get("password").decode())
             r.set("auth_token", auth_token)
             system_log.log_to_redis("[Auth Refresh] Successfully refreshed AUTH_TOKEN.")
             print("[Auth Refresh] Successfully refreshed AUTH_TOKEN.")
         except Exception as e:
             system_log.log_to_redis(f"[Auth Refresh] Exception while refreshing token: {e}")
             print(f"[Auth Refresh] Exception while refreshing token: {e}")
+# -----------------------------------------------
+# Callback for logging connection
+# -----------------------------------------------
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        client_id = client._client_id.decode()
+
+        if client_id not in connected_clients:
+            
+            print("Connected to ThingsBoard!")
+            system_log.log_to_redis(f"Connected to ThingsBoard! ({client_id})")
+            connected_clients.add(client_id)
+        
+        client.connected_flag = True    
+        
+    else:
+        print("Connection failed with code", rc)
 
 # -----------------------------------------------
 # Handle MQTT Publish
@@ -181,14 +214,31 @@ def on_publish(client, userdata, mid):
     system_log.log_to_redis(f"[MQTT] Successfully published message ID={mid}")
 
 # -----------------------------------------------
+# Function to publish data to MQTT
+# ----------------------------------------------- 
+async def publish_to_mqtt():
+    global data_queue
+    while True:
+        json_data = await data_queue.get()
+        device_data = json.loads(json_data)
+        device_id = device_data.get("device_id")
+
+        client = mqtt_clients.get(device_id)
+
+        if client and client.is_connected():
+            result = client.publish(environment.TOPIC, json_data, qos=1)
+            result.wait_for_publish()
+        else:
+            print(f"[ERROR] No MQTT client or not connected for device: {device_id}")
+            system_log.log_to_redis(f"[ERROR] No MQTT client or not connected for device: {device_id}")
+    
+# -----------------------------------------------
 # Function to handle client connections
 # -----------------------------------------------        
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-    global count
+    global count, data_queue, connected_flag
 
     condition_regis_mqtt = True
-
-    mqtt_client = None
 
     client_address = writer.get_extra_info('peername')
     if not client_address:
@@ -257,31 +307,34 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 else:
                     new_id_hex = "TooShort"
 
-
                 # ---------------- MQTT Setup ----------------
                 if condition_regis_mqtt == True:
                     condition_regis_mqtt = False
-                    mqtt_client = mqtt.Client(client_id=client_ip)
 
-                    mqtt_client.on_publish = on_publish
-
-                    # Configure SSL for secure connections to AWS IoT
-                    mqtt_client.tls_set(ca_certs=r.get("root_ca_path").decode(),
-                                        certfile=r.get("cert_path").decode(),
-                                        keyfile=r.get("private_key_path").decode(),
-                                        tls_version=ssl.PROTOCOL_TLSv1_2)
-
-                    system_log.log_to_redis(r.get("aws_iot_endpoint").decode())
-                    system_log.log_to_redis(environment.MQTT_PORT)
-                    # Connect to broker
-                    mqtt_client.connect(r.get("aws_iot_endpoint").decode(), environment.MQTT_PORT, 60)
-
-                    # Start a background thread to handle the network loop
-                    mqtt_client.loop_start()
-
-                    new_device = await http_client.register_device(new_id_hex)
-
+                    # new_device = await http_client.register_device(new_id_hex)
+                    
+                    new_device, created = await http_thingsboard.register_device(new_id_hex)
+                    
                     if new_device:
+                        token = await http_thingsboard.get_access_token(new_device)
+                        
+                        client = mqtt.Client(client_id=client_ip)
+                        client.connected_flag = False
+                        client.on_connect = on_connect
+                        client.on_publish = on_publish
+                        client.username_pw_set(token)
+
+                        client.connect(environment.MQTT_BROKER, environment.MQTT_PORT, 60)
+                        client.loop_start()
+                        
+                        for i in range(10):
+                            if client.connected_flag:
+                                break
+                            print("Waiting for connection...")
+                            time.sleep(1)
+                            
+                        mqtt_clients[new_id_hex] = client
+                        
                         print(f"[Server] Device successfully registered: {new_device}")
                         system_log.log_to_redis(f"[Server] Device successfully registered: {new_device}")
 
@@ -350,14 +403,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
                         system_log.log_to_redis(f"[Before Publish] Preparing to publish data for device {client_id}")
                         
-                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=1)
-                        
-                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
-                            print(f"Message successfully sent with {client_id}!")
-                            system_log.log_to_redis("Message successfully sent!")
-                        else:
-                            print(f"Failed to send message with {client_id}:", info.rc)
-                            system_log.log_to_redis("Failed to send message")
+                        await data_queue.put(json_data)
 
                     elif len(content_data) == 36:
                         parsed = handle_data.parse_36_byte_content(content_data)
@@ -379,14 +425,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                         print(f"[Before Publish] Preparing to publish data for device {client_id}")
                         system_log.log_to_redis(f"[Before Publish] Preparing to publish data for device {client_id}")
 
-                        info = mqtt_client.publish(http_client.generate_topic(client_id), json_data, qos=1)
-                        
-                        if info.rc == mqtt.MQTT_ERR_SUCCESS:
-                            print(f"Message successfully sent with {client_id}!")
-                            system_log.log_to_redis("Message successfully sent!")
-                        else:
-                            print(f"Failed to send message with {client_id}:", info.rc)
-                            system_log.log_to_redis("Failed to send message:")
+                        await data_queue.put(json_data)
 
                     else:
                         print(f"[!] content_data length={len(content_data)}, expected 28 or 36.")
@@ -399,27 +438,31 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 # ---------------- MQTT Setup ----------------
                 if condition_regis_mqtt == True:
                     condition_regis_mqtt = False
-                    mqtt_client = mqtt.Client(client_id=client_ip)
 
-                    mqtt_client.on_publish = on_publish
-
-                    # Configure SSL for secure connections to AWS IoT
-                    mqtt_client.tls_set(ca_certs=r.get("root_ca_path").decode(),
-                                        certfile=r.get("cert_path").decode(),
-                                        keyfile=r.get("private_key_path").decode(),
-                                        tls_version=ssl.PROTOCOL_TLSv1_2)
-
-                    system_log.log_to_redis(r.get("aws_iot_endpoint").decode())
-                    system_log.log_to_redis(environment.MQTT_PORT)
-                    # Connect to broker
-                    mqtt_client.connect(r.get("aws_iot_endpoint").decode(), environment.MQTT_PORT, 60)
-
-                    # Start a background thread to handle the network loop
-                    mqtt_client.loop_start()
-
-                    new_device = await http_client.register_device(new_id_hex)
-
+                    # new_device = await http_client.register_device(new_id_hex)
+                    
+                    new_device, created = await http_thingsboard.register_device(new_id_hex)
+                    
                     if new_device:
+                        token = await http_thingsboard.get_access_token(new_device)
+                        
+                        client = mqtt.Client(client_id=client_ip)
+                        client.connected_flag = False
+                        client.on_connect = on_connect
+                        client.on_publish = on_publish
+                        client.username_pw_set(token)
+
+                        client.connect(environment.MQTT_BROKER, environment.MQTT_PORT, 60)
+                        client.loop_start()
+                        
+                        for i in range(10):
+                            if client.connected_flag:
+                                break
+                            print("Waiting for connection...")
+                            time.sleep(1)
+                            
+                        mqtt_clients[new_id_hex] = client
+                        
                         print(f"[Server] Device successfully registered: {new_device}")
                         system_log.log_to_redis(f"[Server] Device successfully registered: {new_device}")
 
@@ -450,17 +493,26 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         count = count - 1
      
 async def main():
+    global data_queue
+    
     try:
         r.flushall()
 
         initialize_redis()
+        
+        data_queue = asyncio.Queue()
 
-        auth_token = http_client.login_access_token(r.get("username").decode(),r.get("password").decode())
+        # auth_token = http_client.login_access_token(r.get("username").decode(),r.get("password").decode())
+        
+        auth_token = http_thingsboard.login_auth_token(r.get("username").decode(),r.get("password").decode())
 
         if auth_token:
             r.set("auth_token", auth_token)
             asyncio.create_task(refresh_auth_token())
-
+        
+        # Create a publish task
+        asyncio.create_task(publish_to_mqtt())
+        
         while True:
             status = r.get("tcp_server_status").decode()
             if status == "running":
@@ -469,6 +521,7 @@ async def main():
                 await stop_tcp_server()
 
             await asyncio.sleep(1)
+            
     except asyncio.CancelledError:
         print("[INFO] Tasks were cancelled.")
         system_log.log_to_redis("[INFO] Tasks were cancelled.")

@@ -1,0 +1,34 @@
+Removed Pin From Net: NetName=Battery Pin=D23-A
+Removed Pin From Net: NetName=GND Pin=Q5-2
+Removed Pin From Net: NetName=Battery Pin=R98-2
+Removed Pin From Net: NetName=GND Pin=R100-1
+Change Component Designator: OldDesignator=R101 NewDesignator=R98
+Change Component Designator: OldDesignator=R102 NewDesignator=R99
+Change Component Designator: OldDesignator=R103 NewDesignator=R100
+Change Component Designator: OldDesignator=R104 NewDesignator=R101
+Change Component Designator: OldDesignator=R105 NewDesignator=R102
+Change Component Designator: OldDesignator=R106 NewDesignator=R103
+Change Component Designator: OldDesignator=R107 NewDesignator=R104
+Change Component Designator: OldDesignator=R108 NewDesignator=R105
+Change Component Designator: OldDesignator=R109 NewDesignator=R106
+Change Component Designator: OldDesignator=SW? NewDesignator=SW4
+Add Pin To Net: Unknown Pin: Pin U1-5
+Add Pin To Net: Unknown Pin: Pin U1-9
+Change Net Name : Old Net Name=Battery New Net Name=NetC88_2
+Change Net Name : Old Net Name=NetR101_1 New Net Name=NetR98_1
+Change Net Name : Old Net Name=NetR102_1 New Net Name=NetR99_1
+Change Net Name : Old Net Name=NetR105_1 New Net Name=NetR102_1
+Change Net Name : Old Net Name=NetR106_1 New Net Name=NetR103_1
+Change Net Name : Old Net Name=NetR107_1 New Net Name=NetR104_1
+Change Net Name : Old Net Name=NetR108_1 New Net Name=NetR105_1
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator
+Add Class: Class already exists: Designator

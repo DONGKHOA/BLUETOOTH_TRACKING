@@ -158,7 +158,12 @@ DEV_SDCard_Init (spi_device_handle_t *spi_handle,
     BSP_spiDeselectDevice(e_cs_io);
 
     // Set high frequency for SD Card
-    BSP_spiSChangeClock(*spi_handle, e_spi_host, SPI_CLOCK_10MHz);
+    // if (BSP_spiSChangeClock(*spi_handle, e_spi_host, SPI_CLOCK_1MHz) != ESP_OK)
+    // {
+    //   printf("Failed to set clock speed\n");
+    //   return MSD_ERROR;
+    // }
+
     is_initialized = true;
     return MSD_OK;
   }

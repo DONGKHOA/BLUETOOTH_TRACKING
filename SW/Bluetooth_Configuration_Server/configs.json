@@ -1,0 +1,47 @@
+{
+  "B8:D6:1A:68:BB:BA": {
+    "ssid": "47.47",
+    "password": "0902900086",
+    "mqtt_server": "192.168.0.111:1883",
+    "topic": "bluetooth/GW1/data"
+  },
+  "B8:D6:1A:6A:3D:0E": {
+    "ssid": "Thuc Coffee",
+    "password": "18006230",
+    "mqtt_server": "broker.emqx.io:1883",
+    "topic": "bluetooth/GW1/data"
+  },
+  "24:EC:4A:46:06:8A": {
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "192.168.1.103:1883",
+    "topic": "bluetooth/GW1/data",
+    "room": "Room1"
+  },
+  "24:58:7C:E2:C3:A6": {
+    "ssid": "47.47",
+    "password": "1"
+  },
+  "0C:DC:7E:63:2E:16": {
+    "ssid": "47.47",
+    "password": "0902900086"
+  },
+  "94:54:C5:88:86:F6": {
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "172.20.10.12:1883",
+    "topic": "bluetooth/GW2/data"
+  },
+  "94:54:C5:88:7B:EE": {
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "172.20.10.12:1883",
+    "topic": "bluetooth/GW1/data",
+    "room": "Room1"
+  },
+  "98:3D:AE:9F:B5:BE": {
+    "ssid": "Thang",
+    "password": "17122003",
+    "room": "Room1"
+  }
+}

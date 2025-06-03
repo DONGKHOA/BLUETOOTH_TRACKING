@@ -3,6 +3,7 @@
  *****************************************************************************/
 
 #include <string.h>
+#include <stdio.h>
 
 #include "app_handle_wifi.h"
 #include "app_data.h"
@@ -49,7 +50,7 @@ APP_HANDLE_WIFI_CreateTask (void)
 {
   xTaskCreate(APP_HANDLE_WIFI_Task,
               "wifi task",
-              1024 * 20,
+              1024 * 4,
               NULL,
               13,
               &s_handle_wifi_task);

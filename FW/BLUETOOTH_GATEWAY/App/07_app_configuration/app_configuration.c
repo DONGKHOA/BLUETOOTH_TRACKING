@@ -95,7 +95,8 @@ typedef struct
 
 typedef struct
 {
-  QueueHandle_t s_configuration_data_queue;
+  QueueHandle_t   s_configuration_data_queue;
+  state_system_t *p_state_system;
 } configuration_data_t;
 
 /******************************************************************************
@@ -266,8 +267,12 @@ APP_CONFIGURATION_CreateTask (void)
 void
 APP_CONFIGURATION_Init (void)
 {
+  s_configuration_data.p_state_system = &s_data_system.s_state_system;
+
   s_configuration_data.s_configuration_data_queue
       = xQueueCreate(2, sizeof(configuration_data_event_t));
+
+  *s_configuration_data.p_state_system = STATE_BLUETOOTH_CONFIG;
 
   ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
@@ -310,7 +315,7 @@ APP_CONFIGURATION_ProcessData (
 
     for (i = 0; s_configuration_data_event
                     ->u8_data[sizeof("WIFI") + strlen((char *)u8_wifi) + 1 + i]
-                != '\0';
+                != '\n';
          i++)
     {
       u8_pass[i]
@@ -328,26 +333,35 @@ APP_CONFIGURATION_ProcessData (
                   sizeof("MQTTSERVER") - 1)
            == 0)
   {
-    printf("MQTTSERVER\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTSERVER_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTSERVER")]);
+    char mqtt_server[64];
+    uint8_t i;
+
+    for (i = 0;
+         s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i] != '\n';
+         i++)
+    {
+      mqtt_server[i]
+          = s_configuration_data_event->u8_data[sizeof("MQTTSERVER") + i];
+    }
+    mqtt_server[i] = '\0';
+
+    NVS_WriteString("MQTTSERVER_NVS", MQTTSERVER_NVS, mqtt_server);
   }
   else if (memcmp(s_configuration_data_event->u8_data,
                   "MQTTTOPIC",
                   sizeof("MQTTTOPIC") - 1)
            == 0)
   {
-    printf("MQTTTOPIC\n\r");
-    printf("%s\n\r",
-           (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
-    NVS_WriteString(
-        "MQTT",
-        MQTTTOPIC_NVS,
-        (char *)&s_configuration_data_event->u8_data[sizeof("MQTTTOPIC")]);
+    char mqtt_topic[64];
+    uint8_t i;
+    for (i = 0;
+         s_configuration_data_event->u8_data[sizeof("MQTTTOPIC") + i] != '\n';
+         i++)
+    {
+      mqtt_topic[i]
+          = s_configuration_data_event->u8_data[sizeof("MQTTTOPIC") + i];
+    }
+    NVS_WriteString("MQTTTOPIC_NVS", MQTTTOPIC_NVS, mqtt_topic);
   }
 }
 
@@ -370,6 +384,8 @@ APP_CONFIGURATION_Task (void *arg)
                          s_configuration_data_event.u8_len);
 
       APP_CONFIGURATION_ProcessData(&s_configuration_data_event);
+
+      vTaskDelay(1 / portTICK_PERIOD_MS);
     }
   }
 }

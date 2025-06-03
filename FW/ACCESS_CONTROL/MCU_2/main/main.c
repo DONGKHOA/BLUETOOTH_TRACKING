@@ -27,11 +27,12 @@
 #include "app_data_transmit.h"
 #include "app_handle_wifi.h"
 #include "app_fingerprint.h"
-#include "app_timestamp.h"
-#include "app_rtc.h"
+#include "app_time_system.h"
 #include "app_configuration.h"
 #include "app_local_database.h"
 #include "app_led_status.h"
+#include "app_control_sdcard.h"
+#include "app_temp_humid.h"
 
 #include "environment.h"
 
@@ -77,6 +78,7 @@ app_main (void)
   // BSP Initialization
   APP_MAIN_InitGPIO();
   APP_MAIN_InitCan();
+  APP_MAIN_InitSPI();
   APP_MAIN_InitNVS();
   APP_MAIN_InitUart();
   APP_MAIN_InitI2C();
@@ -111,21 +113,25 @@ app_main (void)
     }
     else if (uxBits & APP_CONFIGURATION_DISABLE)
     {
+      // App Initialization
+
       APP_FINGERPRINT_Init();
+      APP_HANDLE_WIFI_Init();
+      APP_TIME_SYSTEM_Init();
       APP_LOCAL_DATABASE_Init();
       APP_DATA_RECEIVE_Init();
       APP_MQTT_CLIENT_Init();
-      APP_HANDLE_WIFI_Init();
-      APP_TIMESTAMP_Init();
+      APP_CONTROL_SDCARD_Init();
 
       // App Create Task
 
-      APP_HANDLE_WIFI_CreateTask();
       APP_FINGERPRINT_CreateTask();
+      APP_HANDLE_WIFI_CreateTask();
       APP_LOCAL_DATABASE_CreateTask();
       APP_DATA_RECEIVE_CreateTask();
-      APP_TIMESTAMP_CreateTask();
+      APP_TIME_SYSTEM_CreateTask();
       APP_MQTT_CLIENT_CreateTask();
+      APP_CONTROL_SDCARD_CreateTask();
 
       break;
     }
@@ -198,11 +204,12 @@ APP_MAIN_InitI2C (void)
 static inline void
 APP_MAIN_InitSPI (void)
 {
-  BSP_spiConfigDefault();
-  BSP_spiConfigMode(SPI3_SPI_MODE);
   BSP_spiConfigIO(SPI3_MISO_PIN, SPI3_MOSI_PIN, SPI3_SCLK_PIN);
+  BSP_spiConfigCS(SPI3_CS_SD_CARD_PIN);
   BSP_spiMaxTransferSize(SPI3_SPI_BUS_MAX_TRANSFER_SZ);
+  BSP_spiConfigDefault();
   BSP_spiClockSpeed(SPI3_CLOCK_SPEED_HZ);
+  BSP_spiConfigMode(SPI3_SPI_MODE);
   BSP_spiTransactionQueueSize(SPI3_QUEUE_SIZE);
 
   BSP_spiDMADriverInit(&spi_sdcard_handle, SPI3_HOST, SPI3_DMA_CHANNEL);
@@ -223,12 +230,16 @@ APP_MAIN_InitDataSystem (void)
                                         MALLOC_CAP_SPIRAM);
 
   s_data_system.s_send_data_queue = xQueueCreate(16, sizeof(DATA_SYNC_t));
-  s_data_system.s_data_mqtt_queue = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_data_mqtt_queue = xQueueCreate(128, sizeof(DATA_SYNC_t));
   s_data_system.s_data_local_database_queue
       = xQueueCreate(2, sizeof(DATA_SYNC_t));
+  s_data_system.s_data_sdcard_queue = xQueueCreate(16, sizeof(sdcard_cmd_t));
+  s_data_system.s_data_attendance_queue
+      = xQueueCreate(16, sizeof(attendance_data_t));
 
   s_data_system.s_spi_mutex           = xSemaphoreCreateMutex();
   s_data_system.s_i2c_mutex           = xSemaphoreCreateMutex();
+  s_data_system.s_time_mutex          = xSemaphoreCreateMutex();
   s_data_system.s_flag_time_event     = xEventGroupCreate();
   s_data_system.s_configuration_event = xEventGroupCreate();
   s_data_system.s_fingerprint_event   = xEventGroupCreate();

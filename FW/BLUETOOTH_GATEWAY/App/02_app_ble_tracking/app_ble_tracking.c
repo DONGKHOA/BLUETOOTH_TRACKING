@@ -15,8 +15,8 @@
 
 #define TAG "APP_BLE_TRACKING"
 
-#define GATEWAY_ID 0x01020304
-#define GATEWAY_VERSION "1.0.0"
+#define GATEWAY_ID      0x01020304
+#define GATEWAY_VERSION "1.0.1"
 
 /******************************************************************************
  *    PRIVATE TYPEDEFS
@@ -58,10 +58,10 @@ void
 APP_BLE_TRACKING_Init (void)
 {
   s_ble_tracking_data.p_rssi_ibeacon_queue
-      = &s_data_system.s_rssi_ibeacon_queue; // Get RSSI iBeacon data queue
+      = &s_data_system.s_rssi_ibeacon_queue;
 
   s_ble_tracking_data.p_location_tag_queue
-      = &s_data_system.s_location_tag_queue; // Get Location tag data queue
+      = &s_data_system.s_location_tag_queue;
 }
 
 /******************************************************************************
@@ -73,8 +73,10 @@ APP_BLE_TRACKING_Task (void *arg)
 {
   ibeacon_infor_tag_t  s_beacon_infor_tag;
   tracking_infor_tag_t tracking_infor_tag;
+
   tracking_infor_tag.u32_gateway_ID = GATEWAY_ID;
   strcpy(tracking_infor_tag.c_gateway_version, GATEWAY_VERSION);
+
   while (1)
   {
     if (xQueueReceive(*s_ble_tracking_data.p_rssi_ibeacon_queue,
@@ -86,7 +88,7 @@ APP_BLE_TRACKING_Task (void *arg)
       {
         continue;
       }
-      
+
       memcpy(tracking_infor_tag.u8_beacon_addr,
              s_beacon_infor_tag.u8_beacon_addr,
              6);

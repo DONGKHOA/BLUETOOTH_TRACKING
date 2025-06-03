@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis-tcpserver
+    network_mode: host
+    volumes:
+      - redis-data:/data
+
+  backend:
+    image: quocthang2404/vitals-backend:v1.0.0
+    container_name: backend
+    working_dir: /app/Backend
+    command: python main.py
+    depends_on:
+      - redis
+    env_file: .env
+    volumes:
+      - ./logs:/app/logs
+    network_mode: host
+
+  frontend:
+    image: quocthang2404/vitals-frontend:v1.0.0
+    container_name: frontend
+    working_dir: /app/Frontend
+    depends_on:
+      - redis
+      - backend
+    env_file: .env
+    volumes:
+      - ./logs:/app/logs
+    network_mode: host
+    command: ["/app/wait-for-redis.sh", "python", "ui.py"]
+
+volumes:
+  redis-data:

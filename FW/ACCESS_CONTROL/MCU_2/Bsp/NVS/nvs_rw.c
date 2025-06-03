@@ -129,56 +129,49 @@ exit_write:
  * the error code indicating the success or failure of the operation.
  */
 esp_err_t
-NVS_ReadString (const char *name, const char *key, char *savedData, uint8_t len)
+NVS_ReadString (const char *name, const char *key, char *savedData, size_t len)
 {
   nvs_handle_t nvsHandle;
   esp_err_t    retVal;
 
-  ESP_LOGW(TAG, "Show Value-> name: %s, key: %s, len: %d", name, key, len);
+  ESP_LOGW(TAG, "Show Value-> name: %s, key: %s, len: %zu", name, key, len);
 
   retVal = nvs_open(name, NVS_READWRITE, &nvsHandle);
   if (retVal != ESP_OK)
   {
-    ESP_LOGE(TAG,
-             "Error (%s) opening NVS handle for Write",
-             esp_err_to_name(retVal));
+    ESP_LOGE(
+        TAG, "Error (%s) opening NVS handle for Read", esp_err_to_name(retVal));
     goto exit_read;
+  }
+
+  size_t buffer_size = len; // Use a local size_t variable for buffer size
+  retVal             = nvs_get_str(nvsHandle, key, savedData, &buffer_size);
+  if (retVal == ESP_OK)
+  {
+    ESP_LOGW(TAG,
+             "*****(%s) Successfully read value: %s",
+             esp_err_to_name(retVal),
+             savedData);
   }
   else
   {
-    printf("opening NVS Read handle Done \r\n");
-    retVal = nvs_get_str(nvsHandle, key, savedData, (size_t *)&len);
-    if (retVal == ESP_OK)
-    {
-      ESP_LOGW(TAG,
-               "*****(%s) Can read/get value: %s",
-               esp_err_to_name(retVal),
-               savedData);
-    }
-    else
-    {
-      ESP_LOGE(TAG,
-               "Error (%s) Can not read/get value: %s",
-               esp_err_to_name(retVal),
-               savedData);
-      goto exit_read;
-    }
-
-    retVal = nvs_commit(nvsHandle);
-    if (retVal != ESP_OK)
-    {
-      ESP_LOGE(
-          TAG, "Error (%s) Can not commit - read", esp_err_to_name(retVal));
-      goto exit_read;
-    }
-    else
-    {
-      ESP_LOGI(TAG, "Read Commit Done!");
-    }
+    ESP_LOGE(TAG,
+             "Error (%s) reading value for key: %s",
+             esp_err_to_name(retVal),
+             key);
+    goto exit_read;
   }
 
-exit_read:
+  retVal = nvs_commit(nvsHandle);
+  if (retVal != ESP_OK)
+  {
+    ESP_LOGE(
+        TAG, "Error (%s) committing NVS after read", esp_err_to_name(retVal));
+    goto exit_read;
+  }
+  ESP_LOGI(TAG, "Read Commit Done!");
 
+exit_read:
   nvs_close(nvsHandle);
   return retVal;
 }

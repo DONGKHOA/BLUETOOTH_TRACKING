@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Info</title>
+  <link rel="stylesheet" href="/static/css/manage_devices.css">
+</head>
+<body>
+    <nav>
+      <div class="logo">Manage Device</div>
+      <ul>
+        <li><a href="#" onclick="showTab('info')">Information</a></li>
+        <li><a href="#" onclick="showTab('network')">Network</a></li>
+        <li><a href="#" onclick="showTab('report')">Report</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  
+    <div class="container">
+      <div id="info" class="tab-content active">
+        <h2>Device Information</h2>
+        <div class="info-row"><strong>MAC:</strong> <span id="mac"></span></div>
+        <div class="info-row"><strong>Name:</strong> <span id="name"></span></div>
+      </div>
+  
+      <div id="network" class="tab-content">
+        <h2>Network Settings</h2>
+        <div class="info-row clickable" onclick="openWifi()">
+          <strong>WiFi:</strong> <span id="currentSSID"></span>
+        </div>        
+      </div>
+  
+      <div id="report" class="tab-content">
+        <h2>Report Configuration</h2>
+        <div class="info-row clickable" onclick="openMQTTServerModal()">
+          <strong>MQTT Server:</strong> <span id="mqttServerDisplay"></span>
+        </div>
+        <div class="info-row clickable" onclick="openMQTTTopicModal()">
+          <strong>Topic:</strong> <span id="mqttTopicDisplay"></span>
+        </div>
+        <div class="info-row clickable" onclick="openRoomModal()">
+          <strong>Room:</strong> <span id="roomDisplay"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WiFi Modal -->
+    <div id="wifiModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeWifiModal()">&times;</button>
+        
+        <h3>Select WiFi</h3>
+        <ul id="wifiList"></ul>
+        <div id="wifiPasswordSection" style="display: none;">
+          <label for="wifiPassword">Enter Password</label>
+          <input type="password" id="wifiPassword" />
+          <button onclick="sendWifi()">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MQTT Server Modal -->
+    <div id="mqttServerModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeMQTTServerModal()">&times;</button>
+        <h3>Set MQTT Server</h3>
+        <label for="mqttServerInput">MQTT Server (e.g., 192.168.1.11:1883):</label>
+        <input type="text" id="mqttServerInput" />
+        <button onclick="applyMQTTServer()">Apply</button>
+      </div>
+    </div>
+
+    <!-- MQTT Topic Modal -->
+    <div id="mqttTopicModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeMQTTTopicModal()">&times;</button>
+        <h3>Set MQTT Topic</h3>
+        <label for="mqttTopicInput">Topic (e.g., GL-IoT/dataTopic/...):</label>
+        <input type="text" id="mqttTopicInput" />
+        <button onclick="applyMQTTTopic()">Apply</button>
+      </div>
+    </div>
+
+    <!-- Room Modal -->
+    <div id="roomModal" class="container" style="display: none;">
+      <div class="modal-container">
+        <button class="close" onclick="closeRoomModal()">&times;</button>
+        <h3>Set Room</h3>
+        <label for="roomInput">Room Name:</label>
+        <input type="text" id="roomInput" />
+        <button onclick="applyRoom()">Apply</button>
+      </div>
+    </div>
+
+    <script>
+      const mac = "{{ mac }}";
+      sessionStorage.setItem("connectedMac", mac);
+      document.getElementById("mac").textContent = mac;
+
+      // Optional: get name from query param or leave empty
+      const name = "{{ request.args.get('name', '') }}";
+      if (name) {
+        sessionStorage.setItem("connectedName", name);
+        document.getElementById("name").textContent = name;
+      }
+    </script>
+
+    <script src="/static/js/manage_devices.js"></script>
+
+</body>
+</html>
