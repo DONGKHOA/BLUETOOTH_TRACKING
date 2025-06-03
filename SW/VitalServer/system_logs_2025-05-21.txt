@@ -1,0 +1,73 @@
+2025-05-21 11:05:32,827 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.103:5000
+2025-05-21 11:05:32,827 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-21 11:08:56,097 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.103:5000
+2025-05-21 11:08:56,097 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-21 11:09:04,237 - INFO - 127.0.0.1 - - [21/May/2025 11:09:04] "GET / HTTP/1.0" 200 -
+2025-05-21 11:09:04,263 - INFO - 127.0.0.1 - - [21/May/2025 11:09:04] "GET /static/css/login.css HTTP/1.0" 200 -
+2025-05-21 11:09:04,310 - INFO - 127.0.0.1 - - [21/May/2025 11:09:04] "GET /static/js/login.js HTTP/1.0" 200 -
+2025-05-21 11:09:04,656 - INFO - 127.0.0.1 - - [21/May/2025 11:09:04] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -
+2025-05-21 11:09:07,534 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "POST /login HTTP/1.0" 200 -
+2025-05-21 11:09:07,550 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "GET /server_management HTTP/1.0" 200 -
+2025-05-21 11:09:07,569 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "GET /static/css/server_management.css HTTP/1.0" 200 -
+2025-05-21 11:09:07,570 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "GET /static/js/server_management.js HTTP/1.0" 200 -
+2025-05-21 11:09:07,609 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "GET /check_status_server HTTP/1.0" 200 -
+2025-05-21 11:09:07,609 - INFO - 127.0.0.1 - - [21/May/2025 11:09:07] "GET /get_current_config HTTP/1.0" 200 -
+2025-05-21 11:09:09,196 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /server_configuration HTTP/1.0" 200 -
+2025-05-21 11:09:09,219 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /static/js/server_configuration.js HTTP/1.0" 200 -
+2025-05-21 11:09:09,219 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /static/css/server_configuration.css HTTP/1.0" 200 -
+2025-05-21 11:09:09,265 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /get_uploaded_files HTTP/1.0" 200 -
+2025-05-21 11:09:09,265 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /button_server_status HTTP/1.0" 200 -
+2025-05-21 11:09:09,266 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /get_existing_files HTTP/1.0" 200 -
+2025-05-21 11:09:09,850 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "POST /start_server HTTP/1.0" 200 -
+2025-05-21 11:09:09,857 - INFO - 127.0.0.1 - - [21/May/2025 11:09:09] "GET /button_server_status HTTP/1.0" 200 -
+2025-05-21 11:09:09,955 - INFO - [INFO] Starting TCP Server...
+2025-05-21 11:09:09,956 - INFO - [Async] TCP Server is running on ('0.0.0.0', 8899)
+2025-05-21 11:09:10,056 - INFO - [ERROR] Failed to start TCP Server: [Errno 98] error while attempting to bind on address ('0.0.0.0', 8899): address already in use
+2025-05-21 11:09:10,604 - INFO - 127.0.0.1 - - [21/May/2025 11:09:10] "GET /system_log HTTP/1.0" 200 -
+2025-05-21 11:09:10,620 - INFO - 127.0.0.1 - - [21/May/2025 11:09:10] "GET /static/css/system_log.css HTTP/1.0" 200 -
+2025-05-21 11:09:10,621 - INFO - 127.0.0.1 - - [21/May/2025 11:09:10] "GET /static/js/system_log.js HTTP/1.0" 200 -
+2025-05-21 11:09:10,662 - INFO - 127.0.0.1 - - [21/May/2025 11:09:10] "GET /get_logging_config HTTP/1.0" 200 -
+2025-05-21 11:09:10,662 - INFO - 127.0.0.1 - - [21/May/2025 11:09:10] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:11,662 - INFO - 127.0.0.1 - - [21/May/2025 11:09:11] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:12,663 - INFO - 127.0.0.1 - - [21/May/2025 11:09:12] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:13,661 - INFO - 127.0.0.1 - - [21/May/2025 11:09:13] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:14,663 - INFO - 127.0.0.1 - - [21/May/2025 11:09:14] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:15,659 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "GET /server_configuration HTTP/1.0" 200 -
+2025-05-21 11:09:15,663 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "GET /get_logs HTTP/1.0" 200 -
+2025-05-21 11:09:15,676 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "[36mGET /static/css/server_configuration.css HTTP/1.0[0m" 304 -
+2025-05-21 11:09:15,676 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "[36mGET /static/js/server_configuration.js HTTP/1.0[0m" 304 -
+2025-05-21 11:09:15,727 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "GET /button_server_status HTTP/1.0" 200 -
+2025-05-21 11:09:15,728 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "GET /get_uploaded_files HTTP/1.0" 200 -
+2025-05-21 11:09:15,728 - INFO - 127.0.0.1 - - [21/May/2025 11:09:15] "GET /get_existing_files HTTP/1.0" 200 -
+2025-05-21 11:09:16,298 - INFO - 127.0.0.1 - - [21/May/2025 11:09:16] "GET /stop_server HTTP/1.0" 200 -
+2025-05-21 11:09:16,307 - INFO - 127.0.0.1 - - [21/May/2025 11:09:16] "GET /button_server_status HTTP/1.0" 200 -
+2025-05-21 11:09:16,966 - INFO - [INFO] Stopping TCP Server...
+2025-05-21 11:09:16,967 - INFO - [INFO] TCP Server stopped.
+2025-05-21 11:09:18,328 - INFO - 127.0.0.1 - - [21/May/2025 11:09:18] "GET /server_management HTTP/1.0" 200 -
+2025-05-21 11:09:18,345 - INFO - 127.0.0.1 - - [21/May/2025 11:09:18] "[36mGET /static/css/server_management.css HTTP/1.0[0m" 304 -
+2025-05-21 11:09:18,346 - INFO - 127.0.0.1 - - [21/May/2025 11:09:18] "[36mGET /static/js/server_management.js HTTP/1.0[0m" 304 -
+2025-05-21 11:09:18,382 - INFO - 127.0.0.1 - - [21/May/2025 11:09:18] "GET /check_status_server HTTP/1.0" 200 -
+2025-05-21 11:09:18,383 - INFO - 127.0.0.1 - - [21/May/2025 11:09:18] "GET /get_current_config HTTP/1.0" 200 -
+2025-05-21 11:09:19,281 - INFO - 127.0.0.1 - - [21/May/2025 11:09:19] "[32mGET /logout HTTP/1.0[0m" 302 -
+2025-05-21 11:09:19,290 - INFO - 127.0.0.1 - - [21/May/2025 11:09:19] "GET /login HTTP/1.0" 200 -
+2025-05-21 11:09:19,306 - INFO - 127.0.0.1 - - [21/May/2025 11:09:19] "[36mGET /static/css/login.css HTTP/1.0[0m" 304 -
+2025-05-21 11:09:19,311 - INFO - 127.0.0.1 - - [21/May/2025 11:09:19] "[36mGET /static/js/login.js HTTP/1.0[0m" 304 -
+2025-05-21 11:09:24,346 - INFO - 127.0.0.1 - - [21/May/2025 11:09:24] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:09:29,772 - INFO - 127.0.0.1 - - [21/May/2025 11:09:29] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:09:34,772 - INFO - 127.0.0.1 - - [21/May/2025 11:09:34] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:09:39,772 - INFO - 127.0.0.1 - - [21/May/2025 11:09:39] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:09:44,773 - INFO - 127.0.0.1 - - [21/May/2025 11:09:44] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:10:10,513 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.103:5000
+2025-05-21 11:10:10,513 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-21 11:10:14,773 - INFO - 127.0.0.1 - - [21/May/2025 11:10:14] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:10:19,772 - INFO - 127.0.0.1 - - [21/May/2025 11:10:19] "GET /check_session HTTP/1.0" 200 -
+2025-05-21 11:10:24,775 - INFO - 127.0.0.1 - - [21/May/2025 11:10:24] "GET /check_session HTTP/1.0" 200 -
