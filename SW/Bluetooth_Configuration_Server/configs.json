@@ -12,8 +12,8 @@
     "topic": "bluetooth/GW1/data"
   },
   "24:EC:4A:46:06:8A": {
-    "ssid": "Thang",
-    "password": "17122003",
+    "ssid": "Khoa",
+    "password": "17042021",
     "mqtt_server": "192.168.1.103:1883",
     "topic": "bluetooth/GW1/data",
     "room": "Room1"
@@ -27,15 +27,15 @@
     "password": "0902900086"
   },
   "94:54:C5:88:86:F6": {
-    "ssid": "Thang",
-    "password": "17122003",
-    "mqtt_server": "172.20.10.9:1883",
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "172.20.10.12:1883",
     "topic": "bluetooth/GW2/data"
   },
   "94:54:C5:88:7B:EE": {
-    "ssid": "Thang",
-    "password": "17122003",
-    "mqtt_server": "172.20.10.9:1883",
+    "ssid": "Khoa",
+    "password": "17042021",
+    "mqtt_server": "172.20.10.12:1883",
     "topic": "bluetooth/GW1/data",
     "room": "Room1"
   },

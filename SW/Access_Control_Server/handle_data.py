@@ -36,6 +36,16 @@ def response_sync():
         "command": "SYN",
         "id": new_id
     }
+    
+def get_user_data(user_id, device_id):
+    users_all = load_users()
+    users = users_all.get(device_id, [])
+    
+    for user in users:
+        if user.get("id") == user_id:
+            return user.get("name")
+    
+    return None
 
 def reponse_user_data(data, device_id):
     users_all = load_users()
@@ -123,16 +133,11 @@ def response_enroll_finger(user_id, device_id):
     return {"command": "ENROLL_FINGERPRINT", "user_id": user_id, "response": "fail"}
 
 
-def response_attendance(user_id, device_id, timestamp):
+def response_attendance(user_id, device_id):
     users_all = load_users()
     users = users_all.get(device_id, [])
 
-    try:
-        timestamp = int(timestamp)
-        now = datetime.utcfromtimestamp(timestamp).astimezone(ZoneInfo("Asia/Ho_Chi_Minh"))
-    except Exception:
-        now = datetime.utcnow().astimezone(ZoneInfo("Asia/Ho_Chi_Minh"))
-
+    now = datetime.now(ZoneInfo("Asia/Ho_Chi_Minh"))
     date_str = now.strftime("%d/%m/%Y")
     time_str = now.strftime("%H:%M:%S")
 
@@ -174,3 +179,23 @@ def response_attendance(user_id, device_id, timestamp):
         "command": "ATTENDANCE",
         "response": "fail"
     }
+    
+def get_latest_attendance_timestamp(attendance, user_id):
+    
+    latest_ts = None
+
+    for record in attendance:
+        if record.get("id") == user_id:
+            date_str = record.get("date", "")
+            for key, value in record.items():
+                if key.startswith("check"):
+                    try:
+                        dt_str = f"{date_str} {value}"
+                        dt = datetime.strptime(dt_str, "%d/%m/%Y %H:%M:%S")
+                        ts = int(dt.replace(tzinfo=ZoneInfo("Asia/Ho_Chi_Minh")).timestamp())
+                        if latest_ts is None or ts > latest_ts:
+                            latest_ts = ts
+                    except Exception:
+                        continue
+
+    return latest_ts

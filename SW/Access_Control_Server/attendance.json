@@ -25,15 +25,6 @@
       "check18": "22:17:26"
     },
     {
-      "id": 2,
-      "name": "Dong Thanh Khoa",
-      "device_id": "Room1",
-      "date": "21/05/2025",
-      "check1": "17:15:26",
-      "check2": "20:40:49",
-      "check3": "22:29:01"
-    },
-    {
       "id": 1,
       "name": "Ho Le Quoc Thang",
       "device_id": "Room1",
@@ -65,8 +56,49 @@
       "id": 1,
       "name": "Ho Le Quoc Thang",
       "device_id": "Room1",
+      "date": "01/06/2025",
+      "check1": "23:53:36",
+      "check2": "23:55:39",
+      "check3": "16:48:44",
+      "check4": "23:56:15",
+      "check5": "23:15:16",
+      "check6": "23:16:36",
+      "check7": "23:35:42"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "device_id": "Room1",
+      "date": "21/05/2025",
+      "check1": "17:15:26",
+      "check2": "20:40:49",
+      "check3": "22:29:01"
+    },
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "device_id": "Room1",
+      "date": "02/06/2025",
+      "check1": "09:04:46",
+      "check2": "09:05:13",
+      "check3": "09:04:31",
+      "check4": "09:05:01",
+      "check5": "10:44:08",
+      "check6": "10:43:58"
+    },
+    {
+      "id": 1,
+      "name": "Ho Le Quoc Thang",
+      "device_id": "Room1",
       "date": "01/01/1970",
       "check1": "00:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Dong Thanh Khoa",
+      "device_id": "Room1",
+      "date": "02/06/2025",
+      "check1": "10:48:06"
     }
   ]
 }

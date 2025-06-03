@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     loadUploadedFilesAndEndpoint();
 
-    fetchFacilityList()
+    // fetchFacilityList()
     
     // Call update function for each file input
     updateFileInfo("file1", "fileInfo1");

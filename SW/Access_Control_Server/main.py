@@ -4,6 +4,9 @@ import paho.mqtt.client as mqtt
 import handle_data
 import redis
 
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
 # MQTT broker details
 BROKER = "broker.emqx.io"
 PORT = 1883
@@ -14,7 +17,7 @@ RESPONSE_SERVER_TOPIC = 'ACCESS_CONTROL/Server/Response'
 REQUEST_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Request'
 RESPONSE_CLIENT_TOPIC = 'ACCESS_CONTROL/Client/Response'
 
-redis_client = redis.Redis(host="127.0.0.1", port=6379, db=0)
+redis_client = redis.Redis(host="127.0.0.1", port=6381, db=0)
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -70,7 +73,29 @@ async def process_request():
                 json_data = json.dumps(handle_data.reponse_user_data(data, device_id))
                 
             case "ATTENDANCE_DATA":
-                json_data = json.dumps(handle_data.response_attendance_data(data, device_id))
+                # json_data = json.dumps(handle_data.response_attendance_data(data, device_id))
+                
+                result = handle_data.response_attendance_data(data, device_id)
+
+                if result.get("response") == "success":
+                    user_id = data.get("id")
+                    attendance_all = handle_data.load_attendance()
+                    attendance = attendance_all.get(device_id, [])
+
+                    last_ts = handle_data.get_latest_attendance_timestamp(attendance, user_id)
+                    print(f"Last timestamp for user {user_id} in device {device_id}: {last_ts}")
+
+                    if last_ts:
+                        # Convert timestamp to local time (UTC+7)
+                        dt_local = datetime.utcfromtimestamp(last_ts) + timedelta(hours=7)
+                        formatted_time = dt_local.strftime("%Y-%m-%d %H:%M:%S")
+                
+                        redis_client.rpush("thingsboard_queue", json.dumps({
+                            "device_id": device_id,
+                            "user_id": user_id,
+                            "timestamp": formatted_time,
+                            "user_name": handle_data.get_user_data(user_id, device_id)
+                        }))
             
             case "ENROLL_FACE":
                 user_id = data.get("id")
@@ -89,7 +114,18 @@ async def process_request():
             case "ATTENDANCE":
                 user_id = data.get("id")
                 time = data.get("timestamp")
-                json_data = json.dumps(handle_data.response_attendance(user_id, device_id, time))
+                json_data = json.dumps(handle_data.response_attendance(user_id, device_id))
+                
+                dt_local = datetime.now(ZoneInfo("Asia/Ho_Chi_Minh"))
+                formatted_time = dt_local.strftime("%Y-%m-%d %H:%M:%S")
+                
+                # Create a JSON object to send to ThingsBoard and send it to the Redis queue
+                redis_client.rpush("thingsboard_queue", json.dumps({
+                    "device_id": device_id,
+                    "user_id": user_id,
+                    "timestamp": formatted_time,
+                    "user_name": handle_data.get_user_data(user_id, device_id)
+                }))
                 
                 mqtt_client.publish(f"{device_id}/Client/Response", json_data, qos=1)
                 print("Sent response:", json_data)

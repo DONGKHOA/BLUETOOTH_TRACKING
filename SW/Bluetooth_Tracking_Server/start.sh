@@ -15,4 +15,5 @@ sleep 3
 # Run the Python scripts
 python3 listener.py &
 python3 processor.py &
-python3 ui.py
+python3 ui.py &
+python3 publish_thingsboard.py

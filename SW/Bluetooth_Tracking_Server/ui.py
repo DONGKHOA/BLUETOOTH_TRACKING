@@ -279,6 +279,12 @@ def api_beacons():
                 "last_seen": formatted_time,
                 "detected": detected
             }
+            
+            redis_client.rpush("thingsboard_queue", json.dumps({
+                "gateways": detected_gateways,
+                "beacon_id": beacon_id,
+                "timestamp": formatted_time
+            }))
 
     return jsonify(beacons)
 
